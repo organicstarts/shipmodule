@@ -1,25 +1,45 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import logo from './logo.png';
+
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+        <header>
+          <img src={logo} style={{textAlign:'center', width:'250px', height:'auto'}} alt="logo" />
         </header>
+        <div>
+          <form>
+            <label> 
+            Batch Number:
+            <input type="text" />
+            </label>
+            <label> 
+            Picked By:
+            <input type="text" />
+            </label>
+            <label> 
+            Shipped By:
+            <input type="text" />
+            </label>
+            <input type="submit" value="Generate Batch" />
+          </form>
+        </div>
+        <div>
+          <form>
+           <label> 
+              Order Number:
+              <input type="text" />
+          </label>
+          <input type="submit" value="Fetch Order" />
+          </form>
+        </div>
+        <div>
+          <button>
+           Search for Fraudulent Orders
+         </button>
+        </div>
       </div>
     );
   }

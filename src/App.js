@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.png';
+import logo from './logo.svg';
 import BatchOrder from './components/BatchOrder/BatchOrder';
 import FetchOrder from './components/FetchOrder/FetchOrder';
 import FraudulentOrder from './components/FraudulentOrder/FraudulentOrder';

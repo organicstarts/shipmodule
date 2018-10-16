@@ -8,7 +8,7 @@ import 'tachyons';
 class App extends Component {
   render() {
     return (
-      <div className="App tc">
+      <div className="App tc container">
         <header>
           <img src={logo} style={{textAlign:'center', width:'250px', height:'auto'}} alt="logo" />
         </header>

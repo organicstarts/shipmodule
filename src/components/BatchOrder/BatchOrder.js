@@ -9,7 +9,7 @@ class BatchOrder extends Component {
 
     render() {
         return (
-            <div className="size center gradient-blue ma3 pa3 tc">
+            <div className="center gradient-blue ma3 pa3 tc">
                 <Form>
                     <Form.Input fluid label='Batch Number: ' placeholder='#123871238912' error />
                     <Form.Group widths='equal'>

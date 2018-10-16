@@ -1,0 +1,10 @@
+.size {
+    width: 500px;
+    height: auto;
+}
+
+
+
+.gradient-blue {
+    background-image: radial-gradient(circle, #C0F1FF, #4570B0);
+}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.png';
 import BatchOrder from './components/BatchOrder/BatchOrder';
 import FetchOrder from './components/FetchOrder/FetchOrder';
+import FraudulentOrder from './components/FraudulentOrder/FraudulentOrder';
 import 'tachyons';
 
 class App extends Component {
@@ -13,11 +14,7 @@ class App extends Component {
         </header>
         <BatchOrder />
         <FetchOrder />
-        <div>
-          <button>
-           Search for Fraudulent Orders
-         </button>
-        </div>
+        <FraudulentOrder />
       </div>
     );
   }

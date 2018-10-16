@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.png';
 import BatchOrder from './components/BatchOrder/BatchOrder';
+import FetchOrder from './components/FetchOrder/FetchOrder';
 import 'tachyons';
 
 class App extends Component {
@@ -11,15 +12,7 @@ class App extends Component {
           <img src={logo} style={{textAlign:'center', width:'250px', height:'auto'}} alt="logo" />
         </header>
         <BatchOrder />
-        <div>
-          <form>
-           <label> 
-              Order Number:
-              <input type="text" />
-          </label>
-          <input type="submit" value="Fetch Order" />
-          </form>
-        </div>
+        <FetchOrder />
         <div>
           <button>
            Search for Fraudulent Orders

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
-import './FraudOrders.css';
 
 const FraudOrders = () => {
     return (

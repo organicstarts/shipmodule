@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import { Image } from 'semantic-ui-react';
-import Batch from './components/BatchOrders/BatchOrders';
-import Order from './components/FetchOrder/FetchOrder';
-import Fraud from './components/FraudOrders/FraudOrders';
+import logo from './logo.svg';
+import {BatchOrders, FetchOrder, FraudOrders} from './components';
 import 'tachyons';
 
 class App extends Component {
@@ -13,9 +11,9 @@ class App extends Component {
         <header>
           <Image src={logo} size='medium' centered alt="Organic Start" />
         </header>
-        <Batch />
-        <Order />
-        <Fraud />
+        <BatchOrders />
+        <FetchOrder />
+        <FraudOrders />
       </div>
     );
   }

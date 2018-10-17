@@ -1,6 +1,5 @@
 import React from 'react';
 import { Segment, Button, Form } from 'semantic-ui-react';
-import './FetchOrder.css';
 
 const FetchOrder = () => {
     return (

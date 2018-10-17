@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import BatchOrder from './components/BatchOrder/BatchOrder';
-import FetchOrder from './components/FetchOrder/FetchOrder';
-import FraudulentOrder from './components/FraudulentOrder/FraudulentOrder';
+import { Image } from 'semantic-ui-react';
+import Batch from './components/BatchOrders/BatchOrders';
+import Order from './components/FetchOrder/FetchOrder';
+import Fraud from './components/FraudOrders/FraudOrders';
 import 'tachyons';
 
 class App extends Component {
   render() {
     return (
-      <div className="App tc container">
+      <div className="App container tc">
         <header>
-          <img src={logo} style={{textAlign:'center', width:'250px', height:'auto'}} alt="logo" />
+          <Image src={logo} size='medium' centered alt="Organic Start" />
         </header>
-        <BatchOrder />
-        <FetchOrder />
-        <FraudulentOrder />
+        <Batch />
+        <Order />
+        <Fraud />
       </div>
     );
   }

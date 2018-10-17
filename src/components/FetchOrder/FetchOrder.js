@@ -1,15 +1,17 @@
 import React from 'react';
-import { Button, Form } from 'semantic-ui-react';
+import { Segment, Button, Form } from 'semantic-ui-react';
 import './FetchOrder.css';
 
 const FetchOrder = () => {
     return (
-        <div className="gradient-orange center ma3 pa3 tc">
-        <Form>
-            <Form.Input fluid label='Order Number: ' placeholder='#123871238912' error />
-            <Button color="orange">Fetch Order</Button>
-        </Form>
-    </div>
+        <Segment color='yellow' padded='very'>
+            <Form>
+                <Form.Field>
+                    <Form.Input fluid label='Order Number: ' placeholder='123456' />
+                </Form.Field>
+                <Button size='large' color="yellow">Fetch Order</Button>
+            </Form>
+        </Segment>
     );
 }
 

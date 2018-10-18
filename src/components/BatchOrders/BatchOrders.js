@@ -10,16 +10,16 @@ class BatchOrders extends React.Component {
     constructor(props) {
         super(props);
         this.state = {batchNumber: '', picker: '', shipper: ''};
-        this.onChange = this.onChange.bind(this);
-        this.onSelectChange = this.onSelectChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    onChange = (e) => this.setState({[e.target.name]: e.target.value});
+    handleChange = (e) => this.setState({[e.target.name]: e.target.value});
 
-    onSelectChange = (e, data) => this.setState({[data.name]: data.value});
+    handleSelectChange = (e, data) => this.setState({[data.name]: data.value});
 
-    onSubmit(event) {
+    handleSubmit(event) {
         /*var request = new XMLHttpRequest();
 
         request.open('GET', 'https://ssapi.shipstation.com/shipments?batchNumber=');
@@ -41,13 +41,13 @@ class BatchOrders extends React.Component {
     render() {
         return (
             <Segment color='olive' padded='very'>
-                <Form size='large' onSubmit={this.onSubmit}>
+                <Form size='large' onSubmit={this.handleSubmit}>
                     <Form.Field>
-                        <Form.Input fluid label='Batch Number' placeholder='123456' name='batchNumber' value={this.state.batchNumber} onChange={this.onChange} />
+                        <Form.Input fluid label='Batch Number' placeholder='123456' name='batchNumber' value={this.state.batchNumber} onChange={this.handleChange} />
                     </Form.Field>
                     <Form.Group widths='equal'>
-                            <Form.Select label='Picker' placeholder='Select One' name='picker' options={people} onChange={this.onSelectChange} />
-                            <Form.Select label='Shipper' placeholder='Select One' name='shipper' options={people} onChange={this.onSelectChange} />
+                            <Form.Select label='Picker' placeholder='Select One' name='picker' options={people} onChange={this.handleSelectChange} />
+                            <Form.Select label='Shipper' placeholder='Select One' name='shipper' options={people} onChange={this.handleSelectChange} />
                     </Form.Group>
                     <Button size='large' color='olive' type='submit'>Generate Batch</Button>
                 </Form>

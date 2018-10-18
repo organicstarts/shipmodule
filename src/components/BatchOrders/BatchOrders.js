@@ -2,9 +2,7 @@ import React from 'react';
 import { Segment, Button, Form } from 'semantic-ui-react';
 
 import people from '../../config/people';
-/*const peopleOptions = people.map((person) =>
-    <option key={person.key} value={person.value}>{person.text}</option>
-);*/
+import shipstation from '../../config/auth';
 
 class BatchOrders extends React.Component {
     constructor(props) {
@@ -20,11 +18,10 @@ class BatchOrders extends React.Component {
     handleSelectChange = (e, data) => this.setState({[data.name]: data.value});
 
     handleSubmit(event) {
-        /*var request = new XMLHttpRequest();
-
-        request.open('GET', 'https://ssapi.shipstation.com/shipments?batchNumber=');
-
-        request.setRequestHeader('Authorization', '< Enter your Basic Authorization string here >');
+        var request = new XMLHttpRequest();
+        request.open('GET', 'https://ssapi.shipstation.com/shipments');
+        const encodedString = new Buffer(shipstation.user + ':' + shipstation.key).toString('base64');
+        request.setRequestHeader('Authorization', 'Basic ' + encodedString);
 
         request.onreadystatechange = function () {
         if (this.readyState === 4) {
@@ -34,9 +31,9 @@ class BatchOrders extends React.Component {
         }
         };
 
-        request.send();*/
+        request.send();
 
-        console.log(this.state);
+        console.log(request);
     }
     render() {
         return (

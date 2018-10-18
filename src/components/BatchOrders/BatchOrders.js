@@ -1,6 +1,6 @@
 import React from 'react';
 import { Segment, Button, Form } from 'semantic-ui-react';
-
+import axios from 'axios';
 import people from '../../config/people';
 import shipstation from '../../config/auth';
 
@@ -18,6 +18,12 @@ class BatchOrders extends React.Component {
     handleSelectChange = (e, data) => this.setState({[data.name]: data.value});
 
     handleSubmit(event) {
+        axios.get('https://ssapi.shipstation.com/shipments', {
+            params: {
+                ID: shipstation.user,
+                password: shipstation.key
+            }
+        }).then(response => console.log(response))
         var request = new XMLHttpRequest();
         request.open('GET', 'https://ssapi.shipstation.com/shipments');
         const encodedString = new Buffer(shipstation.user + ':' + shipstation.key).toString('base64');

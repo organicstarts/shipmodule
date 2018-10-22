@@ -18,6 +18,27 @@ class BatchOrders extends React.Component {
     handleSelectChange = (e, data) => this.setState({[data.name]: data.value});
 
     handleSubmit(event) {
+        var config = {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+            },
+            params: {
+                  email_address: shipstation.user,
+                  password: shipstation.key
+            }
+     };
+     axios.get( 'https://ssapi.shipstation.com/shipments', {}, config)
+     .then(function (response) {
+            console.log(response);
+     })
+     .catch(function (response) {
+            console.log(response);
+     });
+        
+        
+        
+        /*
         axios.get('https://ssapi.shipstation.com/shipments', {
             params: {
                 ID: shipstation.user,
@@ -36,10 +57,10 @@ class BatchOrders extends React.Component {
             console.log('Body:', this.responseText);
         }
         };
+*/
+        //request.send();
 
-        request.send();
-
-        console.log(request);
+      //  console.log(request);
     }
     render() {
         return (

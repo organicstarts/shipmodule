@@ -3,7 +3,6 @@
 # dependencies
 node_modules
 
-
 # testing
 coverage
 
@@ -21,3 +20,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 *.rdb
+
+#private
+src/config/auth.json

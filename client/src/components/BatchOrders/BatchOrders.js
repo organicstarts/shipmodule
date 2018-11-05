@@ -1,7 +1,7 @@
 import React from 'react';
 import { Segment, Button, Form } from 'semantic-ui-react';
 import people from '../../config/people';
-import * as config from '../../config/auth';
+import * as retriever from '../../helpers/Retriever';
 
 class BatchOrders extends React.Component {
     constructor(props) {
@@ -18,6 +18,8 @@ class BatchOrders extends React.Component {
 
     handleSubmit(event) {
 
+        retriever.fetchJSON();
+        /*
         const encodedString = new Buffer(`${config.shipstation.user}:${config.shipstation.key}`).toString('base64');
 
         const requestOptions = {
@@ -41,6 +43,7 @@ class BatchOrders extends React.Component {
             .catch(function (error) {
                 console.log('Looks like there was a problem: \n', error);
             });
+            */
     }
     render() {
         return (

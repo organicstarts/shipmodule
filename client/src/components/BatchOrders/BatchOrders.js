@@ -1,5 +1,6 @@
 import React from "react";
 import { Segment, Button, Form } from "semantic-ui-react";
+import { withRouter } from "react-router-dom";
 import people from "../../config/people";
 import { getBatch } from "../../helpers/ShipStation/Shipments";
 
@@ -21,7 +22,10 @@ class BatchOrders extends React.Component {
       this.setState({
         batchDatas: data
       });
-      console.log(this.state.batchDatas);
+      this.props.history.push({
+        pathname: "/batch",
+        state: {detail: this.state}
+      });
     });
   }
   render() {
@@ -63,4 +67,4 @@ class BatchOrders extends React.Component {
   }
 }
 
-export default BatchOrders;
+export default withRouter(BatchOrders);

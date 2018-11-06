@@ -1,13 +1,20 @@
 import React from "react";
 import { Segment, Button, Form } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
+import _ from "lodash";
 import people from "../../config/people";
 import { getBatch } from "../../helpers/ShipStation/Shipments";
 
 class BatchOrders extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { batchNumber: "", picker: "", shipper: "", batchDatas: [] };
+    this.state = {
+      batchNumber: "",
+      picker: "",
+      shipper: "",
+      batchDatas: [],
+      shipItems: []
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,14 +27,26 @@ class BatchOrders extends React.Component {
   handleSubmit() {
     getBatch(this.state.batchNumber).then(data => {
       this.setState({
-        batchDatas: data
+        batchDatas: data,
+        shipItems: this.sortShipments(data)
       });
+
       this.props.history.push({
         pathname: "/batch",
-        state: {detail: this.state}
+        state: { detail: this.state }
       });
     });
   }
+
+  sortShipments(data) {
+    const shipmentArray = data.map(shipItems => shipItems.shipmentItems);
+    let items = [];
+    for (let i = 0; i < shipmentArray.length; i++) {
+      items = items.concat(shipmentArray[i]);
+    }
+    return _.groupBy(items, item => item.sku);
+  }
+
   render() {
     return (
       <Segment color="olive" padded="very">

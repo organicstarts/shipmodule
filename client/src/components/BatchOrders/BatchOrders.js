@@ -1,13 +1,12 @@
 import React from "react";
 import { Segment, Button, Form } from "semantic-ui-react";
-import axios from "axios";
 import people from "../../config/people";
-import * as config from "../../config/auth";
+import { getBatch } from "../../helpers/ShipStation/Shipments";
 
 class BatchOrders extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { batchNumber: "", picker: "", shipper: "", batchDatas:[] };
+    this.state = { batchNumber: "", picker: "", shipper: "", batchDatas: [] };
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,28 +17,12 @@ class BatchOrders extends React.Component {
   handleSelectChange = (e, data) => this.setState({ [data.name]: data.value });
 
   handleSubmit() {
-    const encodedString = new Buffer(
-      `${config.shipstation.user}:${config.shipstation.key}`
-    ).toString("base64");
-
-    const requestOptions = {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        Authorization: `Basic ${encodedString}`
-      }
-    };
-
-    return axios
-      .get("https://ssapi.shipstation.com/shipments", requestOptions)
-      .then(response => {
-        const batchArray = response.data.shipments.filter( data =>{
-            return data.batchNumber == this.state.batchNumber;
-        })
-        console.log(batchArray)
-      })
-      .catch(error => {
-        console.log("Looks like there was a problem: \n", error);
+    getBatch(this.state.batchNumber).then(data => {
+      this.setState({
+        batchDatas: data
       });
+      console.log(this.state.batchDatas);
+    });
   }
   render() {
     return (

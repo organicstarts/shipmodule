@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import _ from "lodash";
 import people from "../../config/people";
 import { getBatch } from "../../helpers/ShipStation/Shipments";
+import products from "../../config/products.json";
 
 class BatchOrders extends React.Component {
   constructor(props) {
@@ -18,6 +19,8 @@ class BatchOrders extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.calculatePackage = this.calculatePackage.bind(this);
+    this.compare = this.compare.bind(this);
   }
 
   handleChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -30,12 +33,27 @@ class BatchOrders extends React.Component {
         batchDatas: data,
         shipItems: this.sortShipments(data)
       });
-
+      this.calculatePackage();
       this.props.history.push({
         pathname: "/batch",
         state: { detail: this.state }
       });
     });
+  }
+
+  calculatePackage() {
+    const { shipItems } = this.state;
+    let count = 0;
+    let currentWarehouse = shipItems[0].warehouseLocation;
+    for (let item in shipItems) {
+      let i = 0;
+      // while (shipItems[item+=i].warehouseLocation === currentWarehouse) {
+      //   count++;
+      //   i++
+      // }
+      console.log(shipItems[item]);
+      currentWarehouse = shipItems[item].warehouseLocation;
+    }
   }
 
   sortShipments(data) {
@@ -44,7 +62,35 @@ class BatchOrders extends React.Component {
     for (let i = 0; i < shipmentArray.length; i++) {
       items = items.concat(shipmentArray[i]);
     }
-    return _.groupBy(items, item => item.sku);
+    const group = _.groupBy(items, item => item.sku);
+    let sortable = [];
+    let name = "";
+    for (let key in group) {
+      if (group[key].length > 1 && key !== "") {
+        const totalCount = group[key]
+          .map(x => x.quantity)
+          .reduce((accumulator, amount) => amount + accumulator, 0);
+        group[key].splice(1);
+        group[key][0].quantity = totalCount;
+      }
+      name = products[0][key];
+
+      if (name) group[key][0].name = name;
+
+      if (group[key].length > 1 && key === "") {
+        sortable.push(group[key]);
+      } else {
+        sortable.push(group[key][0]);
+      }
+    }
+
+    sortable.sort(this.compare);
+    return sortable;
+  }
+
+  //helper func to compare warehouse locations
+  compare(a, b) {
+    return a.warehouseLocation - b.warehouseLocation;
   }
 
   render() {

@@ -2,20 +2,24 @@
 import * as retriever from "../../helpers/Retriever";
 import * as log from "../Log";
 
-export const recentShipments = () => {
+const recentShipments = () => {
   return retriever.fetchJSON(
     "ss",
     "shipments?sortDir=DESC&page=1&pageSize=500&includeShipmentItems=true"
   );
 };
 
-export const shipments = orderID => {
+const shipments = orderID => {
   return retriever.fetchJSON("ss", "shipments?orderId=" + orderID);
 };
 
-export const order = orderID => {
+const order = orderID => {
   return retriever.fetchJSON("ss", "orders/" + orderID);
 };
+
+const tag = () => {
+  return retriever.fetchJSON("ss","accounts/listtags")
+}
 
 export const getBatch = async batch => {
   return await recentShipments()
@@ -27,3 +31,7 @@ export const getBatch = async batch => {
     })
     .catch(log.error);
 };
+
+export const getTag = async () =>{
+  return await tag().then(data => console.log(data))
+}

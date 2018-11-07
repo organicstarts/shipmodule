@@ -1,39 +1,41 @@
 import React from "react";
 import BatchDetail from "./BatchDetail";
 
+const BatchList = props => {
+  return<div>{renderBatchList(props)}</div>;
+};
+
 const renderBatchList = props => {
   const { shipItems } = props.location.state.detail;
   console.log(shipItems);
-  let totalQuantity = "";
-  return Object.keys(shipItems)
-    .map(data => {
-      if (shipItems[data].length > 1) {
-        totalQuantity = shipItems[data]
-          .map(x => x.quantity)
-          .reduce((accumulator, amount) => amount + accumulator, 0);
-        console.log(totalQuantity);
-      }
-      return (
+  let count = 0;
+  return shipItems.map(data => {
+    if (data.length > 1) {
+      return data.map(data => (
+       
+          <BatchDetail
+            key={data.orderItemId}
+            sku={data.sku}
+            text={data.name}
+            image={data.imageUrl}
+            quantity={data.quantity}
+            warehouse={data.warehouseLocation}
+          />
+       
+      ));
+    }
+    return (
+     
         <BatchDetail
-          key={shipItems[data][0].orderItemId}
-          sku={data}
-          text={shipItems[data][0].name}
-          image={shipItems[data][0].imageUrl}
-          quantity={totalQuantity || shipItems[data][0].quantity}
-          warehouse={shipItems[data][0].warehouseLocation}
+          key={data.orderItemId}
+          sku={data.sku}
+          text={data.name}
+          image={data.imageUrl}
+          quantity={data.quantity}
+          warehouse={data.warehouseLocation}
         />
-      );
-    })
-    .sort(compare);
+     
+    );
+  });
 };
-
-//helper func to compare warehouse locations
-const compare = (a, b) => {
-  return a.props.warehouse - b.props.warehouse;
-};
-
-const BatchList = props => {
-  return <div>{renderBatchList(props)}</div>;
-};
-
 export default BatchList;

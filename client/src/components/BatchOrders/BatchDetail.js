@@ -4,7 +4,7 @@ const BatchDetail = (props) => {
     return (
         <div className="row">
             <div className="col-lg-4">
-                <img src={props.image} alt="product image" />
+                <img src={props.image} alt="product" />
             </div>
             <h1>
                 {props.text}

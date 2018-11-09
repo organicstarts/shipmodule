@@ -1,0 +1,12 @@
+export const brandon = require('./brandon.jpg');
+export const david = require('./david.jpg');
+export const isaiah = require('./isaiah.jpg');
+export const jonathan = require('./jonathan.jpg');
+export const daniel = require('./daniel.jpg');
+export const julian = require('./julian.jpg');
+export const luis = require('./luis.jpg');
+export const peter = require('./peter.jpg');
+export const richard = require('./richard.jpg');
+export const romario = require('./romario.jpg');
+export const steve = require('./steve.jpg');
+export const training = require('./training.jpg')

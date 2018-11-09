@@ -1,42 +1,42 @@
 [
-    { 
-        "key": "1", 
-        "text": "Jonathan", 
-        "value": "jonathan"
-    },
-    { 
-        "key": "2", 
-        "text": "Julian", 
-        "value": "julian"
-    },
-    { 
-        "key": "3", 
-        "text": "Luis", 
-        "value": "luis" 
-    },
-    { 
-        "key": "4", 
-        "text": "Steve", 
-        "value": "steve" 
-    },
-    { 
-        "key": "5", 
-        "text": "David", 
-        "value": "david" 
-    },
-    { 
-        "key": "6", 
-        "text": "Richard", 
-        "value": "richard" 
-    },
-    { 
-        "key": "7", 
-        "text": "Romario", 
-        "value": "romario" 
-    },
-    { 
-        "key": "8", 
-        "text": "Training", 
-        "value": "training" 
-    }
+  {
+    "key": "1",
+    "text": "Jonathan",
+    "value": "jonathan"
+  },
+  {
+    "key": "2",
+    "text": "Julian",
+    "value": "julian"
+  },
+  {
+    "key": "3",
+    "text": "Luis",
+    "value": "luis"
+  },
+  {
+    "key": "4",
+    "text": "Steve",
+    "value": "steve"
+  },
+  {
+    "key": "5",
+    "text": "David",
+    "value": "david"
+  },
+  {
+    "key": "6",
+    "text": "Richard",
+    "value": "richard"
+  },
+  {
+    "key": "7",
+    "text": "Romario",
+    "value": "romario"
+  },
+  {
+    "key": "8",
+    "text": "Training",
+    "value": "training"
+  }
 ]

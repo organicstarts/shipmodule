@@ -1,5 +1,6 @@
 import React from "react";
 import BatchDetail from "./BatchDetail";
+import SlipDetail from "./SlipDetail";
 
 const BatchList = props => {
   return (
@@ -73,7 +74,23 @@ const renderBatchList = props => {
 
 const renderSlipList = props => {
   const { batchDatas } = props.location.state.detail;
-  console.log(batchDatas)
+  console.log(batchDatas);
+  return <SlipDetail 
+    shipmentInfo = {batchDatas[0].shipmentItems}
+    name = {batchDatas[0].shipTo.name}
+    email = {batchDatas[0].customerEmail}
+    company = {batchDatas[0].shipTo.company}
+    street1 = {batchDatas[0].shipTo.street1}
+    street2 = {batchDatas[0].shipTo.street2}
+    city = {batchDatas[0].shipTo.city}
+    state = {batchDatas[0].shipTo.state}
+    zip = {batchDatas[0].shipTo.postalCode}
+    total = {batchDatas[0].shipmentItems.length}
+    orderID = {batchDatas[0].orderNumber}
+    created = {batchDatas[0].createDate}
+    shipmentCost = {batchDatas[0].shipmentCost}
+
+  />
 }
 
 const styles = {

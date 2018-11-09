@@ -43,30 +43,6 @@ class BatchOrders extends React.Component {
     });
   }
 
-  calculatePackage() {
-    const { shipItems } = this.state;
-   
-    for (let item in shipItems) {
-      if(productPerPackage[shipItems[item].sku]){
-        console.log("SKU", shipItems[item].sku)
-        console.log("ITEM QUANTITY", shipItems[item].quantity)
-        const packagePer = productPerPackage[shipItems[item].sku];
-        let fullBox = 0;
-        let loose = 0;
-        if( shipItems[item].quantity/packagePer > 1) {
-          fullBox =  Math.floor(shipItems[item].quantity/packagePer);
-          shipItems[item].fullBox = fullBox;
-        }
-        if(  shipItems[item].quantity/packagePer !== fullBox ) {
-          loose = shipItems[item].quantity - (fullBox * packagePer)
-          shipItems[item].loose = loose;
-        }
-
-      }
-
-    }
-  }
-
   sortShipments(data) {
     const shipmentArray = data.map(shipItems => shipItems.shipmentItems);
     let items = [];
@@ -94,14 +70,35 @@ class BatchOrders extends React.Component {
       } else {
         sortable.push(group[key][0]);
       }
-      count += group[key][0].quantity
+      count += group[key][0].quantity;
     }
 
     sortable.sort(this.compare);
-    this.setState({totalCount: count})
+    this.setState({ totalCount: count });
     return sortable;
   }
 
+  calculatePackage() {
+    const { shipItems } = this.state;
+
+    for (let item in shipItems) {
+      if (productPerPackage[shipItems[item].sku]) {
+        console.log("SKU", shipItems[item].sku);
+        console.log("ITEM QUANTITY", shipItems[item].quantity);
+        const packagePer = productPerPackage[shipItems[item].sku];
+        let fullBox = 0;
+        let loose = 0;
+        if (shipItems[item].quantity / packagePer > 1) {
+          fullBox = Math.floor(shipItems[item].quantity / packagePer);
+          shipItems[item].fullBox = fullBox;
+        }
+        if (shipItems[item].quantity / packagePer !== fullBox) {
+          loose = shipItems[item].quantity - fullBox * packagePer;
+          shipItems[item].loose = loose;
+        }
+      }
+    }
+  }
   //helper func to compare warehouse locations
   compare(a, b) {
     return a.warehouseLocation - b.warehouseLocation;

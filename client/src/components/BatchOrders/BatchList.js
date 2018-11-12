@@ -1,6 +1,8 @@
 import React from "react";
+import moment from "moment";
 import BatchDetail from "./BatchDetail";
 import SlipDetail from "./SlipDetail";
+import boxes from "../../config/boxes";
 
 const BatchList = props => {
   return (
@@ -29,7 +31,7 @@ const BatchList = props => {
           </div>
         </div>
         <div>{renderBatchList(props)}</div>
-        <div className="row text-right">
+        <div className="row" style={{ textAlign: "right" }}>
           <div className="col-12">
             <strong>
               Total Items Required: {props.location.state.detail.totalCount}
@@ -54,7 +56,7 @@ const renderBatchList = props => {
           sku={data.sku}
           text={data.name}
           image={data.imageUrl}
-          quantity={data.quantity}
+          quantity={data.combineTotal ? data.combineTotal : data.quantity}
           warehouse={data.warehouseLocation}
         />
       ));
@@ -65,7 +67,7 @@ const renderBatchList = props => {
         sku={data.sku}
         text={data.name}
         image={data.imageUrl}
-        quantity={data.quantity}
+        quantity={data.combineTotal ? data.combineTotal : data.quantity}
         warehouse={data.warehouseLocation}
         fullBox={data.fullBox ? data.fullBox : null}
         loose={data.loose ? data.loose : null}
@@ -76,9 +78,13 @@ const renderBatchList = props => {
 
 const renderSlipList = props => {
   const { batchDatas } = props.location.state.detail;
+  console.log(batchDatas);
   return batchDatas.map(data => {
     return (
       <SlipDetail
+        key={data.orderId}
+        box={calculateBox(data.dimensions)}
+        batchNumber={data.batchNumber}
         shipmentInfo={data.shipmentItems}
         name={data.shipTo.name}
         email={data.customerEmail}
@@ -88,13 +94,33 @@ const renderSlipList = props => {
         city={data.shipTo.city}
         state={data.shipTo.state}
         zip={data.shipTo.postalCode}
-        total={data.shipmentItems.length}
+        total={getTotal(data.shipmentItems)}
         orderID={data.orderNumber}
-        created={data.createDate}
+        created={formatDate(data.createDate)}
+        shipDate={formatDate(data.shipDate)}
         shipmentCost={data.shipmentCost}
       />
     );
   });
+};
+const calculateBox = dimension => {
+  if(dimension){
+  const boxSize = dimension.height * dimension.width * dimension.length;
+  return boxes[boxSize].name;
+  }
+  return "";
+};
+const getTotal = items => {
+  let x = 0;
+  items.map(item => (x = x + item.quantity));
+  return x;
+};
+
+const formatDate = string => {
+  // var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+  //return new Date(string).toLocaleDateString([],options);
+  const date = moment(string);
+  return date.format("Do MMMM YYYY");
 };
 
 const styles = {

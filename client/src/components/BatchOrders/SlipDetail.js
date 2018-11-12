@@ -18,7 +18,7 @@ const SlipDetail = props => {
           <br />
           <strong>1</strong>
           <br />
-          PT-TWO
+          {props.box}
         </div>
       </div>
       <div className="ui divider shipping-info" />
@@ -29,10 +29,10 @@ const SlipDetail = props => {
           <br />
           {props.email}
           <br />
-          {props.company ? props.company + "<br/>" : ""}
+          {props.company ? [props.company, <br key={props.orderID} />] : ""}
           {props.street1}
           <br />
-          {props.street2 ? props.street2 + "<br>" : ""}
+          {props.street2 ? [props.street2, <br key={props.orderID} />] : ""}
           {props.city}, {props.state} {props.zip}
           <br />
         </div>
@@ -41,8 +41,10 @@ const SlipDetail = props => {
           <br />
           Order <strong>#{props.orderID}</strong>
           <br />
-          Order placed on the <strong>{props.created}</strong>.<br />
-          Shipped on the <strong>{props.shipped}</strong>
+          Batch <strong>#{props.batchNumber}</strong>
+          <br />
+          Order placed on the <strong>{props.created}</strong><br />
+          Shipped on the <strong>{props.shipDate}</strong>
           <small>{props.timeAfter}</small>
         </div>
       </div>

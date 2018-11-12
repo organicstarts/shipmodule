@@ -59,7 +59,7 @@ class BatchOrders extends React.Component {
           .map(x => x.quantity)
           .reduce((accumulator, amount) => amount + accumulator, 0);
         group[key].splice(1);
-        group[key][0].quantity = totalCount;
+        group[key][0].combineTotal = totalCount;
       }
       name = products[0][key];
 
@@ -70,7 +70,9 @@ class BatchOrders extends React.Component {
       } else {
         sortable.push(group[key][0]);
       }
-      count += group[key][0].quantity;
+      count += group[key][0].combineTotal
+        ? group[key][0].combineTotal
+        : group[key][0].quantity;
     }
 
     sortable.sort(this.compare);
@@ -88,13 +90,34 @@ class BatchOrders extends React.Component {
         const packagePer = productPerPackage[shipItems[item].sku];
         let fullBox = 0;
         let loose = 0;
-        if (shipItems[item].quantity / packagePer > 1) {
-          fullBox = Math.floor(shipItems[item].quantity / packagePer);
+        if (
+          (shipItems[item].combineTotal
+            ? shipItems[item].combineTotal
+            : shipItems[item].quantity) /
+            packagePer >=
+          1
+        ) {
+          fullBox = Math.floor(
+            (shipItems[item].combineTotal
+              ? shipItems[item].combineTotal
+              : shipItems[item].quantity) / packagePer
+          );
           shipItems[item].fullBox = fullBox;
-        }
-        if (shipItems[item].quantity / packagePer !== fullBox) {
-          loose = shipItems[item].quantity - fullBox * packagePer;
-          shipItems[item].loose = loose;
+
+          if (
+            (shipItems[item].combineTotal
+              ? shipItems[item].combineTotal
+              : shipItems[item].quantity) /
+              packagePer !==
+            fullBox
+          ) {
+            loose =
+              (shipItems[item].combineTotal
+                ? shipItems[item].combineTotal
+                : shipItems[item].quantity) -
+              fullBox * packagePer;
+            shipItems[item].loose = loose;
+          }
         }
       }
     }

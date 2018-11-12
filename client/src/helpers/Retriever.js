@@ -35,7 +35,7 @@ function switchConfig(destination) {
     case "ss":
       return `${config.shipstation.user}:${config.shipstation.key}`;
     case "os":
-      return `${config.shipstation.user}:${config.shipstation.key}`;
+      return `${config.bigcommerce.user}:${config.bigcommerce.key}`;
     case "osw":
       return `${config.shipstation.user}:${config.shipstation.key}`;
     case "tfc":

@@ -4,7 +4,7 @@ import SlipDetail from "./SlipDetail";
 
 const BatchList = props => {
   return (
-   <div>
+    <div>
       <div style={styles.pickList}>
         <div className="row">
           <h1 className="col-6" style={styles.margin}>
@@ -31,19 +31,21 @@ const BatchList = props => {
         <div>{renderBatchList(props)}</div>
         <div className="row text-right">
           <div className="col-12">
-            <strong>Total Items Required: {props.location.state.detail.totalCount}</strong>
+            <strong>
+              Total Items Required: {props.location.state.detail.totalCount}
+            </strong>
           </div>
         </div>
       </div>
 
-      <div>{renderSlipList(props)}</div> 
-   </div>
+      <div>{renderSlipList(props)}</div>
+    </div>
   );
 };
 
 const renderBatchList = props => {
   const { shipItems } = props.location.state.detail;
-  console.log(shipItems)
+  console.log(shipItems);
   return shipItems.map(data => {
     if (data.length > 1) {
       return data.map(data => (
@@ -74,24 +76,26 @@ const renderBatchList = props => {
 
 const renderSlipList = props => {
   const { batchDatas } = props.location.state.detail;
-  console.log(batchDatas);
-  return <SlipDetail 
-    shipmentInfo = {batchDatas[0].shipmentItems}
-    name = {batchDatas[0].shipTo.name}
-    email = {batchDatas[0].customerEmail}
-    company = {batchDatas[0].shipTo.company}
-    street1 = {batchDatas[0].shipTo.street1}
-    street2 = {batchDatas[0].shipTo.street2}
-    city = {batchDatas[0].shipTo.city}
-    state = {batchDatas[0].shipTo.state}
-    zip = {batchDatas[0].shipTo.postalCode}
-    total = {batchDatas[0].shipmentItems.length}
-    orderID = {batchDatas[0].orderNumber}
-    created = {batchDatas[0].createDate}
-    shipmentCost = {batchDatas[0].shipmentCost}
-
-  />
-}
+  return batchDatas.map(data => {
+    return (
+      <SlipDetail
+        shipmentInfo={data.shipmentItems}
+        name={data.shipTo.name}
+        email={data.customerEmail}
+        company={data.shipTo.company}
+        street1={data.shipTo.street1}
+        street2={data.shipTo.street2}
+        city={data.shipTo.city}
+        state={data.shipTo.state}
+        zip={data.shipTo.postalCode}
+        total={data.shipmentItems.length}
+        orderID={data.orderNumber}
+        created={data.createDate}
+        shipmentCost={data.shipmentCost}
+      />
+    );
+  });
+};
 
 const styles = {
   margin: {

@@ -11,7 +11,10 @@ const SlipDetail = props => {
           <br />
           <i>"Healthy Starts from Day One."</i>
         </div>
-        <div className="col-2 offset-6 text-center">
+        <div
+          className="col-2 offset-6 text-center"
+          style={{ zIndex: "999", color: "#000!important", fontSize: "1.75em" }}
+        >
           <br />
           <strong>1</strong>
           <br />
@@ -45,11 +48,15 @@ const SlipDetail = props => {
       </div>
       <div
         className="ui divider"
-        // style="margin:0.15in auto;border-color:#999;border-top:1px solid transparent;"
+        style={{
+          margin: "0.15in auto",
+          borderColor: "#999",
+          borderTop: "1px solid transparent"
+        }}
       />
       <table
         className="ui very basic table"
-        // style="border-color:#999;border-left:none;border-right:none;"
+        style={{ borderColor: "#999", borderLeft: "none", borderRight: "none" }}
       >
         <thead>
           <tr>
@@ -72,39 +79,59 @@ const SlipDetail = props => {
           <tr>
             <th
               className="text-right"
-              colSpan="3" /*style="padding:.78571429em .78571429em 0 0;"*/
+              colSpan="3"
+              style={{
+                textAlign: "right",
+                padding: ".78571429em .78571429em 0 0"
+              }}
             >
               <strong>Subtotal</strong>
             </th>
-            <th /*style="padding:.78571429em .78571429em 0 .78571429em ;"*/>
+            <th style={{ padding: ".78571429em .78571429em 0 .78571429em" }}>
               ${calculateTotal(props.shipmentInfo)}
             </th>
           </tr>
           <tr>
             <th
               className="text-right"
-              colSpan="3" /*style="padding:0 .78571429em;border-top:none;"*/
+              colSpan="3"
+              style={{
+                textAlign: "right",
+                padding: "0 .78571429em",
+                borderTop: "none"
+              }}
             >
               <strong>Shipping</strong>
             </th>
-            <th /*style="padding:0 .78571429em;border-top:none;"*/>
+            <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
               ${props.shipmentCost}
             </th>
           </tr>
           <tr>
             <th
               className="text-right"
-              colSpan="3" /*style="padding:0 .78571429em;border-top:none;"*/
+              colSpan="3"
+              style={{
+                textAlign: "right",
+                padding: "0 .78571429em",
+                borderTop: "none"
+              }}
             >
               <strong>Credit / Certificate</strong>
             </th>
-            <th /*style="padding:0 .78571429em;border-top:none;"*/>$-0.00</th>
+            <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
+              $-0.00
+            </th>
           </tr>
           <tr>
-            <th className="text-right" colSpan="3" /*style="border-top:none;"*/>
+            <th
+              className="text-right"
+              colSpan="3"
+              style={{ textAlign: "right", borderTop: "none" }}
+            >
               <strong>Total</strong>
             </th>
-            <th /*style="border-top:none;"*/>
+            <th style={{ borderTop: "none" }}>
               ${calculateTotal(props.shipmentInfo, props.shipmentCost)}
             </th>
           </tr>
@@ -113,16 +140,25 @@ const SlipDetail = props => {
 
       <table
         className="ui two column table text-center"
-        //style="margin:0.15in auto;border-color:#999;border-left:none;border-right:none;"
+        style={{
+          textAlign: "center",
+          margin: "0.15in auto",
+          borderColor: "#999",
+          borderLeft: "none",
+          borderRight: "none"
+        }}
       >
         <tbody>
           <tr>
-            <td className="align-middle" /*style="border-right:1px solid #999;"*/>
-              <h4 /*style="margin:0;"*/>Order Questions?</h4>
+            <td
+              className="align-middle"
+              style={{ borderRight: "1px solid #999" }}
+            >
+              <h4 style={{ margin: "0" }}>Order Questions?</h4>
               <u>Email us</u> at support@organicstart.com.
             </td>
             <td className="align-middle">
-              <h5 /*style="margin:0;"*/>
+              <h5 style={{ margin: "0" }}>
                 Translated instructions, ingredients & nutrition labels at
                 OrganicStart.com.
               </h5>

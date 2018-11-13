@@ -57,7 +57,8 @@ function authHeader(destination) {
 }
 
 export const fetchJSON = async (destination, path) => {
+  let proxy="https://cors-anywhere.herokuapp.com/"
   return await axios
-    .get(switchURL(destination) + path, authHeader(destination))
+    .get(proxy + switchURL(destination) + path, authHeader(destination))
     .catch(log.error);
 };

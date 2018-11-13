@@ -25,7 +25,7 @@ const SlipDetail = props => {
       <div className="row details">
         <div className="col-7">
           <h1 className="shipping-name">{props.name.toUpperCase()}</h1>
-          Customer <strong>#NEEDTO MAKE GET REQUEST</strong>
+          Customer <strong>{props.customerId}</strong>
           <br />
           {props.email}
           <br />
@@ -44,8 +44,8 @@ const SlipDetail = props => {
           Batch <strong>#{props.batchNumber}</strong>
           <br />
           Order placed on the <strong>{props.created}</strong><br />
-          Shipped on the <strong>{props.shipDate}</strong>
-          <small>{props.timeAfter}</small>
+          Shipped on the <strong>{props.shipDate}</strong><br />
+          <small>about {props.shipDuration} hours after you ordered. Yeah that was fast ;)</small>
         </div>
       </div>
       <div
@@ -106,7 +106,7 @@ const SlipDetail = props => {
               <strong>Shipping</strong>
             </th>
             <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
-              ${props.shipmentCost}
+              ${parseFloat(props.shipmentCost).toFixed(2)}
             </th>
           </tr>
           <tr>
@@ -122,7 +122,7 @@ const SlipDetail = props => {
               <strong>Credit / Certificate</strong>
             </th>
             <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
-              $-0.00
+              $-{parseFloat(props.credit).toFixed(2)}
             </th>
           </tr>
           <tr>
@@ -134,7 +134,7 @@ const SlipDetail = props => {
               <strong>Total</strong>
             </th>
             <th style={{ borderTop: "none" }}>
-              ${calculateTotal(props.shipmentInfo, props.shipmentCost)}
+              ${calculateTotal(props.shipmentInfo, props.shipmentCost, props.credit)}
             </th>
           </tr>
         </tfoot>
@@ -172,12 +172,12 @@ const SlipDetail = props => {
   );
 };
 
-const calculateTotal = (items, shipping = 0) => {
+const calculateTotal = (items, shipping = 0, discount = 0) => {
   let subTotal = 0;
   for (let sub in items) {
     subTotal += items[sub].unitPrice * items[sub].quantity;
   }
-  return (subTotal + shipping).toFixed(2);
+  return (subTotal + shipping - discount) .toFixed(2);
 };
 
 const renderOrder = items => {

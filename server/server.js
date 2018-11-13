@@ -1,7 +1,10 @@
 import bodyParser from 'body-parser'
+const cors = require('cors')
 import express from 'express'
 import path from 'path'
 const app = express()
+
+app.use(cors())
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))

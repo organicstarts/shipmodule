@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import _ from "lodash";
 import people from "../../config/people";
 import { getBatch } from "../../helpers/ShipStation/Shipments";
+import { getOrder } from "../../helpers/BigCommerce/Orders";
 import products from "../../config/products.json";
 import productPerPackage from "../../config/productPerPackage.json";
 
@@ -30,17 +31,28 @@ class BatchOrders extends React.Component {
   handleSelectChange = (e, data) => this.setState({ [data.name]: data.value });
 
   handleSubmit() {
-    getBatch(this.state.batchNumber).then(data => {
-      this.setState({
-        batchDatas: data,
-        shipItems: this.sortShipments(data)
+    getBatch(this.state.batchNumber)
+      .then( async data => {
+        this.setState({
+          batchDatas: data,
+          shipItems: this.sortShipments(data)
+        });
+        await Promise.all(
+          data.map( async data =>
+            await getOrder(data.orderNumber).then(x => {
+              data.bigCommerce = x;
+            })
+          )
+        );
+      })
+      .then(x => {
+
+        this.calculatePackage();
+        this.props.history.push({
+          pathname: "/batch",
+          state: { detail: this.state }
+        });
       });
-      this.calculatePackage();
-      this.props.history.push({
-        pathname: "/batch",
-        state: { detail: this.state }
-      });
-    });
   }
 
   sortShipments(data) {

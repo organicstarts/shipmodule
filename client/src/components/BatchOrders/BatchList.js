@@ -83,6 +83,7 @@ const renderSlipList = props => {
     return (
       <SlipDetail
         key={data.orderId}
+        customerId={data.bigCommerce.customer_id}
         box={calculateBox(data.dimensions)}
         batchNumber={data.batchNumber}
         shipmentInfo={data.shipmentItems}
@@ -95,18 +96,31 @@ const renderSlipList = props => {
         state={data.shipTo.state}
         zip={data.shipTo.postalCode}
         total={getTotal(data.shipmentItems)}
+        credit={data.bigCommerce.store_credit_amount}
         orderID={data.orderNumber}
-        created={formatDate(data.createDate)}
-        shipDate={formatDate(data.shipDate)}
+        created={formatDate(data.bigCommerce.date_created)}
+        shipDate={formatDate(data.bigCommerce.date_shipped)}
         shipmentCost={data.shipmentCost}
+        shipDuration={calculateTime(data.bigCommerce.date_created, data.bigCommerce.date_shipped)}
       />
     );
   });
 };
+
+const calculateTime = (startDate, endDate) => {
+  let date1 = moment(startDate)
+  let date2 = moment(endDate);
+  let hours = date2.diff(date1,"Hours")
+
+  return hours
+
+
+}
+
 const calculateBox = dimension => {
-  if(dimension){
-  const boxSize = dimension.height * dimension.width * dimension.length;
-  return boxes[boxSize].name;
+  if (dimension) {
+    const boxSize = dimension.height * dimension.width * dimension.length;
+    return boxes[boxSize].name;
   }
   return "";
 };

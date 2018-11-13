@@ -3,6 +3,6 @@ import * as log from "../Log";
 
 export const getOrder = async orderNumber => {
   return await retriever.fetchJSON("os", "orders/" + orderNumber).then(dataArray => {
-    console.log(dataArray)  
+    return dataArray.data;
 }).catch(log.error);
 };

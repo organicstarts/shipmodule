@@ -9,18 +9,6 @@ const recentShipments = () => {
   );
 };
 
-const shipments = orderID => {
-  return retriever.fetchJSON("ss", "shipments?orderId=" + orderID);
-};
-
-const order = orderID => {
-  return retriever.fetchJSON("ss", "orders/" + orderID);
-};
-
-const tag = () => {
-  return retriever.fetchJSON("ss","accounts/listtags")
-}
-
 export const getBatch = async batch => {
   return await recentShipments()
     .then(dataArray => {
@@ -31,7 +19,3 @@ export const getBatch = async batch => {
     })
     .catch(log.error);
 };
-
-export const getTag = async () =>{
-  return await tag().then(data => console.log(data))
-}

@@ -4,6 +4,7 @@ import BatchDetail from "./BatchDetail";
 import SlipDetail from "./SlipDetail";
 import boxes from "../../config/boxes";
 import packages from "../../config/packages";
+import { iconQuotes } from "../../config/peopleicon";
 
 const BatchList = props => {
   return (
@@ -78,7 +79,7 @@ const renderBatchList = props => {
 };
 
 const renderSlipList = props => {
-  const { batchDatas } = props.location.state.detail;
+  const { batchDatas, picker, shipper } = props.location.state.detail;
   console.log(batchDatas);
   return batchDatas.map(data => {
     return (
@@ -91,6 +92,8 @@ const renderSlipList = props => {
         box={calculateBox(data.dimensions)}
         batchNumber={data.batchNumber}
         shipmentInfo={data.shipmentItems}
+        picker={iconQuotes[picker]}
+        shipper={iconQuotes[shipper]}
         name={data.shipTo.name}
         email={data.customerEmail}
         company={data.shipTo.company}
@@ -105,7 +108,10 @@ const renderSlipList = props => {
         created={formatDate(data.bigCommerce.date_created)}
         shipDate={formatDate(data.bigCommerce.date_shipped)}
         shipmentCost={data.shipmentCost}
-        shipDuration={calculateTime(data.bigCommerce.date_created, data.bigCommerce.date_shipped)}
+        shipDuration={calculateTime(
+          data.bigCommerce.date_created,
+          data.bigCommerce.date_shipped
+        )}
       />
     );
   });
@@ -113,17 +119,15 @@ const renderSlipList = props => {
 
 const getCarrier = (carrier, boxPackage) => {
   return packages[carrier][boxPackage].NAME;
-}
+};
 
 const calculateTime = (startDate, endDate) => {
-  let date1 = moment(startDate)
+  let date1 = moment(startDate);
   let date2 = moment(endDate);
-  let hours = date2.diff(date1,"Hours")
+  let hours = date2.diff(date1, "Hours");
 
-  return hours
-
-
-}
+  return hours;
+};
 
 const calculateBox = dimension => {
   if (dimension) {
@@ -139,8 +143,6 @@ const getTotal = items => {
 };
 
 const formatDate = string => {
-  // var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-  //return new Date(string).toLocaleDateString([],options);
   const date = moment(string);
   return date.format("Do MMMM YYYY");
 };

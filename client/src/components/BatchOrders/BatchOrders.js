@@ -30,24 +30,31 @@ class BatchOrders extends React.Component {
 
   handleSelectChange = (e, data) => this.setState({ [data.name]: data.value });
 
+  /* 
+  async get request shipstation api get matching data based on batch number.
+  setState for  batchDatas with shipshipstation response
+  async get request Bigcommerce for coupon info and customer order count. append result to batchdatas
+  */
   handleSubmit() {
     getBatch(this.state.batchNumber)
-      .then( async data => {
+      .then(async data => {
         this.setState({
           batchDatas: data,
           shipItems: this.sortShipments(data)
         });
         await Promise.all(
-          data.map( async data =>
-            await getOrder(data.orderNumber).then(async x => {
-              data.bigCommerce = x;
-              await getOrderCount(x.customer_id).then(y => data.orderCount = y)
-            })
+          data.map(
+            async data =>
+              await getOrder(data.orderNumber).then(async x => {
+                data.bigCommerce = x;
+                await getOrderCount(x.customer_id).then(
+                  y => (data.orderCount = y)
+                );
+              })
           )
         );
       })
       .then(x => {
-
         this.calculatePackage();
         this.props.history.push({
           pathname: "/batch",
@@ -55,7 +62,11 @@ class BatchOrders extends React.Component {
         });
       });
   }
+  /*
+map through batchdatas, place in 1D array and create a key/value pair
+map through Keys(sku) -> add quantities of each object in key to totalCount
 
+*/
   sortShipments(data) {
     const shipmentArray = data.map(shipItems => shipItems.shipmentItems);
     let items = [];
@@ -83,6 +94,9 @@ class BatchOrders extends React.Component {
       } else {
         sortable.push(group[key][0]);
       }
+      /*
+      add total of key(sku) to the total item count if it exist
+      */
       count += group[key][0].combineTotal
         ? group[key][0].combineTotal
         : group[key][0].quantity;
@@ -92,14 +106,14 @@ class BatchOrders extends React.Component {
     this.setState({ totalCount: count });
     return sortable;
   }
-
+  /*
+  calculate item distrubution per package based on the amount of items come in box per sku
+  */
   calculatePackage() {
     const { shipItems } = this.state;
 
     for (let item in shipItems) {
       if (productPerPackage[shipItems[item].sku]) {
-        console.log("SKU", shipItems[item].sku);
-        console.log("ITEM QUANTITY", shipItems[item].quantity);
         const packagePer = productPerPackage[shipItems[item].sku];
         let fullBox = 0;
         let loose = 0;
@@ -152,6 +166,7 @@ class BatchOrders extends React.Component {
               name="batchNumber"
               value={this.state.batchNumber}
               onChange={this.handleChange}
+              required
             />
           </Form.Field>
           <Form.Group widths="equal">
@@ -161,6 +176,7 @@ class BatchOrders extends React.Component {
               name="picker"
               options={people}
               onChange={this.handleSelectChange}
+              required
             />
             <Form.Select
               label="Shipper"
@@ -168,6 +184,7 @@ class BatchOrders extends React.Component {
               name="shipper"
               options={people}
               onChange={this.handleSelectChange}
+              required
             />
           </Form.Group>
           <Button size="large" color="olive" type="submit">

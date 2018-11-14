@@ -13,12 +13,19 @@ const SlipDetail = props => {
         </div>
         <div
           className="col-2 offset-6"
-          style={{ textAlign: "center", zIndex: "999", color: "#000!important", fontSize: "1.75em" }}
+          style={{
+            textAlign: "center",
+            zIndex: "999",
+            color: "#000!important",
+            fontSize: "1.75em"
+          }}
         >
           <br />
-          <strong>{props.orderTotal > 3 ? <p>&#8212;</p>: props.orderTotal}</strong>
+          <strong>
+            {props.orderTotal > 3 ? <p>&#8212;</p> : props.orderTotal}
+          </strong>
           <br />
-          {props.carrier === "fedex"?  ["FDX", <br key={props.orderID} />]: ""}
+          {props.carrier === "fedex" ? ["FDX", <br key={props.orderID} />] : ""}
           {props.carrierCode}
           {props.box}
         </div>
@@ -45,9 +52,14 @@ const SlipDetail = props => {
           <br />
           Batch <strong>#{props.batchNumber}</strong>
           <br />
-          Order placed on the <strong>{props.created}</strong><br />
-          Shipped on the <strong>{props.shipDate}</strong><br />
-          <small>about {props.shipDuration} hours after you ordered. Yeah that was fast ;)</small>
+          Order placed on the <strong>{props.created}</strong>
+          <br />
+          Shipped on the <strong>{props.shipDate}</strong>
+          <br />
+          <small>
+            about {props.shipDuration} hours after you ordered. Yeah that was
+            fast ;)
+          </small>
         </div>
       </div>
       <div
@@ -136,7 +148,12 @@ const SlipDetail = props => {
               <strong>Total</strong>
             </th>
             <th style={{ borderTop: "none" }}>
-              ${calculateTotal(props.shipmentInfo, props.shipmentCost, props.credit)}
+              $
+              {calculateTotal(
+                props.shipmentInfo,
+                props.shipmentCost,
+                props.credit
+              )}
             </th>
           </tr>
         </tfoot>
@@ -166,6 +183,48 @@ const SlipDetail = props => {
                 Translated instructions, ingredients & nutrition labels at
                 OrganicStart.com.
               </h5>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table
+        className="ui column table text-center"
+        style={{
+          textAlign: "center",
+          margin: "0.15in auto",
+          borderColor: "#999",
+          border: "none",
+          borderLeft: "none",
+          borderRight: "none"
+        }}
+      >
+        <tbody>
+          <tr>
+            <td>
+              <img
+                src={props.picker.icon}
+                style={{ float: "left", maxWidth: "0.75in", height: "auto" }}
+                alt="icon"
+              />
+            </td>
+            <td style={{ textAlign: "center" }}>
+              <h3 className="ui header">Prepared by {props.picker.name}</h3>
+              <div className="sub header" style={{ color: "#000" }}>
+                "{props.picker.quote}"
+              </div>
+            </td>
+            <td>
+              <img
+                src={props.shipper.icon}
+                style={{ float: "left", maxWidth: "0.75in", height: "auto" }}
+                alt="icon"
+              />
+            </td>
+            <td style={{ textAlign: "center" }}>
+              <h3 className="ui header">Prepared by {props.shipper.name}</h3>
+              <div className="sub header" style={{ color: "#000" }}>
+                "{props.shipper.quote}"
+              </div>
             </td>
           </tr>
         </tbody>

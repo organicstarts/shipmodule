@@ -1,5 +1,6 @@
 import React from "react";
 
+
 const BatchDetail = props => {
   return (
     <div>

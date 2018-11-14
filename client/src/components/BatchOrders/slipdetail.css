@@ -6,6 +6,8 @@
   min-height: 10.96in;
   overflow: hidden;
   z-index: 5;
+  page-break-after: always;
+  page-break-before: always;
 }
 
 .pad-top {

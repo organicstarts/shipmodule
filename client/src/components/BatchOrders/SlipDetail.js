@@ -12,12 +12,14 @@ const SlipDetail = props => {
           <i>"Healthy Starts from Day One."</i>
         </div>
         <div
-          className="col-2 offset-6 text-center"
-          style={{ zIndex: "999", color: "#000!important", fontSize: "1.75em" }}
+          className="col-2 offset-6"
+          style={{ textAlign: "center", zIndex: "999", color: "#000!important", fontSize: "1.75em" }}
         >
           <br />
-          <strong>1</strong>
+          <strong>{props.orderTotal > 3 ? <p>&#8212;</p>: props.orderTotal}</strong>
           <br />
+          {props.carrier === "fedex"?  ["FDX", <br key={props.orderID} />]: ""}
+          {props.carrierCode}
           {props.box}
         </div>
       </div>
@@ -177,7 +179,7 @@ const calculateTotal = (items, shipping = 0, discount = 0) => {
   for (let sub in items) {
     subTotal += items[sub].unitPrice * items[sub].quantity;
   }
-  return (subTotal + shipping - discount) .toFixed(2);
+  return (subTotal + shipping - discount).toFixed(2);
 };
 
 const renderOrder = items => {

@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import _ from "lodash";
 import people from "../../config/people";
 import { getBatch } from "../../helpers/ShipStation/Shipments";
-import { getOrder } from "../../helpers/BigCommerce/Orders";
+import { getOrder, getOrderCount } from "../../helpers/BigCommerce/Orders";
 import products from "../../config/products.json";
 import productPerPackage from "../../config/productPerPackage.json";
 
@@ -39,8 +39,9 @@ class BatchOrders extends React.Component {
         });
         await Promise.all(
           data.map( async data =>
-            await getOrder(data.orderNumber).then(x => {
+            await getOrder(data.orderNumber).then(async x => {
               data.bigCommerce = x;
+              await getOrderCount(x.customer_id).then(y => data.orderCount = y)
             })
           )
         );

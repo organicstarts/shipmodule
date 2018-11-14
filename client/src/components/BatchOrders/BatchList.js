@@ -3,6 +3,7 @@ import moment from "moment";
 import BatchDetail from "./BatchDetail";
 import SlipDetail from "./SlipDetail";
 import boxes from "../../config/boxes";
+import packages from "../../config/packages";
 
 const BatchList = props => {
   return (
@@ -84,6 +85,9 @@ const renderSlipList = props => {
       <SlipDetail
         key={data.orderId}
         customerId={data.bigCommerce.customer_id}
+        carrier={data.carrierCode}
+        orderTotal={data.orderCount}
+        carrierCode={getCarrier(data.carrierCode, data.packageCode)}
         box={calculateBox(data.dimensions)}
         batchNumber={data.batchNumber}
         shipmentInfo={data.shipmentItems}
@@ -106,6 +110,10 @@ const renderSlipList = props => {
     );
   });
 };
+
+const getCarrier = (carrier, boxPackage) => {
+  return packages[carrier][boxPackage].NAME;
+}
 
 const calculateTime = (startDate, endDate) => {
   let date1 = moment(startDate)
@@ -148,7 +156,9 @@ const styles = {
     zIndex: 5,
     maxWidth: "7.5in",
     margin: "0 auto 5.25in auto",
-    marginBottom: "4in"
+    marginBottom: "4in",
+    pageBreakBefore: "always",
+    pageBreakAfter: "always"
   }
 };
 

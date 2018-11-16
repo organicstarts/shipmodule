@@ -19,3 +19,7 @@ export const getBatch = async batch => {
     })
     .catch(log.error);
 };
+
+export const getAllShipments = async () => {
+  return await recentShipments().then(dataArray => dataArray.data.shipments);
+};

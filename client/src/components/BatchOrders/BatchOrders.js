@@ -50,18 +50,17 @@ class BatchOrders extends React.Component {
           shipItems: this.sortShipments(data)
         });
         await Promise.all(
-          data.map(
-            async data =>
-              await getOrder(data.orderNumber).then(async x => {
-                data.bigCommerce = x;
-                await getOrderCount(x.customer_id).then(
-                  y => (data.orderCount = y)
-                );
-                await getCoupon(data.orderNumber).then(
-                  coupon => (data.couponInfo = coupon)
-                );
-              })
-          )
+          data.map(async data => {
+            await getOrder(data.orderNumber).then(async x => {
+              data.bigCommerce = x;
+              await getOrderCount(x.customer_id).then(
+                y => (data.orderCount = y)
+              );
+            });
+            await getCoupon(data.orderNumber).then(
+              coupon => (data.couponInfo = coupon)
+            );
+          })
         );
       })
       .then(x => {

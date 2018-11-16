@@ -2,9 +2,14 @@ import React from "react";
 import { Segment, Button, Form } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
+import { ClipLoader } from "react-spinners";
 import people from "../../config/people";
 import { getBatch } from "../../helpers/ShipStation/Shipments";
-import { getOrder, getOrderCount } from "../../helpers/BigCommerce/Orders";
+import {
+  getOrder,
+  getOrderCount,
+  getCoupon
+} from "../../helpers/BigCommerce/Orders";
 import products from "../../config/products.json";
 import productPerPackage from "../../config/productPerPackage.json";
 
@@ -17,7 +22,8 @@ class BatchOrders extends React.Component {
       shipper: "",
       batchDatas: [],
       shipItems: [],
-      totalCount: 0
+      totalCount: 0,
+      loading: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -36,6 +42,7 @@ class BatchOrders extends React.Component {
   async get request Bigcommerce for coupon info and customer order count. append result to batchdatas
   */
   handleSubmit() {
+    this.setState({ loading: true });
     getBatch(this.state.batchNumber)
       .then(async data => {
         this.setState({
@@ -49,6 +56,9 @@ class BatchOrders extends React.Component {
                 data.bigCommerce = x;
                 await getOrderCount(x.customer_id).then(
                   y => (data.orderCount = y)
+                );
+                await getCoupon(data.orderNumber).then(
+                  coupon => (data.couponInfo = coupon)
                 );
               })
           )
@@ -154,6 +164,23 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
     return a.warehouseLocation - b.warehouseLocation;
   }
 
+  renderButton() {
+    if (this.state.loading) {
+      return (
+        <ClipLoader
+          sizeUnit={"px"}
+          size={34}
+          color={"#36D7B7"}
+          loading={this.state.loading}
+        />
+      );
+    }
+    return (
+      <Button size="large" color="olive" type="submit">
+        Generate Batch
+      </Button>
+    );
+  }
   render() {
     return (
       <Segment color="olive" padded="very">
@@ -187,9 +214,7 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
               required
             />
           </Form.Group>
-          <Button size="large" color="olive" type="submit">
-            Generate Batch
-          </Button>
+          {this.renderButton()}
         </Form>
       </Segment>
     );

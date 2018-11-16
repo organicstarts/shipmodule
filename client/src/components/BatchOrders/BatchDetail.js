@@ -43,7 +43,7 @@ const BatchDetail = props => {
         ""
       )}
       {props.fullBox || props.loose ? (
-        <div className="row alt" style={styles.color}>
+        <div className="row alt" style={styles.total}>
           <div className="col-4" />
           <div className="col-7">TOTAL</div>
           <div className="col-1 text-center"> {props.quantity}</div>
@@ -69,6 +69,10 @@ const styles = {
   },
   color: {
     backgroundColor: "#ccc"
+  },
+  total: {
+    backgroundColor: "#ccc",
+    marginBottom: "25px"
   }
 };
 export default BatchDetail;

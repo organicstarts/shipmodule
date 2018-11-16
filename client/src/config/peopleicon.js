@@ -5,7 +5,8 @@ import {
   richard,
   romario,
   training,
-  jonathan
+  jonathan,
+  steve
 } from "../images/employeeIcons";
 
 
@@ -42,8 +43,13 @@ export const iconQuotes = {
         icon: training
     },
     jonathan: {
-        name: "jonathan",
+        name: "Jonathan",
         quote: "Still waters run deep.",
         icon: jonathan
+    },
+    steve: {
+        name: "Steve",
+        quote: "There is good in everyday.",
+        icon: steve
     }
 }

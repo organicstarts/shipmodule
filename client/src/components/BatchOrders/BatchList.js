@@ -107,6 +107,7 @@ const renderSlipList = props => {
         orderID={data.orderNumber}
         created={formatDate(data.bigCommerce.date_created)}
         shipDate={formatDate(data.bigCommerce.date_shipped)}
+        coupon={data.couponInfo}
         shipmentCost={data.shipmentCost}
         shipDuration={calculateTime(
           data.bigCommerce.date_created,
@@ -118,15 +119,20 @@ const renderSlipList = props => {
 };
 
 const getCarrier = (carrier, boxPackage) => {
-  return packages[carrier][boxPackage].NAME;
+  if (carrier && boxPackage) {
+    return packages[carrier][boxPackage].NAME;
+  }
+  return "";
 };
 
 const calculateTime = (startDate, endDate) => {
   let date1 = moment(startDate);
   let date2 = moment(endDate);
   let hours = date2.diff(date1, "Hours");
+  let mins = moment.utc(moment(endDate, "HH:mm:ss").diff(moment(startDate, "HH:mm:ss"))).format("mm")
 
-  return hours;
+  return `about ${hours} hours and ${mins} minutes after you ordered. Yeah that was
+  fast ;)`;
 };
 
 const calculateBox = dimension => {
@@ -143,7 +149,7 @@ const getTotal = items => {
 };
 
 const formatDate = string => {
-  const date = moment(string);
+  const date = moment.utc(string);
   return date.format("Do MMMM YYYY");
 };
 

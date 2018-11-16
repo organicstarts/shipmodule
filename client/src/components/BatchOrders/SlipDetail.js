@@ -57,8 +57,7 @@ const SlipDetail = props => {
           Shipped on the <strong>{props.shipDate}</strong>
           <br />
           <small>
-            about {props.shipDuration} hours after you ordered. Yeah that was
-            fast ;)
+          {props.shipDuration}
           </small>
         </div>
       </div>
@@ -90,7 +89,10 @@ const SlipDetail = props => {
             </th>
           </tr>
         </thead>
-        <tbody>{renderOrder(props.shipmentInfo)}</tbody>
+        <tbody>
+          {renderOrder(props.shipmentInfo)}
+          {renderCoupon(props.coupon)}
+        </tbody>
         <tfoot>
           <tr>
             <th
@@ -152,7 +154,8 @@ const SlipDetail = props => {
               {calculateTotal(
                 props.shipmentInfo,
                 props.shipmentCost,
-                props.credit
+                props.credit,
+                props.coupon
               )}
             </th>
           </tr>
@@ -233,12 +236,54 @@ const SlipDetail = props => {
   );
 };
 
-const calculateTotal = (items, shipping = 0, discount = 0) => {
+const calculateTotal = (items, shipping = 0, discount = 0, coupon = 0) => {
   let subTotal = 0;
+  let totalCoupon = 0;
+  if (coupon.length >= 1) { 
+    coupon.map(x => totalCoupon += x.discount)
+  }
   for (let sub in items) {
     subTotal += items[sub].unitPrice * items[sub].quantity;
   }
-  return (subTotal + shipping - discount).toFixed(2);
+  return (subTotal + shipping - discount - totalCoupon).toFixed(2);
+};
+
+const renderCoupon = coupons => {
+  if (coupons) {
+    let name = "";
+    return coupons.map(coupon => {
+      switch (coupon.code) {
+        case "gift":
+          name = "*** FREE GIFT ***";
+          break;
+        case "new":
+          name = "FREE BOOKLET";
+          break;
+        default:
+          name = "Discount";
+          break;
+      }
+      return (
+        <tr key={coupon.coupon_id}>
+          <td>{name}</td>
+          <td className="text-center">
+            $
+            {coupon.discount
+              ? `-${parseFloat(coupon.discount).toFixed(2)}`
+              : "0.00"}
+          </td>
+          <td className="text-center">1</td>
+          <td>
+            $
+            {coupon.discount
+              ? `-${parseFloat(coupon.discount).toFixed(2)}`
+              : "0.00"}
+          </td>
+        </tr>
+      );
+    });
+  }
+  return null;
 };
 
 const renderOrder = items => {

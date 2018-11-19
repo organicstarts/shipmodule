@@ -85,7 +85,7 @@ const renderSlipList = props => {
     return (
       <SlipDetail
         key={data.orderId}
-        customerId={data.bigCommerce.customer_id}
+        customerId={data.bigCommerce ? data.bigCommerce.customer_id : null}
         carrier={data.carrierCode}
         orderTotal={data.orderCount}
         carrierCode={getCarrier(data.carrierCode, data.packageCode)}
@@ -103,16 +103,16 @@ const renderSlipList = props => {
         state={data.shipTo.state}
         zip={data.shipTo.postalCode}
         total={getTotal(data.shipmentItems)}
-        credit={data.bigCommerce.store_credit_amount}
+        credit={data.bigCommerce ? data.bigCommerce.store_credit_amount : 0}
         orderID={data.orderNumber}
-        created={formatDate(data.bigCommerce.date_created)}
-        shipDate={formatDate(data.bigCommerce.date_shipped)}
+        created={data.bigCommerce ? formatDate(data.bigCommerce.date_created) : null}
+        shipDate={data.bigCommerce ? formatDate(data.bigCommerce.date_shipped) : null}
         coupon={data.couponInfo}
         shipmentCost={data.shipmentCost}
-        shipDuration={calculateTime(
+        shipDuration={data.bigCommerce ? calculateTime(
           data.bigCommerce.date_created,
           data.bigCommerce.date_shipped
-        )}
+        ) : null }
       />
     );
   });
@@ -129,7 +129,9 @@ const calculateTime = (startDate, endDate) => {
   let date1 = moment(startDate);
   let date2 = moment(endDate);
   let hours = date2.diff(date1, "Hours");
-  let mins = moment.utc(moment(endDate, "HH:mm:ss").diff(moment(startDate, "HH:mm:ss"))).format("mm")
+  let mins = moment
+    .utc(moment(endDate, "HH:mm:ss").diff(moment(startDate, "HH:mm:ss")))
+    .format("mm");
 
   return `about ${hours} hours and ${mins} minutes after you ordered. Yeah that was
   fast ;)`;

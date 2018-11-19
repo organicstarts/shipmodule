@@ -20,24 +20,15 @@ const renderDetails = props => {
           <br />
           {renderEmail(props)}
           <br />
-          <br />
-          {renderCities(props)}
-          <br />
-          <br />
-          {renderStates(props)}
-          <br />
-          <br />
-          {renderZip(props)}
-          <br />
-          <br />
-          {renderCountry(props)}
-          <br />
         </p>
       </div>
       {props.show && (
         <div className="ui inverted segment secondary row">
           <div className="col-12 center">
-            <h1>Order Count: {props.count}</h1>
+            <h1>
+              Order Count: {props.count} <br />
+              Email: {props.email}
+            </h1>
             <br />
           </div>
           {renderCustomerInfo(
@@ -45,7 +36,6 @@ const renderDetails = props => {
             "Shipping",
             props.shippingName,
             props.shippingPhone,
-            props.email,
             props.shippingStreet1,
             props.shippingStreet2,
             props.shippingCity,
@@ -59,7 +49,6 @@ const renderDetails = props => {
             "Billing",
             props.billingName,
             props.billingPhone,
-            props.email,
             props.billingStreet1,
             props.billingStreet2,
             props.billingCity,
@@ -104,7 +93,6 @@ const renderCustomerInfo = (
   type,
   name,
   phone,
-  email,
   street1,
   street2,
   city,
@@ -117,14 +105,13 @@ const renderCustomerInfo = (
     <div className="col-6">
       <h2>{type}</h2>
       {name} <br />
-      {`phone: ${phone} | email: ${email}`}
-      <br />
       {company ? [company, <br key={orderID} />] : ""}
       {street1}
       <br />
       {street2 ? [street2, <br key={orderID} />] : ""}
       {city}, {state} {zip}, {country}
       <br />
+      phone: {phone} <br />
     </div>
   );
 };
@@ -148,85 +135,61 @@ const renderClassName = error => {
 };
 
 const renderEmail = props => {
+  let render = [];
   for (let i in props.error) {
     if (props.error[i] === "email") {
-      return (
-        <span>
+      render.push(
+        <span key={i}>
           <strong>WEIRD EMAIL</strong>
           <br />
           Email: {props.email}
           <br />
+          <br />
         </span>
       );
     }
-  }
-};
-const renderCities = props => {
-  for (let i in props.error) {
     if (props.error[i] === "cities") {
-      return (
-        <span>
-          <strong>WEIRD CITIES</strong>
-          <br />
-          Billing: {props.billingCity}
-          <br />
-          Shipping: {props.shippingCity}
-          <br />
-          {/* Order IP: { bigcommerce.ip_address} ({ DATA.orderGeo.city })<br/>
-                    Registration IP: { DATA.customer.registration_ip_address} ({ DATA.registrationGeo.city })<br/> */}
-        </span>
+      render.push(
+        detail("WEIRD CITIES", props.billingCity, props.shippingCity, i)
       );
     }
-  }
-};
-const renderStates = props => {
-  for (let i in props.error) {
     if (props.error[i] === "states") {
-      return (
-        <span>
-          <strong>DIFFERENT STATES</strong>
-          <br />
-          Billing: {props.billingState}
-          <br />
-          Shipping: {props.shippingState}
-          <br />
-        </span>
+      render.push(
+        detail("DIFFERENT STATE", props.billingState, props.shippingState, i)
       );
     }
-  }
-};
-const renderZip = props => {
-  for (let i in props.error) {
     if (props.error[i] === "postalcodes") {
-      return (
-        <span>
-          <strong>DIFFERENT POSTAL CODE</strong>
-          <br />
-          Billing: {props.billingZip}
-          <br />
-          Shipping: {props.shippingZip}
-          <br />
-        </span>
+      render.push(
+        detail("DIFFERENT POSTAL CODE", props.billingZip, props.shippingZip, i)
       );
     }
-  }
-};
-const renderCountry = props => {
-  for (let i in props.error) {
     if (props.error[i] === "countires") {
-      return (
-        <span>
-          {" "}
-          <strong>DIFFERENT BILLING / SHIPPING COUNTRY</strong>
-          <br />
-          Billing: {props.billingCountry}
-          <br />
-          Shipping: {props.shippingCountry}
-          <br />
-        </span>
+      render.push(
+        detail(
+          "DIFFERENT BILLING / SHIPPING COUNTRY",
+          props.billingCountry,
+          props.shippingCountry,
+          i
+        )
       );
     }
   }
+
+  return render;
+};
+
+const detail = (type, billing, shipping, i) => {
+  return (
+    <span key={i}>
+      <strong>{type}</strong>
+      <br />
+      Billing: {billing}
+      <br />
+      Shipping: {shipping}
+      <br />
+      <br />
+    </span>
+  );
 };
 
 export default FraudDetail;

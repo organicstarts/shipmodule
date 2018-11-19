@@ -1,55 +1,121 @@
-import React from "react";
+import React, { Component } from "react";
 import FraudDetail from "./FraudDetail";
-import states_hash from '../../config/states_hash';
-const FraudList = props => {
-  return <div>{renderFraudList(props)}</div>;
-};
 
-const renderFraudList = props => {
-  const { fraudDatas } = props.location.state.detail;
-  return fraudDatas.map(data => {
-    console.log(data);
+class FraudList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      toggle: props.location.state.detail.fraudDatas.map(element => false)
+    };
+  }
 
-    return (
-      <FraudDetail
-        key={data.shipmentId}
-        error={checkError(data)}
-        email={data.customerEmail}
-        orderNumber={data.orderNumber}
-        billingCity={data.bigCommerce ? data.bigCommerce.billing_address.city : ""}
-        billingState={data.bigCommerce ? data.bigCommerce.billing_address.state : ""}
-        billingZip={data.bigCommerce ? data.bigCommerce.billing_address.zip : ""}
-        billingCountry={data.bigCommerce ? data.bigCommerce.billing_address.country_iso2 : ""}
-        shippingCity={data.shipTo.city}
-        shippingState={data.shipTo.state}
-        shippingZip={data.shipTo.postalCode}
-        shippingCountry={data.shipTo.country}
-      />
-    );
-  });
-};
+  toggleMenu(index) {
+    const newToggleStatus = [...this.state.toggle];
+    newToggleStatus[index] = !this.state.toggle[index];
+    this.setState({ toggle: newToggleStatus });
+  }
+
+  renderFraudList = props => {
+    const { fraudDatas } = props.location.state.detail;
+    console.log(fraudDatas);
+    return fraudDatas.map((data, index) => {
+      return (
+        <FraudDetail
+          key={data.id}
+          orderID={data.id}
+          count={data.orderCount}
+          error={checkError(data)}
+          orderNumber={data.id}
+          email={data.billing_address.email}
+          billingName={`${data.billing_address.first_name} ${
+            data.billing_address.last_name
+          }`}
+          billingStreet1={data.billing_address.street_1}
+          billingStreet2={data.billing_address.street_2}
+          billingCity={data.billing_address.city}
+          billingState={data.billing_address.state}
+          billingZip={data.billing_address.zip}
+          billingCompany={data.billing_address.company}
+          billingCountry={data.billing_address.country}
+          billingPhone={data.billing_address.phone.replace(
+            /(\d{3})(\d{3})(\d{4})/,
+            "$1-$2-$3"
+          )}
+          shippingName={`${data.shippingInfo[0].first_name} ${
+            data.shippingInfo[0].last_name
+          }`}
+          shippingStreet1={data.shippingInfo[0].street_1}
+          shippingStreet2={data.shippingInfo[0].street_2}
+          shippingCity={data.shippingInfo[0].city}
+          shippingState={data.shippingInfo[0].state}
+          shippingZip={data.shippingInfo[0].zip}
+          shippingCompany={data.shippingInfo[0].company}
+          shippingCountry={data.shippingInfo[0].country}
+          shippingPhone={data.shippingInfo[0].phone.replace(
+            /(\d{3})(\d{3})(\d{4})/,
+            "$1-$2-$3"
+          )}
+          show={this.state.toggle[index]}
+          index={index}
+          handleClick={this.toggleMenu.bind(this)}
+        />
+      );
+    });
+  };
+
+  render() {
+    return <div>{this.renderFraudList(this.props)}</div>;
+  }
+}
 
 const checkError = data => {
-  let errors = [];
-  if(!data.bigCommerce || !data.bigCommerce.billing_address){
-      return null
+  if (data.orderCount < 4) {
+    const emailArray = [
+      "gmail.com",
+      "icloud.com",
+      "me.com",
+      "msn.com",
+      "mac.com",
+      "mail.com",
+      "earthlink.net",
+      "hotmail.com",
+      "live.com",
+      "yahoo.com",
+      "ymail.com",
+      "aol.com",
+      "outlook.com",
+      "yahoo.es",
+      "sbcglobal.net",
+      "naver.com",
+      "att.net"
+    ];
+    let errors = [];
+    let emailEnding = data.billing_address.email.split("@")[1];
+    if (!emailArray.includes(emailEnding.toLowerCase())) {
+      errors.push("email");
+    }
+    if (
+      data.shippingInfo[0].city
+        .toLowerCase()
+        .replace(/^[.\s]+|[.\s]+$/g, "") !==
+      data.billing_address.city.toLowerCase().replace(/^[.\s]+|[.\s]+$/g, "")
+    ) {
+      errors.push("cities");
+    }
+    if (data.shippingInfo[0].state !== data.billing_address.state) {
+      errors.push("states");
+    }
+    if (
+      data.shippingInfo[0].zip.substring(0, 5) !==
+      data.billing_address.zip.substring(0, 5)
+    ) {
+      errors.push("postalcodes");
+    }
+    if (data.shippingInfo[0].country !== data.billing_address.country) {
+      errors.push("countries");
+    }
+    return errors;
   }
-  if (data.customerEmail !== data.bigCommerce.billing_address.email) {
-    errors.push("email");
-  }
-  if (data.shipTo.city.toLowerCase() !== data.bigCommerce.billing_address.city.toLowerCase()) {
-    errors.push("cities");
-  }
-  if (states_hash[data.shipTo.state] !== data.bigCommerce.billing_address.state) {
-    errors.push("states");
-  }
-  if (data.shipTo.postalCode.substring(0,5) !== data.bigCommerce.billing_address.zip.substring(0,5)) {
-    errors.push("postalcodes");
-  }
-  if (data.shipTo.country !== data.bigCommerce.billing_address.country_iso2) {
-    errors.push("countries");
-  }
-  return errors;
 };
 
 export default FraudList;

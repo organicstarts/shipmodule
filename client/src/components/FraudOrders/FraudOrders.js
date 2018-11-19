@@ -2,8 +2,11 @@ import React, { Component } from "react";
 import { ClipLoader } from "react-spinners";
 import { Button } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
-import { getAllShipments } from "../../helpers/ShipStation/Shipments";
-import { getOrder } from "../../helpers/BigCommerce/Orders";
+import {
+  getOrderCount,
+  getAllOrders,
+  getShippingInfo
+} from "../../helpers/BigCommerce/Orders";
 
 class FraudOrders extends Component {
   constructor() {
@@ -18,25 +21,30 @@ class FraudOrders extends Component {
   handleClick() {
     this.setState({ loading: true });
 
-    getAllShipments().then(async data => {
-      console.log(data);
-      this.setState({
-        fraudDatas: data
-      });
-      await Promise.all(
-        data.map(async data => {
-          if (data.orderNumber)
-            await getOrder(data.orderNumber).then(async x => {
-              data.bigCommerce = x;
-            });
-        })
-      ).then(x => {
+    getAllOrders()
+      .then(async data => {
+        console.log(data);
+        this.setState({
+          fraudDatas: data
+        });
+        await Promise.all(
+          data.map(async data => {
+            if (data.id)
+              await getShippingInfo(data.id).then(async x => {
+                data.shippingInfo = x;
+              });
+            await getOrderCount(data.customer_id).then(
+              y => (data.orderCount = y)
+            );
+          })
+        );
+      })
+      .then(x => {
         this.props.history.push({
           pathname: "/fraud",
           state: { detail: this.state }
         });
       });
-    });
   }
   renderButton() {
     if (this.state.loading) {

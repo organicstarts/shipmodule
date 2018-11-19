@@ -19,7 +19,7 @@ function switchURL(destination) {
     case "ss":
       return "https://ssapi.shipstation.com/";
     case "os":
-      return proxy + "https://organicstart.com/api/v2/";
+      return "https://organicstart.com/api/v2/";
     case "osw":
       return "https://organic-start-wholesale.myshopify.com/";
     case "tfc":

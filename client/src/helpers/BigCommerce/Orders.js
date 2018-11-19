@@ -12,7 +12,7 @@ export const getOrder = async orderNumber => {
 
 export const getAllOrders = async () => {
   return await retriever
-    .fetchJSON("os", "orders?sort=date_created:desc&limit=200")
+    .fetchJSON("os", "orders?limit=200&sort=date_created:desc")
     .then(dataArray => {
       return dataArray.data;
     })

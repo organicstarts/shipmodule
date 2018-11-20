@@ -66,9 +66,9 @@ const renderDetails = props => {
               color="olive"
               onClick={() =>
                 window.open(
-                  `https://organicstart.com/manage/orders?viewId=${
-                    props.orderNumber
-                  }&orderTo=${props.orderNumber}&orderFrom=${props.orderNumber}`
+                  `https://organicstart.com/manage/orders?viewId=0&page=1&keywords=${
+                    props.email
+                  }&sortField=id&sortOrder=desc`
                 )
               }
             >

@@ -49,6 +49,58 @@ router.post("/writetofile", (req, res) => {
   });
 });
 
+router.post("/writefraudtofile", (req, res) => {
+  let queue = [];
+  let saveUser = {};
+  for (let i in req.body.saved) {
+    saveUser = {
+      id: req.body.saved[i].id,
+      orderCount: req.body.saved[i].orderCount,
+      billing_address: {
+        email: req.body.saved[i].billing_address.email,
+        first_name: req.body.saved[i].billing_address.first_name,
+        last_name: req.body.saved[i].billing_address.last_name,
+        street_1: req.body.saved[i].billing_address.street_1,
+        street_2: req.body.saved[i].billing_address.street_2,
+        city: req.body.saved[i].billing_address.city,
+        state: req.body.saved[i].billing_address.state,
+        zip: req.body.saved[i].billing_address.zip,
+        company: req.body.saved[i].billing_address.company,
+        country: req.body.saved[i].billing_address.country,
+        phone: req.body.saved[i].billing_address.phone
+      },
+      shippingInfo: {
+        first_name: req.body.saved[i].shippingInfo[0].first_name,
+        last_name: req.body.saved[i].shippingInfo[0].last_name,
+        street_1: req.body.saved[i].shippingInfo[0].street_1,
+        street_2: req.body.saved[i].shippingInfo[0].street_2,
+        city: req.body.saved[i].shippingInfo[0].city,
+        state: req.body.saved[i].shippingInfo[0].state,
+        zip: req.body.saved[i].shippingInfo[0].zip,
+        company: req.body.saved[i].shippingInfo[0].company,
+        country: req.body.saved[i].shippingInfo[0].country,
+        phone: req.body.saved[i].shippingInfo[0].phone
+      }
+    };
+    if (queue.length > 500) {
+      queue.pop();
+    }
+    queue.push(saveUser);
+  }
+
+  let data = JSON.stringify(queue, null, 2);
+  fs.writeFile("../client/src/config/fraudlog.json", data, err => {
+    if (err) {
+      res.json({
+        msg: "fail"
+      });
+    }
+    res.json({
+      msg: "success"
+    });
+  });
+});
+
 app.use(router);
 
 // any routes not picked up by the server api will be handled by the react router

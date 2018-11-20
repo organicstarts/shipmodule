@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import FraudDetail from "./FraudDetail";
+import axios from "axios";
 
 class FraudList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      toggle: props.location.state.detail.fraudDatas.map(element => false)
+      toggle: props.location.state.detail.fraudDatas.map(element => false),
+      saveFraud: props.location.state.detail.savedData
     };
+    this.checkError = this.checkError.bind(this);
   }
 
   toggleMenu(index) {
@@ -15,16 +18,91 @@ class FraudList extends Component {
     this.setState({ toggle: newToggleStatus });
   }
 
+  componentDidMount() {
+    const { saveFraud } = this.state;
+    const { fraudDatas } = this.props.location.state.detail;
+    let saved = [];
+    fraudDatas.map(data => {
+      if (this.checkError(data)) {
+        return saved.push(data);
+      }
+      return null;
+    });
+
+    axios
+      .post("/writefraudtofile", {
+        saved: saved
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
+  }
+
+  checkError = data => {
+    let errors = [];
+    if (data.orderCount < 4) {
+      const emailArray = [
+        "gmail.com",
+        "icloud.com",
+        "me.com",
+        "msn.com",
+        "mac.com",
+        "mail.com",
+        "earthlink.net",
+        "hotmail.com",
+        "live.com",
+        "yahoo.com",
+        "ymail.com",
+        "aol.com",
+        "outlook.com",
+        "yahoo.es",
+        "sbcglobal.net",
+        "naver.com",
+        "att.net"
+      ];
+      let emailEnding = data.billing_address.email.split("@")[1];
+      if (!emailArray.includes(emailEnding.toLowerCase())) {
+        errors.push("email");
+      }
+      if (
+        data.shippingInfo[0].city
+          .toLowerCase()
+          .replace(/^[.\s]+|[.\s]+$/g, "") !==
+        data.billing_address.city.toLowerCase().replace(/^[.\s]+|[.\s]+$/g, "")
+      ) {
+        errors.push("cities");
+      }
+      if (data.shippingInfo[0].state !== data.billing_address.state) {
+        errors.push("states");
+      }
+      if (
+        data.shippingInfo[0].zip.substring(0, 5) !==
+        data.billing_address.zip.substring(0, 5)
+      ) {
+        errors.push("postalcodes");
+      }
+      if (data.shippingInfo[0].country !== data.billing_address.country) {
+        errors.push("countries");
+      }
+      if (errors.length > 0) return errors;
+      return null;
+    }
+  };
+
   renderFraudList = props => {
     const { fraudDatas } = props.location.state.detail;
-    console.log(fraudDatas);
+
     return fraudDatas.map((data, index) => {
       return (
         <FraudDetail
           key={data.id}
           orderID={data.id}
           count={data.orderCount}
-          error={checkError(data)}
+          error={this.checkError(data)}
           orderNumber={data.id}
           email={data.billing_address.email}
           billingName={`${data.billing_address.first_name} ${
@@ -67,55 +145,5 @@ class FraudList extends Component {
     return <div>{this.renderFraudList(this.props)}</div>;
   }
 }
-
-const checkError = data => {
-  if (data.orderCount < 4) {
-    const emailArray = [
-      "gmail.com",
-      "icloud.com",
-      "me.com",
-      "msn.com",
-      "mac.com",
-      "mail.com",
-      "earthlink.net",
-      "hotmail.com",
-      "live.com",
-      "yahoo.com",
-      "ymail.com",
-      "aol.com",
-      "outlook.com",
-      "yahoo.es",
-      "sbcglobal.net",
-      "naver.com",
-      "att.net"
-    ];
-    let errors = [];
-    let emailEnding = data.billing_address.email.split("@")[1];
-    if (!emailArray.includes(emailEnding.toLowerCase())) {
-      errors.push("email");
-    }
-    if (
-      data.shippingInfo[0].city
-        .toLowerCase()
-        .replace(/^[.\s]+|[.\s]+$/g, "") !==
-      data.billing_address.city.toLowerCase().replace(/^[.\s]+|[.\s]+$/g, "")
-    ) {
-      errors.push("cities");
-    }
-    if (data.shippingInfo[0].state !== data.billing_address.state) {
-      errors.push("states");
-    }
-    if (
-      data.shippingInfo[0].zip.substring(0, 5) !==
-      data.billing_address.zip.substring(0, 5)
-    ) {
-      errors.push("postalcodes");
-    }
-    if (data.shippingInfo[0].country !== data.billing_address.country) {
-      errors.push("countries");
-    }
-    return errors;
-  }
-};
 
 export default FraudList;

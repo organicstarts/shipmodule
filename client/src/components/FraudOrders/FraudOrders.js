@@ -7,26 +7,26 @@ import {
   getAllOrders,
   getShippingInfo
 } from "../../helpers/BigCommerce/Orders";
+import fraudlog from "../../config/fraudlog";
 
 class FraudOrders extends Component {
   constructor() {
     super();
     this.state = {
       loading: false,
-      fraudDatas: []
+      fraudDatas: [],
+      savedData: fraudlog
     };
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
     this.setState({ loading: true });
-
-    getAllOrders()
+    console.log(this.state.savedData[0]);
+    getAllOrders(
+      this.state.savedData.length > 0 ? this.state.savedData[0].id : 0
+    )
       .then(async data => {
-        console.log(data);
-        this.setState({
-          fraudDatas: data
-        });
         await Promise.all(
           data.map(async data => {
             if (data.id)
@@ -38,6 +38,13 @@ class FraudOrders extends Component {
             );
           })
         );
+        if (this.state.savedData.length > 0) {
+          data.push(this.state.savedData);
+        }
+        this.setState({
+          fraudDatas: data
+        });
+        console.log(data);
       })
       .then(x => {
         this.props.history.push({

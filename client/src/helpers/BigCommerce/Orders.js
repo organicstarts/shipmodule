@@ -10,9 +10,9 @@ export const getOrder = async orderNumber => {
     .catch(log.error);
 };
 
-export const getAllOrders = async () => {
+export const getAllOrders = async (minId = 0) => {
   return await retriever
-    .fetchJSON("os", "orders?limit=200&sort=date_created:desc")
+    .fetchJSON("os", `orders?limit=200&sort=id:desc&min_id=${minId}`)
     .then(dataArray => {
       return dataArray.data;
     })

@@ -2,6 +2,8 @@ import React from "react";
 import { Segment, Button, Form } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
+import axios from "axios";
+import moment from "moment";
 import { ClipLoader } from "react-spinners";
 import people from "../../config/people";
 import { getBatch } from "../../helpers/ShipStation/Shipments";
@@ -42,7 +44,23 @@ class BatchOrders extends React.Component {
   async get request Bigcommerce for coupon info and customer order count. append result to batchdatas
   */
   handleSubmit() {
+    const { batchNumber, picker, shipper } = this.state;
     this.setState({ loading: true });
+    let currentTime = moment().format("dddd, MMMM Do YYYY hh:mm a");
+    axios
+      .post("/writetofile", {
+        batchNumber,
+        picker,
+        shipper,
+        currentTime
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
     getBatch(this.state.batchNumber)
       .then(async data => {
         this.setState({
@@ -59,8 +77,8 @@ class BatchOrders extends React.Component {
                     y => (data.orderCount = y)
                   );
                 } else {
-                  data.bigCommerce=null;
-                  data.orderCount=null;
+                  data.bigCommerce = null;
+                  data.orderCount = null;
                 }
               });
             await getCoupon(data.orderNumber).then(

@@ -3,6 +3,7 @@ const cors = require("cors");
 import express from "express";
 import path from "path";
 const app = express();
+const fs = require("fs");
 
 app.use(cors());
 app.use(function(req, res, next) {
@@ -22,13 +23,30 @@ const router = express.Router();
 const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
 
-router.get("/cities", (req, res) => {
-  const cities = [
-    { name: "New York City", population: 8175133 },
-    { name: "Los Angeles", population: 3792621 },
-    { name: "Chicago", population: 2695598 }
-  ];
-  res.json(cities);
+router.post("/writetofile", (req, res) => {
+  let rawData = fs.readFileSync("./log/batchlog.json");
+  let queue = JSON.parse(rawData);
+  let saveUser = {
+    batch: req.body.batchNumber,
+    picker: req.body.picker,
+    shipper: req.body.shipper,
+    date: req.body.currentTime
+  };
+  if (queue.length > 500) {
+    queue.pop();
+  }
+  queue.unshift(saveUser);
+  let data = JSON.stringify(queue, null, 2);
+  fs.writeFile("./log/batchlog.json", data, err => {
+    if (err) {
+      res.json({
+        msg: "fail"
+      });
+    }
+    res.json({
+      msg: "success"
+    });
+  });
 });
 
 app.use(router);

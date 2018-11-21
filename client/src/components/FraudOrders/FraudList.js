@@ -28,7 +28,7 @@ class FraudList extends Component {
     });
 
     axios
-      .post("/writefraudtofile", {
+      .post("/fraud/writefraudtofile", {
         saved: saved
       })
       .then(response => {

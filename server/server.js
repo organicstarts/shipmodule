@@ -49,7 +49,7 @@ router.post("/writetofile", (req, res) => {
   });
 });
 
-router.post("/writefraudtofile", (req, res) => {
+router.post("/fraud/writefraudtofile", (req, res) => {
   let queue = [];
   let saveUser = {};
   for (let i in req.body.saved) {

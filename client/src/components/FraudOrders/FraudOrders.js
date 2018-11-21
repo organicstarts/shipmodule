@@ -24,9 +24,10 @@ class FraudOrders extends Component {
     this.setState({ loading: true });
     console.log(this.state.savedData[0]);
     getAllOrders(
-      this.state.savedData.length > 0 ? this.state.savedData[0].id : 0
+      this.state.savedData.length > 0 ? this.state.savedData[0].id + 1 : 0
     )
       .then(async data => {
+        console.log(data)
         await Promise.all(
           data.map(async data => {
             if (data.id)
@@ -39,7 +40,7 @@ class FraudOrders extends Component {
           })
         );
         if (this.state.savedData.length > 0) {
-          data.push(this.state.savedData);
+          this.state.savedData.map( save => data.push(save))
         }
         this.setState({
           fraudDatas: data

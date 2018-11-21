@@ -12,7 +12,7 @@ export const getOrder = async orderNumber => {
 
 export const getAllOrders = async (minId = 0) => {
   return await retriever
-    .fetchJSON("os", `orders?limit=200&sort=id:desc&min_id=${minId}`)
+    .fetchJSON("os", `orders?limit=200&sort=id:desc${minId > 0 ? `&min_id=${minId}` : ''}`)
     .then(dataArray => {
       return dataArray.data;
     })

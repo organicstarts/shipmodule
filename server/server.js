@@ -69,7 +69,7 @@ router.post("/writefraudtofile", (req, res) => {
         country: req.body.saved[i].billing_address.country,
         phone: req.body.saved[i].billing_address.phone
       },
-      shippingInfo: {
+      shippingInfo: [{
         first_name: req.body.saved[i].shippingInfo[0].first_name,
         last_name: req.body.saved[i].shippingInfo[0].last_name,
         street_1: req.body.saved[i].shippingInfo[0].street_1,
@@ -80,7 +80,7 @@ router.post("/writefraudtofile", (req, res) => {
         company: req.body.saved[i].shippingInfo[0].company,
         country: req.body.saved[i].shippingInfo[0].country,
         phone: req.body.saved[i].shippingInfo[0].phone
-      }
+      }]
     };
     if (queue.length > 500) {
       queue.pop();

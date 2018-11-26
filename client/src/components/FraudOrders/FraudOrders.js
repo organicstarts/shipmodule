@@ -19,6 +19,15 @@ class FraudOrders extends Component {
     };
     this.handleClick = this.handleClick.bind(this);
   }
+  componentDidMount(){
+    this.updateFile()
+  }
+
+  updateFile() {
+    this.setState({
+      savedData: fraudlog
+    })
+  }
 
   handleClick() {
     this.setState({ loading: true });

@@ -1,5 +1,6 @@
 import * as retriever from "../../helpers/Retriever";
 import * as log from "../Log";
+import axios from "axios";
 
 export const getOrder = async orderNumber => {
   return await retriever
@@ -10,9 +11,9 @@ export const getOrder = async orderNumber => {
     .catch(log.error);
 };
 
-export const getAllOrders = async (minId = 0) => {
-  return await retriever
-    .fetchJSON("os", `orders?limit=200&sort=id:desc${minId > 0 ? `&min_id=${minId}` : ''}`)
+export const getAllOrders = async minId => {
+  return await axios
+    .get(`/getallorders?min=${minId}`)
     .then(dataArray => {
       return dataArray.data;
     })
@@ -20,16 +21,17 @@ export const getAllOrders = async (minId = 0) => {
 };
 
 export const getShippingInfo = async orderId => {
-  return await retriever
-    .fetchJSON("os", "orders/" + orderId + "/shippingaddresses")
+  return await axios
+    .get(`/getshipping?orderid=${orderId}`)
     .then(dataArray => {
       return dataArray.data;
-    });
+    })
+    .catch(log.error);
 };
 
 export const getOrderCount = async customerNumber => {
-  return await retriever
-    .fetchJSON("os", "orders?customer_id=" + customerNumber + "&limit=5")
+  return await axios
+    .get(`getordercount?customerid=${customerNumber}`)
     .then(dataArray => {
       return dataArray.data.length;
     })

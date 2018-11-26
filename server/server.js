@@ -1,5 +1,6 @@
+
 import bodyParser from "body-parser";
-const fetch = require("node-fetch");
+
 const cors = require("cors");
 import express from "express";
 import path from "path";
@@ -20,6 +21,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const router = express.Router();
+
+router.use('/os', require('./routes/BigCommerceAPI/API'));
 
 const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
@@ -104,83 +107,6 @@ router.post("/fraud/writefraudtofile", (req, res) => {
   });
 });
 
-router.get("/getallorders", (req, res) => {
-  console.log("hi", req.query.min);
-  //build api URL with user zip
-  const baseUrl = `https://organicstart.com/api/v2/orders?limit=200&sort=id:desc${
-    req.query.min > 0 ? `&min_id=${req.query.min}` : ""
-  }`;
-  const username = "shipstation";
-  const password = "be248d994ffb27a4a39584ea9a1d27b882f7f662";
-
-  let encodedString = Buffer.from(username + ":" + password).toString("base64");
-  fetch(baseUrl, {
-    method: "GET",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      Authorization: `Basic ${encodedString}`,
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    }
-  })
-    .then(res => res.json())
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-});
-
-router.get("/getshipping", (req, res) => {
-  //build api URL with user zip
-  const baseUrl = `https://organicstart.com/api/v2/orders/${req.query.orderid}/shippingaddresses`;
-  const username = "shipstation";
-  const password = "be248d994ffb27a4a39584ea9a1d27b882f7f662";
-
-  let encodedString = Buffer.from(username + ":" + password).toString("base64");
-  fetch(baseUrl, {
-    method: "GET",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      Authorization: `Basic ${encodedString}`,
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    }
-  })
-    .then(res => res.json())
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-});
-
-router.get("/getordercount", (req, res) => {
-  //build api URL with user zip
-  const baseUrl = `https://organicstart.com/api/v2/orders?customer_id=${req.query.customerid}&limit=5`;
-  const username = "shipstation";
-  const password = "be248d994ffb27a4a39584ea9a1d27b882f7f662";
-
-  let encodedString = Buffer.from(username + ":" + password).toString("base64");
-  fetch(baseUrl, {
-    method: "GET",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      Authorization: `Basic ${encodedString}`,
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    }
-  })
-    .then(res => res.json())
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-});
 
 app.use(router);
 

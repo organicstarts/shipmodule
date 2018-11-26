@@ -12,14 +12,14 @@ import * as config from "../config/auth";
 import * as log from "./Log";
 
 function switchURL(destination) {
-  let proxy = "https://cors-anywhere.herokuapp.com/";
+  
   switch (destination) {
     default:
       return log.error("Invalid API definition supplied to switchURL.");
     case "ss":
       return "https://ssapi.shipstation.com/";
     case "os":
-      return proxy + "https://organicstart.com/api/v2/";
+      return "https://organicstart.com/api/v2/";
     case "osw":
       return "https://organic-start-wholesale.myshopify.com/";
     case "tfc":

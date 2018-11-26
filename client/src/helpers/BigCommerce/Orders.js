@@ -13,7 +13,7 @@ export const getOrder = async orderNumber => {
 
 export const getAllOrders = async minId => {
   return await axios
-    .get(`/getallorders?min=${minId}`)
+    .get(`/os/getallorders?min=${minId}`)
     .then(dataArray => {
       return dataArray.data;
     })
@@ -22,7 +22,7 @@ export const getAllOrders = async minId => {
 
 export const getShippingInfo = async orderId => {
   return await axios
-    .get(`/getshipping?orderid=${orderId}`)
+    .get(`/os/getshipping?orderid=${orderId}`)
     .then(dataArray => {
       return dataArray.data;
     })
@@ -31,7 +31,7 @@ export const getShippingInfo = async orderId => {
 
 export const getOrderCount = async customerNumber => {
   return await axios
-    .get(`getordercount?customerid=${customerNumber}`)
+    .get(`/os/getordercount?customerid=${customerNumber}`)
     .then(dataArray => {
       return dataArray.data.length;
     })

@@ -7,7 +7,7 @@ import {
   getAllOrders,
   getShippingInfo
 } from "../../helpers/BigCommerce/Orders";
-import fraudlog from "../../config/fraudlog";
+import fraudlog from "../../config/fraudlog.json";
 
 class FraudOrders extends Component {
   constructor() {

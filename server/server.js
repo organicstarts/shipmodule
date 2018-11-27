@@ -26,6 +26,12 @@ router.use('/os', require('./routes/BigCommerceAPI/API'));
 
 const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
+const staticBatchFiles = express.static(path.join(__dirname, "../../client/src/config/batchlog.js"));
+app.use(staticBatchFiles)
+const staticFraudFiles = express.static(path.join(__dirname, "../../client/src/config/fraudlog.js"));
+app.use(staticFraudFiles)
+
+
 
 router.post("/writetofile", (req, res) => {
   let rawData = fs.readFileSync("../client/src/config/batchlog.json");

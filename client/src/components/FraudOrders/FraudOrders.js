@@ -23,9 +23,13 @@ class FraudOrders extends Component {
     this.updateFile()
   }
 
+  componentWillUnmount() {
+    this.updateFile()
+  }
+  
   updateFile() {
     this.setState({
-      savedData: fraudlog
+      savedData: require("../../helpers/BigCommerce/fraudlog.json")
     })
   }
 

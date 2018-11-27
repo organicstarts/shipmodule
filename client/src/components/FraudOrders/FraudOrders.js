@@ -15,7 +15,7 @@ class FraudOrders extends Component {
     this.state = {
       loading: false,
       fraudDatas: [],
-      savedData: fraudlog
+      savedData: []
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -23,13 +23,9 @@ class FraudOrders extends Component {
     this.updateFile()
   }
 
-  componentWillUnmount() {
-    this.updateFile()
-  }
-  
   updateFile() {
     this.setState({
-      savedData: require("../../helpers/BigCommerce/fraudlog.json")
+      savedData: fraudlog
     })
   }
 

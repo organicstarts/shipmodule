@@ -95,7 +95,7 @@ router.post("/fraud/writefraudtofile", (req, res) => {
   }
 
   let data = JSON.stringify(queue, null, 2);
-  fs.writeFile("../client/src/config/fraudlog.json", data, err => {
+  fs.writeFile("../client/src/config/fraudlog.json", data, "utf8", err => {
     if (err) {
       res.json({
         msg: "fail"

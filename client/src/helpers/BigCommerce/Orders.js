@@ -3,8 +3,8 @@ import * as log from "../Log";
 import axios from "axios";
 
 export const getOrder = async orderNumber => {
-  return await retriever
-    .fetchJSON("os", "orders/" + orderNumber)
+  return await axios
+    .get(`/os/getorder?orderid=${orderNumber}`)
     .then(dataArray => {
       return dataArray.data;
     })
@@ -39,8 +39,8 @@ export const getOrderCount = async customerNumber => {
 };
 
 export const getCoupon = async orderNumber => {
-  return await retriever
-    .fetchJSON("os", "orders/" + orderNumber + "/coupons")
+  return await axios
+    .get(`/os/getordercoupon?orderid=${orderNumber}`)
     .then(dataArray => {
       if (dataArray.data) return dataArray.data;
       return "";

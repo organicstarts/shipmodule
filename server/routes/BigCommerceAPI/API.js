@@ -1,7 +1,5 @@
-const router = require('express').Router();
+const router = require("express").Router();
 const fetch = require("node-fetch");
-
-
 
 const username = "shipstation";
 const password = "be248d994ffb27a4a39584ea9a1d27b882f7f662";
@@ -15,6 +13,20 @@ const header = {
     Accept: "application/json"
   }
 };
+
+router.get("/getorder", (req, res) => {
+  //build api URL with user zip
+  const baseUrl = `https://organicstart.com/api/v2/orders/${req.query.orderid}`;
+
+  fetch(baseUrl, header)
+    .then(res => res.json())
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
 
 router.get("/getallorders", (req, res) => {
   //build api URL with user zip
@@ -64,5 +76,20 @@ router.get("/getordercount", (req, res) => {
     });
 });
 
+router.get("/getordercoupon", (req, res) => {
+  //build api URL with user zip
+  const baseUrl = `https://organicstart.com/api/v2/orders/${
+    req.query.orderid
+  }/coupons`;
+
+  fetch(baseUrl, header)
+    .then(res => res.json())
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
 
 module.exports = router;

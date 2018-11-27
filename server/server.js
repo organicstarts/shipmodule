@@ -30,6 +30,7 @@ app.use(staticFiles);
 router.post("/writetofile", (req, res) => {
   let rawData = fs.readFileSync("../client/src/config/batchlog.json");
   let queue = JSON.parse(rawData);
+  console.log(queue)
   let saveUser = {
     batch: req.body.batchNumber,
     picker: req.body.picker,

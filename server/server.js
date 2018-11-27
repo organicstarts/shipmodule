@@ -34,7 +34,7 @@ app.use(staticFiles);
 
 
 router.post("/writetofile", (req, res) => {
-  let rawData = fs.readFileSync(path.join(__dirname, "../../client/src/config/batchlog.js"));
+  let rawData = fs.readFileSync(path.join(__dirname, "../../client/src/config/batchlog.json"));
   let queue = JSON.parse(rawData);
   console.log(queue)
   let saveUser = {
@@ -48,7 +48,7 @@ router.post("/writetofile", (req, res) => {
   }
   queue.unshift(saveUser);
   let data = JSON.stringify(queue, null, 2);
-  fs.writeFile(path.join(__dirname, "../../client/src/config/batchlog.js"), data, "utf8", err => {
+  fs.writeFile(path.join(__dirname, "../../client/src/config/batchlog.json"), data, "utf8", err => {
     if (err) {
       res.json({
         msg: "fail"
@@ -102,7 +102,7 @@ router.post("/fraud/writefraudtofile", (req, res) => {
   }
 
   let data = JSON.stringify(queue, null, 2);
-  fs.writeFile(path.join(__dirname, "../../client/src/config/fraudlog.js"), data, "utf8", err => {
+  fs.writeFile(path.join(__dirname, "../../client/src/config/fraudlog.json"), data, "utf8", err => {
     if (err) {
       res.json({
         msg: "fail"

@@ -19,3 +19,7 @@ code {
 }
 
 .container { max-width: 600px }
+
+@media print {
+body {-webkit-print-color-adjust: exact;}
+}

@@ -2,7 +2,13 @@ import React from "react";
 
 const BatchDetail = props => {
   return (
-    <div>
+    <div
+      style={
+        props.fullBox
+          ? { paddingTop: "25px" }
+          : { borderBottom: "2px dotted gray", paddingTop: "25px" }
+      }
+    >
       <div className="row">
         <div className="col-1" style={styles.padding}>
           <div className="checkbox" style={styles.checkboxStyle} />
@@ -15,11 +21,15 @@ const BatchDetail = props => {
             alt="product"
           />
         </div>
-        <div className="col-2 text-center">{props.sku}</div>
+        <div className="col-2" style={{ textAlign: "center" }}>
+          {props.sku}
+        </div>
         <div className="col-6">{props.text}</div>
-        <div className="col-1 text-center" />
+        <div className="col-1" style={{ textAlign: "center" }} />
         {!props.fullBox && !props.loose ? (
-          <div className="col-1 text-center">{props.quantity}</div>
+          <div className="col-1" style={{ textAlign: "center" }}>
+            {props.quantity}
+          </div>
         ) : (
           ""
         )}
@@ -28,7 +38,9 @@ const BatchDetail = props => {
         <div className="row alt" style={styles.color}>
           <div className="col-4" />
           <div className="col-7">FULL BOXES</div>
-          <div className="col-1 text-center"> {props.fullBox}</div>
+          <div className="col-1" style={{ textAlign: "center" }}>
+            {props.fullBox}
+          </div>
         </div>
       ) : (
         ""
@@ -37,7 +49,9 @@ const BatchDetail = props => {
         <div className="row alt" style={styles.color}>
           <div className="col-4" />
           <div className="col-7">LOOSE</div>
-          <div className="col-1 text-center"> {props.loose}</div>
+          <div className="col-1" style={{ textAlign: "center" }}>
+            {props.loose}
+          </div>
         </div>
       ) : (
         ""
@@ -46,7 +60,9 @@ const BatchDetail = props => {
         <div className="row alt" style={styles.total}>
           <div className="col-4" />
           <div className="col-7">TOTAL</div>
-          <div className="col-1 text-center"> {props.quantity}</div>
+          <div className="col-1" style={{ textAlign: "center" }}>
+            {props.quantity}
+          </div>
         </div>
       ) : (
         ""
@@ -71,8 +87,7 @@ const styles = {
     backgroundColor: "#ccc"
   },
   total: {
-    backgroundColor: "#ccc",
-    marginBottom: "25px"
+    backgroundColor: "#ccc"
   }
 };
 export default BatchDetail;

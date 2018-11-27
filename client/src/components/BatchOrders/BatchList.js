@@ -14,21 +14,29 @@ const BatchList = props => {
           <h1 className="col-6" style={styles.margin}>
             Product Pick List
           </h1>
-          <p className="col-6 text-right" style={styles.margin}>
-            Batch #{props.location.state.detail.batchNumber}
+          <p
+            className="col-6"
+            style={{ fontSize: "large", textAlign: "right", margin: "0", padding: "17px" }}
+          >
+         <strong>
+              Batch #{props.location.state.detail.batchNumber} <br />
+              {formatDateTime(
+                props.location.state.detail.batchDatas[0].create_date
+              )}
+         </strong>
           </p>
         </div>
         <div className="row">
           <div className="col-1">&#10004;</div>
           <div className="col-1" />
-          <div className="col-2 text-center">
+          <div className="col-2" style={{ textAlign: "center" }}>
             <strong>Code</strong>
           </div>
           <div className="col-6">
             <strong>Product Name</strong>
           </div>
           <div className="col-1" />
-          <div className="col-1 text-center">
+          <div className="col-1" style={{ textAlign: "center" }}>
             <strong>#</strong>
           </div>
         </div>
@@ -105,14 +113,22 @@ const renderSlipList = props => {
         total={getTotal(data.shipmentItems)}
         credit={data.bigCommerce ? data.bigCommerce.store_credit_amount : 0}
         orderID={data.orderNumber}
-        created={data.bigCommerce ? formatDate(data.bigCommerce.date_created) : null}
-        shipDate={data.bigCommerce ? formatDate(data.bigCommerce.date_shipped) : null}
+        created={
+          data.bigCommerce ? formatDate(data.bigCommerce.date_created) : null
+        }
+        shipDate={
+          data.bigCommerce ? formatDate(data.bigCommerce.date_shipped) : null
+        }
         coupon={data.couponInfo}
         shipmentCost={data.shipmentCost}
-        shipDuration={data.bigCommerce ? calculateTime(
-          data.bigCommerce.date_created,
-          data.bigCommerce.date_shipped
-        ) : null }
+        shipDuration={
+          data.bigCommerce
+            ? calculateTime(
+                data.bigCommerce.date_created,
+                data.bigCommerce.date_shipped
+              )
+            : null
+        }
       />
     );
   });
@@ -153,6 +169,11 @@ const getTotal = items => {
 const formatDate = string => {
   const date = moment.utc(string);
   return date.format("Do MMMM YYYY");
+};
+
+const formatDateTime = string => {
+  const date = moment.utc(string);
+  return date.format("MMMM DD YYYY");
 };
 
 const styles = {

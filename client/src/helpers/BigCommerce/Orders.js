@@ -1,4 +1,3 @@
-import * as retriever from "../../helpers/Retriever";
 import * as log from "../Log";
 import axios from "axios";
 

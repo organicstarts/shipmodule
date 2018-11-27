@@ -13,7 +13,8 @@ class Main extends Component {
     super();
     this.state = {
       loading: false,
-      user: null
+      user: null,
+      error: false
     };
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
@@ -25,18 +26,20 @@ class Main extends Component {
       loading: true
     });
     auth.signInWithPopup(provider).then(result => {
-      var isNewUser = result.additionalUserInfo.isNewUser;
-      if (!isNewUser) {
+      let email = result.additionalUserInfo.profile.hd
+      let isNewUser = result.additionalUserInfo.isNewUser;
+      if (!isNewUser || email === "organicstart.com") {
         this.setState({
           user: result.user,
-          loading: false
+          loading: false,
+          error: false
         });
       } else {
         result.user.delete().then(x => {
-          alert("not an employee");
           this.setState({
             user: null,
-            loading: false
+            loading: false,
+            error: true
           });
         });
       }
@@ -79,7 +82,10 @@ class Main extends Component {
             <Button fluid size="large" color="green" onClick={this.logout}>Log Out</Button>
           </div>
         ) : (
+          <div>
+            {this.state.error? <h1 className="red"> Wrong Account Information</h1>: ""}
           <Button fluid size="large" color="green" onClick={this.login}>Log In</Button>
+          </div>
         )}
       </div>
     );

@@ -1,34 +1,14 @@
 [
   {
     "batch": "112186",
-    "picker": "steve",
-    "shipper": "david",
-    "date": "Tuesday, November 27th 2018 10:28 am"
-  },
-  {
-    "batch": "112076",
-    "picker": "steve",
-    "shipper": "romario",
-    "date": "Wednesday, November 21st 2018 10:15 am"
-  },
-  {
-    "batch": "112",
-    "picker": "julian",
+    "picker": "luis",
     "shipper": "luis",
-    "date": "Wednesday, November 21st 2018 10:14 am"
+    "date": "Tuesday, November 27th 2018 11:42 am"
   },
   {
-    "id": 304168
-  },
-  {
-    "id": 304182
-  },
-  {
-    "id": "304168"
-  },
-  {
-    "data": "haha"
-  },
-  {},
-  {}
+    "batch": "112186",
+    "picker": "julian",
+    "shipper": "julian",
+    "date": "Tuesday, November 27th 2018 11:31 am"
+  }
 ]

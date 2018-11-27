@@ -88,7 +88,7 @@ router.get("/getordercoupon", (req, res) => {
       res.send(data);
     })
     .catch(err => {
-      console.log(err);
+      res.send("");
     });
 });
 

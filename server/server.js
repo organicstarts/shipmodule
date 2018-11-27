@@ -41,7 +41,7 @@ router.post("/writetofile", (req, res) => {
   }
   queue.unshift(saveUser);
   let data = JSON.stringify(queue, null, 2);
-  fs.writeFile("./log/batchlog.json", data, "utf8", err => {
+  fs.writeFile("./log/batchlog.json", data, err => {
     if (err) {
       res.json({
         msg: "fail"
@@ -95,7 +95,7 @@ router.post("/fraud/writefraudtofile", (req, res) => {
   }
 
   let data = JSON.stringify(queue, null, 2);
-  fs.writeFile("../client/src/config/fraudlog.json", data, "utf8", err => {
+  fs.writeFile("../client/src/config/fraudlog.json", data, err => {
     if (err) {
       res.json({
         msg: "fail"

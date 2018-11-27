@@ -7,7 +7,7 @@ import {
   getAllOrders,
   getShippingInfo
 } from "../../helpers/BigCommerce/Orders";
-import fraudlog from "../../config/fraudlog.json";
+import fraudlog from "../../config/fraudlog";
 
 class FraudOrders extends Component {
   constructor() {
@@ -15,18 +15,9 @@ class FraudOrders extends Component {
     this.state = {
       loading: false,
       fraudDatas: [],
-      savedData: []
+      savedData: fraudlog
     };
     this.handleClick = this.handleClick.bind(this);
-  }
-  componentDidMount(){
-    this.updateFile()
-  }
-
-  updateFile() {
-    this.setState({
-      savedData: fraudlog
-    })
   }
 
   handleClick() {

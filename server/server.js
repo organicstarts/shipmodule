@@ -51,6 +51,7 @@ router.post("/fraud/writefraudtofile", (req, res) => {
   for (let i in req.body.saved) {
     saveUser = {
       id: req.body.saved[i].id,
+      status: req.body.saved[i].status,
       orderCount: req.body.saved[i].orderCount,
       billing_address: {
         email: req.body.saved[i].billing_address.email,

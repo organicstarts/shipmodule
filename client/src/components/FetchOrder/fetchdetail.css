@@ -1,0 +1,38 @@
+.packing-slip {
+  padding-bottom: 0.85in;
+  background: #fff;
+  margin: 0;
+  position: relative;
+  min-height: 9.96in;
+  overflow: hidden;
+  z-index: 5;
+  page-break-after: always;
+  page-break-before: always;
+}
+
+.pad-top {
+  padding-top: 0.05in;
+  z-index: 999;
+}
+
+.header-slip {
+  z-index: 999;
+  color: #000 !important;
+  font-size: 1.75em;
+}
+
+
+.shipping-info {
+    margin:0.15in auto;
+    border-color:#999;
+    border-top:1px solid transparent;
+}
+
+.shipping-name {
+    font-size:180%!important;
+    margin:0;
+}
+
+.border-top {
+    border-top: none;
+}

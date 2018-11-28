@@ -96,6 +96,9 @@ class FraudList extends Component {
 }
 
 const checkError = data => {
+  if(data.status.toLowerCase() === "incomplete"){
+    return null;
+  }
   let errors = [];
   if (data.orderCount < 4) {
     const emailArray = [

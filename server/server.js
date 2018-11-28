@@ -1,62 +1,48 @@
-
 import bodyParser from "body-parser";
-
-const cors = require("cors");
+const firebase = require("firebase-admin");
+const serviceAccount = require("./config/serviceAccountKey.json");
 import express from "express";
 import path from "path";
 const app = express();
-const fs = require("fs");
 
-// app.use(cors());
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// });
+firebase.initializeApp({
+  credential: firebase.credential.cert(serviceAccount),
+  databaseURL: "https://shipmodule.firebaseio.com"
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const router = express.Router();
 
-router.use('/os', require('./routes/BigCommerceAPI/API'));
+router.use("/os", require("./routes/BigCommerceAPI/API"));
 
 const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
 
-
-
-
-
-
-
 router.post("/writetofile", (req, res) => {
-  let rawData = fs.readFileSync(path.join(__dirname, "../../client/src/config/batchlog.json"));
-  let queue = JSON.parse(rawData);
-  let saveUser = {
-    batch: req.body.batchNumber,
-    picker: req.body.picker,
-    shipper: req.body.shipper,
-    date: req.body.currentTime
-  };
-  if (queue.length > 500) {
-    queue.pop();
-  }
-  queue.unshift(saveUser);
-  let data = JSON.stringify(queue, null, 2);
-  fs.writeFile(path.join(__dirname, "../../client/src/config/batchlog.json"), data, "utf8", err => {
-    if (err) {
+  let dataRef = firebase.database().ref(`/batch`);
+
+  dataRef
+    .once("value", snap => {
+      let saveUser = {
+        batch: req.body.batchNumber,
+        picker: req.body.picker,
+        shipper: req.body.shipper,
+        date: req.body.currentTime
+      };
+      dataRef.child("log").push(saveUser);
+    })
+    .then(x => {
+      res.json({
+        msg: "success"
+      });
+    })
+    .catch(e => {
       res.json({
         msg: "fail"
       });
-    }
-    res.json({
-      msg: "success"
     });
-  });
 });
 
 router.post("/fraud/writefraudtofile", (req, res) => {
@@ -100,19 +86,25 @@ router.post("/fraud/writefraudtofile", (req, res) => {
     queue.push(saveUser);
   }
 
-  let data = JSON.stringify(queue, null, 2);
-  fs.writeFile(path.join(__dirname, "../../client/src/config/fraudlog.json"), data, "utf8", err => {
-    if (err) {
+  let datas = [];
+  let dataRef = firebase.database().ref(`/fraud`);
+
+  dataRef
+    .once("value", snap => {
+      datas.push(queue);
+      dataRef.child("log").set(datas);
+    })
+    .then(x => {
+      res.json({
+        msg: "success"
+      });
+    })
+    .catch(e => {
       res.json({
         msg: "fail"
       });
-    }
-    res.json({
-      msg: "success"
     });
-  });
 });
-
 
 app.use(router);
 

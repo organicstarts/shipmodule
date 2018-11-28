@@ -4,7 +4,7 @@ import logo from "./logo.svg";
 import { ClipLoader } from "react-spinners";
 import { withRouter } from "react-router-dom";
 import { BatchOrders, FetchOrder, FraudOrders } from "./components";
-import { auth, provider } from "./base";
+import { auth, provider } from "./config/firebaseconf";
 import { Button } from "semantic-ui-react";
 import "tachyons";
 

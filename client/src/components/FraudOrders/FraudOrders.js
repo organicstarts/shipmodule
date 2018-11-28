@@ -7,7 +7,7 @@ import {
   getAllOrders,
   getShippingInfo
 } from "../../helpers/BigCommerce/Orders";
-import fraudlog from "../../config/fraudlog";
+import firebase from "firebase";
 
 class FraudOrders extends Component {
   constructor() {
@@ -15,11 +15,25 @@ class FraudOrders extends Component {
     this.state = {
       loading: false,
       fraudDatas: [],
-      savedData: fraudlog
+      savedData: []
     };
     this.handleClick = this.handleClick.bind(this);
+    this.firebaseRef = firebase.database().ref(`/fraud`);
+    this.firebaseRef
+      .on("value", snapshot => {
+        const payload = snapshot.val();
+        if (payload) {
+          this.setState({
+            savedData: payload.log[0]
+          });
+        }
+      })
+      .bind(this);
   }
 
+  componentWillUnmount() {
+    this.firebaseRef.off();
+  }
   handleClick() {
     this.setState({ loading: true });
     console.log(this.state.savedData[0]);
@@ -27,7 +41,7 @@ class FraudOrders extends Component {
       this.state.savedData.length > 0 ? this.state.savedData[0].id + 1 : 0
     )
       .then(async data => {
-        console.log(data)
+        console.log(data);
         await Promise.all(
           data.map(async data => {
             if (data.id)
@@ -40,7 +54,7 @@ class FraudOrders extends Component {
           })
         );
         if (this.state.savedData.length > 0) {
-          this.state.savedData.map( save => data.push(save))
+          this.state.savedData.map(save => data.push(save));
         }
         this.setState({
           fraudDatas: data

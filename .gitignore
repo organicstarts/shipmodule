@@ -22,5 +22,5 @@ yarn-error.log*
 *.rdb
 
 #private
-auth.json
-serviceAccountKey.json
+#auth.json
+#serviceAccountKey.json

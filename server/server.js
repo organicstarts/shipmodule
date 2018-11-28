@@ -1,6 +1,6 @@
 import bodyParser from "body-parser";
 const firebase = require("firebase-admin");
-const serviceAccount = require("./config/serviceAccountKey.json");
+const serviceAccount = require("./serviceAccountKey.json");
 import express from "express";
 import path from "path";
 const app = express();

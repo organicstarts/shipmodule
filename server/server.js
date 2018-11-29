@@ -1,12 +1,15 @@
 import bodyParser from "body-parser";
-const firebase = require("firebase-admin");
-const serviceAccount = require("./serviceAccountKey.json");
 import express from "express";
+const admin = require("firebase-admin");
 import path from "path";
+const fs = require("fs");
 const app = express();
 
-firebase.initializeApp({
-  credential: firebase.credential.cert(serviceAccount),
+
+let rawData = fs.readFileSync("./serviceAccountKey.json");
+let serviceAccount = JSON.parse(rawData);
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://shipmodule.firebaseio.com"
 });
 
@@ -21,7 +24,7 @@ const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
 
 router.post("/writetofile", (req, res) => {
-  let dataRef = firebase.database().ref(`/batch`);
+  let dataRef = admin.database().ref(`/batch`);
 
   dataRef
     .once("value", snap => {
@@ -88,7 +91,7 @@ router.post("/fraud/writefraudtofile", (req, res) => {
   }
 
   let datas = [];
-  let dataRef = firebase.database().ref(`/fraud`);
+  let dataRef = admin.database().ref(`/fraud`);
 
   dataRef
     .once("value", snap => {

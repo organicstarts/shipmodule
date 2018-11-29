@@ -79,11 +79,11 @@ class Main extends Component {
             <BatchOrders />
             <FetchOrder />
             <FraudOrders />
-            <Button fluid size="large" color="green" onClick={this.logout}>Log Out</Button>
+            <Button style={{marginTop: "25px" }} fluid size="large" color="green" onClick={this.logout}>Log Out</Button>
           </div>
         ) : (
-          <div>
-            {this.state.error? <h1 className="red"> Wrong Account Information</h1>: ""}
+          <div >
+            {this.state.error? <h1 className="red"> You don't belong here fool!</h1>: ""}
           <Button fluid size="large" color="green" onClick={this.login}>Log In</Button>
           </div>
         )}

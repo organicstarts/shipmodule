@@ -11,10 +11,11 @@ const renderDetails = props => {
   }
 
   return (
-    <div className="ui segments" style={{ margin: "2rem 0" }}>
+    <div className="ui segments " style={{ margin: "2rem 0" }}>
       <div
         className={`ui inverted segment ${renderClassName(props.error)} `}
         onClick={() => props.handleClick(props.index)}
+        style={{ cursor: "pointer" }}
       >
         <p className="lead">
           <br />
@@ -29,36 +30,39 @@ const renderDetails = props => {
               Order Count: {props.count} <br />
               Email: {props.email}
             </h1>
-            <br />
           </div>
-          {renderCustomerInfo(
-            props.orderID,
-            "Shipping",
-            props.shippingName,
-            props.shippingPhone,
-            props.shippingStreet1,
-            props.shippingStreet2,
-            props.shippingCity,
-            props.shippingState,
-            props.shippingZip,
-            props.shippingCountry,
-            props.shippingCompany
-          )}
-          {renderCustomerInfo(
-            props.orderID,
-            "Billing",
-            props.billingName,
-            props.billingPhone,
-            props.billingStreet1,
-            props.billingStreet2,
-            props.billingCity,
-            props.billingState,
-            props.billingZip,
-            props.billingCountry,
-            props.billingCompany
-          )}
+          <div className="col-lg-6 col-sm-12" >
+            {renderCustomerInfo(
+              props.orderID,
+              "Shipping",
+              props.shippingName,
+              props.shippingPhone,
+              props.shippingStreet1,
+              props.shippingStreet2,
+              props.shippingCity,
+              props.shippingState,
+              props.shippingZip,
+              props.shippingCountry,
+              props.shippingCompany
+            )}
+          </div>
+          <div className="col-lg-6 col-sm-12" >
+            {renderCustomerInfo(
+              props.orderID,
+              "Billing",
+              props.billingName,
+              props.billingPhone,
+              props.billingStreet1,
+              props.billingStreet2,
+              props.billingCity,
+              props.billingState,
+              props.billingZip,
+              props.billingCountry,
+              props.billingCompany
+            )}
+          </div>
           <div
-            className="col-12"
+            className="col-lg-12"
             style={{ textAlign: "center", marginTop: "25px" }}
           >
             <Button
@@ -102,7 +106,7 @@ const renderCustomerInfo = (
   company
 ) => {
   return (
-    <div className="col-6">
+    <div style={{marginTop: "25px"}}>
       <h2>{type}</h2>
       {name} <br />
       {company ? [company, <br key={orderID} />] : ""}

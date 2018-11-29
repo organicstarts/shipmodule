@@ -91,7 +91,7 @@ class FraudList extends Component {
   };
 
   render() {
-    return <div>{this.renderFraudList(this.props)}</div>;
+    return <div className="container">{this.renderFraudList(this.props)}</div>;
   }
 }
 

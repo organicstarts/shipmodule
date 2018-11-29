@@ -28,7 +28,6 @@ class FetchOrder extends React.Component {
 
     getShipOrder(orderNumber)
       .then(async data => {
-        console.log(data);
         this.setState({
           fetchData: data
         });
@@ -83,6 +82,7 @@ class FetchOrder extends React.Component {
               name="orderNumber"
               value={this.state.orderNumber}
               onChange={this.handleChange}
+              required
             />
           </Form.Field>
           <Form.Group widths="equal">

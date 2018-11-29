@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { ClipLoader } from "react-spinners";
-import { Button } from "semantic-ui-react";
+import { Button, Segment } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 import {
   getOrderCount,
   getAllOrders,
   getShippingInfo
 } from "../../helpers/BigCommerce/Orders";
-import firebase from "firebase";
+import firebase from "../../config/firebaseconf";
 
 class FraudOrders extends Component {
   constructor() {
@@ -36,12 +36,11 @@ class FraudOrders extends Component {
   }
   handleClick() {
     this.setState({ loading: true });
-    console.log(this.state.savedData[0]);
+
     getAllOrders(
       this.state.savedData.length > 0 ? this.state.savedData[0].id + 1 : 0
     )
       .then(async data => {
-        console.log(data);
         await Promise.all(
           data.map(async data => {
             if (data.id)
@@ -59,7 +58,6 @@ class FraudOrders extends Component {
         this.setState({
           fraudDatas: data
         });
-        console.log(data);
       })
       .then(x => {
         this.props.history.push({
@@ -86,7 +84,11 @@ class FraudOrders extends Component {
     );
   }
   render() {
-    return <div className="center">{this.renderButton()}</div>;
+    return (
+      <Segment color="red" padded="very">
+        {this.renderButton()}
+      </Segment>
+    );
   }
 }
 

@@ -92,7 +92,6 @@ const renderBatchList = props => {
 
 const renderSlipList = props => {
   const { batchDatas, picker, shipper } = props.location.state.detail;
-  console.log(batchDatas)
   return batchDatas.map(data => {
     return (
       <SlipDetail

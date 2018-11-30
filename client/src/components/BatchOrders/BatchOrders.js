@@ -48,20 +48,20 @@ class BatchOrders extends React.Component {
     const { batchNumber, picker, shipper } = this.state;
     this.setState({ loading: true });
     let currentTime = moment().format("dddd, MMMM Do YYYY hh:mm a");
-    // axios
-    //   .post("/writetofile", {
-    //     batchNumber,
-    //     picker,
-    //     shipper,
-    //     currentTime
-    //   })
-    //   .then(response => {
-    //     if (response.data.msg === "success") {
-    //       console.log("logged");
-    //     } else if (response.data.msg === "fail") {
-    //       console.log("failed to log.");
-    //     }
-    //   });
+    axios
+      .post("/writetofile", {
+        batchNumber,
+        picker,
+        shipper,
+        currentTime
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
     getBatch(this.state.batchNumber)
       .then(async data => {
         this.setState({

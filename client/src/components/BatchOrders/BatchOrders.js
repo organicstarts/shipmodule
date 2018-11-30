@@ -32,6 +32,7 @@ class BatchOrders extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.calculatePackage = this.calculatePackage.bind(this);
     this.compare = this.compare.bind(this);
+    this.compareBatch = this.compareBatch.bind(this)
   }
 
   handleChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -47,24 +48,24 @@ class BatchOrders extends React.Component {
     const { batchNumber, picker, shipper } = this.state;
     this.setState({ loading: true });
     let currentTime = moment().format("dddd, MMMM Do YYYY hh:mm a");
-    axios
-      .post("/writetofile", {
-        batchNumber,
-        picker,
-        shipper,
-        currentTime
-      })
-      .then(response => {
-        if (response.data.msg === "success") {
-          console.log("logged");
-        } else if (response.data.msg === "fail") {
-          console.log("failed to log.");
-        }
-      });
+    // axios
+    //   .post("/writetofile", {
+    //     batchNumber,
+    //     picker,
+    //     shipper,
+    //     currentTime
+    //   })
+    //   .then(response => {
+    //     if (response.data.msg === "success") {
+    //       console.log("logged");
+    //     } else if (response.data.msg === "fail") {
+    //       console.log("failed to log.");
+    //     }
+    //   });
     getBatch(this.state.batchNumber)
       .then(async data => {
         this.setState({
-          batchDatas: data,
+          batchDatas: data.sort(this.compareBatch),
           shipItems: this.sortShipments(data)
         });
         await Promise.all(
@@ -113,7 +114,15 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
         let x = parseInt(item.sku.split(/-(.*)/)[0]);
         item.sku = item.sku.split(/-(.*)/)[1];
         item.quantity = x;
+
+        if(item.sku.charAt(0) === "H" & item.sku.includes("-DE-H")){
+          let x = item.sku.split(/-DE(.*)/)[0];
+          let y = item.sku.split(/-DE(.*)/)[1];
+          item.sku = x + y;
+          console.log(item.sku)
+        }
       }
+   
       return item.sku;
     });
     let sortable = [];
@@ -202,6 +211,9 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
   //helper func to compare warehouse locations
   compare(a, b) {
     return a.warehouseLocation - b.warehouseLocation;
+  }
+  compareBatch(a, b) {
+    return a.orderNumber - b.orderNumber
   }
 
   renderButton() {

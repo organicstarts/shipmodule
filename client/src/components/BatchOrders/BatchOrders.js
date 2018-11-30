@@ -119,7 +119,6 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
           let x = item.sku.split(/-DE(.*)/)[0];
           let y = item.sku.split(/-DE(.*)/)[1];
           item.sku = x + y;
-          console.log(item.sku)
         }
       }
    

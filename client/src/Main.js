@@ -7,6 +7,7 @@ import { BatchOrders, FetchOrder, FraudOrders } from "./components";
 import { auth, provider } from "./config/firebaseconf";
 import { Button } from "semantic-ui-react";
 import "tachyons";
+import Log from "./components/AdminLogs/Log";
 
 class Main extends Component {
   constructor() {
@@ -79,6 +80,7 @@ class Main extends Component {
             <BatchOrders />
             <FetchOrder />
             <FraudOrders />
+            {this.state.user.email.includes("yvan" || "peter" || "isaiah") ? <Log /> : "" }
             <Button style={{marginTop: "25px" }} fluid size="large" color="green" onClick={this.logout}>Log Out</Button>
           </div>
         ) : (

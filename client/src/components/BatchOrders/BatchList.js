@@ -16,14 +16,19 @@ const BatchList = props => {
           </h1>
           <p
             className="col-6"
-            style={{ fontSize: "large", textAlign: "right", margin: "0", padding: "17px" }}
+            style={{
+              fontSize: "large",
+              textAlign: "right",
+              margin: "0",
+              padding: "17px"
+            }}
           >
-         <strong>
+            <strong>
               Batch #{props.location.state.detail.batchNumber} <br />
               {formatDateTime(
                 props.location.state.detail.batchDatas[0].create_date
               )}
-         </strong>
+            </strong>
           </p>
         </div>
         <div className="row">
@@ -57,7 +62,6 @@ const BatchList = props => {
 
 const renderBatchList = props => {
   const { shipItems } = props.location.state.detail;
-  console.log(shipItems);
   return shipItems.map(data => {
     if (data.length > 1) {
       return data.map(data => (
@@ -75,7 +79,7 @@ const renderBatchList = props => {
       <BatchDetail
         key={data.orderItemId}
         sku={data.sku}
-        text={data.name}
+        text={data.aliasName}
         image={data.imageUrl}
         quantity={data.combineTotal ? data.combineTotal : data.quantity}
         warehouse={data.warehouseLocation}
@@ -88,7 +92,6 @@ const renderBatchList = props => {
 
 const renderSlipList = props => {
   const { batchDatas, picker, shipper } = props.location.state.detail;
-  console.log(batchDatas);
   return batchDatas.map(data => {
     return (
       <SlipDetail

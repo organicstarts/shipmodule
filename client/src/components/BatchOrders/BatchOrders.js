@@ -107,20 +107,37 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
     for (let i = 0; i < shipmentArray.length; i++) {
       items = items.concat(shipmentArray[i]);
     }
-    const group = _.groupBy(items, item => item.sku);
+
+    const group = _.groupBy(items, item => {
+      if (item.sku && !isNaN(item.sku.charAt(0)) && item.sku.includes("-")) {
+        let x = parseInt(item.sku.split(/-(.*)/)[0]);
+        item.sku = item.sku.split(/-(.*)/)[1];
+        item.quantity = x;
+      }
+      return item.sku;
+    });
     let sortable = [];
     let name = "";
+
     for (let key in group) {
       if (group[key].length > 1 && key !== "") {
         const totalCount = group[key]
-          .map(x => x.quantity)
-          .reduce((accumulator, amount) => amount + accumulator, 0);
+          .map(x => {
+            return x.quantity;
+          })
+          .reduce((accumulator, amount) => {
+            return accumulator + amount;
+          }, 0);
         group[key].splice(1);
         group[key][0].combineTotal = totalCount;
       }
-      name = products[0][key];
 
-      if (name) group[key][0].name = name;
+      name = products[0][group[key][0].sku];
+      if (name) {
+        group[key][0].aliasName = name;
+      } else {
+        group[key][0].aliasName = group[key][0].name;
+      }
 
       if (group[key].length > 1 && key === "") {
         sortable.push(group[key]);

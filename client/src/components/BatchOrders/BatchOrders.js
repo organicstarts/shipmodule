@@ -212,7 +212,7 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
     return a.warehouseLocation - b.warehouseLocation;
   }
   compareBatch(a, b) {
-    return a.orderNumber - b.orderNumber
+    return b.orderNumber - a.orderNumber
   }
 
   renderButton() {

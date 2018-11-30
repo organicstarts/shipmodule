@@ -92,6 +92,7 @@ const renderBatchList = props => {
 
 const renderSlipList = props => {
   const { batchDatas, picker, shipper } = props.location.state.detail;
+  console.log(batchDatas)
   return batchDatas.map(data => {
     return (
       <SlipDetail
@@ -149,7 +150,7 @@ const calculateTime = (startDate, endDate) => {
   let date2 = moment(endDate);
   let hours = date2.diff(date1, "Hours");
   let mins = moment
-    .utc(moment(endDate, "HH:mm:ss").diff(moment(startDate, "HH:mm:ss")))
+    .utc(moment(date2, "Minutes").diff(moment(date1, "HH:mm:ss")))
     .format("mm");
 
   return `about ${hours} hours and ${mins} minutes after you ordered. Yeah that was

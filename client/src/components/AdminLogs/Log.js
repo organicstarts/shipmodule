@@ -12,7 +12,7 @@ class Log extends Component {
       logDatas: []
     };
     this.handleClick = this.handleClick.bind(this);
-    this.firebaseRef = firebase.database().ref(`/batch`);
+    this.firebaseRef = firebase.database().ref(`/action`);
     this.firebaseRef
       .on("value", snapshot => {
         const payload = snapshot.val();
@@ -41,7 +41,13 @@ class Log extends Component {
         return (
           <LogDetail
             key={key}
-            batch={logDatas[key].batch}
+            action={logDatas[key].action}
+            batchorOrder={
+              logDatas[key].batch !== "N/A"
+                ? logDatas[key].batch
+                : logDatas[key].order
+            }
+            user={logDatas[key].user}
             date={logDatas[key].date}
             picker={logDatas[key].picker}
             shipper={logDatas[key].shipper}
@@ -58,19 +64,26 @@ class Log extends Component {
           <Button fluid size="large" color="red" onClick={this.handleClick}>
             Close Log
           </Button>
-          <table>
+          <table style={{paddingTop: "25px"}}
+          >
             <thead>
-              <tr>
-                <th>
+              <tr >
+                <th style={styles.border}>
+                  <strong>Action</strong>
+                </th>
+                <th style={styles.border}>
                   <strong>Date</strong>
                 </th>
-                <th>
-                  <strong>Batch</strong>
+                <th style={styles.border}>
+                  <strong>User</strong>
                 </th>
-                <th>
+                <th style={styles.border}>
+                  <strong>Batch/Order</strong>
+                </th>
+                <th style={styles.border}>
                   <strong>Picker</strong>
                 </th>
-                <th>
+                <th style={styles.borderLast}>
                   <strong>Shipper</strong>
                 </th>
               </tr>
@@ -94,5 +107,19 @@ class Log extends Component {
     );
   }
 }
+
+const styles = {
+  border: {
+    borderBottom: "1px solid #ccc",
+    borderRight: "1px solid #ccc",
+    borderCollapse: "separate",
+    borderSpacing: "4px"
+  },
+  borderLast: {
+    borderBottom: "1px solid #ccc",
+    borderCollapse: "separate",
+    borderSpacing: "4px"
+  }
+};
 
 export default withRouter(Log);

@@ -15,6 +15,7 @@ class Main extends Component {
     this.state = {
       loading: false,
       user: null,
+      displayName: null,
       error: false
     };
     this.login = this.login.bind(this);
@@ -27,11 +28,12 @@ class Main extends Component {
       loading: true
     });
     auth.signInWithPopup(provider).then(result => {
-      let email = result.additionalUserInfo.profile.hd
+      let email = result.additionalUserInfo.profile.hd;
       let isNewUser = result.additionalUserInfo.isNewUser;
       if (!isNewUser || email === "organicstart.com") {
         this.setState({
           user: result.user,
+          displayName: result.user.displayName,
           loading: false,
           error: false
         });
@@ -58,7 +60,7 @@ class Main extends Component {
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
-        this.setState({ user });
+        this.setState({ user, displayName: user.displayName });
       }
     });
   }
@@ -77,16 +79,34 @@ class Main extends Component {
       <div>
         {this.state.user ? (
           <div>
-            <BatchOrders />
-            <FetchOrder />
-            <FraudOrders />
-            {this.state.user.email.includes("yvan" || "peter" || "isaiah") ? <Log /> : "" }
-            <Button style={{marginTop: "25px" }} fluid size="large" color="green" onClick={this.logout}>Log Out</Button>
+            <BatchOrders displayName={this.state.displayName} />
+            <FetchOrder displayName={this.state.displayName} />
+            <FraudOrders displayName={this.state.displayName} />
+            {this.state.user.email.includes("yvan" || "peter" || "isaiah") ? (
+              <Log />
+            ) : (
+              ""
+            )}
+            <Button
+              style={{ marginTop: "25px" }}
+              fluid
+              size="large"
+              color="green"
+              onClick={this.logout}
+            >
+              Log Out
+            </Button>
           </div>
         ) : (
-          <div >
-            {this.state.error? <h1 className="red"> You don't belong here fool!</h1>: ""}
-          <Button fluid size="large" color="green" onClick={this.login}>Log In</Button>
+          <div>
+            {this.state.error ? (
+              <h1 className="red"> You don't belong here fool!</h1>
+            ) : (
+              ""
+            )}
+            <Button fluid size="large" color="green" onClick={this.login}>
+              Log In
+            </Button>
           </div>
         )}
       </div>
@@ -95,7 +115,7 @@ class Main extends Component {
   render() {
     return (
       <div className="App container tc">
-        <header style={{ marginTop: "50px", marginBottom: "50px"}}>
+        <header style={{ marginTop: "50px", marginBottom: "50px" }}>
           <Image src={logo} size="medium" centered alt="Organic Start" />
         </header>
         {this.renderHome()}

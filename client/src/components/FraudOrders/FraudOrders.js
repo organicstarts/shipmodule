@@ -8,12 +8,15 @@ import {
   getShippingInfo
 } from "../../helpers/BigCommerce/Orders";
 import firebase from "../../config/firebaseconf";
+import axios from "axios";
+import moment from "moment";
 
 class FraudOrders extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       loading: false,
+      displayName: this.props.displayName,
       fraudDatas: [],
       savedData: []
     };
@@ -36,7 +39,20 @@ class FraudOrders extends Component {
   }
   handleClick() {
     this.setState({ loading: true });
-
+    let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
+    axios
+      .post("/writetofile", {
+        action: "Fraud Search",
+        user: this.state.displayName,
+        currentTime
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
     getAllOrders(
       this.state.savedData.length > 0 ? this.state.savedData[0].id + 1 : 0
     )

@@ -22,6 +22,7 @@ class BatchOrders extends React.Component {
       batchNumber: "",
       picker: "",
       shipper: "",
+      user: this.props.displayName,
       batchDatas: [],
       shipItems: [],
       totalCount: 0,
@@ -47,10 +48,12 @@ class BatchOrders extends React.Component {
   handleSubmit() {
     const { batchNumber, picker, shipper } = this.state;
     this.setState({ loading: true });
-    let currentTime = moment().format("dddd, MMMM Do YYYY hh:mm a");
+    let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
     axios
       .post("/writetofile", {
+        action: "Generate Batch",
         batchNumber,
+        user: this.props.displayName,
         picker,
         shipper,
         currentTime

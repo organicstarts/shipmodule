@@ -5,7 +5,6 @@ import path from "path";
 const fs = require("fs");
 const app = express();
 
-
 let rawData = fs.readFileSync("./serviceAccountKey.json");
 let serviceAccount = JSON.parse(rawData);
 admin.initializeApp({
@@ -24,17 +23,20 @@ const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
 
 router.post("/writetofile", (req, res) => {
-  let dataRef = admin.database().ref(`/batch`);
+  let dataRef = admin.database().ref(`/action`);
 
   dataRef
     .once("value", snap => {
-      let saveUser = {
-        batch: req.body.batchNumber,
-        picker: req.body.picker,
-        shipper: req.body.shipper,
+      let logUser = {
+        action: req.body.action,
+        order: req.body.orderNumber ? req.body.orderNumber : "N/A",
+        batch: req.body.batchNumber ? req.body.batchNumber : "N/A",
+        user: req.body.user? req.body.user: "N/A",
+        picker: req.body.picker ? req.body.picker : "N/A",
+        shipper: req.body.shipper ? req.body.picker : "N/A",
         date: req.body.currentTime
       };
-      dataRef.child("log").push(saveUser);
+      dataRef.child("log").push(logUser);
     })
     .then(x => {
       res.json({

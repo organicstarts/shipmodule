@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import BatchDetail from "./BatchDetail";
@@ -7,70 +7,106 @@ import boxes from "../../config/boxes";
 import packages from "../../config/packages";
 import { iconQuotes } from "../../config/peopleicon";
 import { Segment } from "semantic-ui-react";
+import axios from "axios";
 
-const BatchList = props => {
-  if (props.location.state.detail.batchDatas.length < 1) {
+class BatchList extends Component {
+  constructor() {
+    super();
+    this.logprint = this.logprint.bind(this);
+  }
+  componentDidMount() {
+    window.addEventListener("afterprint", this.logprint);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("afterprint", this.logprint);
+  }
+
+  logprint() {
+    let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
+    axios
+      .post("/writetofile", {
+        action: "Print",
+        batchNumber: this.props.location.state.detail.batchNumber,
+        user: this.props.location.state.detail.user,
+        picker: this.props.location.state.detail.picker,
+        shipper: this.props.location.state.detail.shipper,
+        currentTime
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
+  }
+  render() {
+    if (this.props.location.state.detail.batchDatas.length < 1) {
+      return (
+        <Segment style={{ marginTop: "50px" }}>
+          <Link to="/">Go Back</Link>
+          <h1>Batch number not found!</h1>
+        </Segment>
+      );
+    }
     return (
-      <Segment style={{ marginTop: "50px" }}>
-        <Link to="/">Go Back</Link>
-        <h1>Batch number not found!</h1>
-      </Segment>
+      <div>
+        <Link to="/" className="noprint">
+          Go Back
+        </Link>
+        <div style={styles.pickList}>
+          <div className="row">
+            <h1 className="col-6" style={styles.margin}>
+              Product Pick List
+            </h1>
+            <p
+              className="col-6"
+              style={{
+                fontSize: "large",
+                textAlign: "right",
+                margin: "0",
+                padding: "17px"
+              }}
+            >
+              <strong>
+                Batch #{this.props.location.state.detail.batchNumber} <br />
+                {formatDateTime(
+                  this.props.location.state.detail.batchDatas[0].create_date
+                )}
+              </strong>
+            </p>
+          </div>
+          <div className="row">
+            <div className="col-1">&#10004;</div>
+            <div className="col-1" />
+            <div className="col-2" style={{ textAlign: "center" }}>
+              <strong>Code</strong>
+            </div>
+            <div className="col-6">
+              <strong>Product Name</strong>
+            </div>
+            <div className="col-1" />
+            <div className="col-1" style={{ textAlign: "center" }}>
+              <strong>#</strong>
+            </div>
+          </div>
+          <div>{renderBatchList(this.props)}</div>
+          <div className="row" style={{ textAlign: "right" }}>
+            <div className="col-12">
+              <strong>
+                Total Items Required:{" "}
+                {this.props.location.state.detail.totalCount}
+              </strong>
+            </div>
+          </div>
+        </div>
+
+        <div>{renderSlipList(this.props)}</div>
+      </div>
     );
   }
-  return (
-    <div>
-      <Link to="/" className="noprint">Go Back</Link>
-      <div style={styles.pickList}>
-        <div className="row">
-          <h1 className="col-6" style={styles.margin}>
-            Product Pick List
-          </h1>
-          <p
-            className="col-6"
-            style={{
-              fontSize: "large",
-              textAlign: "right",
-              margin: "0",
-              padding: "17px"
-            }}
-          >
-            <strong>
-              Batch #{props.location.state.detail.batchNumber} <br />
-              {formatDateTime(
-                props.location.state.detail.batchDatas[0].create_date
-              )}
-            </strong>
-          </p>
-        </div>
-        <div className="row">
-          <div className="col-1">&#10004;</div>
-          <div className="col-1" />
-          <div className="col-2" style={{ textAlign: "center" }}>
-            <strong>Code</strong>
-          </div>
-          <div className="col-6">
-            <strong>Product Name</strong>
-          </div>
-          <div className="col-1" />
-          <div className="col-1" style={{ textAlign: "center" }}>
-            <strong>#</strong>
-          </div>
-        </div>
-        <div>{renderBatchList(props)}</div>
-        <div className="row" style={{ textAlign: "right" }}>
-          <div className="col-12">
-            <strong>
-              Total Items Required: {props.location.state.detail.totalCount}
-            </strong>
-          </div>
-        </div>
-      </div>
-
-      <div>{renderSlipList(props)}</div>
-    </div>
-  );
-};
-
+}
 const renderBatchList = props => {
   const { shipItems } = props.location.state.detail;
   return shipItems.map(data => {

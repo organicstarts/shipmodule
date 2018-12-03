@@ -9,11 +9,13 @@ import { ClipLoader } from "react-spinners";
 import { withRouter } from "react-router-dom";
 import people from "../../config/people";
 import { Segment, Button, Form } from "semantic-ui-react";
+import axios from "axios";
+import moment from "moment";
 
 class FetchOrder extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { orderNumber: "", fetchData: [], picker: "", shipper: "" };
+    this.state = { orderNumber: "", fetchData: [], picker: "", shipper: "", user: this.props.displayName };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -23,8 +25,25 @@ class FetchOrder extends React.Component {
   handleSelectChange = (e, data) => this.setState({ [data.name]: data.value });
 
   handleSubmit() {
-    const { orderNumber } = this.state;
+    const { orderNumber, picker, shipper } = this.state;
     this.setState({ loading: true });
+    let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
+    axios
+      .post("/writetofile", {
+        action: "Fetch Order",
+        orderNumber,
+        user: this.props.displayName,
+        picker,
+        shipper,
+        currentTime
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
 
     getShipOrder(orderNumber)
       .then(async data => {

@@ -92,9 +92,7 @@ class FraudList extends Component {
   render() {
     return (
       <div className="container">
-        <Link to="/" className="noprint">
-          Go Back
-        </Link>
+        <Link to="/">Go Back</Link>
         {this.renderFraudList(this.props)}
       </div>
     );

@@ -22,4 +22,5 @@ code {
 
 @media print {
 body {-webkit-print-color-adjust: exact;}
+.noprint {display: none !important}
 }

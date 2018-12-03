@@ -1,14 +1,25 @@
 import React from "react";
 import moment from "moment";
+import { Link } from "react-router-dom";
 import BatchDetail from "./BatchDetail";
 import SlipDetail from "./SlipDetail";
 import boxes from "../../config/boxes";
 import packages from "../../config/packages";
 import { iconQuotes } from "../../config/peopleicon";
+import { Segment } from "semantic-ui-react";
 
 const BatchList = props => {
+  if (props.location.state.detail.batchDatas.length < 1) {
+    return (
+      <Segment style={{ marginTop: "50px" }}>
+        <Link to="/">Go Back</Link>
+        <h1>Batch number not found!</h1>
+      </Segment>
+    );
+  }
   return (
     <div>
+      <Link to="/" className="noprint">Go Back</Link>
       <div style={styles.pickList}>
         <div className="row">
           <h1 className="col-6" style={styles.margin}>

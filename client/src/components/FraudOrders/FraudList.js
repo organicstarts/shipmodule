@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import FraudDetail from "./FraudDetail";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 class FraudList extends Component {
@@ -39,8 +40,6 @@ class FraudList extends Component {
         }
       });
   }
-
- 
 
   renderFraudList = props => {
     const { fraudDatas } = props.location.state.detail;
@@ -91,12 +90,19 @@ class FraudList extends Component {
   };
 
   render() {
-    return <div className="container">{this.renderFraudList(this.props)}</div>;
+    return (
+      <div className="container">
+        <Link to="/" className="noprint">
+          Go Back
+        </Link>
+        {this.renderFraudList(this.props)}
+      </div>
+    );
   }
 }
 
 const checkError = data => {
-  if(data.status.toLowerCase() === "incomplete"){
+  if (data.status.toLowerCase() === "incomplete") {
     return null;
   }
   let errors = [];

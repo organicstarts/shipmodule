@@ -32,7 +32,7 @@ class BatchOrders extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.calculatePackage = this.calculatePackage.bind(this);
     this.compare = this.compare.bind(this);
-    this.compareBatch = this.compareBatch.bind(this)
+    this.compareBatch = this.compareBatch.bind(this);
   }
 
   handleChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -113,15 +113,15 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
       if (item.sku && !isNaN(item.sku.charAt(0)) && item.sku.includes("-")) {
         let x = parseInt(item.sku.split(/-(.*)/)[0]);
         item.sku = item.sku.split(/-(.*)/)[1];
-        item.quantity = x;
+        item.combineTotal = x;
 
-        if(item.sku.charAt(0) === "H" & item.sku.includes("-DE-H")){
+        if ((item.sku.charAt(0) === "H") & item.sku.includes("-DE-H")) {
           let x = item.sku.split(/-DE(.*)/)[0];
           let y = item.sku.split(/-DE(.*)/)[1];
           item.sku = x + y;
         }
       }
-   
+
       return item.sku;
     });
     let sortable = [];
@@ -131,7 +131,7 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
       if (group[key].length > 1 && key !== "") {
         const totalCount = group[key]
           .map(x => {
-            return x.quantity;
+            return x.combineTotal ? x.combineTotal : x.quantity;
           })
           .reduce((accumulator, amount) => {
             return accumulator + amount;
@@ -212,7 +212,7 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
     return a.warehouseLocation - b.warehouseLocation;
   }
   compareBatch(a, b) {
-    return b.orderNumber - a.orderNumber
+    return b.orderNumber - a.orderNumber;
   }
 
   renderButton() {

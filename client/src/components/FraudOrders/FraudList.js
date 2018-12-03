@@ -43,8 +43,8 @@ class FraudList extends Component {
 
   renderFraudList = props => {
     const { fraudDatas } = props.location.state.detail;
-
     return fraudDatas.map((data, index) => {
+      if (data.shippingInfo.length > 1) console.log(data);
       return (
         <FraudDetail
           key={data.id}
@@ -67,20 +67,7 @@ class FraudList extends Component {
             /(\d{3})(\d{3})(\d{4})/,
             "$1-$2-$3"
           )}
-          shippingName={`${data.shippingInfo[0].first_name} ${
-            data.shippingInfo[0].last_name
-          }`}
-          shippingStreet1={data.shippingInfo[0].street_1}
-          shippingStreet2={data.shippingInfo[0].street_2}
-          shippingCity={data.shippingInfo[0].city}
-          shippingState={data.shippingInfo[0].state}
-          shippingZip={data.shippingInfo[0].zip}
-          shippingCompany={data.shippingInfo[0].company}
-          shippingCountry={data.shippingInfo[0].country}
-          shippingPhone={data.shippingInfo[0].phone.replace(
-            /(\d{3})(\d{3})(\d{4})/,
-            "$1-$2-$3"
-          )}
+          shipping={data.shippingInfo}
           show={this.state.toggle[index]}
           index={index}
           handleClick={this.toggleMenu.bind(this)}

@@ -31,25 +31,14 @@ const renderDetails = props => {
               Email: {props.email}
             </h1>
           </div>
-          <div className="col-lg-6 col-sm-12" >
-            {renderCustomerInfo(
-              props.orderID,
-              "Shipping",
-              props.shippingName,
-              props.shippingPhone,
-              props.shippingStreet1,
-              props.shippingStreet2,
-              props.shippingCity,
-              props.shippingState,
-              props.shippingZip,
-              props.shippingCountry,
-              props.shippingCompany
-            )}
+          <div className="col-lg-6 col-sm-12">
+            <h2 style={{ marginTop: "25px" }}>Shipping</h2>
+            {renderCustomerShippingInfo(props.orderID, props.shipping)}
           </div>
-          <div className="col-lg-6 col-sm-12" >
+          <div className="col-lg-6 col-sm-12">
+            <h2 style={{ marginTop: "25px" }}>Billing</h2>
             {renderCustomerInfo(
               props.orderID,
-              "Billing",
               props.billingName,
               props.billingPhone,
               props.billingStreet1,
@@ -92,9 +81,26 @@ const renderDetails = props => {
   );
 };
 
+const renderCustomerShippingInfo = (orderID, shipping) => {
+  return shipping.map(data => {
+    return (
+      <div key={data.street_1} style={{ marginTop: "25px" }}>
+        {data.first_name} {data.last_name} <br />
+        {data.company ? [data.company, <br key={orderID} />] : ""}
+        {data.street_1}
+        <br />
+        {data.street_2 ? [data.street_2, <br key={orderID} />] : ""}
+        {data.city}, {data.state} {data.zip} <br />
+        {data.country}
+        <br />
+        phone: {data.phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")} <br />
+      </div>
+    );
+  });
+};
+
 const renderCustomerInfo = (
   orderID,
-  type,
   name,
   phone,
   street1,
@@ -106,14 +112,14 @@ const renderCustomerInfo = (
   company
 ) => {
   return (
-    <div style={{marginTop: "25px"}}>
-      <h2>{type}</h2>
+    <div style={{ marginTop: "25px" }}>
       {name} <br />
       {company ? [company, <br key={orderID} />] : ""}
       {street1}
       <br />
       {street2 ? [street2, <br key={orderID} />] : ""}
-      {city}, {state} {zip}, {country}
+      {city}, {state} {zip}, <br />
+      {country}
       <br />
       phone: {phone} <br />
     </div>

@@ -48,23 +48,23 @@ class BatchOrders extends React.Component {
   handleSubmit() {
     const { batchNumber, picker, shipper } = this.state;
     this.setState({ loading: true });
-    let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
-    axios
-      .post("/writetofile", {
-        action: "Generate Batch",
-        batchNumber,
-        user: this.props.displayName,
-        picker,
-        shipper,
-        currentTime
-      })
-      .then(response => {
-        if (response.data.msg === "success") {
-          console.log("logged");
-        } else if (response.data.msg === "fail") {
-          console.log("failed to log.");
-        }
-      });
+    // let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
+    // axios
+    //   .post("/writetofile", {
+    //     action: "Generate Batch",
+    //     batchNumber,
+    //     user: this.props.displayName,
+    //     picker,
+    //     shipper,
+    //     currentTime
+    //   })
+    //   .then(response => {
+    //     if (response.data.msg === "success") {
+    //       console.log("logged");
+    //     } else if (response.data.msg === "fail") {
+    //       console.log("failed to log.");
+    //     }
+    //   });
     getBatch(this.state.batchNumber)
       .then(async data => {
         this.setState({
@@ -108,6 +108,7 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
     const shipmentArray = data.map(shipItems => shipItems.shipmentItems);
     let items = [];
     let count = 0;
+    let tkSku = [];
     for (let i = 0; i < shipmentArray.length; i++) {
       items = items.concat(shipmentArray[i]);
     }
@@ -116,13 +117,25 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
       if (item.sku && !isNaN(item.sku.charAt(0)) && item.sku.includes("-")) {
         let x = parseInt(item.sku.split(/-(.*)/)[0]);
         item.sku = item.sku.split(/-(.*)/)[1];
-        item.combineTotal = x;
+        item.combineTotal = x * item.quantity;
 
-        if ((item.sku.charAt(0) === "H") & item.sku.includes("-DE-H")) {
+        if (item.sku.charAt(0) === "H" && item.sku.includes("-DE-H")) {
           let x = item.sku.split(/-DE(.*)/)[0];
           let y = item.sku.split(/-DE(.*)/)[1];
           item.sku = x + y;
         }
+      } else if (item.sku.includes("TK")) {
+        let x = parseInt(item.sku.split(/-/)[1]);
+        let sku1 = {
+          sku: item.sku.split(/-(?=\D)/)[1],
+          quantity: x / 2
+        };
+        let sku2 = {
+          sku: item.sku.split(/-(?=\D)/)[2],
+          quantity: x / 2
+        };
+        tkSku.push(sku1);
+        tkSku.push(sku2);
       }
 
       return item.sku;
@@ -142,6 +155,9 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
         group[key].splice(1);
         group[key][0].combineTotal = totalCount;
       }
+      for (let sku of tkSku) {
+        if (sku.sku.includes(key)) group[key][0].combineTotal += sku.quantity;
+      }
 
       name = products[0][group[key][0].sku];
       if (name) {
@@ -152,6 +168,8 @@ map through Keys(sku) -> add quantities of each object in key to totalCount
 
       if (group[key].length > 1 && key === "") {
         sortable.push(group[key]);
+      } else if (key.includes("TK")) {
+        continue;
       } else {
         sortable.push(group[key][0]);
       }

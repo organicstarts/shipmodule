@@ -22,7 +22,7 @@ const BatchDetail = props => {
           />
         </div>
         <div className="col-2" style={{ textAlign: "center" }}>
-          {props.sku}
+          {props.warehouse}
         </div>
         <div className="col-6">{props.text}</div>
         <div className="col-1" style={{ textAlign: "center" }} />

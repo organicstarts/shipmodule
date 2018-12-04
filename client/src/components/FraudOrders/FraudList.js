@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import FraudDetail from "./FraudDetail";
 import { Link } from "react-router-dom";
+import moment from "moment";
 import axios from "axios";
 
 class FraudList extends Component {
@@ -8,14 +9,53 @@ class FraudList extends Component {
     super(props);
     this.state = {
       toggle: props.location.state.detail.fraudDatas.map(element => false),
-      saveFraud: props.location.state.detail.savedData
+      saveFraud: props.location.state.detail.savedData,
+      checked: props.location.state.detail.fraudDatas.map(element => {
+        if (element.checked) {
+          return element.checked;
+        } else {
+          return false;
+        }
+      })
     };
   }
-
   toggleMenu(index) {
     const newToggleStatus = [...this.state.toggle];
     newToggleStatus[index] = !this.state.toggle[index];
     this.setState({ toggle: newToggleStatus });
+  }
+
+  checkChange(e, index) {
+    console.log(e.checked);
+    const newCheckedStatus = [...this.state.checked];
+    newCheckedStatus[index] = !this.state.checked[index];
+    this.setState({ checked: newCheckedStatus });
+    axios
+      .put("fraud/updatefraudtofile", {
+        checked: newCheckedStatus[index],
+        orderNumber: e.orderNumber
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
+          axios
+            .post("/writetofile", {
+              action: newCheckedStatus[index] ? "Fraud Check" : "Fraud UnCheck",
+              orderNumber: e.orderNumber,
+              user: this.props.location.state.detail.displayName,
+              currentTime
+            })
+            .then(response => {
+              if (response.data.msg === "success") {
+                console.log("logged");
+              } else if (response.data.msg === "fail") {
+                console.log("failed to log.");
+              }
+            });
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
   }
 
   componentDidMount() {
@@ -68,9 +108,17 @@ class FraudList extends Component {
             "$1-$2-$3"
           )}
           shipping={data.shippingInfo}
+          shippingCity={data.shippingInfo[0].city}
+          shippingState={data.shippingInfo[0].state}
+          shippingZip={data.shippingInfo[0].zip}
           show={this.state.toggle[index]}
           index={index}
           handleClick={this.toggleMenu.bind(this)}
+          handleStatus={this.checkChange.bind(this)}
+          status={data.status}
+          checked={
+            this.state.checked[index] ? this.state.checked[index] : false
+          }
         />
       );
     });

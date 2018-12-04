@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "semantic-ui-react";
+import { Button, Checkbox } from "semantic-ui-react";
 
 const FraudDetail = props => {
   return renderDetails(props);
@@ -76,6 +76,14 @@ const renderDetails = props => {
         )}`}
       >
         <h2 className="ui h2">Order #: {props.orderNumber}</h2>
+        <h3 className="ui">Status: {props.status}</h3>
+        <label>Fraud Order Checked:</label>
+        <Checkbox
+          style={{ marginLeft: "5px" }}
+          type="checkbox"
+          checked={props.checked}
+          onChange={() => props.handleStatus(props, props.index)}
+        />
       </div>
     </div>
   );

@@ -22,6 +22,28 @@ router.use("/os", require("./routes/BigCommerceAPI/API"));
 const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
 
+router.put("/fraud/updatefraudtofile", (req, res) => {
+  let dataRef = admin.database().ref("/fraud/log/0");
+  dataRef
+    .once("value", snap => {
+      snap.forEach(childSnap => {
+        if (req.body.orderNumber === childSnap.val().id) {
+          childSnap.ref.update({ checked: req.body.checked });
+        }
+      });
+    })
+    .then(x => {
+      res.json({
+        msg: "success"
+      });
+    })
+    .catch(e => {
+      res.json({
+        msg: "fail"
+      });
+    });
+});
+
 router.post("/writetofile", (req, res) => {
   let dataRef = admin.database().ref(`/action`);
 
@@ -31,7 +53,7 @@ router.post("/writetofile", (req, res) => {
         action: req.body.action,
         order: req.body.orderNumber ? req.body.orderNumber : "N/A",
         batch: req.body.batchNumber ? req.body.batchNumber : "N/A",
-        user: req.body.user? req.body.user: "N/A",
+        user: req.body.user ? req.body.user : "N/A",
         picker: req.body.picker ? req.body.picker : "N/A",
         shipper: req.body.shipper ? req.body.picker : "N/A",
         date: req.body.currentTime
@@ -56,6 +78,7 @@ router.post("/fraud/writefraudtofile", (req, res) => {
   for (let i in req.body.saved) {
     saveUser = {
       id: req.body.saved[i].id,
+      checked: req.body.saved[i].checked ? req.body.saved[i].checked : false,
       status: req.body.saved[i].status,
       orderCount: req.body.saved[i].orderCount,
       billing_address: {
@@ -72,18 +95,16 @@ router.post("/fraud/writefraudtofile", (req, res) => {
         phone: req.body.saved[i].billing_address.phone
       },
       shippingInfo: req.body.saved[i].shippingInfo
-          // [0].first_name,
-          // last_name: req.body.saved[i].shippingInfo[0].last_name,
-          // street_1: req.body.saved[i].shippingInfo[0].street_1,
-          // street_2: req.body.saved[i].shippingInfo[0].street_2,
-          // city: req.body.saved[i].shippingInfo[0].city,
-          // state: req.body.saved[i].shippingInfo[0].state,
-          // zip: req.body.saved[i].shippingInfo[0].zip,
-          // company: req.body.saved[i].shippingInfo[0].company,
-          // country: req.body.saved[i].shippingInfo[0].country,
-          // phone: req.body.saved[i].shippingInfo[0].phone
-        
-      
+      // [0].first_name,
+      // last_name: req.body.saved[i].shippingInfo[0].last_name,
+      // street_1: req.body.saved[i].shippingInfo[0].street_1,
+      // street_2: req.body.saved[i].shippingInfo[0].street_2,
+      // city: req.body.saved[i].shippingInfo[0].city,
+      // state: req.body.saved[i].shippingInfo[0].state,
+      // zip: req.body.saved[i].shippingInfo[0].zip,
+      // company: req.body.saved[i].shippingInfo[0].company,
+      // country: req.body.saved[i].shippingInfo[0].country,
+      // phone: req.body.saved[i].shippingInfo[0].phone
     };
     if (queue.length > 500) {
       queue.pop();

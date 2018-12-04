@@ -48,23 +48,23 @@ class BatchOrders extends React.Component {
   handleSubmit() {
     const { batchNumber, picker, shipper } = this.state;
     this.setState({ loading: true });
-    // let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
-    // axios
-    //   .post("/writetofile", {
-    //     action: "Generate Batch",
-    //     batchNumber,
-    //     user: this.props.displayName,
-    //     picker,
-    //     shipper,
-    //     currentTime
-    //   })
-    //   .then(response => {
-    //     if (response.data.msg === "success") {
-    //       console.log("logged");
-    //     } else if (response.data.msg === "fail") {
-    //       console.log("failed to log.");
-    //     }
-    //   });
+    let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
+    axios
+      .post("/writetofile", {
+        action: "Generate Batch",
+        batchNumber,
+        user: this.props.displayName,
+        picker,
+        shipper,
+        currentTime
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
     getBatch(this.state.batchNumber)
       .then(async data => {
         this.setState({

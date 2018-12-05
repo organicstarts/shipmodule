@@ -38,7 +38,7 @@ const BatchDetail = props => {
         <div className="row alt" style={styles.color}>
           <div className="col-4" />
           <div className="col-7">FULL BOXES</div>
-          <div className="col-1" style={{ textAlign: "center" }}>
+          <div className="col-1" style={{ textAlign: "right"  }}>
             {props.fullBox}
           </div>
         </div>
@@ -49,7 +49,7 @@ const BatchDetail = props => {
         <div className="row alt" style={styles.color}>
           <div className="col-4" />
           <div className="col-7">LOOSE</div>
-          <div className="col-1" style={{ textAlign: "center" }}>
+          <div className="col-1" style={{ textAlign: "right" }}>
             {props.loose}
           </div>
         </div>
@@ -57,12 +57,15 @@ const BatchDetail = props => {
         ""
       )}
       {props.fullBox || props.loose ? (
-        <div className="row alt" style={styles.total}>
-          <div className="col-4" />
-          <div className="col-7">TOTAL</div>
-          <div className="col-1" style={{ textAlign: "center" }}>
-            {props.quantity}
+        <div>
+          <div className="row alt" style={styles.total}>
+            <div className="col-4" />
+            <div className="col-7">TOTAL</div>
+            <div className="col-1" style={{ textAlign: "right" }}>
+              {props.quantity}
+            </div>
           </div>
+          <div style={styles.border} />
         </div>
       ) : (
         ""
@@ -84,10 +87,20 @@ const styles = {
     padding: "15px"
   },
   color: {
-    backgroundColor: "#ccc"
+    backgroundColor: "#ccc",
+    marginLeft: "0",
+    marginRight: "0",
+    borderBottom: ".5px solid #a6a6a6"
   },
   total: {
+    marginLeft: "0",
+    marginRight: "0",
     backgroundColor: "#ccc"
+  },
+  border: {
+    height: "10px",
+    backgroundColor: "white",
+    borderBottom: "2px dotted gray"
   }
 };
 export default BatchDetail;

@@ -5,8 +5,8 @@ const BatchDetail = props => {
     <div
       style={
         props.fullBox
-          ? { paddingTop: "25px" }
-          : { borderBottom: "2px dotted gray", paddingTop: "25px" }
+          ? { padding: "25px 0" }
+          : { borderBottom: "2px dotted gray", padding: "25px 0" }
       }
     >
       <div className="row">
@@ -38,7 +38,7 @@ const BatchDetail = props => {
         <div className="row alt" style={styles.color}>
           <div className="col-4" />
           <div className="col-7">FULL BOXES</div>
-          <div className="col-1" style={{ textAlign: "right"  }}>
+          <div className="col-1" style={{ textAlign: "center"  }}>
             {props.fullBox}
           </div>
         </div>
@@ -49,7 +49,7 @@ const BatchDetail = props => {
         <div className="row alt" style={styles.color}>
           <div className="col-4" />
           <div className="col-7">LOOSE</div>
-          <div className="col-1" style={{ textAlign: "right" }}>
+          <div className="col-1" style={{ textAlign: "center" }}>
             {props.loose}
           </div>
         </div>
@@ -61,7 +61,7 @@ const BatchDetail = props => {
           <div className="row alt" style={styles.total}>
             <div className="col-4" />
             <div className="col-7">TOTAL</div>
-            <div className="col-1" style={{ textAlign: "right" }}>
+            <div className="col-1" style={{ textAlign: "center" }}>
               {props.quantity}
             </div>
           </div>
@@ -76,25 +76,25 @@ const BatchDetail = props => {
 
 const styles = {
   imageStyle: {
-    maxHeight: "55px",
+    minHeight: "55px",
+    width: "auto",
     margin: "0 auto"
   },
   checkboxStyle: {
     border: "1px solid #ccc",
-    height: "30px"
+    height: "30px",
+    width: "30px"
   },
   padding: {
-    padding: "15px"
+    padding: "25px"
   },
   color: {
     backgroundColor: "#ccc",
-    marginLeft: "0",
-    marginRight: "0",
+    padding: "25px 0",
     borderBottom: ".5px solid #a6a6a6"
   },
   total: {
-    marginLeft: "0",
-    marginRight: "0",
+    padding: "25px 0",
     backgroundColor: "#ccc"
   },
   border: {

@@ -153,7 +153,7 @@ const SlipDetail = props => {
               $
               {calculateTotal(
                 props.shipmentInfo,
-                props.shipmentCost,
+                parseFloat(props.shipmentCost),
                 props.credit,
                 props.coupon
               )}

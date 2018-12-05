@@ -248,7 +248,12 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
       );
     }
     return (
-      <Button size="large" color="olive" type="submit">
+      <Button
+        disabled={this.state.picker && this.state.shipper ? false : true}
+        size="large"
+        color="olive"
+        type="submit"
+      >
         Generate Batch
       </Button>
     );

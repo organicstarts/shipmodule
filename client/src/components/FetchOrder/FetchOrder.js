@@ -15,7 +15,13 @@ import moment from "moment";
 class FetchOrder extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { orderNumber: "", fetchData: [], picker: "", shipper: "", user: this.props.displayName };
+    this.state = {
+      orderNumber: "",
+      fetchData: [],
+      picker: "",
+      shipper: "",
+      user: this.props.displayName
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -84,7 +90,12 @@ class FetchOrder extends React.Component {
       );
     }
     return (
-      <Button size="large" color="olive" type="submit">
+      <Button
+        disabled={this.state.picker && this.state.shipper ? false : true}
+        size="large"
+        color="olive"
+        type="submit"
+      >
         Fetch Order
       </Button>
     );

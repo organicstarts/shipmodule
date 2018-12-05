@@ -64,6 +64,17 @@ class Main extends Component {
       }
     });
   }
+
+  compareEmail(email) {
+    switch (email) {
+      case "yvan@organicstart.com":
+      case "peter@organicstart.com":
+      case "isaiah@organicstart.com":
+        return true;
+      default:
+        return false;
+    }
+  }
   renderHome() {
     if (this.state.loading) {
       return (
@@ -82,11 +93,7 @@ class Main extends Component {
             <BatchOrders displayName={this.state.displayName} />
             <FetchOrder displayName={this.state.displayName} />
             <FraudOrders displayName={this.state.displayName} />
-            {this.state.user.email.includes("yvan" || "peter" || "isaiah") ? (
-              <Log />
-            ) : (
-              ""
-            )}
+            {this.compareEmail(this.state.user.email) ? <Log /> : ""}
             <Button
               style={{ marginTop: "25px" }}
               fluid

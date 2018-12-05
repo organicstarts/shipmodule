@@ -42,6 +42,7 @@ class FetchDetail extends Component {
   }
   render() {
     const { fetchData, picker, shipper } = this.props.location.state.detail;
+    console.log(fetchData)
     return (
       <div>
         <Link to="/" className="noprint">
@@ -189,7 +190,7 @@ class FetchDetail extends Component {
                   <strong>Shipping</strong>
                 </th>
                 <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
-                  ${parseFloat(fetchData.shipmentCost).toFixed(2)}
+                  ${parseFloat(fetchData.bigCommerce.shipping_cost_inc_tax).toFixed(2)}
                 </th>
               </tr>
               <tr>
@@ -223,7 +224,7 @@ class FetchDetail extends Component {
                   $
                   {calculateTotal(
                     fetchData.shipmentItems,
-                    fetchData.shipmentCost,
+                    parseFloat(fetchData.bigCommerce.shipping_cost_inc_tax),
                     fetchData.bigCommerce.store_credit_amount,
                     fetchData.couponInfo
                   )}

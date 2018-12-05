@@ -1,17 +1,22 @@
 import React from "react";
+import { Table } from "semantic-ui-react";
 
 const LogDetail = props => {
   return (
-    <tbody>
-      <tr>
-        <td style={styles.border}>{props.action}</td>
-        <td style={styles.border}>{props.date}</td>
-        <td style={styles.border}>{props.user}</td>
-        <td style={styles.border}>{props.batchorOrder}</td>
-        <td style={styles.border}>{props.picker}</td>
-        <td style={styles.borderLast}>{props.shipper}</td>
-      </tr>
-    </tbody>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell style={styles.border}>{props.action}</Table.Cell>
+        <Table.Cell style={styles.border}>{props.date}</Table.Cell>
+        <Table.Cell style={styles.border}>{props.user}</Table.Cell>
+        <Table.Cell style={styles.border}>{props.batchorOrder}</Table.Cell>
+        <Table.Cell style={styles.border}>
+          {props.picker.charAt(0).toUpperCase() + props.picker.slice(1)}
+        </Table.Cell>
+        <Table.Cell style={styles.borderLast}>
+          {props.shipper.charAt(0).toUpperCase() + props.shipper.slice(1)}
+        </Table.Cell>
+      </Table.Row>
+    </Table.Body>
   );
 };
 

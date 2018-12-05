@@ -170,7 +170,7 @@ const renderSlipList = props => {
           data.bigCommerce ? formatDate(data.bigCommerce.date_shipped) : null
         }
         coupon={data.couponInfo}
-        shipmentCost={data.shipmentCost}
+        shipmentCost={data.bigCommerce.shipping_cost_inc_tax}
         shipDuration={
           data.bigCommerce
             ? calculateTime(

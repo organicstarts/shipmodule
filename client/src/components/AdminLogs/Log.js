@@ -61,47 +61,54 @@ class Log extends Component {
     if (this.state.loading) {
       return (
         <div>
-          <Button fluid size="large" color="red" onClick={this.handleClick}>
+          <Button fluid size="large" color="orange" onClick={this.handleClick}>
             Close Log
           </Button>
-          <table style={{paddingTop: "25px"}}
+          <div
+            style={{
+              paddingTop: "25px",
+              overflowY: "scroll",
+              maxHeight: "599px"
+            }}
           >
-            <thead>
-              <tr >
-                <th style={styles.border}>
-                  <strong>Action</strong>
-                </th>
-                <th style={styles.border}>
-                  <strong>Date</strong>
-                </th>
-                <th style={styles.border}>
-                  <strong>User</strong>
-                </th>
-                <th style={styles.border}>
-                  <strong>Batch/Order</strong>
-                </th>
-                <th style={styles.border}>
-                  <strong>Picker</strong>
-                </th>
-                <th style={styles.borderLast}>
-                  <strong>Shipper</strong>
-                </th>
-              </tr>
-            </thead>
-            {this.renderLogList()}
-          </table>
+            <table style={{color: "black", paddingRight: "10px"}}>
+              <thead>
+                <tr>
+                  <th style={styles.border}>
+                    <strong>Action</strong>
+                  </th>
+                  <th style={styles.border}>
+                    <strong>Date</strong>
+                  </th>
+                  <th style={styles.border}>
+                    <strong>User</strong>
+                  </th>
+                  <th style={styles.border}>
+                    <strong>Batch/Order</strong>
+                  </th>
+                  <th style={styles.border}>
+                    <strong>Picker</strong>
+                  </th>
+                  <th style={styles.borderLast}>
+                    <strong>Shipper</strong>
+                  </th>
+                </tr>
+              </thead>
+              {this.renderLogList()}
+            </table>
+          </div>
         </div>
       );
     }
     return (
-      <Button fluid size="large" color="red" onClick={this.handleClick}>
+      <Button fluid size="large" color="orange" onClick={this.handleClick}>
         View Log
       </Button>
     );
   }
   render() {
     return (
-      <Segment color="red" padded="very">
+      <Segment color="orange" padded="very">
         {this.renderLog()}
       </Segment>
     );

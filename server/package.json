@@ -8,6 +8,9 @@
     "build": "babel . --ignore node_modules,build --out-dir build",
     "start:prod": "node build/server.js"
   },
+  "_moduleAliases": {
+    "@bgauth": "../client/src/config"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -21,6 +24,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "firebase-admin": "^6.2.0",
+    "module-alias": "^2.1.0",
     "node-fetch": "^2.3.0",
     "nodemon": "^1.18.4"
   }

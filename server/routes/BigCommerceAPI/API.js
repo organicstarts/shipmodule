@@ -1,8 +1,9 @@
+import "module-alias/register";
 const router = require("express").Router();
 const fetch = require("node-fetch");
-
-const username = "shipstation";
-const password = "be248d994ffb27a4a39584ea9a1d27b882f7f662";
+import bigCommerce from "@bgauth/auth.json";
+const username = bigCommerce.bigcommerce.user;
+const password = bigCommerce.bigcommerce.key;
 let encodedString = Buffer.from(username + ":" + password).toString("base64");
 const header = {
   method: "GET",
@@ -15,7 +16,7 @@ const header = {
 };
 
 router.get("/getorder", (req, res) => {
-  //build api URL with user zip
+  //build api URL with user order number
   const baseUrl = `https://organicstart.com/api/v2/orders/${req.query.orderid}`;
 
   fetch(baseUrl, header)
@@ -29,7 +30,7 @@ router.get("/getorder", (req, res) => {
 });
 
 router.get("/getallorders", (req, res) => {
-  //build api URL with user zip
+  //build api URL with user all order, if  order# exist set as min
   const baseUrl = `https://organicstart.com/api/v2/orders?limit=200&sort=id:desc${
     req.query.min > 0 ? `&min_id=${req.query.min}` : ""
   }`;
@@ -45,7 +46,7 @@ router.get("/getallorders", (req, res) => {
 });
 
 router.get("/getshipping", (req, res) => {
-  //build api URL with user zip
+  //build api URL with user orderid to get shipping info
   const baseUrl = `https://organicstart.com/api/v2/orders/${
     req.query.orderid
   }/shippingaddresses`;
@@ -61,7 +62,7 @@ router.get("/getshipping", (req, res) => {
 });
 
 router.get("/getordercount", (req, res) => {
-  //build api URL with user zip
+  //build api URL with user customerid to get history on purchase count
   const baseUrl = `https://organicstart.com/api/v2/orders?customer_id=${
     req.query.customerid
   }&limit=5`;
@@ -77,7 +78,7 @@ router.get("/getordercount", (req, res) => {
 });
 
 router.get("/getordercoupon", (req, res) => {
-  //build api URL with user zip
+  //build api URL with user ordernumber to see if order had coupons used
   const baseUrl = `https://organicstart.com/api/v2/orders/${
     req.query.orderid
   }/coupons`;

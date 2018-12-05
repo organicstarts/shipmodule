@@ -19,14 +19,22 @@ class FraudList extends Component {
       })
     };
   }
+
+  /*
+  toggle click to show details in FraudDetails 
+  */
   toggleMenu(index) {
     const newToggleStatus = [...this.state.toggle];
     newToggleStatus[index] = !this.state.toggle[index];
     this.setState({ toggle: newToggleStatus });
   }
 
+  /*
+  toggle boolean for true or false when chacke box is ticked.
+  update fraud/log/[ordernumber]/checked: true/false
+  save to admin log  
+  */
   checkChange(e, index) {
-    console.log(e.checked);
     const newCheckedStatus = [...this.state.checked];
     newCheckedStatus[index] = !this.state.checked[index];
     this.setState({ checked: newCheckedStatus });
@@ -58,6 +66,9 @@ class FraudList extends Component {
       });
   }
 
+  /*
+  Save order numbers that came up with possible fraud errors to fraud/log firebase
+  */
   componentDidMount() {
     const { fraudDatas } = this.props.location.state.detail;
     let saved = [];
@@ -134,6 +145,10 @@ class FraudList extends Component {
   }
 }
 
+/*
+check data to see if there are any possible fraud orders
+compare email, address, city, state, zip, countries for shipping and billing
+*/
 const checkError = data => {
   if (data.status.toLowerCase() === "incomplete") {
     return null;

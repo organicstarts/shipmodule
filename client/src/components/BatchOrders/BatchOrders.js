@@ -102,7 +102,7 @@ class BatchOrders extends React.Component {
   /*
 map through batchdatas, place in 1D array and create a key/value pair
 map through Keys(sku) -> add quantities of each object in key to totalCount
-
+Special case sku.includes("TK || first char is an integer") => parse data first to combine with existing matching skus 
 */
   sortShipments(data) {
     const shipmentArray = data.map(shipItems => shipItems.shipmentItems);

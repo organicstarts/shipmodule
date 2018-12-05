@@ -37,6 +37,14 @@ class FraudOrders extends Component {
   componentWillUnmount() {
     this.firebaseRef.off();
   }
+
+  /*
+  log click to firebase for admin log
+  send get request for past 200 orders; if there's saved ordernumber from previous search
+  start search from the last saved ordernumber
+  combine response data with saved datas
+  push to fraudlist
+  */
   handleClick() {
     this.setState({ loading: true });
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");

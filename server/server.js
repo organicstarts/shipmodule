@@ -22,6 +22,9 @@ router.use("/os", require("./routes/BigCommerceAPI/API"));
 const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
 
+/*
+update boolean -> checked [true/false] in firebase  when the user ticks the checkbox in FraudDetails 
+*/
 router.put("/fraud/updatefraudtofile", (req, res) => {
   let dataRef = admin.database().ref("/fraud/log/0");
   dataRef
@@ -44,6 +47,9 @@ router.put("/fraud/updatefraudtofile", (req, res) => {
     });
 });
 
+/*
+log all the actions user does in the app (clicking, printing, completing fraud status)
+*/
 router.post("/writetofile", (req, res) => {
   let dataRef = admin.database().ref(`/action`);
 
@@ -72,6 +78,9 @@ router.post("/writetofile", (req, res) => {
     });
 });
 
+/*
+save proccesssed BigCommerce API request of orders that are possibly fraudulent
+*/
 router.post("/fraud/writefraudtofile", (req, res) => {
   let queue = [];
   let saveUser = {};
@@ -95,16 +104,6 @@ router.post("/fraud/writefraudtofile", (req, res) => {
         phone: req.body.saved[i].billing_address.phone
       },
       shippingInfo: req.body.saved[i].shippingInfo
-      // [0].first_name,
-      // last_name: req.body.saved[i].shippingInfo[0].last_name,
-      // street_1: req.body.saved[i].shippingInfo[0].street_1,
-      // street_2: req.body.saved[i].shippingInfo[0].street_2,
-      // city: req.body.saved[i].shippingInfo[0].city,
-      // state: req.body.saved[i].shippingInfo[0].state,
-      // zip: req.body.saved[i].shippingInfo[0].zip,
-      // company: req.body.saved[i].shippingInfo[0].company,
-      // country: req.body.saved[i].shippingInfo[0].country,
-      // phone: req.body.saved[i].shippingInfo[0].phone
     };
     if (queue.length > 500) {
       queue.pop();

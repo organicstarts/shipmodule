@@ -5,12 +5,12 @@ const BatchDetail = props => {
     <div
       style={
         props.fullBox
-          ? { padding: "25px 0" }
-          : { borderBottom: "2px dotted gray", padding: "25px 0" }
+          ? { padding: "15px" }
+          : { borderBottom: "2px dotted gray", padding: "15px" }
       }
     >
-      <div className="row">
-        <div className="col-1" style={styles.padding}>
+      <div className="row align-items-center">
+        <div className="col-1">
           <div className="checkbox" style={styles.checkboxStyle} />
         </div>
         <div className="col-1">
@@ -35,7 +35,7 @@ const BatchDetail = props => {
         )}
       </div>
       {props.fullBox ? (
-        <div className="row alt" style={styles.color}>
+        <div className="row alt" style={styles.color1}>
           <div className="col-4" />
           <div className="col-7">FULL BOXES</div>
           <div className="col-1" style={{ textAlign: "center"  }}>
@@ -46,7 +46,7 @@ const BatchDetail = props => {
         ""
       )}
       {props.loose ? (
-        <div className="row alt" style={styles.color}>
+        <div className="row alt" style={styles.color2}>
           <div className="col-4" />
           <div className="col-7">LOOSE</div>
           <div className="col-1" style={{ textAlign: "center" }}>
@@ -85,16 +85,19 @@ const styles = {
     height: "30px",
     width: "30px"
   },
-  padding: {
-    padding: "25px"
-  },
-  color: {
+  color1: {
+    marginTop: "15px",
     backgroundColor: "#ccc",
-    padding: "25px 0",
+    padding: "15px",
+    borderBottom: ".5px solid #a6a6a6"
+  },
+  color2: {
+    backgroundColor: "#ccc",
+    padding: "15px",
     borderBottom: ".5px solid #a6a6a6"
   },
   total: {
-    padding: "25px 0",
+    padding: "15px",
     backgroundColor: "#ccc"
   },
   border: {

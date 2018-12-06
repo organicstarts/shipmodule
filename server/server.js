@@ -61,7 +61,7 @@ router.post("/writetofile", (req, res) => {
         batch: req.body.batchNumber ? req.body.batchNumber : "N/A",
         user: req.body.user ? req.body.user : "N/A",
         picker: req.body.picker ? req.body.picker : "N/A",
-        shipper: req.body.shipper ? req.body.picker : "N/A",
+        shipper: req.body.shipper ? req.body.shipper : "N/A",
         date: req.body.currentTime
       };
       dataRef.child("log").push(logUser);

@@ -2,6 +2,9 @@ import bodyParser from "body-parser";
 import express from "express";
 const admin = require("firebase-admin");
 import path from "path";
+const nodemailer = require("nodemailer");
+const smtpTransport = require("nodemailer-smtp-transport");
+const cred = require("./config/config");
 const fs = require("fs");
 const app = express();
 
@@ -21,6 +24,88 @@ router.use("/os", require("./routes/BigCommerceAPI/API"));
 
 const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
+
+router.post("/batchcheckemail", (req, res) => {
+  let dataRef = admin.database().ref("/action/log");
+  dataRef.once("value", snapshot => {
+    const payload = snapshot.val();
+    const result = Object.keys(payload)
+      .map(key => payload[key])
+      .reverse();
+    let i = 0;
+    let batchToCheck = [];
+
+    result.map(data => {
+      if (i > 3) return batchToCheck;
+      if (
+        data.batch !== req.body.batchNumber &&
+        data.action === "Generate Batch"
+      ) {
+        data.check = false;
+        batchToCheck.push(data);
+        i++;
+      }
+    });
+    for (let i in batchToCheck) {
+      for (let j in result) {
+        if (
+          batchToCheck[i].batch === result[j].batch &&
+          result[j].action === "Print"
+        ) {
+          batchToCheck[i].check = true;
+        }
+      }
+    }
+    let sendEmail = batchToCheck.filter(x => x.check === false);
+    console.log(sendEmail);
+    if (sendEmail.length > 0) {
+      console.log("sup");
+      const htmlEmail = sendEmail.reduce((a, send) => {
+        return (
+          a +
+          `<h3> Batch Information </h3>    
+            <ul>
+            <li>Batch: ${send.batch}</li>
+            <li>Date: ${send.date}</li>
+            <li>User: ${send.user}</li>
+            <li>Picker: ${send.picker}</li>
+            <li>Shipper: ${send.shipper}</li>
+          </ul>`
+        );
+      }, "");
+
+      let transporter = nodemailer.createTransport(
+        smtpTransport({
+          service: "gmail",
+          host: "smtp.gmail.email",
+          auth: {
+            user: cred.USER,
+            pass: cred.PASS
+          }
+        })
+      );
+
+      let mailOptions = {
+        from: "yvan@organicstart.com",
+        to: "yvan@organicstart.com",
+        subject: "Print Alert",
+        html: htmlEmail
+      };
+
+      transporter.sendMail(mailOptions, err => {
+        if (err) {
+          res.json({
+            msg: "fail"
+          });
+        } else {
+          res.json({
+            msg: "success"
+          });
+        }
+      });
+    }
+  });
+});
 
 /*
 update boolean -> checked [true/false] in firebase  when the user ticks the checkbox in FraudDetails 

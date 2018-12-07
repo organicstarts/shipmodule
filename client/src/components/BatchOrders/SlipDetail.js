@@ -56,9 +56,7 @@ const SlipDetail = props => {
           <br />
           Shipped on the <strong>{props.shipDate}</strong>
           <br />
-          <small>
-          {props.shipDuration}
-          </small>
+          <small>{props.shipDuration}</small>
         </div>
       </div>
       <div
@@ -239,8 +237,8 @@ const SlipDetail = props => {
 const calculateTotal = (items, shipping = 0, discount = 0, coupon = 0) => {
   let subTotal = 0;
   let totalCoupon = 0;
-  if (coupon.length >= 1) { 
-    coupon.map(x => totalCoupon += x.discount)
+  if (coupon.length >= 1) {
+    coupon.map(x => (totalCoupon += x.discount));
   }
   for (let sub in items) {
     subTotal += items[sub].unitPrice * items[sub].quantity;
@@ -290,7 +288,7 @@ const renderOrder = items => {
   return items.map(item => {
     return (
       <tr key={item.orderItemId}>
-        <td>{item.name}</td>
+        <td>{`${item.name} ${item.options ? `(${item.options[0].value})` : ""}`}</td>
         <td className="text-center">${item.unitPrice}</td>
         <td className="text-center">{item.quantity}</td>
         <td>${(item.unitPrice * item.quantity).toFixed(2)}</td>

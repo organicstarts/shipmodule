@@ -65,6 +65,9 @@ class BatchOrders extends React.Component {
           console.log("failed to log.");
         }
       });
+    axios.post("/batchcheckemail", {
+      batchNumber
+    });
     getBatch(this.state.batchNumber)
       .then(async data => {
         this.setState({
@@ -128,10 +131,20 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
         let x = parseInt(item.sku.split(/-/)[1]);
         let sku1 = {
           sku: item.sku.split(/-(?=\D)/)[1],
+          aliasName: products[0][item.sku.split(/-(?=\D)/)[1]],
+          orderItemId: item.orderItemId,
+          warehouseLocation: item.warehouseLocation,
+          imageUrl: item.imageUrl,
+          check: false,
           quantity: x / 2
         };
         let sku2 = {
           sku: item.sku.split(/-(?=\D)/)[2],
+          aliasName: products[0][item.sku.split(/-(?=\D)/)[2]],
+          orderItemId: item.orderItemId + 1,
+          warehouseLocation: item.warehouseLocation,
+          imageUrl: item.imageUrl,
+          check: false,
           quantity: x / 2
         };
         tkSku.push(sku1);
@@ -179,6 +192,21 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
       count += group[key][0].combineTotal
         ? group[key][0].combineTotal
         : group[key][0].quantity;
+    }
+
+    if (tkSku) {
+      for (let i in sortable) {
+        for (let j in tkSku) {
+          if (sortable[i].sku === tkSku[j].sku) {
+            tkSku[j].check = true;
+          }
+        }
+      }
+      for (let i in tkSku) {
+        if (!tkSku[i].check) {
+          sortable.push(tkSku[i]);
+        }
+      }
     }
 
     sortable.sort(this.compare);

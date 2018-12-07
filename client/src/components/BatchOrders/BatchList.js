@@ -111,6 +111,7 @@ class BatchList extends Component {
 }
 const renderBatchList = props => {
   const { shipItems } = props.location.state.detail;
+  console.log(shipItems)
   return shipItems.map(data => {
     if (data.length > 1) {
       return data.map(data => (
@@ -121,6 +122,7 @@ const renderBatchList = props => {
           image={data.imageUrl}
           quantity={data.combineTotal ? data.combineTotal : data.quantity}
           warehouse={data.warehouseLocation}
+          options={data.options? data.options[0].value: ""}
         />
       ));
     }
@@ -134,6 +136,7 @@ const renderBatchList = props => {
         warehouse={data.warehouseLocation}
         fullBox={data.fullBox ? data.fullBox : null}
         loose={data.loose ? data.loose : null}
+        options={data.options? data.options[0].value: ""}
       />
     );
   });
@@ -141,6 +144,7 @@ const renderBatchList = props => {
 
 const renderSlipList = props => {
   const { batchDatas, picker, shipper } = props.location.state.detail;
+  console.log(batchDatas)
   return batchDatas.map(data => {
     return (
       <SlipDetail

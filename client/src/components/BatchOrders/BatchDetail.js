@@ -24,7 +24,7 @@ const BatchDetail = props => {
         <div className="col-2" style={{ textAlign: "center" }}>
           {props.warehouse}
         </div>
-        <div className="col-6">{props.text}</div>
+        <div className="col-6">{`${props.text} ${props.options? (props.options) : ""}`}</div>
         <div className="col-1" style={{ textAlign: "center" }} />
         {!props.fullBox && !props.loose ? (
           <div className="col-1" style={{ textAlign: "center" }}>

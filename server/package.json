@@ -26,6 +26,8 @@
     "firebase-admin": "^6.2.0",
     "module-alias": "^2.1.0",
     "node-fetch": "^2.3.0",
+    "nodemailer": "^4.7.0",
+    "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^1.18.4"
   }
 }

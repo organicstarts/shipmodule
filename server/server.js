@@ -1,15 +1,14 @@
+import "module-alias/register";
+import cred from "@bgauth/auth.json";
+import serviceAccount from "@bgauth/serviceAccountKey.json";
 import bodyParser from "body-parser";
 import express from "express";
 const admin = require("firebase-admin");
 import path from "path";
 const nodemailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
-const cred = require("./config/config");
-const fs = require("fs");
 const app = express();
 
-let rawData = fs.readFileSync("./serviceAccountKey.json");
-let serviceAccount = JSON.parse(rawData);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://shipmodule.firebaseio.com"
@@ -79,8 +78,8 @@ router.post("/batchcheckemail", (req, res) => {
           service: "gmail",
           host: "smtp.gmail.email",
           auth: {
-            user: cred.USER,
-            pass: cred.PASS
+            user: cred.emailcred.user,
+            pass: cred.emailcred.key
           }
         })
       );

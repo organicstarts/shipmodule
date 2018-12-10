@@ -24,6 +24,36 @@ router.use("/os", require("./routes/BigCommerceAPI/API"));
 const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
 
+router.post("/writeinventorytofile", (req, res) => {
+  let dataRef = admin.database().ref("/inventory");
+
+  dataRef
+    .once("value", snap => {
+      let logInventory = {
+        trackingNumber: req.body.trackingNumber,
+        brand: req.body.brand,
+        stage: req.body.stage,
+        quantity: req.body.quantity,
+        broken: req.body.broken,
+        total: req.body.total,
+        scanner: req.body.scanner,
+        warehouseLocation: req.body.warehouseLocation,
+        timeStamp: req.body.timeStamp
+      };
+      dataRef.child("log").push(logInventory);
+    })
+    .then(x => {
+      res.json({
+        msg: "success"
+      });
+    })
+    .catch(e => {
+      res.json({
+        msg: "fail"
+      });
+    });
+});
+
 router.post("/batchcheckemail", (req, res) => {
   let dataRef = admin.database().ref("/action/log");
   dataRef.once("value", snapshot => {

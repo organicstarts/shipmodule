@@ -3,11 +3,16 @@ import { Image } from "semantic-ui-react";
 import logo from "./logo.svg";
 import { ClipLoader } from "react-spinners";
 import { withRouter } from "react-router-dom";
-import { BatchOrders, FetchOrder, FraudOrders } from "./components";
+import {
+  BatchOrders,
+  FetchOrder,
+  FraudOrders,
+  Log,
+  Inventory
+} from "./components";
 import { auth, provider } from "./config/firebaseconf";
 import { Button } from "semantic-ui-react";
 import "tachyons";
-import Log from "./components/AdminLogs/Log";
 
 class Main extends Component {
   constructor() {
@@ -93,6 +98,7 @@ class Main extends Component {
             <BatchOrders displayName={this.state.displayName} />
             <FetchOrder displayName={this.state.displayName} />
             <FraudOrders displayName={this.state.displayName} />
+            <Inventory displayName={this.state.displayName} email={this.state.user.email} compareEmail={this.compareEmail}/>
             {this.compareEmail(this.state.user.email) ? <Log /> : ""}
             <Button
               style={{ marginTop: "25px" }}

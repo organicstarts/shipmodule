@@ -49,25 +49,25 @@ class BatchOrders extends React.Component {
     const { batchNumber, picker, shipper } = this.state;
     this.setState({ loading: true });
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
-    axios
-      .post("/writetofile", {
-        action: "Generate Batch",
-        batchNumber,
-        user: this.props.displayName,
-        picker,
-        shipper,
-        currentTime
-      })
-      .then(response => {
-        if (response.data.msg === "success") {
-          console.log("logged");
-        } else if (response.data.msg === "fail") {
-          console.log("failed to log.");
-        }
-      });
-    axios.post("/batchcheckemail", {
-      batchNumber
-    });
+    // axios
+    //   .post("/writetofile", {
+    //     action: "Generate Batch",
+    //     batchNumber,
+    //     user: this.props.displayName,
+    //     picker,
+    //     shipper,
+    //     currentTime
+    //   })
+    //   .then(response => {
+    //     if (response.data.msg === "success") {
+    //       console.log("logged");
+    //     } else if (response.data.msg === "fail") {
+    //       console.log("failed to log.");
+    //     }
+    //   });
+    // axios.post("/batchcheckemail", {
+    //   batchNumber
+    // });
     getBatch(this.state.batchNumber)
       .then(async data => {
         this.setState({
@@ -169,7 +169,15 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
         group[key][0].combineTotal = totalCount;
       }
       for (let sku of tkSku) {
-        if (sku.sku.includes(key)) group[key][0].combineTotal += sku.quantity;
+        if (sku.sku.includes(key)) {
+          console.log(sku);
+          console.log(group[key][0]);
+          if (group[key][0].combineTotal) {
+            group[key][0].combineTotal += sku.quantity;
+          } else {
+            group[key][0].combineTotal = group[key][0].quantity + sku.quantity;
+          }
+        }
       }
 
       name = products[0][group[key][0].sku];

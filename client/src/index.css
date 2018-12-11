@@ -7,9 +7,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 8in;
-  max-width: 8in;
-  height: 11in;
   margin: 0 auto;
   font-size: 14px;
 }
@@ -22,6 +19,7 @@ code {
 .container {
   max-width: 600px;
 }
+
 
 @media print {
   body {

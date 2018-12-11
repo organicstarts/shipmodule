@@ -129,7 +129,7 @@ class LogList extends Component {
   }
   render() {
     return (
-      <Segment style={{ marginTop: "50px" }}>
+      <Segment compact style={{ margin: "50px auto" }}>
         <Link to="/" className="noprint">
           Go Back
         </Link>
@@ -165,7 +165,7 @@ class LogList extends Component {
             />
           </FormGroup>
         </Form>
-        <Table celled textAlign="center">
+        <Table celled collapsing textAlign="center">
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>

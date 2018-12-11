@@ -86,9 +86,7 @@ router.post("/batchcheckemail", (req, res) => {
       }
     }
     let sendEmail = batchToCheck.filter(x => x.check === false);
-    console.log(sendEmail);
     if (sendEmail.length > 0) {
-      console.log("sup");
       const htmlEmail = sendEmail.reduce((a, send) => {
         return (
           a +

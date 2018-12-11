@@ -136,6 +136,7 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
           warehouseLocation: item.warehouseLocation,
           imageUrl: item.imageUrl,
           check: false,
+          isTk: true,
           quantity: x / 2
         };
         let sku2 = {
@@ -145,6 +146,7 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
           warehouseLocation: item.warehouseLocation,
           imageUrl: item.imageUrl,
           check: false,
+          isTk: true,
           quantity: x / 2
         };
         tkSku.push(sku1);
@@ -170,8 +172,6 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
       }
       for (let sku of tkSku) {
         if (sku.sku.includes(key)) {
-          console.log(sku);
-          console.log(group[key][0]);
           if (group[key][0].combineTotal) {
             group[key][0].combineTotal += sku.quantity;
           } else {
@@ -203,14 +203,15 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
     }
 
     if (tkSku) {
-      for (let i in sortable) {
-        for (let j in tkSku) {
-          if (sortable[i].sku === tkSku[j].sku) {
-            tkSku[j].check = true;
+      for (let i in tkSku) {
+        for (let j in sortable) {
+          if (sortable[j].sku === tkSku[i].sku) {
+            tkSku[i].check = true;
+            if (tkSku[i].isTk) {
+              sortable[j].quantity += tkSku[i].quantity;
+            }
           }
         }
-      }
-      for (let i in tkSku) {
         if (!tkSku[i].check) {
           sortable.push(tkSku[i]);
         }

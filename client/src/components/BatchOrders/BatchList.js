@@ -52,10 +52,10 @@ class BatchList extends Component {
     }
     return (
       <div>
-        <Link to="/" className="noprint">
-          Go Back
-        </Link>
         <div style={styles.pickList}>
+          <Link to="/" className="noprint">
+            Go Back
+          </Link>
           <div className="row">
             <h1 className="col-6" style={styles.margin}>
               Product Pick List
@@ -93,7 +93,7 @@ class BatchList extends Component {
               <strong>#</strong>
             </div>
           </div>
-          <div>{renderBatchList(this.props)}</div>
+          <div >{renderBatchList(this.props)}</div>
           <div className="row" style={{ textAlign: "right" }}>
             <div className="col-12">
               <strong>
@@ -104,7 +104,7 @@ class BatchList extends Component {
           </div>
         </div>
 
-        <div>{renderSlipList(this.props)}</div>
+        <div style={{margin: "0 auto"}}>{renderSlipList(this.props)}</div>
       </div>
     );
   }
@@ -121,7 +121,7 @@ const renderBatchList = props => {
           image={data.imageUrl}
           quantity={data.combineTotal ? data.combineTotal : data.quantity}
           warehouse={data.warehouseLocation}
-          options={data.options? data.options[0].value: ""}
+          options={data.options ? data.options[0].value : ""}
         />
       ));
     }
@@ -135,7 +135,7 @@ const renderBatchList = props => {
         warehouse={data.warehouseLocation}
         fullBox={data.fullBox ? data.fullBox : null}
         loose={data.loose ? data.loose : null}
-        options={data.options? data.options[0].value: ""}
+        options={data.options ? data.options[0].value : ""}
       />
     );
   });

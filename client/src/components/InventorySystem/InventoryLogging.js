@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Segment, Form, Button, List } from "semantic-ui-react";
+import { Segment, Form, Button, List, Grid, Divider } from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
 import moment from "moment";
+import firebase from "../../config/firebaseconf";
 import axios from "axios";
 import people from "../../config/people.json";
 
@@ -11,6 +12,7 @@ class LogList extends Component {
     this.state = {
       loading: false,
       trackingNumber: "",
+      file: [],
       brand: "",
       stage: "",
       quantity: "",
@@ -33,6 +35,13 @@ class LogList extends Component {
 
   handleChange = e => this.setState({ [e.target.name]: e.target.value });
 
+  fileHandler = e => {
+    console.log(e.target.files);
+    this.setState({ file: e.target.files[0] });
+    this.setState(prevState => {
+      return { count: prevState.count + 1 };
+    });
+  };
   _handleKeyPress = e => {
     if (e.key === "Enter") {
       this.setState(prevState => {
@@ -46,21 +55,45 @@ class LogList extends Component {
       return { count: prevState.count - 1 };
     });
   };
+
+  getBrand(brandnum) {
+    switch (parseInt(brandnum)) {
+      case 1:
+        return "Hipp";
+      case 2:
+        return "Holle";
+      case 3:
+        return "Lebenswert";
+      case 4:
+        return "Topfer";
+      case 5:
+        return "Nanny care";
+      default:
+        return "unknown brand";
+    }
+  }
+
   handleSubmit() {
     const {
       trackingNumber,
       brand,
+      file,
       stage,
       quantity,
       broken,
       scanner,
       warehouseLocation
     } = this.state;
+    let brandName = this.getBrand(brand);
 
+    let storageRef = firebase.storage().ref("images");
+    storageRef.child(trackingNumber).put(file).then(snapshot => {
+      console.log("sup")
+    })
     axios
       .post("/writeinventorytofile", {
         trackingNumber,
-        brand,
+        brand: brandName,
         stage,
         quantity,
         broken,
@@ -76,7 +109,6 @@ class LogList extends Component {
           console.log("failed to log.");
         }
       });
-
 
     this.setState({
       count: 0,
@@ -102,7 +134,7 @@ class LogList extends Component {
       case 1:
         inputInfo = {
           label: "Brand Name:",
-          placeholder: "Hipp",
+          placeholder: "1",
           name: "brand",
           value: this.state.brand
         };
@@ -131,6 +163,18 @@ class LogList extends Component {
           value: this.state.broken
         };
         break;
+      case 5:
+        return (
+          <Segment>
+            <h2>Upload invoice slip</h2>
+            <Form.Input
+              type="file"
+              accept="image/*"
+              capture="camera"
+              onChange={this.fileHandler}
+            />
+          </Segment>
+        );
 
       default:
         return this.renderConfirmation();
@@ -173,6 +217,26 @@ class LogList extends Component {
           onKeyPress={this._handleKeyPress}
           autoFocus
         />
+        {this.state.count === 1 ? (
+          <Segment>
+            <List>
+              <Grid columns={2} relaxed="very">
+                <Grid.Column>
+                  <List.Item>1: Hipp</List.Item>
+                  <List.Item>2: Holle</List.Item>
+                  <List.Item>3: Lebenswert</List.Item>
+                </Grid.Column>
+                <Grid.Column>
+                  <List.Item>4: Topfer</List.Item>
+                  <List.Item>5: Nanny care</List.Item>
+                </Grid.Column>
+              </Grid>
+              <Divider vertical />
+            </List>
+          </Segment>
+        ) : (
+          ""
+        )}
       </Form.Field>
     );
   }
@@ -201,7 +265,7 @@ class LogList extends Component {
         <h2>Is this information correct?</h2>
         <List>
           <List.Item>Tracking #: {trackingNumber}</List.Item>
-          <List.Item>Brand: {brand}</List.Item>
+          <List.Item>Brand: {this.getBrand(brand)}</List.Item>
           <List.Item>Stage #: {stage}</List.Item>
           <List.Item>Quantity #: {quantity}</List.Item>
           <List.Item>Broken #: {broken}</List.Item>
@@ -225,7 +289,12 @@ class LogList extends Component {
 
   render() {
     return (
-      <Segment color="olive" padded="very" style={{ marginTop: "25px" }}>
+      <Segment
+        compact
+        color="olive"
+        padded="very"
+        style={{ margin: "50px auto" }}
+      >
         {this.renderInput()}
       </Segment>
     );

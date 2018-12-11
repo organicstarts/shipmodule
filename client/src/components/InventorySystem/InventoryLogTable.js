@@ -8,8 +8,11 @@ class InventoryLogTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      datas: []
+      datas: {},
+      image: 0
     };
+  }
+  componentDidMount() {
     this.firebaseRef = firebase.database().ref(`/inventory`);
     this.firebaseRef
       .on("value", snapshot => {
@@ -17,6 +20,17 @@ class InventoryLogTable extends Component {
         if (payload) {
           this.setState({
             datas: payload.log
+          });
+          let storageRef = firebase.storage().ref();
+
+          Object.keys(payload.log).forEach(key => {
+            storageRef
+              .child(`images/${payload.log[key].trackingNumber}`)
+              .getDownloadURL()
+              .then(url => {
+                payload.log[key].image = url;
+                this.setState({ image: url });
+              });
           });
         }
       })
@@ -26,41 +40,46 @@ class InventoryLogTable extends Component {
   componentWillUnmount() {
     this.firebaseRef.off();
   }
+  
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.image !== nextState.image;
+  }
 
   renderLogList() {
     const { datas } = this.state;
-    return Object.keys(datas).map(key => {
-      return (
-        <InventoryDetail
-          key={key}
-          trackingNumber={datas[key].trackingNumber}
-          brand={datas[key].brand}
-          stage={datas[key].stage}
-          quantity={datas[key].quantity}
-          broken={datas[key].broken}
-          total={datas[key].total}
-          scanner={datas[key].scanner}
-          timeStamp={datas[key].timeStamp}
-          warehouseLocation={datas[key].warehouseLocation}
-        />
-      );
-    }).reverse();
+
+    return Object.keys(datas)
+      .map(key => {
+        return (
+          <InventoryDetail
+            key={key}
+            trackingNumber={datas[key].trackingNumber}
+            brand={datas[key].brand}
+            stage={datas[key].stage}
+            quantity={datas[key].quantity}
+            broken={datas[key].broken}
+            total={datas[key].total}
+            scanner={datas[key].scanner}
+            timeStamp={datas[key].timeStamp}
+            warehouseLocation={datas[key].warehouseLocation}
+            image={datas[key].image}
+          />
+        );
+      })
+      .reverse();
   }
 
   render() {
     return (
-      <Segment style={{ marginTop: "50px" }}>
+      <Segment compact style={{ margin: "50px auto" }}>
         <Link to="/" className="noprint">
           Go Back
         </Link>
-        <Table celled textAlign="center">
+        <Table celled collapsing textAlign="center">
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
                 <strong>Tracking #</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Date</strong>
               </Table.HeaderCell>
               <Table.HeaderCell>
                 <strong>Brand</strong>
@@ -82,6 +101,12 @@ class InventoryLogTable extends Component {
               </Table.HeaderCell>
               <Table.HeaderCell>
                 <strong>Warehouse</strong>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <strong>invoic</strong>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <strong>Date</strong>
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>

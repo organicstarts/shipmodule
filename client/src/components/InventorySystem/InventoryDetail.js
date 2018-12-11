@@ -1,6 +1,5 @@
 import React from "react";
 import { Table } from "semantic-ui-react";
-
 const InventoryDetail = props => {
   return (
     <Table.Body>
@@ -12,7 +11,12 @@ const InventoryDetail = props => {
         <Table.Cell style={styles.borderLast}>{props.broken}</Table.Cell>
         <Table.Cell style={styles.borderLast}>{props.total}</Table.Cell>
         <Table.Cell style={styles.borderLast}>{props.scanner}</Table.Cell>
-        <Table.Cell style={styles.borderLast}>{props.warehouseLocation}</Table.Cell>
+        <Table.Cell style={styles.borderLast}>
+          {props.warehouseLocation}
+        </Table.Cell>
+        <Table.Cell style={styles.border}>
+          <a href={props.image} target="_blank" rel="noopener noreferrer">invoice </a>
+        </Table.Cell>
         <Table.Cell style={styles.border}>{props.timeStamp}</Table.Cell>
       </Table.Row>
     </Table.Body>

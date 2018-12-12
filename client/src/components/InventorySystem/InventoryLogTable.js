@@ -103,7 +103,7 @@ class InventoryLogTable extends Component {
                 <strong>Warehouse</strong>
               </Table.HeaderCell>
               <Table.HeaderCell>
-                <strong>invoic</strong>
+                <strong>Invoice</strong>
               </Table.HeaderCell>
               <Table.HeaderCell>
                 <strong>Date</strong>

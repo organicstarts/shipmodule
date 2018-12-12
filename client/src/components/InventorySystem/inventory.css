@@ -1,0 +1,9 @@
+.no-rotate-on-mobile {
+    transform: rotate(0);
+  }
+
+@media(min-width: 768) {
+    .no-rotate-on-mobile {
+        transform: rotate(90deg);
+      }
+}

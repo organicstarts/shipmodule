@@ -1,5 +1,7 @@
 import React from "react";
-import { Table } from "semantic-ui-react";
+import { Table, Modal, Image, Button } from "semantic-ui-react";
+import "./inventory.css";
+
 const InventoryDetail = props => {
   return (
     <Table.Body>
@@ -15,7 +17,11 @@ const InventoryDetail = props => {
           {props.warehouseLocation}
         </Table.Cell>
         <Table.Cell style={styles.border}>
-          <a href={props.image} target="_blank" rel="noopener noreferrer">invoice </a>
+          <Modal basic trigger={<Button>invoice</Button>} closeIcon>
+            <Modal.Content image>
+              <Image style={window.innerWidth > 768? {transform: "rotate(90deg)"}: {transform: "rotate:(0)"}} wrapped src={props.image} />
+            </Modal.Content>
+          </Modal>
         </Table.Cell>
         <Table.Cell style={styles.border}>{props.timeStamp}</Table.Cell>
       </Table.Row>

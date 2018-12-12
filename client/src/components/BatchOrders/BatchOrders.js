@@ -172,6 +172,7 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
       }
       for (let sku of tkSku) {
         if (sku.sku.includes(key)) {
+          sku.isTk = false
           if (group[key][0].combineTotal) {
             group[key][0].combineTotal += sku.quantity;
           } else {

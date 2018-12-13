@@ -93,4 +93,47 @@ router.get("/getordercoupon", (req, res) => {
     });
 });
 
+router.get("/getcategories", async (req, res) => {
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
+  });
+  let resData = [];
+  let all = [];
+
+  for (let i = 1; i < 4; i++) {
+    resData = await getAllproducts(i, 250);
+    all.push(resData);
+  }
+  res.send(all);
+});
+
+function getAllproducts(page, limit) {
+  const baseUrl = `https://organicstart.com/api/v2/products?page=${page}&limit=${limit}`;
+
+  return fetch(baseUrl, header)
+    .then(res => res.json())
+    .then(data => {
+      return data;
+    });
+}
+
+router.get("/getbrand", (req, res) => {
+  //build api URL with user ordernumber to see if order had coupons used
+  const baseUrl = req.query.brandUrl;
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
+  });
+
+  fetch(baseUrl, header)
+    .then(res => res.json())
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.send("");
+    });
+});
+
 module.exports = router;

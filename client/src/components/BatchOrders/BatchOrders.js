@@ -137,9 +137,25 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
         }
       } else if (item.sku.includes("TK")) {
         let x = parseInt(item.sku.split(/-/)[1]);
+        let tempSku = item.sku.split(/TK-.\d-/)[1];
+        let split = tempSku.split(/-/);
+        let skusplit1 = "";
+        let skusplit2 = "";
+
+        if (
+          tempSku.charAt(0) === "H" &&
+          (tempSku.includes(`HP-DE`) || tempSku.includes(`HP-UK`))
+        ) {
+          skusplit1 = split[0] + "-" + split[1] + "-" + split[2];
+          skusplit2 = split[3] + "-" + split[4] + "-" + split[5];
+        } else {
+          skusplit1 = split[0] + "-" + split[1];
+          skusplit2 = split[2] + "-" + split[3];
+        }
+
         let sku1 = {
-          sku: item.sku.split(/-(?=\D)/)[1],
-          aliasName: products[0][item.sku.split(/-(?=\D)/)[1]],
+          sku: skusplit1,
+          aliasName: products[0][skusplit1],
           orderItemId: item.orderItemId,
           warehouseLocation: item.warehouseLocation,
           imageUrl: item.imageUrl,
@@ -148,8 +164,8 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
           quantity: x / 2
         };
         let sku2 = {
-          sku: item.sku.split(/-(?=\D)/)[2],
-          aliasName: products[0][item.sku.split(/-(?=\D)/)[2]],
+          sku: skusplit2,
+          aliasName: products[0][skusplit2],
           orderItemId: item.orderItemId + 1,
           warehouseLocation: item.warehouseLocation,
           imageUrl: item.imageUrl,

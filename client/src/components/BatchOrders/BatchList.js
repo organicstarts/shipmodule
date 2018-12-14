@@ -93,7 +93,7 @@ class BatchList extends Component {
               <strong>#</strong>
             </div>
           </div>
-          <div >{renderBatchList(this.props)}</div>
+          <div>{renderBatchList(this.props)}</div>
           <div className="row" style={{ textAlign: "right" }}>
             <div className="col-12">
               <strong>
@@ -104,7 +104,7 @@ class BatchList extends Component {
           </div>
         </div>
 
-        <div style={{margin: "0 auto"}}>{renderSlipList(this.props)}</div>
+        <div style={{ margin: "0 auto" }}>{renderSlipList(this.props)}</div>
       </div>
     );
   }
@@ -148,6 +148,7 @@ const renderSlipList = props => {
       <SlipDetail
         key={data.orderId}
         customerId={data.bigCommerce ? data.bigCommerce.customer_id : null}
+        message={data.bigCommerce ? data.bigCommerce.customer_message : ""}
         carrier={data.carrierCode}
         orderTotal={data.orderCount}
         carrierCode={getCarrier(data.carrierCode, data.packageCode)}

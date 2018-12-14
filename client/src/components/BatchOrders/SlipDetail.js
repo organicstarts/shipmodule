@@ -107,6 +107,15 @@ const SlipDetail = props => {
               ${calculateTotal(props.shipmentInfo)}
             </th>
           </tr>
+          {props.message ? (
+            <tr>
+              <th colSpan="3" style={{ padding: "0 .78571429em" }}>
+                <strong>Customer Message:</strong>
+                <br />
+                {props.message}
+              </th>
+            </tr>
+          ) : null}
           <tr>
             <th
               className="text-right"
@@ -288,7 +297,9 @@ const renderOrder = items => {
   return items.map(item => {
     return (
       <tr key={item.orderItemId}>
-        <td>{`${item.name} ${item.options ? `(${item.options[0].value})` : ""}`}</td>
+        <td>{`${item.name} ${
+          item.options ? `(${item.options[0].value})` : ""
+        }`}</td>
         <td className="text-center">${item.unitPrice}</td>
         <td className="text-center">{item.quantity}</td>
         <td>${(item.unitPrice * item.quantity).toFixed(2)}</td>

@@ -70,10 +70,9 @@ class FraudList extends Component {
   Save order numbers that came up with possible fraud errors to fraud/log firebase
   */
   componentDidMount() {
-    const { newData, fraudDatas } = this.props.location.state.detail;
-    console.log(`new ${newData} fraud ${fraudDatas}`)
+    const { newData } = this.props.location.state.detail;
     let saved = [];
-    newData.map(data => {
+    newData.reverse().map(data => {
       if (checkError(data)) {
         return saved.push(data);
       }
@@ -95,45 +94,46 @@ class FraudList extends Component {
 
   renderFraudList = props => {
     const { fraudDatas } = props.location.state.detail;
-    return fraudDatas.map((data, index) => {
-      if (data.shippingInfo.length > 1) console.log(data);
-      return (
-        <FraudDetail
-          key={data.id}
-          orderID={data.id}
-          count={data.orderCount}
-          error={checkError(data)}
-          orderNumber={data.id}
-          email={data.billing_address.email}
-          billingName={`${data.billing_address.first_name} ${
-            data.billing_address.last_name
-          }`}
-          billingStreet1={data.billing_address.street_1}
-          billingStreet2={data.billing_address.street_2}
-          billingCity={data.billing_address.city}
-          billingState={data.billing_address.state}
-          billingZip={data.billing_address.zip}
-          billingCompany={data.billing_address.company}
-          billingCountry={data.billing_address.country}
-          billingPhone={data.billing_address.phone.replace(
-            /(\d{3})(\d{3})(\d{4})/,
-            "$1-$2-$3"
-          )}
-          shipping={data.shippingInfo}
-          shippingCity={data.shippingInfo[0].city}
-          shippingState={data.shippingInfo[0].state}
-          shippingZip={data.shippingInfo[0].zip}
-          show={this.state.toggle[index]}
-          index={index}
-          handleClick={this.toggleMenu.bind(this)}
-          handleStatus={this.checkChange.bind(this)}
-          status={data.status}
-          checked={
-            this.state.checked[index] ? this.state.checked[index] : false
-          }
-        />
-      );
-    });
+    return fraudDatas
+      .map((data, index) => {
+        return (
+          <FraudDetail
+            key={data.id}
+            orderID={data.id}
+            count={data.orderCount}
+            error={checkError(data)}
+            orderNumber={data.id}
+            email={data.billing_address.email}
+            billingName={`${data.billing_address.first_name} ${
+              data.billing_address.last_name
+            }`}
+            billingStreet1={data.billing_address.street_1}
+            billingStreet2={data.billing_address.street_2}
+            billingCity={data.billing_address.city}
+            billingState={data.billing_address.state}
+            billingZip={data.billing_address.zip}
+            billingCompany={data.billing_address.company}
+            billingCountry={data.billing_address.country}
+            billingPhone={data.billing_address.phone.replace(
+              /(\d{3})(\d{3})(\d{4})/,
+              "$1-$2-$3"
+            )}
+            shipping={data.shippingInfo}
+            shippingCity={data.shippingInfo[0].city}
+            shippingState={data.shippingInfo[0].state}
+            shippingZip={data.shippingInfo[0].zip}
+            show={this.state.toggle[index]}
+            index={index}
+            handleClick={this.toggleMenu.bind(this)}
+            handleStatus={this.checkChange.bind(this)}
+            status={data.status}
+            checked={
+              this.state.checked[index] ? this.state.checked[index] : false
+            }
+          />
+        );
+      })
+      .reverse();
   };
 
   render() {

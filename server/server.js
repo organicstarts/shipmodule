@@ -141,12 +141,15 @@ router.post("/batchcheckemail", (req, res) => {
 update boolean -> checked [true/false] in firebase  when the user ticks the checkbox in FraudDetails 
 */
 router.put("/fraud/updatefraudtofile", (req, res) => {
-  let dataRef = admin.database().ref("/fraud/log/0");
+  let dataRef = admin.database().ref("/fraud");
   dataRef
+    .orderByKey()
     .once("value", snap => {
-      snap.forEach(childSnap => {
-        if (req.body.orderNumber === childSnap.val().id) {
-          childSnap.ref.update({ checked: req.body.checked });
+      const payload = snap.val();
+
+      Object.keys(payload).map(key => {
+        if (req.body.orderNumber === payload[key].id) {
+          dataRef.child(key).update({ checked: req.body.checked });
         }
       });
     })

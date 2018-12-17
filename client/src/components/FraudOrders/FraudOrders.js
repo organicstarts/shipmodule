@@ -64,7 +64,6 @@ class FraudOrders extends Component {
   */
   handleClick() {
     this.setState({ loading: true });
-    console.log(this.state.savedData);
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
 
     axios
@@ -80,8 +79,9 @@ class FraudOrders extends Component {
           console.log("failed to log.");
         }
       });
+      
     getAllOrders(
-      this.state.savedData.length > 0 ? this.state.savedData[0].id + 1 : 0
+      this.state.oneData? this.state.oneData.id + 1 : 0
     )
       .then(async data => {
         await Promise.all(
@@ -95,13 +95,10 @@ class FraudOrders extends Component {
             );
           })
         );
-        console.log("data", data)
         let tempArray = JSON.parse(JSON.stringify(data));
         if (this.state.savedData.length > 0) {
           this.state.savedData.map(save => tempArray.push(save));
         }
-        console.log("data2", data)
-        console.log("temp", tempArray)
         this.setState({
           fraudDatas: tempArray,
           newData: data

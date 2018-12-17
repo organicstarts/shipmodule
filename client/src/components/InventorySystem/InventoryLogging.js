@@ -5,7 +5,6 @@ import {
   Button,
   List,
   Grid,
-  Divider,
   Label,
   Icon
 } from "semantic-ui-react";
@@ -46,7 +45,6 @@ class LogList extends Component {
   handleChange = e => this.setState({ [e.target.name]: e.target.value });
 
   fileHandler = e => {
-    console.log(e.target.files);
     this.setState({ file: e.target.files[0] });
     this.setState(prevState => {
       return { count: prevState.count + 1 };
@@ -97,12 +95,7 @@ class LogList extends Component {
     let brandName = this.getBrand(brand);
 
     let storageRef = firebase.storage().ref("images");
-    storageRef
-      .child(trackingNumber)
-      .put(file)
-      .then(snapshot => {
-        console.log("sup");
-      });
+    storageRef.child(trackingNumber).put(file);
     axios
       .post("/writeinventorytofile", {
         trackingNumber,
@@ -260,7 +253,7 @@ class LogList extends Component {
         {this.state.count === 1 ? (
           <Segment>
             <List>
-              <Grid columns={2}>
+              <Grid columns={2} divided>
                 <Grid.Column>
                   <List.Item>1: Hipp</List.Item>
                   <List.Item>2: Holle</List.Item>
@@ -271,7 +264,6 @@ class LogList extends Component {
                   <List.Item>5: Nanny care</List.Item>
                 </Grid.Column>
               </Grid>
-              <Divider vertical />
             </List>
           </Segment>
         ) : (
@@ -329,7 +321,7 @@ class LogList extends Component {
 
   render() {
     return (
-      <Segment piled color="olive" padded="very" style={{ margin: "25px" }}>
+      <Segment piled color="olive" style={{ margin: "25px" }}>
         {this.renderInput()}
       </Segment>
     );

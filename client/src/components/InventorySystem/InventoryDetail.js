@@ -19,7 +19,7 @@ const InventoryDetail = props => {
         <Table.Cell style={styles.border}>
           <Modal basic trigger={<Button>invoice</Button>} closeIcon>
             <Modal.Content image>
-              <Image style={window.innerWidth > 768? {transform: "rotate(90deg)"}: {transform: "rotate:(0)"}} wrapped src={props.image} />
+              <Image wrapped src={props.image} />
             </Modal.Content>
           </Modal>
         </Table.Cell>

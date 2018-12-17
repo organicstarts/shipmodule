@@ -30,7 +30,9 @@ class InventoryLogTable extends Component {
               .then(url => {
                 payload.log[key].image = url;
                 this.setState({ image: url });
-              });
+              }).catch(err => {
+                console.log("file not found!")
+              })
           });
         }
       })
@@ -40,7 +42,7 @@ class InventoryLogTable extends Component {
   componentWillUnmount() {
     this.firebaseRef.off();
   }
-  
+
   shouldComponentUpdate(nextProps, nextState) {
     return this.state.image !== nextState.image;
   }
@@ -62,7 +64,7 @@ class InventoryLogTable extends Component {
             scanner={datas[key].scanner}
             timeStamp={datas[key].timeStamp}
             warehouseLocation={datas[key].warehouseLocation}
-            image={datas[key].image}
+            image={datas[key].image ? datas[key].image : ""}
           />
         );
       })

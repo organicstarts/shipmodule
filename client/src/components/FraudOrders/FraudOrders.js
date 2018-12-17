@@ -18,20 +18,37 @@ class FraudOrders extends Component {
       loading: false,
       displayName: this.props.displayName,
       fraudDatas: [],
-      savedData: []
+      savedData: [],
+      newData: [],
+      oneData: {}
     };
     this.handleClick = this.handleClick.bind(this);
     this.firebaseRef = firebase.database().ref(`/fraud`);
     this.firebaseRef
+      .orderByKey()
+      .limitToLast(1)
       .on("value", snapshot => {
         const payload = snapshot.val();
         if (payload) {
+          const key = Object.keys(snapshot.val());
           this.setState({
-            savedData: payload.log[0]
+            oneData: payload[key]
           });
         }
       })
       .bind(this);
+
+    this.fraudRef = firebase.database().ref("/fraud");
+    this.fraudRef.orderByKey().on("value", snapshot => {
+      const payload = snapshot.val();
+      if (payload) {
+        let dataArray = []
+        Object.keys(payload).map(key => dataArray.push(payload[key]));
+        this.setState({
+          savedData: dataArray
+        });
+      }
+    });
   }
 
   componentWillUnmount() {
@@ -47,8 +64,9 @@ class FraudOrders extends Component {
   */
   handleClick() {
     this.setState({ loading: true });
-    console.log(this.state.savedData)
+    console.log(this.state.savedData);
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
+
     axios
       .post("/writetofile", {
         action: "Fraud Search",
@@ -77,11 +95,16 @@ class FraudOrders extends Component {
             );
           })
         );
+        console.log("data", data)
+        let tempArray = JSON.parse(JSON.stringify(data));
         if (this.state.savedData.length > 0) {
-          this.state.savedData.map(save => data.push(save));
+          this.state.savedData.map(save => tempArray.push(save));
         }
+        console.log("data2", data)
+        console.log("temp", tempArray)
         this.setState({
-          fraudDatas: data
+          fraudDatas: tempArray,
+          newData: data
         });
       })
       .then(x => {

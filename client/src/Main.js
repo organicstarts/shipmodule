@@ -127,8 +127,8 @@ class Main extends Component {
   }
   render() {
     return (
-      <div className="App container tc">
-        <header style={{ marginTop: "50px", marginBottom: "50px" }}>
+      <div className="App container tc" style={{margin: "50px auto"}}>
+        <header style={{ marginBottom: "50px" }}>
           <Image src={logo} size="medium" centered alt="Organic Start" />
         </header>
         {this.renderHome()}

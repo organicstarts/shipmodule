@@ -1,10 +1,20 @@
 import React, { Component } from "react";
-import { Segment, Form, Button, List, Grid, Divider } from "semantic-ui-react";
+import {
+  Segment,
+  Form,
+  Button,
+  List,
+  Grid,
+  Divider,
+  Label,
+  Icon
+} from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
 import moment from "moment";
 import firebase from "../../config/firebaseconf";
 import axios from "axios";
 import people from "../../config/people.json";
+import "./inventory.css";
 
 class LogList extends Component {
   constructor(props) {
@@ -87,9 +97,12 @@ class LogList extends Component {
     let brandName = this.getBrand(brand);
 
     let storageRef = firebase.storage().ref("images");
-    storageRef.child(trackingNumber).put(file).then(snapshot => {
-      console.log("sup")
-    })
+    storageRef
+      .child(trackingNumber)
+      .put(file)
+      .then(snapshot => {
+        console.log("sup");
+      });
     axios
       .post("/writeinventorytofile", {
         trackingNumber,
@@ -166,13 +179,40 @@ class LogList extends Component {
       case 5:
         return (
           <Segment>
-            <h2>Upload invoice slip</h2>
-            <Form.Input
-              type="file"
-              accept="image/*"
-              capture="camera"
-              onChange={this.fileHandler}
-            />
+            <Button onClick={this.subtract} compact size="small" color="grey">
+              Back
+            </Button>
+            <Button
+              onClick={() => {
+                window.history.go(-1);
+                return false;
+              }}
+              compact
+              size="small"
+              color="red"
+            >
+              Cancel
+            </Button>
+            <h2>Upload Invoice slip:</h2>
+            <Label
+              style={{
+                textAlign: "center",
+                paddingBottom: "50px",
+                display: "inherit"
+              }}
+              color="orange"
+              className="fileContainer"
+            >
+              <Form.Input
+                fluid
+                type="file"
+                accept="image/*"
+                capture="camera"
+                onChange={this.fileHandler}
+              />
+              <Icon name="camera" />
+              Add Invoice
+            </Label>
           </Segment>
         );
 
@@ -220,7 +260,7 @@ class LogList extends Component {
         {this.state.count === 1 ? (
           <Segment>
             <List>
-              <Grid columns={2} relaxed="very">
+              <Grid columns={2}>
                 <Grid.Column>
                   <List.Item>1: Hipp</List.Item>
                   <List.Item>2: Holle</List.Item>
@@ -289,12 +329,7 @@ class LogList extends Component {
 
   render() {
     return (
-      <Segment
-        compact
-        color="olive"
-        padded="very"
-        style={{ margin: "50px auto" }}
-      >
+      <Segment piled color="olive" padded="very" style={{ margin: "25px" }}>
         {this.renderInput()}
       </Segment>
     );

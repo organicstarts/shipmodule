@@ -70,9 +70,10 @@ class FraudList extends Component {
   Save order numbers that came up with possible fraud errors to fraud/log firebase
   */
   componentDidMount() {
-    const { fraudDatas } = this.props.location.state.detail;
+    const { newData, fraudDatas } = this.props.location.state.detail;
+    console.log(`new ${newData} fraud ${fraudDatas}`)
     let saved = [];
-    fraudDatas.map(data => {
+    newData.map(data => {
       if (checkError(data)) {
         return saved.push(data);
       }

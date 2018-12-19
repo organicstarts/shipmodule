@@ -4,7 +4,6 @@ import {
   Form,
   Button,
   List,
-  Grid,
   Label,
   Icon
 } from "semantic-ui-react";
@@ -13,6 +12,7 @@ import moment from "moment";
 import firebase from "../../config/firebaseconf";
 import axios from "axios";
 import people from "../../config/people.json";
+import upc from "../../config/upc.json";
 import "./inventory.css";
 
 class LogList extends Component {
@@ -20,7 +20,9 @@ class LogList extends Component {
     super(props);
     this.state = {
       loading: false,
+      isTyped: false,
       trackingNumber: "",
+      upc: "",
       file: [],
       brand: "",
       stage: "",
@@ -40,10 +42,21 @@ class LogList extends Component {
     this.subtract = this.subtract.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
+    this.getBrand = this.getBrand.bind(this);
+    this.getStage = this.getStage.bind(this);
+    this.getQuantity = this.getQuantity.bind(this);
   }
 
-  handleChange = e => this.setState({ [e.target.name]: e.target.value });
-
+  handleChange = e => {
+    if (!this.state.isTyped) {
+      this.setState({ [e.target.name]: e.target.value });
+      this.setState(prevState => {
+        return { count: prevState.count + 1 };
+      });
+    } else {
+      this.setState({ [e.target.name]: e.target.value });
+    }
+  };
   fileHandler = e => {
     this.setState({ file: e.target.files[0] });
     this.setState(prevState => {
@@ -51,7 +64,11 @@ class LogList extends Component {
     });
   };
   _handleKeyPress = e => {
+    if (e.key) {
+      this.setState({ isTyped: true });
+    }
     if (e.key === "Enter") {
+      this.setState({ isTyped: false });
       this.setState(prevState => {
         return { count: prevState.count + 1 };
       });
@@ -64,21 +81,19 @@ class LogList extends Component {
     });
   };
 
-  getBrand(brandnum) {
-    switch (parseInt(brandnum)) {
-      case 1:
-        return "Hipp";
-      case 2:
-        return "Holle";
-      case 3:
-        return "Lebenswert";
-      case 4:
-        return "Topfer";
-      case 5:
-        return "Nanny care";
-      default:
-        return "unknown brand";
-    }
+  getBrand() {
+    //this.setState({brand: upc[this.state.upc].name})
+    return upc[this.state.upc].brand;
+  }
+
+  getStage() {
+    //this.setState({stage: upc[this.state.upc].stage})
+    return upc[this.state.upc].stage;
+  }
+
+  getQuantity() {
+   // this.setState({quantity: upc[this.state.upc].quantity * this.state.quantity})
+    return parseInt(upc[this.state.upc].quantity) * this.state.quantity;
   }
 
   handleSubmit() {
@@ -140,28 +155,20 @@ class LogList extends Component {
       case 1:
         inputInfo = {
           label: "Brand Name:",
-          placeholder: "1",
-          name: "brand",
-          value: this.state.brand
+          placeholder: "#upc number",
+          name: "upc",
+          value: this.state.upc
         };
         break;
       case 2:
         inputInfo = {
-          label: "Stage:",
-          placeholder: "0",
-          name: "stage",
-          value: this.state.stage
-        };
-        break;
-      case 3:
-        inputInfo = {
-          label: "Quantity:",
+          label: "Number of Boxes:",
           placeholder: "0",
           name: "quantity",
           value: this.state.quantity
         };
         break;
-      case 4:
+      case 3:
         inputInfo = {
           label: "Broken:",
           placeholder: "0",
@@ -169,7 +176,7 @@ class LogList extends Component {
           value: this.state.broken
         };
         break;
-      case 5:
+      case 4:
         return (
           <Segment>
             <Button onClick={this.subtract} compact size="small" color="grey">
@@ -246,29 +253,10 @@ class LogList extends Component {
           placeholder={inputInfo.placeholder}
           name={inputInfo.name}
           value={inputInfo.value}
-          onChange={this.handleChange}
           onKeyPress={this._handleKeyPress}
+          onChange={this.handleChange}
           autoFocus
         />
-        {this.state.count === 1 ? (
-          <Segment>
-            <List>
-              <Grid columns={2} divided>
-                <Grid.Column>
-                  <List.Item>1: Hipp</List.Item>
-                  <List.Item>2: Holle</List.Item>
-                  <List.Item>3: Lebenswert</List.Item>
-                </Grid.Column>
-                <Grid.Column>
-                  <List.Item>4: Topfer</List.Item>
-                  <List.Item>5: Nanny care</List.Item>
-                </Grid.Column>
-              </Grid>
-            </List>
-          </Segment>
-        ) : (
-          ""
-        )}
       </Form.Field>
     );
   }
@@ -276,8 +264,6 @@ class LogList extends Component {
   renderConfirmation() {
     const {
       trackingNumber,
-      brand,
-      stage,
       quantity,
       broken,
       loading
@@ -297,9 +283,9 @@ class LogList extends Component {
         <h2>Is this information correct?</h2>
         <List>
           <List.Item>Tracking #: {trackingNumber}</List.Item>
-          <List.Item>Brand: {this.getBrand(brand)}</List.Item>
-          <List.Item>Stage #: {stage}</List.Item>
-          <List.Item>Quantity #: {quantity}</List.Item>
+          <List.Item>Brand: {this.getBrand}</List.Item>
+          <List.Item>Stage #: {this.getStage}</List.Item>
+          <List.Item>Boxes #: {quantity} ({this.getQuantity} items)</List.Item>
           <List.Item>Broken #: {broken}</List.Item>
         </List>
 

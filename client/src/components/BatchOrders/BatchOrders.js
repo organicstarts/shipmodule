@@ -125,7 +125,15 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
     }
 
     const group = _.groupBy(items, item => {
-      if (item.sku && !isNaN(item.sku.charAt(0)) && item.sku.includes("-")) {
+      console.log(item);
+
+      if (
+        item.sku &&
+        !isNaN(item.sku.charAt(0)) &&
+        item.sku.includes("-") &&
+        !item.sku.includes("PRMX") &&
+        item.sku.match(/\d-\d/) === null
+      ) {
         let x = parseInt(item.sku.split(/-(.*)/)[0]);
         item.sku = item.sku.split(/-(.*)/)[1];
         item.combineTotal = x * item.quantity;
@@ -292,7 +300,8 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
   }
   //helper func to compare warehouse locations
   compare(a, b) {
-    return a.warehouseLocation - b.warehouseLocation;
+    if(a.warehouseLocation === "") return -1
+    return parseInt(a.warehouseLocation, 16) - parseInt(b.warehouseLocation, 16);
   }
   compareBatch(a, b) {
     return b.orderNumber - a.orderNumber;

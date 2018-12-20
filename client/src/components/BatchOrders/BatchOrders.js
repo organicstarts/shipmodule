@@ -125,8 +125,6 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
     }
 
     const group = _.groupBy(items, item => {
-      console.log(item);
-
       if (
         item.sku &&
         !isNaN(item.sku.charAt(0)) &&
@@ -252,6 +250,7 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
     }
 
     sortable.sort(this.compare);
+    console.log(sortable)
     this.setState({ totalCount: count });
     return sortable;
   }
@@ -300,8 +299,7 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
   }
   //helper func to compare warehouse locations
   compare(a, b) {
-    if(a.warehouseLocation === "") return -1
-    return parseInt(a.warehouseLocation, 16) - parseInt(b.warehouseLocation, 16);
+   return a.warehouseLocation - b.warehouseLocation || a.warehouseLocation.localeCompare(b.warehouseLocation);
   }
   compareBatch(a, b) {
     return b.orderNumber - a.orderNumber;

@@ -22,7 +22,7 @@ class LogList extends Component {
       loading: false,
       isTyped: false,
       trackingNumber: "",
-      upc: "",
+      upcNum: "",
       file: [],
       brand: "",
       stage: "",
@@ -42,9 +42,6 @@ class LogList extends Component {
     this.subtract = this.subtract.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
-    this.getBrand = this.getBrand.bind(this);
-    this.getStage = this.getStage.bind(this);
-    this.getQuantity = this.getQuantity.bind(this);
   }
 
   handleChange = e => {
@@ -81,44 +78,27 @@ class LogList extends Component {
     });
   };
 
-  getBrand() {
-    //this.setState({brand: upc[this.state.upc].name})
-    return upc[this.state.upc].brand;
-  }
-
-  getStage() {
-    //this.setState({stage: upc[this.state.upc].stage})
-    return upc[this.state.upc].stage;
-  }
-
-  getQuantity() {
-   // this.setState({quantity: upc[this.state.upc].quantity * this.state.quantity})
-    return parseInt(upc[this.state.upc].quantity) * this.state.quantity;
-  }
-
   handleSubmit() {
     const {
       trackingNumber,
-      brand,
+      upcNum,
       file,
-      stage,
       quantity,
       broken,
       scanner,
       warehouseLocation
     } = this.state;
-    let brandName = this.getBrand(brand);
 
     let storageRef = firebase.storage().ref("images");
     storageRef.child(trackingNumber).put(file);
     axios
       .post("/writeinventorytofile", {
         trackingNumber,
-        brand: brandName,
-        stage,
-        quantity,
+        brand: upc[upcNum].brand,
+        stage: upc[upcNum].stage,
+        quantity: upc[upcNum].package * quantity,
         broken,
-        total: parseInt(quantity - broken),
+        total: parseInt((quantity *  upc[upcNum].package)- broken),
         scanner,
         timeStamp: moment().format("dddd, MMMM DD YYYY hh:mma"),
         warehouseLocation: warehouseLocation[0].warehouse
@@ -156,8 +136,8 @@ class LogList extends Component {
         inputInfo = {
           label: "Brand Name:",
           placeholder: "#upc number",
-          name: "upc",
-          value: this.state.upc
+          name: "upcNum",
+          value: this.state.upcNum
         };
         break;
       case 2:
@@ -265,6 +245,7 @@ class LogList extends Component {
     const {
       trackingNumber,
       quantity,
+      upcNum,
       broken,
       loading
     } = this.state;
@@ -283,9 +264,9 @@ class LogList extends Component {
         <h2>Is this information correct?</h2>
         <List>
           <List.Item>Tracking #: {trackingNumber}</List.Item>
-          <List.Item>Brand: {this.getBrand}</List.Item>
-          <List.Item>Stage #: {this.getStage}</List.Item>
-          <List.Item>Boxes #: {quantity} ({this.getQuantity} items)</List.Item>
+          <List.Item>Brand: {upc[upcNum].brand}</List.Item>
+          <List.Item>Stage #: {upc[upcNum].stage}</List.Item>
+          <List.Item>Boxes #: {quantity} ({ upc[upcNum].package * this.state.quantity} items)</List.Item>
           <List.Item>Broken #: {broken}</List.Item>
         </List>
 

@@ -5,7 +5,9 @@ import {
   Button,
   List,
   Label,
-  Icon
+  Icon,
+  Container,
+  Grid
 } from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
 import moment from "moment";
@@ -25,9 +27,9 @@ class LogList extends Component {
       upcNum: "",
       file: [],
       brand: "",
-      stage: "",
       quantity: "",
       broken: "",
+      count: 0,
       scanner: this.props.location.state.detail.user,
       warehouseLocation: Object.keys(people)
         .map(key => people[key])
@@ -35,13 +37,11 @@ class LogList extends Component {
           data.email.includes(
             this.props.location.state.detail.email.split("@")[0]
           )
-        ),
-      count: 0
+        )
     };
     this.handleChange = this.handleChange.bind(this);
-    this.subtract = this.subtract.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this._handleKeyPress = this._handleKeyPress.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   handleChange = e => {
@@ -54,13 +54,15 @@ class LogList extends Component {
       this.setState({ [e.target.name]: e.target.value });
     }
   };
+
   fileHandler = e => {
     this.setState({ file: e.target.files[0] });
     this.setState(prevState => {
       return { count: prevState.count + 1 };
     });
   };
-  _handleKeyPress = e => {
+
+  handleKeyPress = e => {
     if (e.key) {
       this.setState({ isTyped: true });
     }
@@ -72,12 +74,36 @@ class LogList extends Component {
     }
   };
 
+  clear = e => {
+    const { count } = this.state;
+    switch (count) {
+      case 0:
+        this.setState({ trackingNumber: "", isTyped: false });
+        break;
+      case 1:
+        this.setState({ upcNum: "", isTyped: false });
+        break;
+      case 2:
+        this.setState({ quantity: "", isTyped: false });
+        break;
+      case 4:
+        this.setState({ broken: "", isTyped: false });
+        break;
+      default:
+        break;
+    }
+  };
   subtract = e => {
     this.setState(prevState => {
       return { count: prevState.count - 1 };
     });
   };
 
+  /*
+  Upload photo into firebase storage '/image/ with tracking number as filename
+  Send POST request to save state datas to database
+  reset all states
+  */
   handleSubmit() {
     const {
       trackingNumber,
@@ -88,17 +114,29 @@ class LogList extends Component {
       scanner,
       warehouseLocation
     } = this.state;
-
+    const warehouse = warehouseLocation[0].warehouse
+      .toLowerCase()
+      .replace(/\s/g, "");
     let storageRef = firebase.storage().ref("images");
     storageRef.child(trackingNumber).put(file);
+    let inventoryRef = firebase
+      .database()
+      .ref(`/inventory/${warehouse}`)
+      .child(upc[upcNum].sku)
+      .child("total");
+
+    inventoryRef.transaction(
+      total => total + parseInt(quantity * upc[upcNum].package - broken)
+    );
+
     axios
       .post("/writeinventorytofile", {
         trackingNumber,
         brand: upc[upcNum].brand,
         stage: upc[upcNum].stage,
         quantity: upc[upcNum].package * quantity,
-        broken,
-        total: parseInt((quantity *  upc[upcNum].package)- broken),
+        broken: broken ? broken : 0,
+        total: parseInt(quantity * upc[upcNum].package - broken),
         scanner,
         timeStamp: moment().format("dddd, MMMM DD YYYY hh:mma"),
         warehouseLocation: warehouseLocation[0].warehouse
@@ -114,15 +152,22 @@ class LogList extends Component {
     this.setState({
       count: 0,
       trackingNumber: "",
+      upcNum: "",
       brand: "",
-      stage: "",
       quantity: "",
       broken: ""
     });
   }
-
+  /*
+cycle input values per scan/user input
+tracking number > upc number > # of boxes > # of broken > photo of invoice > confirmation
+*/
   renderInput() {
     let inputInfo = {};
+    if(this.state.count > 1  && !upc[this.state.upcNum]) {
+      alert("The UPC number is not valid");
+      return this.setState({count: 1, upcNum: ""})      
+    }
     switch (this.state.count) {
       case 0:
         inputInfo = {
@@ -142,7 +187,11 @@ class LogList extends Component {
         break;
       case 2:
         inputInfo = {
-          label: "Number of Boxes:",
+          label: `${
+            upc[this.state.upcNum].package > 1
+              ? "# of Cases"
+              : "# of individual items"
+          }`,
           placeholder: "0",
           name: "quantity",
           value: this.state.quantity
@@ -203,37 +252,85 @@ class LogList extends Component {
     return (
       <Form.Field>
         {this.state.count > 0 ? (
-          <Button
-            style={{ marginBottom: "25px" }}
-            onClick={this.subtract}
-            compact
-            size="small"
-            color="grey"
-          >
-            Back
-          </Button>
+          <Grid padded="horizontally">
+            <Grid.Row columns={3}>
+              <Grid.Column textAlign="center">
+                <Button
+                  style={{ marginBottom: "25px" }}
+                  onClick={this.subtract}
+                  compact
+                  size="small"
+                  color="grey"
+                >
+                  Back
+                </Button>
+              </Grid.Column>
+              <Grid.Column textAlign="center">
+                <Button
+                  style={{ marginBottom: "25px" }}
+                  onClick={this.clear}
+                  compact
+                  size="small"
+                  color="orange"
+                >
+                  Clear
+                </Button>
+              </Grid.Column>
+              <Grid.Column textAlign="center">
+                <Button
+                  style={{ marginBottom: "25px" }}
+                  onClick={() => {
+                    window.history.go(-1);
+                    return false;
+                  }}
+                  compact
+                  size="small"
+                  color="red"
+                >
+                  Cancel
+                </Button>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         ) : (
-          ""
+          <Grid padded="horizontally">
+            <Grid.Row columns={2}>
+              <Grid.Column textAlign="center">
+                <Button
+                  style={{ marginBottom: "25px" }}
+                  onClick={this.clear}
+                  compact
+                  size="small"
+                  color="orange"
+                >
+                  Clear
+                </Button>
+              </Grid.Column>
+              <Grid.Column textAlign="center">
+                <Button
+                  style={{ marginBottom: "25px" }}
+                  onClick={() => {
+                    window.history.go(-1);
+                    return false;
+                  }}
+                  compact
+                  size="small"
+                  color="red"
+                >
+                  Cancel
+                </Button>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         )}
-        <Button
-          style={{ marginBottom: "25px" }}
-          onClick={() => {
-            window.history.go(-1);
-            return false;
-          }}
-          compact
-          size="small"
-          color="red"
-        >
-          Cancel
-        </Button>
+        <Label size="massive" basic style={{border: 0, padding: 0, margin: 0}}>{inputInfo.label}</Label>
         <Form.Input
           fluid
-          label={inputInfo.label}
+          size="massive"
           placeholder={inputInfo.placeholder}
           name={inputInfo.name}
           value={inputInfo.value}
-          onKeyPress={this._handleKeyPress}
+          onKeyPress={this.handleKeyPress}
           onChange={this.handleChange}
           autoFocus
         />
@@ -242,13 +339,7 @@ class LogList extends Component {
   }
 
   renderConfirmation() {
-    const {
-      trackingNumber,
-      quantity,
-      upcNum,
-      broken,
-      loading
-    } = this.state;
+    const { trackingNumber, quantity, upcNum, broken, loading } = this.state;
     if (loading) {
       return (
         <ClipLoader
@@ -266,8 +357,14 @@ class LogList extends Component {
           <List.Item>Tracking #: {trackingNumber}</List.Item>
           <List.Item>Brand: {upc[upcNum].brand}</List.Item>
           <List.Item>Stage #: {upc[upcNum].stage}</List.Item>
-          <List.Item>Boxes #: {quantity} ({ upc[upcNum].package * this.state.quantity} items)</List.Item>
-          <List.Item>Broken #: {broken}</List.Item>
+          <List.Item>
+            # of {upc[upcNum].package > 1 ? `Cases` : `Items`}: {quantity}{" "}
+            {upc[upcNum].package > 1
+              ? `(
+            ${upc[upcNum].package * this.state.quantity} items)`
+              : ""}
+          </List.Item>
+          <List.Item>Broken #: {broken ? broken : 0}</List.Item>
         </List>
 
         <Button
@@ -288,9 +385,9 @@ class LogList extends Component {
 
   render() {
     return (
-      <Segment piled color="olive" style={{ margin: "25px" }}>
+      <Container fluid style={{ marginTop: "50px" }}>
         {this.renderInput()}
-      </Segment>
+      </Container>
     );
   }
 }

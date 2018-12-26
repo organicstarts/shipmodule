@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import InventoryDetail from "./InventoryDetail";
+import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import firebase from "../../config/firebaseconf";
 import { Segment, Table } from "semantic-ui-react";
@@ -9,15 +10,16 @@ class InventoryLogTable extends Component {
     super(props);
     this.state = {
       datas: {},
-      image: 0
+      loading: true
     };
   }
+
   componentDidMount() {
     this.firebaseRef = firebase.database().ref(`/inventory`);
     this.firebaseRef
-      .on("value", snapshot => {
+      .on("value", async snapshot => {
         const payload = snapshot.val();
-        if (payload) {
+        if (payload.log) {
           this.setState({
             datas: payload.log
           });
@@ -29,10 +31,11 @@ class InventoryLogTable extends Component {
               .getDownloadURL()
               .then(url => {
                 payload.log[key].image = url;
-                this.setState({ image: url });
-              }).catch(err => {
-                console.log("file not found!")
+                this.setState({ loading: false });
               })
+              .catch(err => {
+                console.log("file not found!");
+              });
           });
         }
       })
@@ -43,13 +46,8 @@ class InventoryLogTable extends Component {
     this.firebaseRef.off();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.state.image !== nextState.image;
-  }
-
-  renderLogList() {
+  mapTableList() {
     const { datas } = this.state;
-
     return Object.keys(datas)
       .map(key => {
         return (
@@ -71,50 +69,68 @@ class InventoryLogTable extends Component {
       .reverse();
   }
 
+  renderLogList() {
+    if (this.state.loading) {
+      return (
+        <ClipLoader
+          sizeUnit={"px"}
+          size={54}
+          color={"#36D7B7"}
+          loading={this.state.loading}
+        />
+      );
+    }
+
+    return (
+      <Table celled collapsing textAlign="center">
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>
+              <strong>Tracking #</strong>
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <strong>Brand</strong>
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <strong>Stage</strong>
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <strong>Quantity</strong>
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <strong>Broken</strong>
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <strong>Total</strong>
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <strong>Scanner</strong>
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <strong>Warehouse</strong>
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <strong>Invoice</strong>
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <strong>Date</strong>
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+
+        {this.mapTableList()}
+      </Table>
+    );
+  }
+
   render() {
     return (
       <Segment compact style={{ margin: "50px auto" }}>
         <Link to="/" className="noprint">
           Go Back
-        </Link>
-        <Table celled collapsing textAlign="center">
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>
-                <strong>Tracking #</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Brand</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Stage</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Quantity</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Broken</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Total</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Scanner</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Warehouse</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Invoice</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Date</strong>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-
-          {this.renderLogList()}
-        </Table>
+        </Link>{" "}
+        <br />
+        {this.renderLogList()}
       </Segment>
     );
   }

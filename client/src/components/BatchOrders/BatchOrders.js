@@ -120,6 +120,9 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
     let items = [];
     let count = 0;
     let tkSku = [];
+    let sortable = [];
+    let name = "";
+
     for (let i = 0; i < shipmentArray.length; i++) {
       items = items.concat(shipmentArray[i]);
     }
@@ -185,8 +188,6 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
 
       return item.sku;
     });
-    let sortable = [];
-    let name = "";
 
     for (let key in group) {
       if (group[key].length > 1 && key !== "") {
@@ -250,7 +251,6 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
     }
 
     sortable.sort(this.compare);
-    console.log(sortable)
     this.setState({ totalCount: count });
     return sortable;
   }

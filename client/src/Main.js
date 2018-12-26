@@ -3,6 +3,7 @@ import { Image } from "semantic-ui-react";
 import logo from "./logo.svg";
 import { ClipLoader } from "react-spinners";
 import { withRouter } from "react-router-dom";
+import MediaQuery from "react-responsive";
 import {
   BatchOrders,
   FetchOrder,
@@ -95,10 +96,16 @@ class Main extends Component {
       <div>
         {this.state.user ? (
           <div>
-            <BatchOrders displayName={this.state.displayName} />
-            <FetchOrder displayName={this.state.displayName} />
-            <FraudOrders displayName={this.state.displayName} />
-            <Inventory displayName={this.state.displayName} email={this.state.user.email} compareEmail={this.compareEmail}/>
+            <MediaQuery minDeviceWidth={1224}>
+              <BatchOrders displayName={this.state.displayName} />
+              <FetchOrder displayName={this.state.displayName} />
+              <FraudOrders displayName={this.state.displayName} />
+            </MediaQuery>
+            <Inventory
+              displayName={this.state.displayName}
+              email={this.state.user.email}
+              compareEmail={this.compareEmail}
+            />
             {this.compareEmail(this.state.user.email) ? <Log /> : ""}
             <Button
               style={{ marginTop: "25px" }}
@@ -127,9 +134,18 @@ class Main extends Component {
   }
   render() {
     return (
-      <div className="App container tc" style={{margin: "50px auto"}}>
+      <div className="App container tc" style={{ margin: "50px auto" }}>
         <header style={{ marginBottom: "50px" }}>
-          <Image src={logo} size="medium" centered alt="Organic Start" />
+          <MediaQuery minDeviceWidth={700}>
+            {(matches) => {
+              if(matches) {
+                return <Image src={logo} size="medium" centered alt="Organic Start" />
+              } else {
+                return <Image src={logo} size="small" centered alt="Organic Start" />
+              }
+            }}
+            
+          </MediaQuery>
         </header>
         {this.renderHome()}
       </div>

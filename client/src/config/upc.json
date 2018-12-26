@@ -1,7 +1,428 @@
 {
-    "04062300139541": {
-        "brand": "Hipp",
+    "4062300168930": {
+        "brand": "HiPP Dutch",
+        "stage": "1",
+        "package": 6,
+        "sku": "HP-NL-1"
+    },
+    "4062300168961": {
+        "brand": "HiPP Dutch",
+        "stage": "2",
+        "package": 6,
+        "sku": "HP-NL-2"
+    },
+    "4062300341586": {
+        "brand": "HiPP Dutch",
         "stage": "3",
-        "package": 4
+        "package": 6,
+        "sku": "HP-NL-3"
+    },
+    "4062300161399": {
+        "brand": "HiPP German",
+        "stage": "AR",
+        "package": 4,
+        "sku": "HP-AR"
+    },
+    "4062300261488": {
+        "brand": "HiPP German",
+        "stage": "Comfort",
+        "package": 4,
+        "sku": "HP-DE-COM"
+    },
+    "4062300232273": {
+        "brand": "HiPP German",
+        "stage": "PRE",
+        "package": 4,
+        "sku": "HP-DE-PRE"
+    },
+    "4062300119642": {
+        "brand": "HiPP German HA",
+        "stage": "PRE",
+        "package": 4,
+        "sku": "HP-HA-PRE"
+    },
+    "4062300155107": {
+        "brand": "HiPP German",
+        "stage": "1",
+        "package": 6,
+        "sku": "HP-DE-1"
+    },
+    "4062300178380": {
+        "brand": "HiPP German",
+        "stage": "1+",
+        "package": 4,
+        "sku": "HP-DE-4"
+    },
+    "4062300177543": {
+        "brand": "HiPP German",
+        "stage": "2",
+        "package": 4,
+        "sku": "HP-DE-2"
+    },
+    "4062300200586": {
+        "brand": "HiPP German",
+        "stage": "2 - No Starch",
+        "package": 4,
+        "sku": "HP-DE-2-NS"
+    },
+    "4062300287952": {
+        "brand": "HiPP German HA",
+        "stage": "2",
+        "package": 4,
+        "sku": "HP-HA-2"
+    },
+    "4062300178366": {
+        "brand": "HiPP German",
+        "stage": "3",
+        "package": 4,
+        "sku": "HP-DE-3"
+    },
+    "04062300139015": {
+        "brand": "HiPP UK",
+        "stage": "1",
+        "package": 4,
+        "sku": "HP-UK-1"
+    },
+    "04062300139077": {
+        "brand": "HiPP UK",
+        "stage": "2",
+        "package": 4,
+        "sku": "HP-UK-2"
+    },
+    "04062300139541": {
+        "brand": "HiPP UK",
+        "stage": "3",
+        "package": 4,
+        "sku": "HP-UK-3"
+    },
+    "7640161875869": {
+        "brand": "Holle Cow",
+        "stage": "PRE",
+        "package": 6,
+        "sku": "HC-PRE"
+    },
+    "7640104951025": {
+        "brand": "Holle Cow",
+        "stage": "1",
+        "package": 6,
+        "sku": "HC-1"
+    },
+    "7640104950400": {
+        "brand": "Holle Cow",
+        "stage": "2",
+        "package": 3,
+        "sku": "HC-2"
+    },
+    "7640104954095": {
+        "brand": "Holle Cow",
+        "stage": "3",
+        "package": 4,
+        "sku": "HC-3"
+    },
+    "7640104959427": {
+        "brand": "Holle Cow",
+        "stage": "4",
+        "package": 4,
+        "sku": "HC-4"
+    },
+    "7640161870901": {
+        "brand": "Holle Goat",
+        "stage": "1",
+        "package": 4,
+        "sku": "HG-1"
+    },
+    "7640161870840": {
+        "brand": "Holle Goat",
+        "stage": "2",
+        "package": 4,
+        "sku": "HG-2"
+    },
+    "7640161871021": {
+        "brand": "Holle Goat",
+        "stage": "3",
+        "package": 4,
+        "sku": "HG-3"
+    },
+    "7640104952060": {
+        "brand": "Holle Cereal",
+        "stage": "3-KORN",
+        "package": 6,
+        "sku": "87"
+    },
+    "7640161872110": {
+        "brand": "Holle Cereal",
+        "stage": "Kurbis",
+        "package": 6,
+        "sku": "276"
+    },
+    "7640161870802": {
+        "brand": "Holle Cereal",
+        "stage": "Griess Banane",
+        "package": 3,
+        "sku": "133"
+    },
+    "7640104951438": {
+        "brand": "Lebenswert",
+        "stage": "1",
+        "package": 5,
+        "sku": "LB-1"
+    },
+    "7640104951452": {
+        "brand": "Lebenswert",
+        "stage": "2",
+        "package": 5,
+        "sku": "LB-2"
+    },
+    "7640104951476": {
+        "brand": "Lebenswert",
+        "stage": "3",
+        "package": 5,
+        "sku": "LB-3"
+    },
+    "05022817109986": {
+        "brand": "NANNYCare",
+        "stage": "1",
+        "package": 6,
+        "sku": "NC-1"  
+    },
+    "05022817109948": {
+        "brand": "NANNYCare",
+        "stage": "2",
+        "package": 6,
+        "sku": "NC-2"  
+    },
+    "05022817109849": {
+        "brand": "NANNYCare",
+        "stage": "3",
+        "package": 6,
+        "sku": "NC-3"
+    },
+    "7640161875852": {
+        "brand": "Holle Cow",
+        "stage": "PRE",
+        "package": 1,
+        "sku": "HC-PRE"
+    },
+    "7640104950011": {
+        "brand": "Holle Cow",
+        "stage": "1",
+        "package": 1,
+        "sku": "HC-1"
+    },
+    "7640104950394": {
+        "brand": "Holle Cow",
+        "stage": "2",
+        "package": 1,
+        "sku": "HC-2"
+    },
+    "7640104950417": {
+        "brand": "Holle Cow",
+        "stage": "3",
+        "package": 1,
+        "sku": "HC-3"
+    },
+    "7640104959410": {
+        "brand": "Holle Cow",
+        "stage": "4",
+        "package": 1,
+        "sku": "HC-4"
+    },
+    "7640161870895": {
+        "brand": "Holle Goat",
+        "stage": "1",
+        "package": 1,
+        "sku": "HG-1"
+    },
+    "7640161870833": {
+        "brand": "Holle Goat",
+        "stage": "2",
+        "package": 1,
+        "sku": "HG-2"
+    },
+    "7640161871014": {
+        "brand": "Holle Goat",
+        "stage": "3",
+        "package": 1,
+        "sku": "HG-3"
+    },
+    "4062300168923": {
+        "brand": "HiPP Dutch",
+        "stage": "1",
+        "package": 1,
+        "sku": "HP-NL-1"
+    },
+    "4062300168954": {
+        "brand": "HiPP Dutch",
+        "stage": "2",
+        "package": 1,
+        "sku": "HP-NL-2"
+    },
+    "4062300265691": {
+        "brand": "HiPP Dutch",
+        "stage": "3",
+        "package": 1,
+        "sku": "HP-NL-3"
+    },
+    "4062300161382": {
+        "brand": "HiPP German",
+        "stage": "AR",
+        "package": 1,
+        "sku": "HP-AR"
+    },
+    "4062300261471": {
+        "brand": "HiPP German",
+        "stage": "Comfort",
+        "package": 1,
+        "sku": "HP-DE-COM"
+    },
+    "4062300232266": {
+        "brand": "HiPP German",
+        "stage": "PRE",
+        "package": 1,
+        "sku": "HP-DE-PRE"
+    },
+    "4062300119635": {
+        "brand": "HiPP German HA",
+        "stage": "PRE",
+        "package": 1,
+        "sku": "HP-HA-PRE"
+    },
+    "4062300155091": {
+        "brand": "HiPP German",
+        "stage": "1",
+        "package": 1,
+        "sku": "HP-DE-1"
+    },
+    "4062300119666": {
+        "brand": "HiPP German HA",
+        "stage": "1",
+        "package": 1,
+        "sku": "HP-HA-1"
+    },
+    "4062300155169": {
+        "brand": "HiPP German",
+        "stage": "2",
+        "package": 1,
+        "sku": "HP-DE-2"
+    },
+    "4062300200579": {
+        "brand": "HiPP German",
+        "stage": "2 - No Starch",
+        "package": 1,
+        "sku": "HP-DE-2-NS"
+    },
+    "4062300287945": {
+        "brand": "HiPP German HA",
+        "stage": "2",
+        "package": 1,
+        "sku": "HP-HA-2"
+    },
+    "4062300155220": {
+        "brand": "HiPP German",
+        "stage": "3",
+        "package": 1,
+        "sku": "HP-DE-3"
+    },
+    "4062300139008": {
+        "brand": "HiPP UK",
+        "stage": "1",
+        "package": 1,
+        "sku": "HP-UK-1"
+    },
+    "4062300139060": {
+        "brand": "HiPP UK",
+        "stage": "2",
+        "package": 1,
+        "sku": "HP-UK-2"
+    },
+    "4062300139534": {
+        "brand": "HiPP UK",
+        "stage": "3",
+        "package": 1,
+        "sku": "HP-UK-3"
+    },
+    "7640104951421": {
+        "brand": "Lebenswert",
+        "stage": "1",
+        "package": 1,
+        "sku": "LB-1"
+    },
+    "7640104951445": {
+        "brand": "Lebenswert",
+        "stage": "2",
+        "package": 1,
+        "sku": "LB-2"
+    },
+    "7640104951469": {
+        "brand": "Lebenswert",
+        "stage": "3",
+        "package": 1,
+        "sku": "LB-3"
+    },
+    "5022817109795": {
+        "brand": "NANNYCare",
+        "stage": "1",
+        "package": 1,
+        "sku": "NC-1"  
+    },
+    "5022817109924": {
+        "brand": "NANNYCare",
+        "stage": "2",
+        "package": 1,
+        "sku": "NC-2"  
+    },
+    "5022817109832": {
+        "brand": "NANNYCare",
+        "stage": "3",
+        "package": 1,
+        "sku": "NC-3"
+    },
+    "4006303002570": {
+        "brand": "Topfer",
+        "stage": "1",
+        "package": 1,
+        "sku": "TPFR-1"
+    },
+    "4006303002594": {
+        "brand": "Topfer",
+        "stage": "3",
+        "package": 1,
+        "sku": "TPFR-2"
+    },
+    "4006303002617": {
+        "brand": "Topfer",
+        "stage": "3",
+        "package": 1,
+        "sku": "TPFR-3"
+    },
+    "4006303002532": {
+        "brand": "Topfer",
+        "stage": "4",
+        "package": 1,
+        "sku": "TPFR-4"
+    },
+    "9062300128984": {
+        "brand": "Polish HA",
+        "stage": "1",
+        "package": 1,
+        "sku": "HP-PL-HA-1"
+    },
+    "4062300329263": {
+        "brand": "Premix HiPP",
+        "stage": "PRE",
+        "package": 1,
+        "sku": "6-HP-DE-PRE-PRMX-BTL"
+    },
+    "4062300329416": {
+        "brand": "Premix HiPP",
+        "stage": "1",
+        "package": 1,
+        "sku": "6-HP-UK-1-PRMX-BTL"
+    },
+    "4062300329232": {
+        "brand": "Premix HiPP HA",
+        "stage": "PRE",
+        "package": 1,
+        "sku": "6-HP-HA-PRE-PRMX-BTL"
     }
 }

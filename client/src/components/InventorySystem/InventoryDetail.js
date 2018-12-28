@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Modal, Image, Button } from "semantic-ui-react";
+import { Table, Modal, Image, Icon } from "semantic-ui-react";
 import "./inventory.css";
 
 const InventoryDetail = props => {
@@ -17,11 +17,13 @@ const InventoryDetail = props => {
           {props.warehouseLocation}
         </Table.Cell>
         <Table.Cell style={styles.border}>
-          <Modal basic trigger={<Button>invoice</Button>} closeIcon>
+          <Modal trigger={<Icon bordered name="file alternate" />} closeIcon>
             <Modal.Content image>
               <Image wrapped src={props.image} />
             </Modal.Content>
           </Modal>
+          <Icon bordered color="green" name="check"/>
+          <Icon bordered color="red" name="undo"/>
         </Table.Cell>
         <Table.Cell style={styles.border}>{props.timeStamp}</Table.Cell>
       </Table.Row>

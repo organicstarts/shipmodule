@@ -3,6 +3,7 @@ import cred from "@bgauth/auth.json";
 import serviceAccount from "@bgauth/serviceAccountKey.json";
 import bodyParser from "body-parser";
 import express from "express";
+const fs = require("fs");
 const admin = require("firebase-admin");
 import path from "path";
 const nodemailer = require("nodemailer");
@@ -26,6 +27,74 @@ router.use("/os", require("./routes/BigCommerceAPI/API"));
 
 const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
+
+router.post("/writeupc", (req, res) => {
+  let rawData = fs.readFileSync("../client/src/config/upc.json");
+  let queue = JSON.parse(rawData);
+  queue[req.body.individualUpc] = `TEMP-${req.body.individualUpc}`;
+  queue[req.body.caseUpc] = `TEMP-${req.body.individualUpc}`;
+  let data = JSON.stringify(queue, null, 2);
+  fs.writeFile("../client/src/config/upc.json", data, err => {
+    if (err) {
+      res.json({
+        msg: "fail"
+      });
+    }
+    res.json({
+      msg: "success"
+    });
+  });
+});
+
+router.post("/writeupcinfo", (req, res) => {
+  let rawData = fs.readFileSync("../client/src/config/productinfo.json");
+  let queue = JSON.parse(rawData);
+  queue[`TEMP-${req.body.individualUpc}`] = {
+    brand: `TEMP-${req.body.individualUpc}`,
+    stage: "N/A",
+    package: req.body.case,
+    individual: 1,
+    sku: `TEMP-${req.body.individualUpc}`
+  };
+  let data = JSON.stringify(queue, null, 2);
+  const htmlEmail = `<h3> New Product Information </h3>    
+        <ul>
+        <li>Individual UPC: ${req.body.individualUpc}</li>
+        <li>Case UPC: ${req.body.caseUpc}</li>
+        <li>Package : ${req.body.case}</li>
+        <li>Image:</li>
+      </ul>
+      <img src=${req.body.newFile} style="width: 500px; height: 500px" />`;
+  let transporter = nodemailer.createTransport(
+    smtpTransport({
+      service: "gmail",
+      host: "smtp.gmail.email",
+      auth: {
+        user: cred.emailcred.user,
+        pass: cred.emailcred.key
+      }
+    })
+  );
+
+  let mailOptions = {
+    from: "yvan@organicstart.com",
+    to: "yvan@organicstart.com",
+    subject: "New Product Scanned Alert",
+    html: htmlEmail
+  };
+
+  transporter.sendMail(mailOptions);
+  fs.writeFile("../client/src/config/productinfo.json", data, err => {
+    if (err) {
+      res.json({
+        msg: "fail"
+      });
+    }
+    res.json({
+      msg: "success"
+    });
+  });
+});
 
 router.post("/writeinventorytofile", (req, res) => {
   let dataRef = admin.database().ref("/inventory");

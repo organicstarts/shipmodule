@@ -1,0 +1,296 @@
+{
+  "HP-NL-1": {
+    "brand": "HiPP Dutch",
+    "stage": "1",
+    "package": 6,
+    "individual": 1,
+    "sku": "HP-NL-1"
+  },
+  "HP-NL-2": {
+    "brand": "HiPP Dutch",
+    "stage": "2",
+    "package": 6,
+    "individual": 1,
+    "sku": "HP-NL-2"
+  },
+  "HP-NL-3": {
+    "brand": "HiPP Dutch",
+    "stage": "3",
+    "package": 6,
+    "individual": 1,
+    "sku": "HP-NL-3"
+  },
+  "HP-AR": {
+    "brand": "HiPP German",
+    "stage": "AR",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-AR"
+  },
+  "HP-DE-COM": {
+    "brand": "HiPP German",
+    "stage": "Comfort",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-DE-COM"
+  },
+  "HP-DE-PRE": {
+    "brand": "HiPP German",
+    "stage": "PRE",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-DE-PRE"
+  },
+  "HP-HA-PRE": {
+    "brand": "HiPP German HA",
+    "stage": "PRE",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-HA-PRE"
+  },
+  "HP-HA-1": {
+    "brand": "HiPP German HA",
+    "stage": "1",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-HA-1"
+  },
+  "HP-DE-1": {
+    "brand": "HiPP German",
+    "stage": "1",
+    "package": 6,
+    "individual": 1,
+    "sku": "HP-DE-1"
+  },
+  "HP-DE-4": {
+    "brand": "HiPP German",
+    "stage": "1+",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-DE-4"
+  },
+  "HP-DE-2": {
+    "brand": "HiPP German",
+    "stage": "2",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-DE-2"
+  },
+  "HP-DE-2-NS": {
+    "brand": "HiPP German",
+    "stage": "2 - No Starch",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-DE-2-NS"
+  },
+  "HP-HA-2": {
+    "brand": "HiPP German HA",
+    "stage": "2",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-HA-2"
+  },
+  "HP-DE-3": {
+    "brand": "HiPP German",
+    "stage": "3",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-DE-3"
+  },
+  "HP-UK-1": {
+    "brand": "HiPP UK",
+    "stage": "1",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-UK-1"
+  },
+  "HP-UK-2": {
+    "brand": "HiPP UK",
+    "stage": "2",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-UK-2"
+  },
+  "HP-UK-3": {
+    "brand": "HiPP UK",
+    "stage": "3",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-UK-3"
+  },
+  "HC-PRE": {
+    "brand": "Holle Cow",
+    "stage": "PRE",
+    "package": 6,
+    "individual": 1,
+    "sku": "HC-PRE"
+  },
+  "HC-1": {
+    "brand": "Holle Cow",
+    "stage": "1",
+    "package": 6,
+    "individual": 1,
+    "sku": "HC-1"
+  },
+  "HC-2": {
+    "brand": "Holle Cow",
+    "stage": "2",
+    "package": 3,
+    "individual": 1,
+    "sku": "HC-2"
+  },
+  "HC-3": {
+    "brand": "Holle Cow",
+    "stage": "3",
+    "package": 4,
+    "individual": 1,
+    "sku": "HC-3"
+  },
+  "HC-4": {
+    "brand": "Holle Cow",
+    "stage": "4",
+    "package": 4,
+    "individual": 1,
+    "sku": "HC-4"
+  },
+  "HG-1": {
+    "brand": "Holle Goat",
+    "stage": "1",
+    "package": 4,
+    "individual": 1,
+    "sku": "HG-1"
+  },
+  "HG-2": {
+    "brand": "Holle Goat",
+    "stage": "2",
+    "package": 4,
+    "individual": 1,
+    "sku": "HG-2"
+  },
+  "HG-3": {
+    "brand": "Holle Goat",
+    "stage": "3",
+    "package": 4,
+    "individual": 1,
+    "sku": "HG-3"
+  },
+  "87": {
+    "brand": "Holle Cereal",
+    "stage": "3-KORN",
+    "package": 6,
+    "individual": 1,
+    "sku": "87"
+  },
+  "276": {
+    "brand": "Holle Cereal",
+    "stage": "Kurbis",
+    "package": 6,
+    "individual": 1,
+    "sku": "276"
+  },
+  "133": {
+    "brand": "Holle Cereal",
+    "stage": "Griess Banane",
+    "package": 3,
+    "individual": 1,
+    "sku": "133"
+  },
+  "LB-1": {
+    "brand": "Lebenswert",
+    "stage": "1",
+    "package": 5,
+    "individual": 1,
+    "sku": "LB-1"
+  },
+  "LB-2": {
+    "brand": "Lebenswert",
+    "stage": "2",
+    "package": 5,
+    "individual": 1,
+    "sku": "LB-2"
+  },
+  "LB-3": {
+    "brand": "Lebenswert",
+    "stage": "3",
+    "package": 5,
+    "individual": 1,
+    "sku": "LB-3"
+  },
+  "NC-1": {
+    "brand": "NANNYCare",
+    "stage": "1",
+    "package": 6,
+    "individual": 1,
+    "sku": "NC-1"
+  },
+  "NC-2": {
+    "brand": "NANNYCare",
+    "stage": "2",
+    "package": 6,
+    "individual": 1,
+    "sku": "NC-2"
+  },
+  "NC-3": {
+    "brand": "NANNYCare",
+    "stage": "3",
+    "package": 6,
+    "individual": 1,
+    "sku": "NC-3"
+  },
+  "TPFR-1": {
+    "brand": "Topfer",
+    "stage": "1",
+    "package": 6,
+    "individual": 1,
+    "sku": "TPFR-1"
+  },
+  "TPFR-2": {
+    "brand": "Topfer",
+    "stage": "3",
+    "package": 6,
+    "individual": 1,
+    "sku": "TPFR-2"
+  },
+  "TPFR-3": {
+    "brand": "Topfer",
+    "stage": "3",
+    "package": 6,
+    "individual": 1,
+    "sku": "TPFR-3"
+  },
+  "TPFR-4": {
+    "brand": "Topfer",
+    "stage": "4",
+    "package": 6,
+    "individual": 1,
+    "sku": "TPFR-4"
+  },
+  "HP-PL-HA-1": {
+    "brand": "Polish HA",
+    "stage": "1",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-PL-HA-1"
+  },
+  "6-HP-DE-PRE-PRMX-BTL": {
+    "brand": "Premix HiPP",
+    "stage": "PRE",
+    "package": 5,
+    "individual": 1,
+    "sku": "6-HP-DE-PRE-PRMX-BTL"
+  },
+  "6-HP-UK-1-PRMX-BTL": {
+    "brand": "Premix HiPP",
+    "stage": "1",
+    "package": 5,
+    "individual": 1,
+    "sku": "6-HP-UK-1-PRMX-BTL"
+  },
+  "6-HP-HA-PRE-PRMX-BTL": {
+    "brand": "Premix HiPP HA",
+    "stage": "PRE",
+    "package": 5,
+    "individual": 1,
+    "sku": "6-HP-HA-PRE-PRMX-BTL"
+  }
+}

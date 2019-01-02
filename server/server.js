@@ -96,6 +96,19 @@ router.post("/writeupcinfo", (req, res) => {
   });
 });
 
+router.put("/updateinventory", (req, res) => {
+  let dataRef = admin.database().ref("/inventory/eastcoast");
+  dataRef
+    .child(`${req.body.sku}/total`)
+    .once("value", snap => snap.val())
+    .then(x => {
+      dataRef.child(req.body.sku).update({ total: x.val() + req.body.quantity });
+    });
+  res.json({
+    msg: "success"
+  });
+});
+
 router.post("/writeinventorytofile", (req, res) => {
   let dataRef = admin.database().ref("/inventory");
 
@@ -103,6 +116,9 @@ router.post("/writeinventorytofile", (req, res) => {
     .once("value", snap => {
       let logInventory = {
         trackingNumber: req.body.trackingNumber,
+        sku: req.body.sku,
+        obsku: `OB-${req.body.sku}`,
+        isChecked: false,
         brand: req.body.brand,
         stage: req.body.stage,
         quantity: req.body.quantity,

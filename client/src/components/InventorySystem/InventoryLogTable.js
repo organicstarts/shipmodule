@@ -4,6 +4,7 @@ import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import firebase from "../../config/firebaseconf";
 import { Segment, Table } from "semantic-ui-react";
+import axios from "axios";
 
 class InventoryLogTable extends Component {
   constructor(props) {
@@ -46,6 +47,40 @@ class InventoryLogTable extends Component {
     this.firebaseRef.off();
   }
 
+  totalChange(key) {
+    const { datas } = this.state;
+    const bool = datas[key].isChecked;
+    if (bool) {
+      axios
+        .put("/updateinventory", {
+          sku: datas[key].sku,
+          obsku: datas[key].obsku,
+          quantity: 0 - datas[key].quantity,
+          broken: datas[key].broken
+        })
+        .then(response => {
+          if (response.data.msg === "success") {
+            let update = firebase.database().ref("/inventory/log");
+            update.child(key).update({ isChecked: !bool });
+          }
+        });
+    } else {
+      axios
+        .put("/updateinventory", {
+          sku: datas[key].sku,
+          obsku: datas[key].obsku,
+          quantity: datas[key].quantity,
+          broken: datas[key].broken
+        })
+        .then(response => {
+          if (response.data.msg === "success") {
+            let update = firebase.database().ref("/inventory/log");
+            update.child(key).update({ isChecked: !bool });
+          }
+        });
+    }
+  }
+
   mapTableList() {
     const { datas } = this.state;
     return Object.keys(datas)
@@ -53,6 +88,7 @@ class InventoryLogTable extends Component {
         return (
           <InventoryDetail
             key={key}
+            id={key}
             trackingNumber={datas[key].trackingNumber}
             brand={datas[key].brand}
             stage={datas[key].stage}
@@ -63,6 +99,8 @@ class InventoryLogTable extends Component {
             timeStamp={datas[key].timeStamp}
             warehouseLocation={datas[key].warehouseLocation}
             image={datas[key].image ? datas[key].image : ""}
+            handleTotal={this.totalChange.bind(this)}
+            show={datas[key].isChecked}
           />
         );
       })

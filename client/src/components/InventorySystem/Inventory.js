@@ -13,42 +13,62 @@ class Inventory extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick() {
+  handleClick(id) {
     this.setState({ loading: true });
+    let path = "";
+
+    switch (id) {
+      case 1:
+        path = "/inventoryLogging";
+        break;
+      case 2:
+        path = "/inventoryReport";
+        break;
+      case 3:
+        path = "/inventoryTable";
+        break;
+      default:
+        path = "/";
+        break;
+    }
+
     this.props.history.push({
-      pathname: "/inventorylogging",
+      pathname: path,
       state: { detail: this.state }
     });
   }
 
   render() {
+    let buttons = [
+      { id: 1, name: "Scan Inventory", color: "blue", show: true },
+      { id: 2, name: "Inventory Reporting Table", color: "violet", show: true },
+      {
+        id: 3,
+        name: "View Inventory List",
+        color: "teal",
+        show: this.props.compareEmail(this.state.email) ? true : false
+      }
+    ];
     return (
       <Segment color="blue" padded="very">
-        <Button
-          fluid
-          style={{ marginBottom: "15px" }}
-          size="large"
-          color="blue"
-          onClick={this.handleClick}
-        >
-          Scan Inventory
-        </Button>
-        {this.props.compareEmail(this.state.email) ? (
-          <Button
-            fluid
-            size="large"
-            color="teal"
-            onClick={() => {
-              this.props.history.push({
-                pathname: "/inventoryTable"
-              });
-            }}
-          >
-            View Inventory List
-          </Button>
-        ) : (
-          ""
-        )}
+        {buttons.map(button => {
+          if (button.show) {
+            return (
+              <Button
+                key={button.id}
+                fluid
+                style={{ marginBottom: "15px" }}
+                size="large"
+                color={button.color}
+                onClick={() => this.handleClick(button.id)}
+              >
+                {button.name}
+              </Button>
+            );
+          } else {
+            return "";
+          }
+        })}
       </Segment>
     );
   }

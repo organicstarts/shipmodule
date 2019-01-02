@@ -167,24 +167,25 @@ class LogList extends Component {
       warehouseLocation
     } = this.state;
     let sku = upc[upcNum];
-    const warehouse = warehouseLocation[0].warehouse
-      .toLowerCase()
-      .replace(/\s/g, "");
+    // const warehouse = warehouseLocation[0].warehouse
+    //   .toLowerCase()
+    // .replace(/\s/g, "");
     let storageRef = firebase.storage().ref("images");
     storageRef.child(trackingNumber).put(file);
-    let inventoryRef = firebase
-      .database()
-      .ref(`/inventory/${warehouse}`)
-      .child(sku)
-      .child("total");
+    // let inventoryRef = firebase
+    //   .database()
+    //   .ref(`/inventory/${warehouse}`)
+    //   .child(sku)
+    //   .child("total");
 
-    inventoryRef.transaction(
-      total => total + parseInt(quantity * skuInfo[sku].package - broken)
-    );
+    // inventoryRef.transaction(
+    //   total => total + parseInt(quantity * skuInfo[sku].package - broken)
+    // );
 
     axios
       .post("/writeinventorytofile", {
         trackingNumber,
+        sku: skuInfo[sku].sku,
         brand: skuInfo[sku].brand,
         stage: skuInfo[sku].stage,
         quantity: parseInt(quantity * skuInfo[sku].package - broken),

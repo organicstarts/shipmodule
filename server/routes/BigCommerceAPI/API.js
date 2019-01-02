@@ -136,4 +136,14 @@ router.get("/getbrand", (req, res) => {
     });
 });
 
+// router.put("/updateinventory", (req, res) => {
+//   const baseUrl = ""
+//   res.set({
+//     "Access-Control-Allow-Origin": "*",
+//     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
+//   });
+
+
+// });
+
 module.exports = router;

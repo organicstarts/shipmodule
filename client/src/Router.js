@@ -7,6 +7,7 @@ import LogList from './components/AdminLogs/LogList';
 import FetchDetail from "./components/FetchOrder/FetchDetail";
 import InventoryLogging from "./components/InventorySystem/InventoryLogging";
 import InventoryLogTable from "./components/InventorySystem/InventoryLogTable";
+import InventoryReportTable from "./components/InventorySystem/InventoryReportTable";
 
 const Router = () => (
   <main>
@@ -16,8 +17,9 @@ const Router = () => (
       <Route path="/fraud" component={FraudList} />
       <Route path="/fetch" component={FetchDetail} />
       <Route path="/log" component={LogList} />
-      <Route path="/inventorylogging" component={InventoryLogging} />
+      <Route path="/inventoryLogging" component={InventoryLogging} />
       <Route path="/inventoryTable" component={InventoryLogTable} />
+      <Route path="/inventoryReport" component={InventoryReportTable} />
     </Switch>
   </main>
 );

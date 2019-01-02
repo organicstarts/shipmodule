@@ -17,13 +17,34 @@ const InventoryDetail = props => {
           {props.warehouseLocation}
         </Table.Cell>
         <Table.Cell style={styles.border}>
-          <Modal trigger={<Icon bordered name="file alternate" />} closeIcon>
+          <Modal
+            trigger={
+              <Icon style={styles.hover} bordered name="file alternate" />
+            }
+            closeIcon
+          >
             <Modal.Content image>
               <Image wrapped src={props.image} />
             </Modal.Content>
           </Modal>
-          <Icon bordered color="green" name="check"/>
-          <Icon bordered color="red" name="undo"/>
+          <Icon
+            onClick={() => props.handleTotal(props.id)}
+            style={styles.hover}
+            bordered
+            inverted
+            color={props.show ? "grey" : "green"}
+            disabled={props.show ? true : false}
+            name="check"
+          />
+          <Icon
+            style={styles.hover}
+            onClick={() => props.handleTotal(props.id)}
+            bordered
+            inverted
+            color={props.show ? "red" : "grey"}
+            disabled={props.show ? false : true}
+            name="undo"
+          />
         </Table.Cell>
         <Table.Cell style={styles.border}>{props.timeStamp}</Table.Cell>
       </Table.Row>
@@ -44,5 +65,8 @@ const styles = {
     borderBottom: "1px solid #ccc",
     borderCollapse: "separate",
     borderSpacing: "4px"
+  },
+  hover: {
+    cursor: "pointer"
   }
 };

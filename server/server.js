@@ -116,6 +116,7 @@ router.post("/writeinventorytofile", (req, res) => {
     .once("value", snap => {
       let logInventory = {
         trackingNumber: req.body.trackingNumber,
+        productID: req.body.productID,
         sku: req.body.sku,
         obsku: `OB-${req.body.sku}`,
         isChecked: false,

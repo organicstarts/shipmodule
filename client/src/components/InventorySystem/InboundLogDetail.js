@@ -2,7 +2,7 @@ import React from "react";
 import { Table, Modal, Image, Icon } from "semantic-ui-react";
 import "./inventory.css";
 
-const InventoryDetail = props => {
+const InboundLogDetail = props => {
   return (
     <Table.Body>
       <Table.Row>
@@ -52,7 +52,7 @@ const InventoryDetail = props => {
   );
 };
 
-export default InventoryDetail;
+export default InboundLogDetail;
 
 const styles = {
   border: {

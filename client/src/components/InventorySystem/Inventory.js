@@ -19,13 +19,16 @@ class Inventory extends Component {
 
     switch (id) {
       case 1:
-        path = "/inventoryLogging";
+        path = "/inboundLogging";
         break;
       case 2:
         path = "/inventoryReport";
         break;
       case 3:
         path = "/inventoryTable";
+        break;
+      case 4:
+        path = "/inboundLogTable";
         break;
       default:
         path = "/";
@@ -42,9 +45,10 @@ class Inventory extends Component {
     let buttons = [
       { id: 1, name: "Scan Inventory", color: "blue", show: true },
       { id: 2, name: "Inventory Reporting Table", color: "violet", show: true },
+      { id: 3, name: "View Inventory", color: "brown", show: true },
       {
-        id: 3,
-        name: "View Inventory List",
+        id: 4,
+        name: "View Inbound Inventory Log",
         color: "teal",
         show: this.props.compareEmail(this.state.email) ? true : false
       }

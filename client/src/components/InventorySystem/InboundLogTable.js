@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import InventoryDetail from "./InventoryDetail";
+import InboundLogDetail from "./InboundLogDetail";
 import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import firebase from "../../config/firebaseconf";
 import { Segment, Table } from "semantic-ui-react";
 import axios from "axios";
 
-class InventoryLogTable extends Component {
+class InboundLogTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -50,35 +50,30 @@ class InventoryLogTable extends Component {
   totalChange(key) {
     const { datas } = this.state;
     const bool = datas[key].isChecked;
+    let total = "";
     if (bool) {
-      axios
-        .put("/updateinventory", {
-          sku: datas[key].sku,
-          obsku: datas[key].obsku,
-          quantity: 0 - datas[key].quantity,
-          broken: datas[key].broken
-        })
-        .then(response => {
-          if (response.data.msg === "success") {
-            let update = firebase.database().ref("/inventory/log");
-            update.child(key).update({ isChecked: !bool });
-          }
-        });
+      total = 0 - datas[key].quantity;
     } else {
-      axios
-        .put("/updateinventory", {
-          sku: datas[key].sku,
-          obsku: datas[key].obsku,
-          quantity: datas[key].quantity,
-          broken: datas[key].broken
-        })
-        .then(response => {
-          if (response.data.msg === "success") {
-            let update = firebase.database().ref("/inventory/log");
-            update.child(key).update({ isChecked: !bool });
-          }
-        });
+      total = datas[key].quantity;
     }
+    axios.put("os/updateinventory", {
+      inventory_level: total,
+      productID: datas[key].productID
+    });
+
+    axios
+      .put("/updateinventory", {
+        sku: datas[key].sku,
+        obsku: datas[key].obsku,
+        quantity: total,
+        broken: datas[key].broken
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          let update = firebase.database().ref("/inventory/log");
+          update.child(key).update({ isChecked: !bool });
+        }
+      });
   }
 
   mapTableList() {
@@ -86,7 +81,7 @@ class InventoryLogTable extends Component {
     return Object.keys(datas)
       .map(key => {
         return (
-          <InventoryDetail
+          <InboundLogDetail
             key={key}
             id={key}
             trackingNumber={datas[key].trackingNumber}
@@ -174,4 +169,4 @@ class InventoryLogTable extends Component {
   }
 }
 
-export default InventoryLogTable;
+export default InboundLogTable;

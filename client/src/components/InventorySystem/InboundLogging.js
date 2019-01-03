@@ -18,7 +18,7 @@ import upc from "../../config/upc.json";
 import skuInfo from "../../config/productinfo.json";
 import "./inventory.css";
 
-class LogList extends Component {
+class InboundLogging extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -185,6 +185,7 @@ class LogList extends Component {
     axios
       .post("/writeinventorytofile", {
         trackingNumber,
+        productID: skuInfo[sku].productID,
         sku: skuInfo[sku].sku,
         brand: skuInfo[sku].brand,
         stage: skuInfo[sku].stage,
@@ -439,8 +440,6 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
           onKeyPress={this.handleKeyPress}
           onChange={this.handleChange}
           autoFocus
-          focusOnShow={false}
-          ignoreReadOnly={true}
         />
         {this.state.count > 0 ? (
           <Grid padded="horizontally">
@@ -573,4 +572,4 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
   }
 }
 
-export default LogList;
+export default InboundLogging;

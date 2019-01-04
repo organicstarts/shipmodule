@@ -2,16 +2,20 @@ import React, { Component } from "react";
 import InventoryReportDetail from "./InventoryReportDetail";
 import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
-import firebase from "../../config/firebaseconf";
+import firebase from "../../../config/firebaseconf";
 import { Segment, Table } from "semantic-ui-react";
+import axios from "axios";
+import moment from "moment";
 
 class InventoryLogTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
       datas: {},
-      loading: true
+      loading: true,
+      user: this.props.location.state.detail.user
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -19,9 +23,9 @@ class InventoryLogTable extends Component {
     this.firebaseRef
       .on("value", async snapshot => {
         const payload = snapshot.val();
-        if (payload.eastcoastReport) {
+        if (payload[this.props.location.state.warehouse]) {
           this.setState({
-            datas: payload.eastcoastReport,
+            datas: payload[this.props.location.state.warehouse],
             loading: false
           });
         }
@@ -32,33 +36,59 @@ class InventoryLogTable extends Component {
   componentWillUnmount() {
     this.firebaseRef.off();
   }
+  handleChange = e => {
+    let data = this.state.datas;
+    let value = e.target.value;
+    if (e.target.value.charAt(0) === 0) {
+      value = e.target.value.substring(1);
+    }
+    if (e.target.value.length < 1) {
+      value = 0;
+    }
+    data[e.target.name].total = parseInt(value);
+    this.setState({
+      datas: data
+    });
+  };
 
   changeTotal(key) {
-    let data = {...this.state.datas}
-    data[key].total = 1
-    this.setState({datas: data})
-    console.log(data);
+    const { user, datas } = this.state;
+    let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
+    axios
+      .put("/updateinventory", {
+        dbname: this.props.location.state.warehouse,
+        sku: key,
+        total: datas[key].total,
+        date: currentTime,
+        user
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
   }
 
   mapTableList() {
     const { datas } = this.state;
-    return Object.keys(datas)
-      .map(key => {
-        return (
-          <InventoryReportDetail
-            key={key}
-            sku={key}
-            brand={datas[key].brand}
-            stage={datas[key].stage}
-            total={datas[key].total}
-            scanner={datas[key].scanner}
-            timeStamp={datas[key].timeStamp}
-            inputRef={input => (this.textInput = input)}
-            handleSubmitButton={this.changeTotal.bind(this)}
-          />
-        );
-      })
-      .reverse();
+    return Object.keys(datas).map(key => {
+      return (
+        <InventoryReportDetail
+          key={key}
+          sku={key}
+          brand={datas[key].brand}
+          stage={datas[key].stage}
+          total={datas[key].total}
+          scanner={datas[key].user}
+          timeStamp={datas[key].date}
+          inputRef={input => (this.textInput = input)}
+          handleChange={this.handleChange}
+          handleSubmitButton={this.changeTotal.bind(this)}
+        />
+      );
+    });
   }
 
   renderLogList() {

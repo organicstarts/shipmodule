@@ -97,12 +97,26 @@ router.post("/writeupcinfo", (req, res) => {
 });
 
 router.put("/updateinventory", (req, res) => {
-  let dataRef = admin.database().ref("/inventory/eastcoast");
+  let dataRef = admin.database().ref(`/inventory/${req.body.dbname}`);
   dataRef
     .child(`${req.body.sku}/total`)
     .once("value", snap => snap.val())
     .then(x => {
-      dataRef.child(req.body.sku).update({ total: x.val() + req.body.quantity });
+      if (req.body.dbname === "eastcoast" || req.body.dbname === "westcoast") {
+        dataRef
+          .child(req.body.sku)
+          .update({ total: x.val() + req.body.quantity });
+      } else if (
+        req.body.dbname === "eastcoastReport" ||
+        req.body.dbname === "westcoastReport"
+      ) {
+        dataRef
+          .child(req.body.sku)
+          .update({ total: req.body.total,
+          user: req.body.user,
+          date: req.body.date  
+          });
+      }
     });
   res.json({
     msg: "success"

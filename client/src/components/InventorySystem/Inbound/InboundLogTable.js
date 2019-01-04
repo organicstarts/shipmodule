@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import InboundLogDetail from "./InboundLogDetail";
 import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
-import firebase from "../../config/firebaseconf";
+import firebase from "../../../config/firebaseconf";
 import { Segment, Table } from "semantic-ui-react";
 import axios from "axios";
 
@@ -50,6 +50,9 @@ class InboundLogTable extends Component {
   totalChange(key) {
     const { datas } = this.state;
     const bool = datas[key].isChecked;
+    const warehouse = datas[key].warehouseLocation
+      .toLowerCase()
+      .replace(/\s/g, "");
     let total = "";
     if (bool) {
       total = 0 - datas[key].quantity;
@@ -63,6 +66,7 @@ class InboundLogTable extends Component {
 
     axios
       .put("/updateinventory", {
+        dbname: warehouse,
         sku: datas[key].sku,
         obsku: datas[key].obsku,
         quantity: total,

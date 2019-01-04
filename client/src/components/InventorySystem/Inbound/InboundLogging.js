@@ -11,12 +11,12 @@ import {
 } from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
 import moment from "moment";
-import firebase from "../../config/firebaseconf";
+import firebase from "../../../config/firebaseconf";
 import axios from "axios";
-import people from "../../config/people.json";
-import upc from "../../config/upc.json";
-import skuInfo from "../../config/productinfo.json";
-import "./inventory.css";
+import people from "../../../config/people.json";
+import upc from "../../../config/upc.json";
+import skuInfo from "../../../config/productinfo.json";
+import "../inventory.css";
 
 class InboundLogging extends Component {
   constructor(props) {

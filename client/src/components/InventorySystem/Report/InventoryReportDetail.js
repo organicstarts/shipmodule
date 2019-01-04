@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, Input, Button } from "semantic-ui-react";
-import "./inventory.css";
+import "../inventory.css";
 
 const InventoryReportDetail = props => {
   return (
@@ -10,8 +10,15 @@ const InventoryReportDetail = props => {
         <Table.Cell style={styles.border}>{props.brand}</Table.Cell>
         <Table.Cell style={styles.border}>{props.stage}</Table.Cell>
         <Table.Cell style={styles.border}>
-          <Input fluid ref={props.inputRef} value={props.total}  type="text" />{" "}
-          <Button onClick={() => props.handleSubmitButton(props.sku)} />
+          <Input
+            style={{width: "75px"}}
+            floated="left"
+            value={props.total}
+            name={props.sku}
+            onChange={props.handleChange}
+            type="text"
+          />
+          <Button style={{marginTop: "5%"}} onClick={() => props.handleSubmitButton(props.sku)} color="olive" compact floated="right" icon="checkmark" /> 
         </Table.Cell>
         <Table.Cell style={styles.borderLast}>{props.scanner}</Table.Cell>
         <Table.Cell style={styles.border}>{props.timeStamp}</Table.Cell>

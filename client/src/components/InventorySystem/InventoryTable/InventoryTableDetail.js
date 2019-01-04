@@ -1,6 +1,6 @@
 import React from "react";
 import { Table } from "semantic-ui-react";
-import "./inventory.css";
+import "../inventory.css";
 
 const InventoryReportDetail = props => {
   return (
@@ -12,7 +12,7 @@ const InventoryReportDetail = props => {
         </Table.Cell>
         <Table.Cell style={styles.border}>{props.eastTotal}</Table.Cell>
         <Table.Cell style={styles.border}>{props.westTotal}</Table.Cell>
-        <Table.Cell style={styles.border}>{props.bgTotal}</Table.Cell>
+        <Table.Cell style={styles.border}>{props.bgTracking === "none" ? <span>&infin;</span> :props.bgTotal}</Table.Cell>
       </Table.Row>
     </Table.Body>
   );

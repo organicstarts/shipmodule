@@ -16,18 +16,27 @@ class Inventory extends Component {
   handleClick(id) {
     this.setState({ loading: true });
     let path = "";
-
+    let warehouse = "";
     switch (id) {
+      case 0: {
+        path = "reportLogging";
+        break;
+      }
       case 1:
         path = "/inboundLogging";
         break;
       case 2:
         path = "/inventoryReport";
+        warehouse = "eastcoastReport";
         break;
       case 3:
-        path = "/inventoryTable";
+        path = "/inventoryReport";
+        warehouse = "westcoastReport";
         break;
       case 4:
+        path = "/inventoryTable";
+        break;
+      case 5:
         path = "/inboundLogTable";
         break;
       default:
@@ -37,17 +46,29 @@ class Inventory extends Component {
 
     this.props.history.push({
       pathname: path,
-      state: { detail: this.state }
+      state: { detail: this.state, warehouse: warehouse ? warehouse : "" }
     });
   }
 
   render() {
     let buttons = [
+      { id: 0, name: "Report Scan", color: "teal", show: true },
       { id: 1, name: "Scan Inventory", color: "blue", show: true },
-      { id: 2, name: "Inventory Reporting Table", color: "violet", show: true },
-      { id: 3, name: "View Inventory", color: "brown", show: true },
       {
-        id: 4,
+        id: 2,
+        name: "East Coast Reporting Table",
+        color: "violet",
+        show: true
+      },
+      {
+        id: 3,
+        name: "West Coast Reporting Table",
+        color: "violet",
+        show: true
+      },
+      { id: 4, name: "View Inventory", color: "brown", show: true },
+      {
+        id: 5,
         name: "View Inbound Inventory Log",
         color: "teal",
         show: this.props.compareEmail(this.state.email) ? true : false

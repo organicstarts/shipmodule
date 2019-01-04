@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import InventoryTableDetail from "./InventoryTableDetail";
 import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
-import firebase from "../../config/firebaseconf";
+import firebase from "../../../config/firebaseconf";
 import axios from "axios";
 import { Segment, Table } from "semantic-ui-react";
-import skuInfo from "../../config/productinfo.json";
+import skuInfo from "../../../config/productinfo.json";
 
 class InventoryTable extends Component {
   constructor(props) {
@@ -30,7 +30,6 @@ class InventoryTable extends Component {
         });
         await Promise.all(
           Object.keys(payload.eastcoast).map(async key => {
-            if (!skuInfo[key]) console.log(key);
             await axios
               .get(
                 `os/getinventorylevel?productid=${
@@ -38,11 +37,13 @@ class InventoryTable extends Component {
                 }`
               )
               .then(data => {
-                bgData[key] = { total: data.data.inventory_level };
+                bgData[key] = {
+                  total: data.data.inventory_level,
+                  tracking: data.data.inventory_tracking
+                };
               });
           })
-        )
-        .then(e => {
+        ).then(e => {
           this.setState({
             bgDatas: bgData,
             loading: false
@@ -58,7 +59,6 @@ class InventoryTable extends Component {
 
   mapTableList() {
     const { eastDatas, westDatas, bgDatas } = this.state;
-    console.log(this.state.eastDatas);
     return Object.keys(eastDatas).map(key => {
       return (
         <InventoryTableDetail
@@ -69,6 +69,7 @@ class InventoryTable extends Component {
           eastTotal={eastDatas[key].total}
           westTotal={westDatas[key].total}
           bgTotal={bgDatas[key].total}
+          bgTracking={bgDatas[key].tracking}
           scanner={eastDatas[key].scanner}
           timeStamp={eastDatas[key].timeStamp}
           inputRef={input => (this.textInput = input)}

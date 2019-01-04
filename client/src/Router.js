@@ -5,10 +5,11 @@ import BatchList from './components/BatchOrders/BatchList';
 import FraudList from './components/FraudOrders/FraudList';
 import LogList from './components/AdminLogs/LogList';
 import FetchDetail from "./components/FetchOrder/FetchDetail";
-import InboundLogging from "./components/InventorySystem/InboundLogging";
-import InventoryTable from "./components/InventorySystem/InventoryTable";
-import InboundLogTable from "./components/InventorySystem/InboundLogTable";
-import InventoryReportTable from "./components/InventorySystem/InventoryReportTable";
+import InboundLogging from "./components/InventorySystem/Inbound/InboundLogging";
+import InventoryTable from "./components/InventorySystem/InventoryTable/InventoryTable";
+import InboundLogTable from "./components/InventorySystem/Inbound/InboundLogTable";
+import InventoryReportTable from "./components/InventorySystem/Report/InventoryReportTable";
+import ReportLogging from "./components/InventorySystem/Report/ReportLogging";
 
 const Router = () => (
   <main>
@@ -22,6 +23,7 @@ const Router = () => (
       <Route path="/inboundLogTable" component={InboundLogTable} />
       <Route path="/inventoryTable" component={InventoryTable} />
       <Route path="/inventoryReport" component={InventoryReportTable} />
+      <Route path="/reportLogging" component={ReportLogging} />
     </Switch>
   </main>
 );

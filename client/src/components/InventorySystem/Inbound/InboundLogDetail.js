@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, Modal, Image, Icon } from "semantic-ui-react";
-import "./inventory.css";
+import "../inventory.css";
 
 const InboundLogDetail = props => {
   return (

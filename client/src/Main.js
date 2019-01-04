@@ -97,7 +97,10 @@ class Main extends Component {
         {this.state.user ? (
           <div>
             <MediaQuery minDeviceWidth={1224}>
-              <BatchOrders displayName={this.state.displayName} />
+              <BatchOrders
+                displayName={this.state.displayName}
+                email={this.state.user.email}
+              />
               <FetchOrder displayName={this.state.displayName} />
               <FraudOrders displayName={this.state.displayName} />
             </MediaQuery>
@@ -137,14 +140,22 @@ class Main extends Component {
       <div className="App container tc" style={{ margin: "50px auto" }}>
         <header style={{ marginBottom: "50px" }}>
           <MediaQuery minDeviceWidth={700}>
-            {(matches) => {
-              if(matches) {
-                return <Image src={logo} size="medium" centered alt="Organic Start" />
+            {matches => {
+              if (matches) {
+                return (
+                  <Image
+                    src={logo}
+                    size="medium"
+                    centered
+                    alt="Organic Start"
+                  />
+                );
               } else {
-                return <Image src={logo} size="small" centered alt="Organic Start" />
+                return (
+                  <Image src={logo} size="small" centered alt="Organic Start" />
+                );
               }
             }}
-            
           </MediaQuery>
         </header>
         {this.renderHome()}

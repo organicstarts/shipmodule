@@ -23,6 +23,7 @@ class BatchOrders extends React.Component {
       picker: "",
       shipper: "",
       user: this.props.displayName,
+      email: this.props.email,
       batchDatas: [],
       shipItems: [],
       totalCount: 0,

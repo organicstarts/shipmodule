@@ -5,14 +5,28 @@ import BatchDetail from "./BatchDetail";
 import SlipDetail from "./SlipDetail";
 import boxes from "../../config/boxes";
 import packages from "../../config/packages";
+import people from "../../config/people.json";
+import skuInfo from "../../config/productinfo.json";
 import { iconQuotes } from "../../config/peopleicon";
-import { Segment } from "semantic-ui-react";
+import { Segment, Button } from "semantic-ui-react";
 import axios from "axios";
 
 class BatchList extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.state = {
+      disable: false,
+      shipItems: this.props.location.state.detail.shipItems,
+      warehouseLocation: Object.keys(people)
+        .map(key => people[key])
+        .filter(data =>
+          data.email.includes(
+            this.props.location.state.detail.email.split("@")[0]
+          )
+        )
+    };
     this.logprint = this.logprint.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount() {
     window.addEventListener("afterprint", this.logprint);
@@ -20,6 +34,33 @@ class BatchList extends Component {
 
   componentWillUnmount() {
     window.removeEventListener("afterprint", this.logprint);
+  }
+
+  handleClick() {
+    const { shipItems, warehouseLocation } = this.state;
+    this.setState({ disable: true });
+    const warehouse = warehouseLocation[0].warehouse
+      .toLowerCase()
+      .replace(/\s/g, "");
+
+    shipItems.map(async data => {
+      if (skuInfo[data.sku]) {
+        await axios
+          .put("/updateinventory", {
+            dbname: warehouse,
+            sku: data.sku,
+            quantity: -data.combineTotal || -data.quantity
+          })
+          .then(response => {
+            if (response.data.msg === "success") {
+              console.log("logged");
+            } else if (response.data.msg === "fail") {
+              console.log("failed to log.");
+            }
+          });
+      }
+      return "";
+    });
   }
 
   logprint() {
@@ -56,6 +97,15 @@ class BatchList extends Component {
           <Link to="/" className="noprint">
             Go Back
           </Link>
+          <Button
+            style={{ margin: "10px 50px" }}
+            className="noprint"
+            color="green"
+            onClick={this.handleClick}
+            disabled={this.state.disable}
+          >
+            Subtract from Database
+          </Button>
           <div className="row">
             <h1 className="col-6" style={styles.margin}>
               Product Pick List

@@ -47,20 +47,20 @@
     "sku": "HP-DE-PRE",
     "productID": 95
   },
-  "HP-HA-PRE": {
+  "HP-DE-HA-PRE": {
     "brand": "HiPP German HA",
     "stage": "PRE",
     "package": 4,
     "individual": 1,
-    "sku": "HP-HA-PRE",
+    "sku": "HP-DE-HA-PRE",
     "productID": 207
   },
-  "HP-HA-1": {
+  "HP-DE-HA-1": {
     "brand": "HiPP German HA",
     "stage": "1",
     "package": 4,
     "individual": 1,
-    "sku": "HP-HA-1",
+    "sku": "HP-DE-HA-1",
     "productID": 111
   },
   "HP-DE-1": {
@@ -95,12 +95,12 @@
     "sku": "HP-DE-2-NS",
     "productID": 353
   },
-  "HP-HA-2": {
+  "HP-DE-HA-2": {
     "brand": "HiPP German HA",
     "stage": "2",
     "package": 4,
     "individual": 1,
-    "sku": "HP-HA-2",
+    "sku": "HP-DE-HA-2",
     "productID": 129
   },
   "HP-DE-3": {

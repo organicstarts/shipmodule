@@ -37,7 +37,7 @@ class InventoryTable extends Component {
       if (
         dataInfo.sku.includes(key) &&
         dataInfo.sku.length > key.length &&
-        !dataInfo.sku.includes("OB-")
+        !dataInfo.sku.includes("OB-") 
       ) {
         bundleObj = {
           id: dataInfo.id,
@@ -235,6 +235,7 @@ class InventoryTable extends Component {
     const { eastDatas, westDatas, bgDatas, toggle } = this.state;
 
     return Object.keys(eastDatas).map((key, index) => {
+      console.log(bgDatas[key]);
       return (
         <InventoryTableDetail
           index={index}

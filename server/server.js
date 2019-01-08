@@ -102,7 +102,15 @@ router.put("/updateinventory", (req, res) => {
     .child(`${req.body.sku}/total`)
     .once("value", snap => snap.val())
     .then(x => {
-      if (req.body.dbname === "eastcoast" || req.body.dbname === "westcoast") {
+      if (
+        (req.body.dbname === "eastcoast" || req.body.dbname === "westcoast") &&
+        req.body.noEquation
+      ) {
+        dataRef.child(req.body.sku).update({ total: req.body.total });
+      } else if (
+        (req.body.dbname === "eastcoast" || req.body.dbname === "westcoast") &&
+        !req.body.noEquation
+      ) {
         dataRef
           .child(req.body.sku)
           .update({ total: x.val() + req.body.quantity });
@@ -110,12 +118,11 @@ router.put("/updateinventory", (req, res) => {
         req.body.dbname === "eastcoastReport" ||
         req.body.dbname === "westcoastReport"
       ) {
-        dataRef
-          .child(req.body.sku)
-          .update({ total: req.body.total,
+        dataRef.child(req.body.sku).update({
+          total: req.body.total,
           user: req.body.user,
-          date: req.body.date  
-          });
+          date: req.body.date
+        });
       }
     });
   res.json({

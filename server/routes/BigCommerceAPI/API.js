@@ -136,10 +136,11 @@ router.get("/getbrand", (req, res) => {
     });
 });
 
-
 router.get("/getinventorylevel", (req, res) => {
   //build api URL with user ordernumber to see if order had coupons used
-  const baseUrl = `https://organicstart.com/api/v2/products/${req.query.productid}`;
+  const baseUrl = `https://organicstart.com/api/v2/products/${
+    req.query.productid
+  }`;
   res.set({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
@@ -155,7 +156,6 @@ router.get("/getinventorylevel", (req, res) => {
     });
 });
 
-
 router.put("/updateinventory", (req, res) => {
   const baseUrl = `https://organicstart.com/api/v2/products/${
     req.body.productID
@@ -164,32 +164,85 @@ router.put("/updateinventory", (req, res) => {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
   });
-  fetch(baseUrl, header)
-    .then(res => res.json())
-    .then(data => {
-      let total = parseInt(data.inventory_level + req.body.inventory_level);
-      if(total < 0) {
-        total = 0
-      }
-      fetch(baseUrl, {
-        method: "PUT",
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          Authorization: `Basic ${encodedString}`,
-          "Content-Type": "application/json",
-          Accept: "application/json"
-        },
-        body: JSON.stringify({
-          inventory_level: total
-        })
+  if (req.body.noEquation) {
+    let total = parseInt(req.body.inventory_level);
+    fetch(baseUrl, {
+      method: "PUT",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Basic ${encodedString}`,
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        inventory_level: total
       })
-        .then(e => {
-          res.json({ msg: "success" });
+    })
+      .then(e => {
+        res.json({ msg: "success" });
+      })
+      .catch(err => {
+        res.json({ msg: "fail" });
+      });
+  } else {
+    fetch(baseUrl, header)
+      .then(res => res.json())
+      .then(data => {
+        let total = parseInt(data.inventory_level + req.body.inventory_level);
+        if (total < 0) {
+          total = 0;
+        }
+        fetch(baseUrl, {
+          method: "PUT",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            Authorization: `Basic ${encodedString}`,
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify({
+            inventory_level: total
+          })
         })
-        .catch(err => {
-          res.json({ msg: "fail" });
-        });
+          .then(e => {
+            res.json({ msg: "success" });
+          })
+          .catch(err => {
+            res.json({ msg: "fail" });
+          });
+      });
+  }
+});
+
+router.put("/disableproduct", (req, res) => {
+  const baseUrl = `https://organicstart.com/api/v2/products/${
+    req.body.productID
+  }`;
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
+  });
+
+  fetch(baseUrl, {
+    method: "PUT",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      Authorization: `Basic ${encodedString}`,
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify({
+      availability: req.body.availability
+    })
+  })
+    .then(e => {
+      res.json({ msg: "success" });
+    })
+    .catch(err => {
+      res.json({ msg: "fail" });
     });
 });
+
+
 
 module.exports = router;

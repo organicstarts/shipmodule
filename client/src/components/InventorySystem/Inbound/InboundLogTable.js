@@ -66,6 +66,7 @@ class InboundLogTable extends Component {
 
     axios
       .put("/updateinventory", {
+        
         dbname: warehouse,
         sku: datas[key].sku,
         obsku: datas[key].obsku,

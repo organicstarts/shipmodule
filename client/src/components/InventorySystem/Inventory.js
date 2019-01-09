@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Button, Segment } from "semantic-ui-react";
+import { Button, Segment, Grid, Label } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
+import MediaQuery from "react-responsive";
 
 class Inventory extends Component {
   constructor(props) {
@@ -53,7 +54,7 @@ class Inventory extends Component {
   render() {
     let buttons = [
       { id: 0, name: "Report Scan", color: "teal", show: true },
-      { id: 1, name: "Scan Inventory", color: "blue", show: true },
+      { id: 1, name: "Inbound Scan", color: "blue", show: true },
       {
         id: 2,
         name: "East Coast Reporting Table",
@@ -75,25 +76,56 @@ class Inventory extends Component {
       }
     ];
     return (
-      <Segment color="blue" padded="very">
-        {buttons.map(button => {
-          if (button.show) {
-            return (
+      <Segment color="blue" padded={window.innerWidth > 1224 ? "very" : ""}>
+        <MediaQuery maxWidth={1224}>
+          <Label attached="top left" tag>Scanning</Label>
+          <Grid columns={2}>
+            <Grid.Column>
               <Button
-                key={button.id}
+                key={0}
                 fluid
-                style={{ marginBottom: "15px" }}
-                size="large"
-                color={button.color}
-                onClick={() => this.handleClick(button.id)}
+                circular
+                style={{ margin: "15px auto", width: "100px", height: "100px" }}
+                color="teal"
+                onClick={() => this.handleClick(0)}
               >
-                {button.name}
+                Report
               </Button>
-            );
-          } else {
-            return "";
-          }
-        })}
+            </Grid.Column>
+            <Grid.Column verticalAlign="middle">
+              <Button
+                key={1}
+                fluid
+                circular
+                style={{ margin: "15px auto", width: "100px", height: "100px" }}
+                color="blue"
+                onClick={() => this.handleClick(1)}
+              >
+                Inbound
+              </Button>
+            </Grid.Column>
+          </Grid>
+        </MediaQuery>
+        <MediaQuery minWidth={1224}>
+          {buttons.map(button => {
+            if (button.show) {
+              return (
+                <Button
+                  key={button.id}
+                  fluid
+                  style={{ marginBottom: "15px" }}
+                  size="large"
+                  color={button.color}
+                  onClick={() => this.handleClick(button.id)}
+                >
+                  {button.name}
+                </Button>
+              );
+            } else {
+              return "";
+            }
+          })}
+        </MediaQuery>
       </Segment>
     );
   }

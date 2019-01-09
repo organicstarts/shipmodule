@@ -99,9 +99,9 @@ router.post("/writeupcinfo", (req, res) => {
 router.put("/updateinventory", (req, res) => {
   let dataRef = admin.database().ref(`/inventory/${req.body.dbname}`);
   dataRef
-    .child(`${req.body.sku}/total`)
     .once("value", snap => snap.val())
     .then(x => {
+      console.log(x.val()[req.body.sku].total);
       if (
         (req.body.dbname === "eastcoast" || req.body.dbname === "westcoast") &&
         req.body.noEquation
@@ -111,9 +111,18 @@ router.put("/updateinventory", (req, res) => {
         (req.body.dbname === "eastcoast" || req.body.dbname === "westcoast") &&
         !req.body.noEquation
       ) {
-        dataRef
-          .child(req.body.sku)
-          .update({ total: x.val() + req.body.quantity });
+        if (req.body.broken !== 0 && req.body.obsku) {
+          let tempTotal = x.val()[req.body.obsku].total + req.body.broken;
+          if (tempTotal < 0) {
+            tempTotal = 0;
+          }
+          dataRef.child(req.body.obsku).update({ total: tempTotal });
+        }
+        let tempTotal = x.val()[req.body.sku].total + req.body.quantity;
+        if (tempTotal < 0) {
+          tempTotal = 0;
+        }
+        dataRef.child(req.body.sku).update({ total: tempTotal });
       } else if (
         req.body.dbname === "eastcoastReport" ||
         req.body.dbname === "westcoastReport"
@@ -139,12 +148,12 @@ router.post("/writeinventorytofile", (req, res) => {
         trackingNumber: req.body.trackingNumber,
         productID: req.body.productID,
         sku: req.body.sku,
-        obsku: `OB-${req.body.sku}`,
         isChecked: false,
         brand: req.body.brand,
         stage: req.body.stage,
         quantity: req.body.quantity,
         broken: req.body.broken,
+        invoiceNum: req.body.invoiceNum,
         total: req.body.total,
         scanner: req.body.scanner,
         warehouseLocation: req.body.warehouseLocation,

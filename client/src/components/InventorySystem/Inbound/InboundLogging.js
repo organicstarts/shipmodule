@@ -25,6 +25,7 @@ class InboundLogging extends Component {
       loading: false,
       isTyped: false,
       trackingNumber: "",
+      invoiceNum: "",
       newUpc: "",
       newCaseUpc: "",
       newFile: [],
@@ -48,6 +49,8 @@ class InboundLogging extends Component {
     this.handleNewSubmit = this.handleNewSubmit.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.subtract = this.subtract.bind(this);
+    this.return = this.return.bind(this);
   }
 
   handleChange = e => {
@@ -87,6 +90,10 @@ class InboundLogging extends Component {
     }
   };
 
+  return = e => {
+    window.history.go(-1);
+  };
+
   clear = e => {
     const { count } = this.state;
     switch (count) {
@@ -102,6 +109,9 @@ class InboundLogging extends Component {
       case 4:
         this.setState({ broken: "", isTyped: false });
         break;
+      case 5:
+        this.setState({ broken: "", isTyped: false });
+        break;
       default:
         break;
     }
@@ -113,7 +123,7 @@ class InboundLogging extends Component {
   };
 
   handleNewSubmit() {
-    const { newUpc, newCaseUpc, newPackage } = this.state;
+    const { newUpc, newCaseUpc, newPackage, invoiceNum } = this.state;
     let storageRef = firebase.storage().ref();
     storageRef
       .child(`images/${newUpc}`)
@@ -133,6 +143,7 @@ class InboundLogging extends Component {
                   individualUpc: newUpc,
                   caseUpc: newCaseUpc,
                   case: newPackage,
+                  invoiceNum: invoiceNum,
                   newFile: image
                 })
                 .then(response => {
@@ -164,23 +175,12 @@ class InboundLogging extends Component {
       quantity,
       broken,
       scanner,
-      warehouseLocation
+      warehouseLocation,
+      invoiceNum
     } = this.state;
     let sku = upc[upcNum];
-    // const warehouse = warehouseLocation[0].warehouse
-    //   .toLowerCase()
-    // .replace(/\s/g, "");
     let storageRef = firebase.storage().ref("images");
     storageRef.child(trackingNumber).put(file);
-    // let inventoryRef = firebase
-    //   .database()
-    //   .ref(`/inventory/${warehouse}`)
-    //   .child(sku)
-    //   .child("total");
-
-    // inventoryRef.transaction(
-    //   total => total + parseInt(quantity * skuInfo[sku].package - broken)
-    // );
 
     axios
       .post("/writeinventorytofile", {
@@ -190,8 +190,9 @@ class InboundLogging extends Component {
         brand: skuInfo[sku].brand,
         stage: skuInfo[sku].stage,
         quantity: parseInt(quantity * skuInfo[sku].package - broken),
-        broken: broken ? broken : 0,
+        broken: broken ? parseInt(broken) : 0,
         total: skuInfo[sku].package * quantity,
+        invoiceNum: invoiceNum,
         scanner,
         timeStamp: moment().format("dddd, MMMM DD YYYY hh:mma"),
         warehouseLocation: warehouseLocation[0].warehouse
@@ -210,9 +211,21 @@ class InboundLogging extends Component {
       upcNum: "",
       brand: "",
       quantity: "",
-      broken: ""
+      broken: "",
+      invoiceNum: ""
     });
   }
+
+  checkError() {
+    if (this.state.count > 0 && this.state.trackingNumber.length < 5) {
+      alert("The Tracking number is not valid");
+      this.setState({ count: 0, trackingNumber: "" });
+    } else if (this.state.count > 1 && this.state.upcNum.length !== 13) {
+      alert("The UPC number is not valid");
+      this.setState({ count: 1, upcNum: "" });
+    }
+  }
+
   /*
 cycle input values per scan/user input
 tracking number > upc number > # of boxes > # of broken > photo of invoice > confirmation
@@ -221,10 +234,8 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
     let inputInfo = {};
     let warning = "";
     let sku = upc[this.state.upcNum];
-    if (this.state.count > 1 && !this.state.upcNum.length === 12) {
-      alert("The UPC number is not valid");
-      return this.setState({ count: 1, upcNum: "" });
-    } else if (this.state.count > 1 && !sku) {
+    this.checkError();
+    if (this.state.count > 1 && !sku) {
       warning = "FOLLOW INSTRUCTIONS CAREFULLY! YOU ARE ADDING A NEW PRODUCT!";
       switch (this.state.count) {
         case 2:
@@ -410,7 +421,14 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
               </Label>
             </Segment>
           );
-
+        case 5:
+          inputInfo = {
+            label: "Invoice Number",
+            placeholder: "0",
+            name: "invoiceNum",
+            value: this.state.invoiceNum
+          };
+          break;
         default:
           return this.renderConfirmation();
       }
@@ -469,10 +487,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
               <Grid.Column textAlign="center">
                 <Button
                   style={{ marginTop: "25px" }}
-                  onClick={() => {
-                    window.history.go(-1);
-                    return false;
-                  }}
+                  onClick={this.return}
                   compact
                   size="big"
                   color="red"
@@ -499,10 +514,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
               <Grid.Column textAlign="center">
                 <Button
                   style={{ marginTop: "25px" }}
-                  onClick={() => {
-                    window.history.go(-1);
-                    return false;
-                  }}
+                  onClick={this.return}
                   compact
                   size="big"
                   color="red"
@@ -518,7 +530,14 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
   }
 
   renderConfirmation() {
-    const { trackingNumber, quantity, upcNum, broken, loading } = this.state;
+    const {
+      trackingNumber,
+      quantity,
+      upcNum,
+      broken,
+      loading,
+      invoiceNum
+    } = this.state;
     let sku = upc[upcNum];
     if (loading) {
       return (
@@ -545,6 +564,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
               : ""}
           </List.Item>
           <List.Item>Broken #: {broken ? broken : 0}</List.Item>
+          <List.Item>Invoice #: {invoiceNum ? invoiceNum : 0}</List.Item>
         </List>
 
         <Button

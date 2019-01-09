@@ -3,6 +3,7 @@ import InboundLogDetail from "./InboundLogDetail";
 import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import firebase from "../../../config/firebaseconf";
+import skuInfo from "../../../config/productinfo.json";
 import { Segment, Table } from "semantic-ui-react";
 import axios from "axios";
 
@@ -54,24 +55,26 @@ class InboundLogTable extends Component {
       .toLowerCase()
       .replace(/\s/g, "");
     let total = "";
+    let broken = "";
     if (bool) {
       total = 0 - datas[key].quantity;
+      broken = 0 - datas[key].broken;
     } else {
       total = datas[key].quantity;
+      broken = datas[key].broken;
     }
     axios.put("os/updateinventory", {
       inventory_level: total,
       productID: datas[key].productID
     });
-
     axios
       .put("/updateinventory", {
-        
         dbname: warehouse,
         sku: datas[key].sku,
-        obsku: datas[key].obsku,
+        obsku:
+          datas[key].broken !== 0 ? `OB-${skuInfo[datas[key].sku].sku}` : null,
         quantity: total,
-        broken: datas[key].broken
+        broken: broken
       })
       .then(response => {
         if (response.data.msg === "success") {
@@ -92,6 +95,7 @@ class InboundLogTable extends Component {
             trackingNumber={datas[key].trackingNumber}
             brand={datas[key].brand}
             stage={datas[key].stage}
+            invoiceNum={datas[key].invoiceNum}
             quantity={datas[key].quantity}
             broken={datas[key].broken}
             total={datas[key].total}
@@ -125,6 +129,9 @@ class InboundLogTable extends Component {
           <Table.Row>
             <Table.HeaderCell>
               <strong>Tracking #</strong>
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <strong>Invoice #</strong>
             </Table.HeaderCell>
             <Table.HeaderCell>
               <strong>Brand</strong>

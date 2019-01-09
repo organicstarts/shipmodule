@@ -37,7 +37,7 @@ class InventoryTable extends Component {
       if (
         dataInfo.sku.includes(key) &&
         dataInfo.sku.length > key.length &&
-        !dataInfo.sku.includes("OB-") 
+        !dataInfo.sku.includes("OB-")
       ) {
         bundleObj = {
           id: dataInfo.id,
@@ -235,7 +235,6 @@ class InventoryTable extends Component {
     const { eastDatas, westDatas, bgDatas, toggle } = this.state;
 
     return Object.keys(eastDatas).map((key, index) => {
-      console.log(bgDatas[key]);
       return (
         <InventoryTableDetail
           index={index}
@@ -245,17 +244,25 @@ class InventoryTable extends Component {
           stage={eastDatas[key].stage}
           eastTotal={eastDatas[key].total}
           westTotal={westDatas[key].total}
-          bgTotal={bgDatas[key].total}
-          bgTracking={bgDatas[key].tracking}
+          bgTotal={bgDatas[key] ? bgDatas[key].total : "N/A"}
+          bgTracking={bgDatas[key] ? bgDatas[key].tracking : ""}
           scanner={eastDatas[key].scanner}
           timeStamp={eastDatas[key].timeStamp}
           inputRef={input => (this.textInput = input)}
-          link={bgDatas[key].custom_url}
-          availability={bgDatas[key].availability}
-          disable={bgDatas[key].bundles.length < 1 ? true : false}
+          link={bgDatas[key] ? bgDatas[key].custom_url : ""}
+          availability={bgDatas[key] ? bgDatas[key].availability : ""}
+          disable={
+            bgDatas[key]
+              ? bgDatas[key].bundles.length < 1
+                ? true
+                : false
+              : true
+          }
           bundleAvailability={
-            bgDatas[key].bundles[0]
-              ? bgDatas[key].bundles[0].availability
+            bgDatas[key]
+              ? bgDatas[key].bundles[0]
+                ? bgDatas[key].bundles[0].availability
+                : "disabled"
               : "disabled"
           }
           handleOutOfStockSingle={this.handleOutOfStockSingle}

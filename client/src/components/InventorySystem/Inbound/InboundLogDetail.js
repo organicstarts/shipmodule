@@ -7,6 +7,7 @@ const InboundLogDetail = props => {
     <Table.Body>
       <Table.Row>
         <Table.Cell style={styles.border}>{props.trackingNumber}</Table.Cell>
+        <Table.Cell style={styles.border}>{props.invoiceNum}</Table.Cell>
         <Table.Cell style={styles.border}>{props.brand}</Table.Cell>
         <Table.Cell style={styles.border}>{props.stage}</Table.Cell>
         <Table.Cell style={styles.border}>{props.quantity}</Table.Cell>

@@ -111,35 +111,39 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
 */
   renderInput() {
     let inputInfo = {};
+    if (this.state.count > 0 && this.state.upcNum.length !== 13) {
+      alert("The UPC number is not valid");
+      return this.setState({ count: 0, upcNum: "" });
+    } else {
+      switch (this.state.count) {
+        case 0:
+          inputInfo = {
+            label: "Brand Name:",
+            placeholder: "#upc number",
+            name: "upcNum",
+            value: this.state.upcNum
+          };
+          break;
+        case 1:
+          inputInfo = {
+            label: "# of Cases",
+            placeholder: "0",
+            name: "quantity",
+            value: this.state.quantity
+          };
+          break;
+        default:
+          this.updateInventory();
 
-    switch (this.state.count) {
-      case 0:
-        inputInfo = {
-          label: "Brand Name:",
-          placeholder: "#upc number",
-          name: "upcNum",
-          value: this.state.upcNum
-        };
-        break;
-      case 1:
-        inputInfo = {
-          label: "# of Cases",
-          placeholder: "0",
-          name: "quantity",
-          value: this.state.quantity
-        };
-        break;
-      default:
-        this.updateInventory();
-
-        return (
-          <ClipLoader
-            sizeUnit={"px"}
-            size={34}
-            color={"#36D7B7"}
-            loading={true}
-          />
-        );
+          return (
+            <ClipLoader
+              sizeUnit={"px"}
+              size={34}
+              color={"#36D7B7"}
+              loading={true}
+            />
+          );
+      }
     }
     return (
       <Form.Field>

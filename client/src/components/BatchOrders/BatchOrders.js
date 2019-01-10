@@ -138,13 +138,14 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
       ) {
         let x = parseInt(item.sku.split(/-(.*)/)[0]);
         item.sku = item.sku.split(/-(.*)/)[1];
+        console.log(item.sku);
         item.combineTotal = x * item.quantity;
 
-        if (item.sku.charAt(0) === "H" && item.sku.includes("-DE-H")) {
-          let x = item.sku.split(/-DE(.*)/)[0];
-          let y = item.sku.split(/-DE(.*)/)[1];
-          item.sku = x + y;
-        }
+        // if (item.sku.charAt(0) === "H" && item.sku.includes("-DE-H")) {
+        //   let x = item.sku.split(/-DE(.*)/)[0];
+        //   let y = item.sku.split(/-DE(.*)/)[1];
+        //   item.sku = x + y;
+        // }
       } else if (item.sku.includes("TK")) {
         let x = parseInt(item.sku.split(/-/)[1]);
         let tempSku = item.sku.split(/TK-.\d-/)[1];
@@ -300,7 +301,10 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
   }
   //helper func to compare warehouse locations
   compare(a, b) {
-   return a.warehouseLocation - b.warehouseLocation || a.warehouseLocation.localeCompare(b.warehouseLocation);
+    return (
+      a.warehouseLocation - b.warehouseLocation ||
+      a.warehouseLocation.localeCompare(b.warehouseLocation)
+    );
   }
   compareBatch(a, b) {
     return b.orderNumber - a.orderNumber;

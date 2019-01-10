@@ -138,7 +138,6 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
       ) {
         let x = parseInt(item.sku.split(/-(.*)/)[0]);
         item.sku = item.sku.split(/-(.*)/)[1];
-        console.log(item.sku);
         item.combineTotal = x * item.quantity;
 
         // if (item.sku.charAt(0) === "H" && item.sku.includes("-DE-H")) {

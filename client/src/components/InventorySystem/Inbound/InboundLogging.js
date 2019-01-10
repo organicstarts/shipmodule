@@ -106,10 +106,10 @@ class InboundLogging extends Component {
       case 2:
         this.setState({ quantity: "", isTyped: false });
         break;
-      case 4:
+      case 3:
         this.setState({ broken: "", isTyped: false });
         break;
-      case 5:
+      case 4:
         this.setState({ broken: "", isTyped: false });
         break;
       default:
@@ -383,6 +383,14 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
           };
           break;
         case 4:
+          inputInfo = {
+            label: "Invoice Number",
+            placeholder: "0",
+            name: "invoiceNum",
+            value: this.state.invoiceNum
+          };
+          break;
+        case 5:
           return (
             <Segment>
               <Button onClick={this.subtract} compact size="big" color="grey">
@@ -421,14 +429,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
               </Label>
             </Segment>
           );
-        case 5:
-          inputInfo = {
-            label: "Invoice Number",
-            placeholder: "0",
-            name: "invoiceNum",
-            value: this.state.invoiceNum
-          };
-          break;
+
         default:
           return this.renderConfirmation();
       }

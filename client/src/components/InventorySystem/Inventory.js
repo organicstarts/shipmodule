@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Segment, Grid, Label } from "semantic-ui-react";
+import { Button, Segment, Grid, Header } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 import MediaQuery from "react-responsive";
 
@@ -27,17 +27,24 @@ class Inventory extends Component {
         path = "/inboundLogging";
         break;
       case 2:
+        path = "/obReportLogging";
+        break;
+      case 3:
+        path = "/babycareLogging";
+        warehouse = "eastcoastReport";
+        break;
+      case 4:
         path = "/inventoryReport";
         warehouse = "eastcoastReport";
         break;
-      case 3:
+      case 5:
         path = "/inventoryReport";
         warehouse = "westcoastReport";
         break;
-      case 4:
+      case 6:
         path = "/inventoryTable";
         break;
-      case 5:
+      case 7:
         path = "/inboundLogTable";
         break;
       default:
@@ -55,55 +62,67 @@ class Inventory extends Component {
     let buttons = [
       { id: 0, name: "Report Scan", color: "teal", show: true },
       { id: 1, name: "Inbound Scan", color: "blue", show: true },
-      {
-        id: 2,
+      { id: 2, name: "Open Broken Scan", color: "orange", show: true },
+      { id: 3, name: "Baby Care Scan", color: "yellow", show: true }
+    ];
+
+    if (window.innerWidth > 1224) {
+      buttons.push({
+        id: 4,
         name: "East Coast Reporting Table",
         color: "violet",
         show: true
-      },
-      {
-        id: 3,
+      });
+      buttons.push({
+        id: 5,
         name: "West Coast Reporting Table",
         color: "violet",
         show: true
-      },
-      { id: 4, name: "View Inventory", color: "brown", show: true },
-      {
-        id: 5,
+      });
+      buttons.push({
+        id: 6,
+        name: "View Inventory",
+        color: "brown",
+        show: true
+      });
+      buttons.push({
+        id: 7,
         name: "View Inbound Inventory Log",
         color: "teal",
         show: this.props.compareEmail(this.state.email) ? true : false
-      }
-    ];
+      });
+    }
     return (
-      <Segment color="blue" padded={window.innerWidth > 1224 ? "very" : ""}>
+      <Segment color="blue" padded={window.innerWidth > 1224 ? "very" : null}>
         <MediaQuery maxWidth={1224}>
-          <Label attached="top left" tag>Scanning</Label>
+          <Header color="olive" block>
+            Inventory Scanning
+          </Header>
           <Grid columns={2}>
-            <Grid.Column>
-              <Button
-                key={0}
-                fluid
-                circular
-                style={{ margin: "15px auto", width: "100px", height: "100px" }}
-                color="teal"
-                onClick={() => this.handleClick(0)}
-              >
-                Report
-              </Button>
-            </Grid.Column>
-            <Grid.Column verticalAlign="middle">
-              <Button
-                key={1}
-                fluid
-                circular
-                style={{ margin: "15px auto", width: "100px", height: "100px" }}
-                color="blue"
-                onClick={() => this.handleClick(1)}
-              >
-                Inbound
-              </Button>
-            </Grid.Column>
+            {buttons.map(button => {
+              if (button.show) {
+                return (
+                  <Grid.Column key={button.name}>
+                    <Button
+                      key={button.name}
+                      circular
+                      style={{
+                        padding: 0,
+                        margin: "15px auto",
+                        width: "100px",
+                        height: "100px"
+                      }}
+                      color={button.color}
+                      onClick={() => this.handleClick(button.id)}
+                    >
+                      {button.name}
+                    </Button>
+                  </Grid.Column>
+                );
+              } else {
+                return "";
+              }
+            })}
           </Grid>
         </MediaQuery>
         <MediaQuery minWidth={1224}>

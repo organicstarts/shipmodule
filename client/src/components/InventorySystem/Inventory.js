@@ -31,20 +31,22 @@ class Inventory extends Component {
         break;
       case 3:
         path = "/babycareLogging";
-        warehouse = "eastcoastReport";
         break;
       case 4:
-        path = "/inventoryReport";
-        warehouse = "eastcoastReport";
+        path = "/toyLogging";
         break;
       case 5:
         path = "/inventoryReport";
-        warehouse = "westcoastReport";
+        warehouse = "eastcoastReport";
         break;
       case 6:
-        path = "/inventoryTable";
+        path = "/inventoryReport";
+        warehouse = "westcoastReport";
         break;
       case 7:
+        path = "/inventoryTable";
+        break;
+      case 8:
         path = "/inboundLogTable";
         break;
       default:
@@ -63,38 +65,39 @@ class Inventory extends Component {
       { id: 0, name: "Report Scan", color: "teal", show: true },
       { id: 1, name: "Inbound Scan", color: "blue", show: true },
       { id: 2, name: "Open Broken Scan", color: "orange", show: true },
-      { id: 3, name: "Baby Care Scan", color: "yellow", show: true }
+      { id: 3, name: "Baby Care Scan", color: "yellow", show: true },
+      { id: 4, name: "Toy Scan", color: "red", show: true }
     ];
 
-    if (window.innerWidth > 1224) {
+    if (window.innerWidth > 374) {
       buttons.push({
-        id: 4,
+        id: 5,
         name: "East Coast Reporting Table",
         color: "violet",
         show: true
       });
       buttons.push({
-        id: 5,
+        id: 6,
         name: "West Coast Reporting Table",
         color: "violet",
         show: true
       });
       buttons.push({
-        id: 6,
+        id: 7,
         name: "View Inventory",
         color: "brown",
         show: true
       });
       buttons.push({
-        id: 7,
+        id: 8,
         name: "View Inbound Inventory Log",
         color: "teal",
         show: this.props.compareEmail(this.state.email) ? true : false
       });
     }
     return (
-      <Segment color="blue" padded={window.innerWidth > 1224 ? "very" : null}>
-        <MediaQuery maxWidth={1224}>
+      <Segment color="blue" padded={window.innerWidth > 374 ? "very" : null}>
+        <MediaQuery maxWidth={374}>
           <Header color="olive" block>
             Inventory Scanning
           </Header>
@@ -125,7 +128,7 @@ class Inventory extends Component {
             })}
           </Grid>
         </MediaQuery>
-        <MediaQuery minWidth={1224}>
+        <MediaQuery minWidth={374}>
           {buttons.map(button => {
             if (button.show) {
               return (

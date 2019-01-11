@@ -96,7 +96,7 @@ class Main extends Component {
       <div>
         {this.state.user ? (
           <div>
-            <MediaQuery minDeviceWidth={1224}>
+            <MediaQuery minDeviceWidth={374}>
               <BatchOrders
                 displayName={this.state.displayName}
                 email={this.state.user.email}
@@ -139,7 +139,7 @@ class Main extends Component {
     return (
       <div className="App container tc" style={{ margin: "50px auto" }}>
         <header style={{ marginBottom: "50px" }}>
-          <MediaQuery minDeviceWidth={700}>
+          <MediaQuery minDeviceWidth={374}>
             {matches => {
               if (matches) {
                 return (

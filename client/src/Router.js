@@ -12,6 +12,7 @@ import InventoryReportTable from "./components/InventorySystem/Report/InventoryR
 import ReportLogging from "./components/InventorySystem/Report/ReportLogging";
 import OBReportLogging from "./components/InventorySystem/Report/OBReportLogging";
 import BabyCareLogging from "./components/InventorySystem/Report/BabyCareLogging";
+import ToyLogging from "./components/InventorySystem/Report/ToyLogging";
 
 const Router = () => (
   <main>
@@ -28,6 +29,7 @@ const Router = () => (
       <Route path="/reportLogging" component={ReportLogging} />
       <Route path="/obReportLogging" component={OBReportLogging} />
       <Route path="/babycareLogging" component={BabyCareLogging} />
+      <Route path="/toyLogging" component={ToyLogging} />
     </Switch>
   </main>
 );

@@ -4,16 +4,16 @@ import moment from "moment";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
 import people from "../../../config/people.json";
-import babyCareInfo from "../../../config/babycareproduct.json";
+import toyInfo from "../../../config/toy.json";
 import "../inventory.css";
 
-class BabyCareLogging extends Component {
+class ToyLogging extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isTyped: false,
       loading: false,
-      babyCareArr: babyCareInfo,
+      toyArr: toyInfo,
       quantity: "",
       index: 0,
       scanner: this.props.location.state.detail.user,
@@ -58,7 +58,7 @@ class BabyCareLogging extends Component {
   */
   updateInventory() {
     const {
-      babyCareArr,
+      toyArr,
       quantity,
       index,
       scanner,
@@ -70,7 +70,7 @@ class BabyCareLogging extends Component {
     axios
       .put("/updateinventory", {
         dbname: `${warehouse}Report`,
-        sku: babyCareArr[index],
+        sku: toyArr[index],
         total: parseInt(quantity),
         user: scanner,
         date: moment().format("dddd, MMMM DD YYYY hh:mma")
@@ -84,7 +84,7 @@ class BabyCareLogging extends Component {
         this.setState({
           quantity: ""
         });
-        if (babyCareArr[index] > babyCareArr.length - 1) {
+        if (toyArr[index] > toyArr.length - 1) {
           window.history.go(-1);
         }
         this.setState(prevState => {
@@ -97,7 +97,7 @@ cycle input values per scan/user input
 tracking number > upc number > # of boxes > # of broken > photo of invoice > confirmation
 */
   renderInput() {
-    const { index, babyCareArr, loading } = this.state;
+    const { index, toyArr, loading } = this.state;
     if (loading) {
       return (
         <ClipLoader
@@ -115,7 +115,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
           basic
           style={{ border: 0, padding: 0, margin: 0 }}
         >
-          {babyCareArr[index]}
+          {toyArr[index]}
         </Label>
         <Form.Input
           fluid
@@ -179,4 +179,4 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
   }
 }
 
-export default BabyCareLogging;
+export default ToyLogging;

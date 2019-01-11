@@ -71,26 +71,50 @@ class InventoryLogTable extends Component {
       });
   }
 
-  mapTableList() {
+  mapTableList(x) {
     const { datas } = this.state;
-    return Object.keys(datas).map(key => {
-      return (
-        <InventoryReportDetail
-          key={key}
-          sku={key}
-          brand={datas[key].brand}
-          stage={datas[key].stage}
-          total={datas[key].total}
-          scanner={datas[key].user}
-          timeStamp={datas[key].date}
-          inputRef={input => (this.textInput = input)}
-          handleChange={this.handleChange}
-          handleSubmitButton={this.changeTotal.bind(this)}
-        />
-      );
-    });
+    let condition;
+
+    return Object.keys(datas)
+      .sort(this.compare)
+      .map(key => {
+        switch (x) {
+          case 1:
+            condition =
+              key.length > 4 && !key.includes("OB-") && !key.includes(" ");
+            break;
+          case 2:
+            condition = key.includes("OB-");
+            break;
+          case 3:
+            condition = key.length < 4 && isNaN(key.charAt(0));
+            break;
+          case 4:
+            condition = key.length > 4 && key.includes(" ");
+            break;
+          default:
+            break;
+        }
+        if (condition)
+          return (
+            <InventoryReportDetail
+              key={key}
+              sku={key}
+              brand={datas[key].brand}
+              stage={datas[key].stage}
+              total={datas[key].total}
+              scanner={datas[key].user}
+              timeStamp={datas[key].date}
+              inputRef={input => (this.textInput = input)}
+              handleChange={this.handleChange}
+              handleSubmitButton={this.changeTotal.bind(this)}
+            />
+          );
+        return null;
+      });
   }
 
+ 
   renderLogList() {
     if (this.state.loading) {
       return (
@@ -128,7 +152,10 @@ class InventoryLogTable extends Component {
           </Table.Row>
         </Table.Header>
 
-        {this.mapTableList()}
+        {this.mapTableList(1)}
+        {this.mapTableList(2)}
+        {this.mapTableList(3)}
+        {this.mapTableList(4)}
       </Table>
     );
   }

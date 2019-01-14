@@ -13,9 +13,9 @@ class BabyCareLogging extends Component {
     this.state = {
       isTyped: false,
       loading: false,
-      babyCareArr: babyCareInfo,
       quantity: "",
       index: 0,
+      key: Object.keys(babyCareInfo).map(key => key),
       scanner: this.props.location.state.detail.user,
       warehouseLocation: Object.keys(people)
         .map(key => people[key])
@@ -57,21 +57,17 @@ class BabyCareLogging extends Component {
   reset all states
   */
   updateInventory() {
-    const {
-      babyCareArr,
-      quantity,
-      index,
-      scanner,
-      warehouseLocation
-    } = this.state;
+    const { quantity, key, index, scanner, warehouseLocation } = this.state;
     const warehouse = warehouseLocation[0].warehouse
       .toLowerCase()
       .replace(/\s/g, "");
+
     axios
       .put("/updateinventory", {
         dbname: `${warehouse}Report`,
-        sku: babyCareArr[index],
-        total: parseInt(quantity),
+        sku: key[index],
+        brand: babyCareInfo[key[index]],
+        total: quantity ? parseInt(quantity) : 0,
         user: scanner,
         date: moment().format("dddd, MMMM DD YYYY hh:mma")
       })
@@ -82,13 +78,15 @@ class BabyCareLogging extends Component {
           console.log("failed to log.");
         }
         this.setState({
-          quantity: ""
+          quantity: "",
+          loading: false
         });
-        if (babyCareArr[index] > babyCareArr.length - 1) {
+        if (index >= key.length - 1) {
           window.history.go(-1);
+          return false;
         }
         this.setState(prevState => {
-          return { index: prevState.index + 1, loading: false };
+          return { index: prevState.index + 1 };
         });
       });
   }
@@ -97,7 +95,7 @@ cycle input values per scan/user input
 tracking number > upc number > # of boxes > # of broken > photo of invoice > confirmation
 */
   renderInput() {
-    const { index, babyCareArr, loading } = this.state;
+    const { key, index, loading } = this.state;
     if (loading) {
       return (
         <ClipLoader
@@ -115,7 +113,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
           basic
           style={{ border: 0, padding: 0, margin: 0 }}
         >
-          {babyCareArr[index]}
+          {key[index]}
         </Label>
         <Form.Input
           fluid

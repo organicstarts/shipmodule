@@ -127,6 +127,7 @@ router.put("/updateinventory", (req, res) => {
         req.body.dbname === "westcoastReport"
       ) {
         dataRef.child(req.body.sku).update({
+          brand: req.body.brand,
           total: req.body.total,
           user: req.body.user,
           date: req.body.date

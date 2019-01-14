@@ -14,6 +14,7 @@ import {
 import { auth, provider } from "./config/firebaseconf";
 import { Button } from "semantic-ui-react";
 import "tachyons";
+import Scanning from "./components/InventorySystem/Scanning";
 
 class Main extends Component {
   constructor() {
@@ -103,12 +104,17 @@ class Main extends Component {
               />
               <FetchOrder displayName={this.state.displayName} />
               <FraudOrders displayName={this.state.displayName} />
+              <Inventory
+                displayName={this.state.displayName}
+                email={this.state.user.email}
+                compareEmail={this.compareEmail}
+              />
             </MediaQuery>
-            <Inventory
+            <Scanning
               displayName={this.state.displayName}
               email={this.state.user.email}
-              compareEmail={this.compareEmail}
             />
+
             {this.compareEmail(this.state.user.email) ? <Log /> : ""}
             <Button
               style={{ marginTop: "25px" }}

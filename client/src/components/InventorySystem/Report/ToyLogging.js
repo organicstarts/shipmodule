@@ -13,7 +13,7 @@ class ToyLogging extends Component {
     this.state = {
       isTyped: false,
       loading: false,
-      toyArr: toyInfo,
+      key: Object.keys(toyInfo).map(key => key),
       quantity: "",
       index: 0,
       scanner: this.props.location.state.detail.user,
@@ -57,21 +57,16 @@ class ToyLogging extends Component {
   reset all states
   */
   updateInventory() {
-    const {
-      toyArr,
-      quantity,
-      index,
-      scanner,
-      warehouseLocation
-    } = this.state;
+    const { key, quantity, index, scanner, warehouseLocation } = this.state;
     const warehouse = warehouseLocation[0].warehouse
       .toLowerCase()
       .replace(/\s/g, "");
     axios
       .put("/updateinventory", {
         dbname: `${warehouse}Report`,
-        sku: toyArr[index],
-        total: parseInt(quantity),
+        brand: toyInfo[key[index]],
+        sku: key[index],
+        total: quantity ? parseInt(quantity) : 0,
         user: scanner,
         date: moment().format("dddd, MMMM DD YYYY hh:mma")
       })
@@ -84,8 +79,9 @@ class ToyLogging extends Component {
         this.setState({
           quantity: ""
         });
-        if (toyArr[index] > toyArr.length - 1) {
+        if (index >= key.length - 1) {
           window.history.go(-1);
+          return false;
         }
         this.setState(prevState => {
           return { index: prevState.index + 1, loading: false };
@@ -97,7 +93,7 @@ cycle input values per scan/user input
 tracking number > upc number > # of boxes > # of broken > photo of invoice > confirmation
 */
   renderInput() {
-    const { index, toyArr, loading } = this.state;
+    const { index, key, loading } = this.state;
     if (loading) {
       return (
         <ClipLoader
@@ -115,7 +111,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
           basic
           style={{ border: 0, padding: 0, margin: 0 }}
         >
-          {toyArr[index]}
+          {key[index]}
         </Label>
         <Form.Input
           fluid

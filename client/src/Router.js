@@ -10,6 +10,7 @@ import InventoryTable from "./components/InventorySystem/InventoryTable/Inventor
 import InboundLogTable from "./components/InventorySystem/Inbound/InboundLogTable";
 import InventoryReportTable from "./components/InventorySystem/Report/InventoryReportTable";
 import ReportLogging from "./components/InventorySystem/Report/ReportLogging";
+import ReturnLogging from "./components/InventorySystem/Report/ReturnLogging";
 import OBReportLogging from "./components/InventorySystem/Report/OBReportLogging";
 import BabyCareLogging from "./components/InventorySystem/Report/BabyCareLogging";
 import ToyLogging from "./components/InventorySystem/Report/ToyLogging";
@@ -27,6 +28,7 @@ const Router = () => (
       <Route path="/inventoryTable" component={InventoryTable} />
       <Route path="/inventoryReport" component={InventoryReportTable} />
       <Route path="/reportLogging" component={ReportLogging} />
+      <Route path="/returnLogging" component={ReturnLogging} />
       <Route path="/obReportLogging" component={OBReportLogging} />
       <Route path="/babycareLogging" component={BabyCareLogging} />
       <Route path="/toyLogging" component={ToyLogging} />

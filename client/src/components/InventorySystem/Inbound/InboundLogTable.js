@@ -63,6 +63,12 @@ class InboundLogTable extends Component {
       total = datas[key].quantity;
       broken = datas[key].broken;
     }
+    if(datas[key].broken !== 0) {
+      axios.put("os/updateinventory", {
+        inventory_level: broken,
+        productID: datas[`OB-${key}`].productID
+      })
+    }
     axios.put("os/updateinventory", {
       inventory_level: total,
       productID: datas[key].productID

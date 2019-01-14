@@ -152,6 +152,18 @@ class BatchList extends Component {
               </strong>
             </div>
           </div>
+          <br />
+          <p>
+            Batch#:<b>{this.props.location.state.detail.batchNumber}</b>{" "}
+            <span style={{ paddingLeft: "10px" }}>
+              Picker:______________________________ Checker:______________________________
+            </span>
+          </p>
+          <br />
+          <p>
+            Time Printed:_______________ Time Started:_______________ Time
+            Finished:_______________ Time Checked:_______________
+          </p>
         </div>
 
         <div style={{ margin: "0 auto" }}>{renderSlipList(this.props)}</div>

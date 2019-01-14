@@ -156,7 +156,7 @@ class BatchList extends Component {
           <p>
             Batch#:<b>{this.props.location.state.detail.batchNumber}</b>{" "}
             <span style={{ paddingLeft: "10px" }}>
-              Picker:______________________________ Checker:______________________________
+              Picker:_____________________ Checker:_____________________ # of Items Missed: _____________________
             </span>
           </p>
           <br />

@@ -374,6 +374,6 @@ app.use("/*", staticFiles);
 
 app.set("port", process.env.PORT || 3001);
 const httpsServer = https.createServer(credentials, app);
-app.listen(app.get("port"), () => {
+httpsServer.listen(app.get("port"), () => {
   console.log(`Listening on ${app.get("port")}`);
 });

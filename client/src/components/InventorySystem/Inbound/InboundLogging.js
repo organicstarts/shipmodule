@@ -5,7 +5,6 @@ import {
   Button,
   List,
   Label,
-  Icon,
   Container,
   Grid
 } from "semantic-ui-react";
@@ -286,25 +285,24 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
                 Cancel
               </Button>
               <h2>Picture of the box:</h2>
-              <Label
-                style={{
-                  textAlign: "center",
-                  paddingBottom: "50px",
-                  display: "inherit"
+              <Button
+                fluid
+                color="google plus"
+                size="massive"
+                onClick={() => {
+                  document.getElementById("getFile").click();
                 }}
-                color="orange"
-                className="fileContainer"
-              >
-                <Form.Input
-                  fluid
-                  type="file"
-                  accept="image/*"
-                  capture="camera"
-                  onChange={this.newFileHandler}
-                />
-                <Icon name="camera" />
-                Add Photo
-              </Label>
+                icon="camera"
+              />
+
+              <input
+                id="getFile"
+                style={{ display: "none" }}
+                type="file"
+                accept="image/*"
+                capture="camera"
+                onChange={this.newFileHandler}
+              />
             </Segment>
           );
         case 5:
@@ -408,25 +406,24 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
                 Cancel
               </Button>
               <h2>Upload Invoice slip:</h2>
-              <Label
-                style={{
-                  textAlign: "center",
-                  paddingBottom: "50px",
-                  display: "inherit"
+              <Button
+                fluid
+                color="google plus"
+                size="massive"
+                onClick={() => {
+                  document.getElementById("getFile").click();
                 }}
-                color="orange"
-                className="fileContainer"
-              >
-                <Form.Input
-                  fluid
-                  type="file"
-                  accept="image/*"
-                  capture="camera"
-                  onChange={this.fileHandler}
-                />
-                <Icon name="camera" />
-                Add Invoice
-              </Label>
+                icon="camera"
+              />
+
+              <input
+                id="getFile"
+                style={{ display: "none" }}
+                type="file"
+                accept="image/*"
+                capture="camera"
+                onChange={this.fileHandler}
+              />
             </Segment>
           );
 

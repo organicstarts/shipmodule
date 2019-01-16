@@ -370,11 +370,10 @@ app.use(router);
 
 // any routes not picked up by the server api will be handled by the react router
 app.use("/*", staticFiles);
+
+
+app.set("port", process.env.PORT || 3001);
 const httpsServer = https.createServer(credentials, app);
-
-httpsServer.listen(8443);
-
-app.set("port", httpsServer || 3001);
-app.listen(app.get("port"), () => {
+httpsServer.listen(app.get("port"), () => {
   console.log(`Listening on ${app.get("port")}`);
 });

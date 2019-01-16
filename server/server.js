@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const router = express.Router();
 
 router.use("/os", require("./routes/BigCommerceAPI/API"));
-//router.use("/osw", require("./routes/ShopifyAPI/API"));
+router.use("/osw", require("./routes/ShopifyAPI/API"));
 
 
 const staticFiles = express.static(path.join(__dirname, "../../client/build"));

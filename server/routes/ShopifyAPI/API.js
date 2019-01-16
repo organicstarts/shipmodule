@@ -25,7 +25,15 @@ router.get("/getorder", (req, res) => {
     req.query.orderid
   }`;
 
-  fetch(baseUrl, header)
+  fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      Authorization: `Basic ${encodedString}`,
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    }
+  })
     .then(res => res.json())
     .then(datas => {
       if (

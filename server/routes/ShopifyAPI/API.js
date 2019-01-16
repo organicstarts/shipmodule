@@ -15,25 +15,11 @@ const header = {
 
 router.get("/getorder", (req, res) => {
   //build api URL with user order number
-
-  res.set({
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
-  });
-
   const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders.json?name=${
     req.query.orderid
   }`;
 
-  fetch(baseUrl, {
-    method: "GET",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      Authorization: `Basic ${encodedString}`,
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    }
-  })
+  fetch(baseUrl, header)
     .then(res => res.json())
     .then(datas => {
       if (

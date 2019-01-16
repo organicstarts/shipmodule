@@ -4,11 +4,16 @@ import serviceAccount from "@bgauth/serviceAccountKey.json";
 import bodyParser from "body-parser";
 import express from "express";
 const fs = require("fs");
+const https = require("https");
+const privateKey = fs.readFileSync("./config/server.key", "utf8");
+const certificate = fs.readFileSync("./config/server.crt", "utf8");
 const admin = require("firebase-admin");
 import path from "path";
 const nodemailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
 const app = express();
+
+var credentials = { key: privateKey, cert: certificate };
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -25,7 +30,6 @@ const router = express.Router();
 
 router.use("/os", require("./routes/BigCommerceAPI/API"));
 router.use("/osw", require("./routes/ShopifyAPI/API"));
-
 
 const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
@@ -366,8 +370,11 @@ app.use(router);
 
 // any routes not picked up by the server api will be handled by the react router
 app.use("/*", staticFiles);
+const httpsServer = https.createServer(credentials, app);
 
-app.set("port", process.env.PORT || 3001);
+httpsServer.listen(8443);
+
+app.set("port", httpsServer || 3001);
 app.listen(app.get("port"), () => {
   console.log(`Listening on ${app.get("port")}`);
 });

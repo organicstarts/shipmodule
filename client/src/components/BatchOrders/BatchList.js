@@ -182,6 +182,7 @@ class BatchList extends Component {
 }
 const renderBatchList = props => {
   const { shipItems } = props.location.state.detail;
+  console.log(shipItems)
   return shipItems.map(data => {
     if (data.length > 1) {
       return data.map(data => (

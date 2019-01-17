@@ -4,16 +4,13 @@ import serviceAccount from "@bgauth/serviceAccountKey.json";
 import bodyParser from "body-parser";
 import express from "express";
 const fs = require("fs");
-const https = require("https");
-const privateKey = fs.readFileSync("./config/server.key", "utf8");
-const certificate = fs.readFileSync("./config/server.crt", "utf8");
 const admin = require("firebase-admin");
 import path from "path";
 const nodemailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
 const app = express();
 
-var credentials = { key: privateKey, cert: certificate };
+
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -374,6 +371,6 @@ app.use("/*", staticFiles);
 
 app.set("port", process.env.PORT || 3001);
 
-https.createServer(credentials, app).listen(app.get("port"), () => {
+app.listen(app.get("port"), () => {
   console.log(`Listening on ${app.get("port")}`);
 });

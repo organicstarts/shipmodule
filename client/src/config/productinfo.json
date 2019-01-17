@@ -199,30 +199,6 @@
     "sku": "HG-3",
     "productID": 172
   },
-  "87": {
-    "brand": "Holle Cereal",
-    "stage": "3-KORN",
-    "package": 6,
-    "individual": 1,
-    "sku": "87",
-    "productID": 87
-  },
-  "276": {
-    "brand": "Holle Cereal",
-    "stage": "Kurbis",
-    "package": 6,
-    "individual": 1,
-    "sku": "276",
-    "productID": 276
-  },
-  "133": {
-    "brand": "Holle Cereal",
-    "stage": "Griess Banane",
-    "package": 3,
-    "individual": 1,
-    "sku": "133",
-    "productID": 133
-  },
   "LB-1": {
     "brand": "Lebenswert",
     "stage": "1",
@@ -319,7 +295,6 @@
     "sku": "TPFR-HA-1",
     "productID": 695
   },
-
   "HP-PL-HA-1": {
     "brand": "Polish HA",
     "stage": "1",
@@ -655,5 +630,38 @@
     "individual": 1,
     "sku": "OB-HP-PL-HA-1",
     "productID": 782
+  },
+  "HOL-KORN": {
+    "brand": "Holle Cereal",
+    "stage": "3-KORN",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-KORN",
+    "productID": 87
+  },
+  "HOL-PMPKN": {
+    "brand": "Holle Cereal",
+    "stage": "Kurbis",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-PMPKN",
+    "productID": 276
+  },
+  "HOL-BAN-GB": {
+    "brand": "Holle Cereal",
+    "stage": "Griess Banane",
+    "package": 3,
+    "individual": 1,
+    "sku": "HOL-BAN-GB",
+    "productID": 133
+  },
+  "HOL-CRNFLK-FR": {
+    "brand": "Holle Cereal",
+    "stage": "Junior Muesli with Fruit",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-BAN-GB",
+    "productID": 316
   }
+  
 }

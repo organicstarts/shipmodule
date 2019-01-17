@@ -29,6 +29,7 @@ router.get("/getorder", (req, res) => {
     .then(res => res.json())
     .then(datas => {
       if (
+        datas.orders[0] &&
         datas.orders[0].contact_email === req.query.email &&
         datas.orders[0].order_number === parseInt(req.query.orderid)
       ) {

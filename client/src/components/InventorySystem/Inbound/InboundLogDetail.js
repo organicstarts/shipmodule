@@ -6,6 +6,7 @@ const InboundLogDetail = props => {
   return (
     <Table.Body>
       <Table.Row>
+        <Table.Cell style={styles.border}>{props.carrier}</Table.Cell>
         <Table.Cell style={styles.border}>{props.trackingNumber}</Table.Cell>
         <Table.Cell style={styles.border}>{props.invoiceNum}</Table.Cell>
         <Table.Cell style={styles.border}>{props.brand}</Table.Cell>

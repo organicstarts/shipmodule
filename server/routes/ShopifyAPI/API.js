@@ -24,53 +24,57 @@ router.get("/getorder", (req, res) => {
   const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders?name=${
     req.query.orderid
   }`;
-
   fetch(baseUrl, header)
     .then(res => res.json())
-    .then(datas => {
+    .then(async datas => {
       if (
         datas.orders[0] &&
         datas.orders[0].contact_email === req.query.email &&
         datas.orders[0].order_number === parseInt(req.query.orderid)
       ) {
-        let info = {
-          trackingNum: datas.orders[0].note
+        return {
+          tracking: datas.orders[0].note
             .split("Tracking Number: ")[1]
             .split("\n")[0],
           createdAt: datas.orders[0].created_at,
           updatedAt: datas.orders[0].updated_at,
           lineItems: datas.orders[0].line_items.map(data => {
-            if (!isNaN(data.title.charAt(0))) {
-              return {
-                boxes: data.title.split(" ")[0],
-                title: data.title.split("of ")[1],
-                quantity: data.quantity,
-                grams: data.grams,
-                fullfillmentStatus: data.fullfillment_status
-              };
-            } else {
-              return {
-                boxes: null,
-                title: data.title,
-                quantity: data.quantity,
-                grams: data.grams,
-                fullfillmentStatus: data.fullfillment_status
-              };
-            }
+            return {
+              boxes: !isNaN(data.title.charAt(0))
+                ? data.title.split(" ")[0]
+                : null,
+              title: !isNaN(data.title.charAt(0))
+                ? data.title.split("of ")[1]
+                : data.title,
+              quantity: data.quantity,
+              grams: data.grams,
+              fullfillmentStatus: data.fullfillment_status
+            };
           }),
-          shippingAddress: {
+          address: {
             city: datas.orders[0].shipping_address.city,
             zip: datas.orders[0].shipping_address.province,
-            country: datas.orders[0].shipping_address.country_code
+            country: datas.orders[0].shipping_address.country_code,
+            latitude: datas.orders[0].shipping_address.latitude,
+            longitude: datas.orders[0].shipping_address.longitude
           }
         };
-        res.send(info);
-      } else {
-        res.send({});
       }
     })
-    .catch(err => {
-      console.log(err);
+    .then(info => {
+      fetch(
+        `http://www.bpost2.be/bpostinternational/track_trace/find.php?search=s&lng=en&trackcode=${
+          info.tracking
+        }`
+      )
+        .then(res => res.text())
+        .then(async datas => {
+          info["carrierXML"] = datas;
+          res.send(info);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     });
 });
 

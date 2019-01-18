@@ -4,7 +4,7 @@ import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import firebase from "../../../config/firebaseconf";
 import skuInfo from "../../../config/productinfo.json";
-import { Segment, Table } from "semantic-ui-react";
+import { Segment, Table, Form, FormGroup } from "semantic-ui-react";
 import axios from "axios";
 
 class InboundLogTable extends Component {
@@ -12,8 +12,10 @@ class InboundLogTable extends Component {
     super(props);
     this.state = {
       datas: {},
-      loading: true
+      loading: true,
+      filter: ""
     };
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   componentDidMount() {
@@ -63,11 +65,11 @@ class InboundLogTable extends Component {
       total = datas[key].quantity;
       broken = datas[key].broken;
     }
-    if(datas[key].broken !== 0) {
+    if (datas[key].broken !== 0) {
       axios.put("os/updateinventory", {
         inventory_level: broken,
         productID: datas[`OB-${key}`].productID
-      })
+      });
     }
     axios.put("os/updateinventory", {
       inventory_level: total,
@@ -90,6 +92,46 @@ class InboundLogTable extends Component {
       });
   }
 
+  getCarrier(tracking) {
+    if (tracking.includes("CD")) {
+      return "Post NL";
+    } else if (tracking.includes("CO")) {
+      return "DHL Economy";
+    } else if (tracking.includes("30100981")) {
+      return "Bpost";
+    } else if (tracking.includes("CP")) {
+      return "Lux";
+    } else if (tracking.length === 10) {
+      return "DHL Express";
+    } else {
+      return "N/A";
+    }
+  }
+
+  filterLog(action) {
+    const { datas } = this.state;
+    if (action === "none") {
+      return [];
+    }
+    if (action === "nofilter") {
+      const result = Object.keys(datas).map(key => datas[key]);
+      return result;
+    }
+    const result = Object.keys(datas)
+      .map(key => datas[key])
+      .filter(data => data.action.includes(action));
+    return result;
+  }
+
+  handleInputChange = (e, data) => {
+    this.setState({
+      [data.name]: {
+        name: data.value,
+        log: this.filterLog(data.value)
+      }
+    });
+  };
+
   mapTableList() {
     const { datas } = this.state;
     return Object.keys(datas)
@@ -98,6 +140,7 @@ class InboundLogTable extends Component {
           <InboundLogDetail
             key={key}
             id={key}
+            carrier={this.getCarrier(datas[key].trackingNumber)}
             trackingNumber={datas[key].trackingNumber}
             brand={datas[key].brand}
             stage={datas[key].stage}
@@ -114,9 +157,12 @@ class InboundLogTable extends Component {
           />
         );
       })
-      .reverse();
+      .sort(this.compare);
   }
 
+  compare(a, b) {
+    return a.props.invoiceNum - b.props.invoiceNum;
+  }
   renderLogList() {
     if (this.state.loading) {
       return (
@@ -130,47 +176,62 @@ class InboundLogTable extends Component {
     }
 
     return (
-      <Table celled collapsing textAlign="center">
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>
-              <strong>Tracking #</strong>
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              <strong>Invoice #</strong>
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              <strong>Brand</strong>
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              <strong>Stage</strong>
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              <strong>Quantity</strong>
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              <strong>Broken</strong>
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              <strong>Total</strong>
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              <strong>Scanner</strong>
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              <strong>Warehouse</strong>
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              <strong>Invoice</strong>
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              <strong>Date</strong>
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
+      <Segment>
+        <Form>
+          <FormGroup widths="equal" inline>
+            <label>Filter: </label>
+            <Form.Input
+              name="filter"
+              value={this.state.filter}
+              onChange={this.handleInputChange}
+            />
+          </FormGroup>
+        </Form>
+        <Table celled collapsing textAlign="center">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>
+                <strong>Carrier</strong>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <strong>Tracking #</strong>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <strong>Invoice #</strong>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <strong>Brand</strong>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <strong>Stage</strong>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <strong>Quantity</strong>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <strong>Broken</strong>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <strong>Total</strong>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <strong>Scanner</strong>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <strong>Warehouse</strong>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <strong>Invoice</strong>
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <strong>Date</strong>
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
 
-        {this.mapTableList()}
-      </Table>
+          {this.mapTableList()}
+        </Table>
+      </Segment>
     );
   }
 

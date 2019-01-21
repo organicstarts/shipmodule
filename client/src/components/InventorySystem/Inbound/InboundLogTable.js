@@ -11,9 +11,10 @@ class InboundLogTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      backUpDatas: {},
       datas: {},
       loading: true,
-      filter: ""
+      filter: { value: "", log: [] }
     };
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -25,7 +26,8 @@ class InboundLogTable extends Component {
         const payload = snapshot.val();
         if (payload.log) {
           this.setState({
-            datas: payload.log
+            datas: payload.log,
+            backUpDatas: payload.log
           });
           let storageRef = firebase.storage().ref();
 
@@ -109,27 +111,40 @@ class InboundLogTable extends Component {
   }
 
   filterLog(action) {
-    const { datas } = this.state;
+    const { backUpDatas } = this.state;
     if (action === "none") {
       return [];
     }
-    if (action === "nofilter") {
-      const result = Object.keys(datas).map(key => datas[key]);
+    if (action === "") {
+      const result = Object.keys(backUpDatas).map(key => backUpDatas[key]);
       return result;
     }
-    const result = Object.keys(datas)
-      .map(key => datas[key])
-      .filter(data => data.action.includes(action));
+    const result = Object.keys(backUpDatas)
+      .map(key => backUpDatas[key])
+      .filter(data => {
+        if (data.invoiceNum) {
+          if (data.invoiceNum.includes(action)) {
+            return data;
+          }
+        }
+        return null;
+      });
     return result;
   }
 
   handleInputChange = (e, data) => {
-    this.setState({
-      [data.name]: {
-        name: data.value,
-        log: this.filterLog(data.value)
+    this.setState(
+      {
+        [data.name]: {
+          value: data.value,
+          log: this.filterLog(data.value)
+        }
+      },
+      () => {
+        const { filter } = this.state;
+        this.setState({ datas: filter.log });
       }
-    });
+    );
   };
 
   mapTableList() {
@@ -182,7 +197,7 @@ class InboundLogTable extends Component {
             <label>Filter: </label>
             <Form.Input
               name="filter"
-              value={this.state.filter}
+              value={this.state.filter.value}
               onChange={this.handleInputChange}
             />
           </FormGroup>

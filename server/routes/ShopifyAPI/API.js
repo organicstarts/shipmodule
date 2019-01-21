@@ -13,6 +13,49 @@ const header = {
   }
 };
 
+router.get("/usps", (req, res) => {
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD",
+    "Content-Type": "application/json",
+    Accept: "application/json"
+  });
+
+  const baseUrl = `http://production.shippingapis.com/ShippingAPI.dll?API=TrackV2&XML=<?xml version="1.0" encoding="UTF-8" ?>
+  <TrackRequest USERID="024ORGAN4286">
+  <TrackID ID="${req.body.tracking}"></TrackID>
+  </TrackRequest>`;
+  fetch(baseUrl, header)
+    .then(res => res.text())
+    .then(datas => {
+      res.send(datas);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+router.get("/bpost", (req, res) => {
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD",
+    "Content-Type": "application/json",
+    Accept: "application/json"
+  });
+
+  const baseUrl = `http://www.bpost2.be/bpostinternational/track_trace/find.php?search=s&lng=en&trackcode=${
+    req.body.tracking
+  }`;
+  fetch(baseUrl, header)
+    .then(res => res.text())
+    .then(datas => {
+      res.send(datas);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
 router.get("/getorder", (req, res) => {
   //build api URL with user order number
   res.set({
@@ -68,7 +111,7 @@ router.get("/getorder", (req, res) => {
         }`
       )
         .then(res => res.text())
-        .then(async datas => {
+        .then(datas => {
           info["carrierXML"] = datas;
           res.send(info);
         })

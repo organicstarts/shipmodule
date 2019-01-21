@@ -49,6 +49,9 @@
         "NAME": "OR ENV"
       },
       "fedex_extra_large_box_onerate": {
+        "NAME": "OR XLG"
+      },
+      "fedex_large_box_onerate": {
         "NAME": "OR LG"
       },
       "fedex_medium_box_onerate": {

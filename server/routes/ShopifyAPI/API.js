@@ -20,12 +20,17 @@ router.get("/usps", (req, res) => {
     "Content-Type": "application/json",
     Accept: "application/json"
   });
-
-  const baseUrl = `http://production.shippingapis.com/ShippingAPI.dll?API=TrackV2&XML=<?xml version="1.0" encoding="UTF-8" ?>
-  <TrackRequest USERID="024ORGAN4286">
-  <TrackID ID="${req.body.tracking}"></TrackID>
-  </TrackRequest>`;
-  fetch(baseUrl, header)
+  const baseUrl = `http://production.shippingapis.com/ShippingAPI.dll?API=TrackV2&XML=%3C?xml%20version=%221.0%22%20encoding=%22UTF-8%22%20?%3E%20%3CTrackRequest%20USERID=%22024ORGAN4286%22%3E%20%3CTrackID%20ID=%22${
+    req.query.tracking
+  }%22%3E%3C/TrackID%3E%20%3C/TrackRequest%3E`;
+  fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/text",
+      Accept: "application/text"
+    }
+  })
     .then(res => res.text())
     .then(datas => {
       res.send(datas);

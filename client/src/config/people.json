@@ -49,14 +49,28 @@
     "email": "romario@organictstart.com"
   },
   {
-    "key": "8",
+    "key": "9",
+    "text": "Chris",
+    "value": "chris",
+    "warehouse": "East coast",
+    "email": "chris@organictstart.com"
+  },
+  {
+    "key": "10",
+    "text": "Jason",
+    "value": "jason",
+    "warehouse": "East coast",
+    "email": "jason@organictstart.com"
+  },
+  {
+    "key": "11",
     "text": "Training",
     "value": "training",
     "warehouse": "East coast",
     "email": "training@organictstart.com"
   },
   {
-    "key": "9",
+    "key": "12",
     "warehouse":"East coast",
     "email": "yvan@organictstart.com"
   }

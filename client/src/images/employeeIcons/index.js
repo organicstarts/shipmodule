@@ -10,3 +10,5 @@ export const richard = require('./richard.jpg');
 export const romario = require('./romario.jpg');
 export const steve = require('./steve.jpg');
 export const training = require('./training.jpg')
+export const chris = require('./chris.png')
+export const jason = require('./jason.jpeg')

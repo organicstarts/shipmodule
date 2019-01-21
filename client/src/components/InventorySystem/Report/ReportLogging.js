@@ -6,6 +6,7 @@ import axios from "axios";
 import people from "../../../config/people.json";
 import upc from "../../../config/upc.json";
 import skuInfo from "../../../config/productinfo.json";
+import firebase from "../../../config/firebaseconf";
 import "../inventory.css";
 
 class ReportLogging extends Component {
@@ -88,12 +89,14 @@ class ReportLogging extends Component {
       .put("/updateinventory", {
         dbname: `${warehouse}Report`,
         sku: skuInfo[sku].sku,
+        brand: skuInfo[sku].brand,
         total: skuInfo[sku].package * quantity,
         user: scanner,
         date: moment().format("dddd, MMMM DD YYYY hh:mma")
       })
       .then(response => {
         if (response.data.msg === "success") {
+          this.checkEastWestTotal(sku);
           console.log("logged");
         } else if (response.data.msg === "fail") {
           console.log("failed to log.");
@@ -103,6 +106,56 @@ class ReportLogging extends Component {
           upcNum: "",
           quantity: ""
         });
+      });
+  }
+  disableBundle(datas) {
+    return datas.forEach(data => {
+      axios.put("os/disableproduct", {
+        productID: data.productID,
+        availability: "disabled"
+      });
+      data.availability = "disabled";
+    });
+  }
+
+  enableBundle(datas) {
+    return datas.forEach(data => {
+      axios.put("os/disableproduct", {
+        productID: data.productID,
+        availability: "available"
+      });
+      data.availability = "available";
+    });
+  }
+
+  checkEastWestTotal(key) {
+    const reportRef = firebase.database().ref("/inventory");
+    let eastTotal = 0;
+    let westTotal = 0;
+
+    reportRef
+      .once("value", async snapshot => {
+        const payload = snapshot.val();
+        if (payload) {
+          eastTotal = payload.eastcoastReport[key].total;
+          westTotal = payload.westcoastReport[key].total;
+        }
+      })
+      .then(async x => {
+        const total = eastTotal + westTotal;
+        if (total < 100) {
+          axios.put("os/disableproduct", {
+            productID: skuInfo[key].productID,
+            availability: "disabled"
+          });
+          await this.disableBundle(skuInfo[key].bundleID);
+        } else {
+          axios.put("os/disableproduct", {
+            productID: skuInfo[key].productID,
+            availability: "available"
+          });
+          await this.enableBundle(skuInfo[key].bundleID);
+        }
       });
   }
   /*

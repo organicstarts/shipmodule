@@ -5,7 +5,13 @@
     "package": 6,
     "individual": 1,
     "sku": "HP-NL-1",
-    "productID": 173
+    "productID": 173,
+    "bundleID": [
+      { "productID": 400, "amount": 12 },
+      { "productID": 257, "amount": 4 },
+      { "productID": 258, "amount": 8 },
+      { "productID": 342, "amount": 8 }
+    ]
   },
   "HP-NL-2": {
     "brand": "HiPP Dutch",
@@ -13,7 +19,15 @@
     "package": 6,
     "individual": 1,
     "sku": "HP-NL-2",
-    "productID": 213
+    "productID": 213,
+    "bundleID": [
+      { "productID": 399, "amount": 12 },
+      { "productID": 271, "amount": 4 },
+      { "productID": 272, "amount": 8 },
+      { "productID": 339, "amount": 6 },
+      { "productID": 342, "amount": 8 },
+      { "productID": 343, "amount": 8 }
+    ]
   },
   "HP-NL-3": {
     "brand": "HiPP Dutch",
@@ -21,7 +35,13 @@
     "package": 6,
     "individual": 1,
     "sku": "HP-NL-3",
-    "productID": 212
+    "productID": 212,
+    "bundleID": [
+      { "productID": 401, "amount": 12 },
+      { "productID": 274, "amount": 4 },
+      { "productID": 273, "amount": 8 },
+      { "productID": 343, "amount": 8 }
+    ]
   },
   "HP-AR": {
     "brand": "HiPP German",
@@ -45,7 +65,13 @@
     "package": 4,
     "individual": 1,
     "sku": "HP-DE-PRE",
-    "productID": 95
+    "productID": 95,
+    "bundleID": [
+      { "productID": 228, "amount": 12 },
+      { "productID": 560, "amount": 3 },
+      { "productID": 229, "amount": 6 },
+      { "productID": 341, "amount": 6 }
+    ]
   },
   "HP-DE-HA-PRE": {
     "brand": "HiPP German HA",
@@ -53,7 +79,11 @@
     "package": 4,
     "individual": 1,
     "sku": "HP-DE-HA-PRE",
-    "productID": 207
+    "productID": 207,
+    "bundleID": [
+      { "productID": 294, "amount": 4 },
+      { "productID": 291, "amount": 6 }
+    ]
   },
   "HP-DE-HA-1": {
     "brand": "HiPP German HA",
@@ -61,7 +91,11 @@
     "package": 4,
     "individual": 1,
     "sku": "HP-DE-HA-1",
-    "productID": 111
+    "productID": 111,
+    "bundleID": [
+      { "productID": 292, "amount": 4 },
+      { "productID": 289, "amount": 6 }
+    ]
   },
   "HP-DE-1": {
     "brand": "HiPP German",
@@ -69,7 +103,14 @@
     "package": 6,
     "individual": 1,
     "sku": "HP-DE-1",
-    "productID": 76
+    "productID": 76,
+    "bundleID": [
+      { "productID": 218, "amount": 12 },
+      { "productID": 224, "amount": 24 },
+      { "productID": 221, "amount": 6 },
+      { "productID": 339, "amount": 6 },
+      { "productID": 341, "amount": 6 }
+    ]
   },
   "HP-DE-4": {
     "brand": "HiPP German",
@@ -77,7 +118,8 @@
     "package": 4,
     "individual": 1,
     "sku": "HP-DE-4",
-    "productID": 97
+    "productID": 97,
+    "bundleID": [{ "productID": 346, "amount": 6 }]
   },
   "HP-DE-2": {
     "brand": "HiPP German",
@@ -85,7 +127,14 @@
     "package": 4,
     "individual": 1,
     "sku": "HP-DE-2",
-    "productID": 78
+    "productID": 78,
+    "bundleID": [
+      { "productID": 219, "amount": 12 },
+      { "productID": 225, "amount": 24 },
+      { "productID": 222, "amount": 6 },
+      { "productID": 339, "amount": 6 },
+      { "productID": 340, "amount": 6 }
+    ]
   },
   "HP-DE-2-NS": {
     "brand": "HiPP German",
@@ -93,7 +142,13 @@
     "package": 4,
     "individual": 1,
     "sku": "HP-DE-2-NS",
-    "productID": 353
+    "productID": 353,
+    "bundleID": [
+      { "productID": 557, "amount": 12 },
+      { "productID": 558, "amount": 24 },
+      { "productID": 559, "amount": 3 },
+      { "productID": 556, "amount": 6 }
+    ]
   },
   "HP-DE-HA-2": {
     "brand": "HiPP German HA",
@@ -101,7 +156,11 @@
     "package": 4,
     "individual": 1,
     "sku": "HP-DE-HA-2",
-    "productID": 129
+    "productID": 129,
+    "bundleID": [
+      { "productID": 293, "amount": 4 },
+      { "productID": 290, "amount": 6 }
+    ]
   },
   "HP-DE-3": {
     "brand": "HiPP German",
@@ -109,7 +168,14 @@
     "package": 4,
     "individual": 1,
     "sku": "HP-DE-3",
-    "productID": 79
+    "productID": 79,
+    "bundleID": [
+      { "productID": 220, "amount": 12 },
+      { "productID": 226, "amount": 24 },
+      { "productID": 223, "amount": 6 },
+      { "productID": 340, "amount": 6 },
+      { "productID": 345, "amount": 6 }
+    ]
   },
   "HP-UK-1": {
     "brand": "HiPP UK",
@@ -117,7 +183,13 @@
     "package": 4,
     "individual": 1,
     "sku": "HP-UK-1",
-    "productID": 103
+    "productID": 103,
+    "bundleID": [
+      { "productID": 377, "amount": 12 },
+      { "productID": 200, "amount": 3 },
+      { "productID": 298, "amount": 6 },
+      { "productID": 337, "amount": 6 }
+    ]
   },
   "HP-UK-2": {
     "brand": "HiPP UK",
@@ -125,7 +197,14 @@
     "package": 4,
     "individual": 1,
     "sku": "HP-UK-2",
-    "productID": 102
+    "productID": 102,
+    "bundleID": [
+      { "productID": 378, "amount": 12 },
+      { "productID": 296, "amount": 3 },
+      { "productID": 297, "amount": 6 },
+      { "productID": 337, "amount": 6 },
+      { "productID": 338, "amount": 6 }
+    ]
   },
   "HP-UK-3": {
     "brand": "HiPP UK",
@@ -133,7 +212,13 @@
     "package": 4,
     "individual": 1,
     "sku": "HP-UK-3",
-    "productID": 113
+    "productID": 113,
+    "bundleID": [
+      { "productID": 382, "amount": 12 },
+      { "productID": 380, "amount": 3 },
+      { "productID": 381, "amount": 6 },
+      { "productID": 338, "amount": 6 }
+    ]
   },
   "HC-PRE": {
     "brand": "Holle Cow",
@@ -141,7 +226,12 @@
     "package": 6,
     "individual": 1,
     "sku": "HC-PRE",
-    "productID": 369
+    "productID": 369,
+    "bundleID": [
+      { "productID": 370, "amount": 12 },
+      { "productID": 371, "amount": 18 },
+      { "productID": 372, "amount": 24 }
+    ]
   },
   "HC-1": {
     "brand": "Holle Cow",
@@ -149,7 +239,14 @@
     "package": 6,
     "individual": 1,
     "sku": "HC-1",
-    "productID": 77
+    "productID": 77,
+    "bundleID": [
+      { "productID": 98, "amount": 12 },
+      { "productID": 99, "amount": 24 },
+      { "productID": 198, "amount": 36 },
+      { "productID": 326, "amount": 6 },
+      { "productID": 327, "amount": 12 }
+    ]
   },
   "HC-2": {
     "brand": "Holle Cow",
@@ -157,7 +254,15 @@
     "package": 3,
     "individual": 1,
     "sku": "HC-2",
-    "productID": 80
+    "productID": 80,
+    "bundleID": [
+      { "productID": 104, "amount": 12 },
+      { "productID": 105, "amount": 25 },
+      { "productID": 326, "amount": 6 },
+      { "productID": 329, "amount": 6 },
+      { "productID": 327, "amount": 12 },
+      { "productID": 328, "amount": 12 }
+    ]
   },
   "HC-3": {
     "brand": "Holle Cow",
@@ -165,7 +270,15 @@
     "package": 4,
     "individual": 1,
     "sku": "HC-3",
-    "productID": 81
+    "productID": 81,
+    "bundleID": [
+      { "productID": 106, "amount": 12 },
+      { "productID": 107, "amount": 20 },
+      { "productID": 329, "amount": 6 },
+      { "productID": 330, "amount": 6 },
+      { "productID": 328, "amount": 12 },
+      { "productID": 332, "amount": 12 }
+    ]
   },
   "HC-4": {
     "brand": "Holle Cow",
@@ -173,7 +286,13 @@
     "package": 4,
     "individual": 1,
     "sku": "HC-4",
-    "productID": 108
+    "productID": 108,
+    "bundleID": [
+      { "productID": 92, "amount": 12 },
+      { "productID": 109, "amount": 25 },
+      { "productID": 330, "amount": 6 },
+      { "productID": 332, "amount": 12 }
+    ]
   },
   "HG-1": {
     "brand": "Holle Goat",
@@ -181,7 +300,11 @@
     "package": 4,
     "individual": 1,
     "sku": "HG-1",
-    "productID": 101
+    "productID": 101,
+    "bundleID": [
+      { "productID": 230, "amount": 12 },
+      { "productID": 233, "amount": 24 }
+    ]
   },
   "HG-2": {
     "brand": "Holle Goat",
@@ -189,7 +312,12 @@
     "package": 4,
     "individual": 1,
     "sku": "HG-2",
-    "productID": 82
+    "productID": 82,
+    "bundleID": [
+      { "productID": 232, "amount": 12 },
+      { "productID": 227, "amount": 24 },
+      { "productID": 227, "amount": 24 }
+    ]
   },
   "HG-3": {
     "brand": "Holle Goat",
@@ -197,7 +325,11 @@
     "package": 4,
     "individual": 1,
     "sku": "HG-3",
-    "productID": 172
+    "productID": 172,
+    "bundleID": [
+      { "productID": 231, "amount": 12 },
+      { "productID": 234, "amount": 24 }
+    ]
   },
   "LB-1": {
     "brand": "Lebenswert",
@@ -205,7 +337,14 @@
     "package": 5,
     "individual": 1,
     "sku": "LB-1",
-    "productID": 86
+    "productID": 86,
+    "bundleID": [
+      { "productID": 195, "amount": 12 },
+      { "productID": 196, "amount": 24 },
+      { "productID": 197, "amount": 36 },
+      { "productID": 331, "amount": 6 },
+      { "productID": 333, "amount": 12 }
+    ]
   },
   "LB-2": {
     "brand": "Lebenswert",
@@ -213,7 +352,15 @@
     "package": 5,
     "individual": 1,
     "sku": "LB-2",
-    "productID": 84
+    "productID": 84,
+    "bundleID": [
+      { "productID": 191, "amount": 12 },
+      { "productID": 192, "amount": 24 },
+      { "productID": 331, "amount": 6 },
+      { "productID": 334, "amount": 6 },
+      { "productID": 333, "amount": 12 },
+      { "productID": 335, "amount": 12 }
+    ]
   },
   "LB-3": {
     "brand": "Lebenswert",
@@ -221,7 +368,13 @@
     "package": 5,
     "individual": 1,
     "sku": "LB-3",
-    "productID": 85
+    "productID": 85,
+    "bundleID": [
+      { "productID": 193, "amount": 12 },
+      { "productID": 193, "amount": 24 },
+      { "productID": 334, "amount": 6 },
+      { "productID": 335, "amount": 12 }
+    ]
   },
   "NC-1": {
     "brand": "NANNYCare",
@@ -253,7 +406,12 @@
     "package": 6,
     "individual": 1,
     "sku": "TPFR-1",
-    "productID": 252
+    "productID": 252,
+    "bundleID": [
+      { "productID": 385, "amount": 12 },
+      { "productID": 383, "amount": 3 },
+      { "productID": 384, "amount": 6 }
+    ]
   },
   "TPFR-2": {
     "brand": "Topfer",
@@ -261,7 +419,12 @@
     "package": 6,
     "individual": 1,
     "sku": "TPFR-2",
-    "productID": 253
+    "productID": 253,
+    "bundleID": [
+      { "productID": 388, "amount": 12 },
+      { "productID": 386, "amount": 3 },
+      { "productID": 387, "amount": 6 }
+    ]
   },
   "TPFR-3": {
     "brand": "Topfer",
@@ -269,7 +432,12 @@
     "package": 6,
     "individual": 1,
     "sku": "TPFR-3",
-    "productID": 254
+    "productID": 254,
+    "bundleID": [
+      { "productID": 391, "amount": 12 },
+      { "productID": 389, "amount": 3 },
+      { "productID": 390, "amount": 6 }
+    ]
   },
   "TPFR-4": {
     "brand": "Topfer",
@@ -277,7 +445,12 @@
     "package": 6,
     "individual": 1,
     "sku": "TPFR-4",
-    "productID": 256
+    "productID": 256,
+    "bundleID": [
+      { "productID": 394, "amount": 12 },
+      { "productID": 392, "amount": 3 },
+      { "productID": 393, "amount": 6 }
+    ]
   },
   "TPFR-HA-PRE": {
     "brand": "Topfer HA",
@@ -285,7 +458,12 @@
     "package": 6,
     "individual": 1,
     "sku": "TPFR-4",
-    "productID": 396
+    "productID": 396,
+    "bundleID": [
+      { "productID": 699, "amount": 12 },
+      { "productID": 697, "amount": 3 },
+      { "productID": 698, "amount": 6 }
+    ]
   },
   "TPFR-HA-1": {
     "brand": "Topfer HA",
@@ -293,7 +471,12 @@
     "package": 6,
     "individual": 1,
     "sku": "TPFR-HA-1",
-    "productID": 695
+    "productID": 695,
+    "bundleID": [
+      { "productID": 696, "amount": 12 },
+      { "productID": 694, "amount": 3 },
+      { "productID": 695, "amount": 6 }
+    ]
   },
   "HP-PL-HA-1": {
     "brand": "Polish HA",
@@ -663,5 +846,4 @@
     "sku": "HOL-BAN-GB",
     "productID": 316
   }
-  
 }

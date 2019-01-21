@@ -11,7 +11,7 @@ class InboundLogTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      backUpDatas: {},
+      dbDatas: {},
       datas: {},
       loading: true,
       filter: { value: "", log: [] }
@@ -26,8 +26,8 @@ class InboundLogTable extends Component {
         const payload = snapshot.val();
         if (payload.log) {
           this.setState({
-            datas: payload.log,
-            backUpDatas: payload.log
+            datas: this.state.filter.value !== "" ? this.filterLog(this.state.filter.value): payload.log,
+            dbDatas: payload.log
           });
           let storageRef = firebase.storage().ref();
 
@@ -53,36 +53,38 @@ class InboundLogTable extends Component {
   }
 
   totalChange(key) {
-    const { datas } = this.state;
-    const bool = datas[key].isChecked;
-    const warehouse = datas[key].warehouseLocation
+    const { dbDatas } = this.state;
+    const bool = dbDatas[key].isChecked;
+    const warehouse = dbDatas[key].warehouseLocation
       .toLowerCase()
       .replace(/\s/g, "");
     let total = "";
     let broken = "";
     if (bool) {
-      total = 0 - datas[key].quantity;
-      broken = 0 - datas[key].broken;
+      total = 0 - dbDatas[key].quantity;
+      broken = 0 - dbDatas[key].broken;
     } else {
-      total = datas[key].quantity;
-      broken = datas[key].broken;
+      total = dbDatas[key].quantity;
+      broken = dbDatas[key].broken;
     }
-    if (datas[key].broken !== 0) {
+    if (dbDatas[key].broken !== 0) {
       axios.put("os/updateinventory", {
         inventory_level: broken,
-        productID: datas[`OB-${key}`].productID
+        productID: dbDatas[`OB-${key}`].productID
       });
     }
     axios.put("os/updateinventory", {
       inventory_level: total,
-      productID: datas[key].productID
+      productID: dbDatas[key].productID
     });
     axios
       .put("/updateinventory", {
         dbname: warehouse,
-        sku: datas[key].sku,
+        sku: dbDatas[key].sku,
         obsku:
-          datas[key].broken !== 0 ? `OB-${skuInfo[datas[key].sku].sku}` : null,
+          dbDatas[key].broken !== 0
+            ? `OB-${skuInfo[dbDatas[key].sku].sku}`
+            : null,
         quantity: total,
         broken: broken
       })
@@ -110,17 +112,17 @@ class InboundLogTable extends Component {
     }
   }
 
-  filterLog(action) {
-    const { backUpDatas } = this.state;
-    if (action === "none") {
-      return [];
-    }
-    if (action === "") {
-      const result = Object.keys(backUpDatas).map(key => backUpDatas[key]);
+  filterLog(action = "none") {
+    const { dbDatas } = this.state;
+    if (action === "" || action === "none") {
+      const result = Object.keys(dbDatas).map(key => dbDatas[key]);
       return result;
     }
-    const result = Object.keys(backUpDatas)
-      .map(key => backUpDatas[key])
+    const result = Object.keys(dbDatas)
+      .map(key => {
+        dbDatas[key].key = key;
+        return dbDatas[key];
+      })
       .filter(data => {
         if (data.invoiceNum) {
           if (data.invoiceNum.includes(action)) {
@@ -129,6 +131,7 @@ class InboundLogTable extends Component {
         }
         return null;
       });
+    console.log(result);
     return result;
   }
 
@@ -154,7 +157,7 @@ class InboundLogTable extends Component {
         return (
           <InboundLogDetail
             key={key}
-            id={key}
+            id={datas[key].key ? datas[key].key : key}
             carrier={this.getCarrier(datas[key].trackingNumber)}
             trackingNumber={datas[key].trackingNumber}
             brand={datas[key].brand}

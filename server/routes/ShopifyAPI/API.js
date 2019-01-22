@@ -61,7 +61,6 @@ router.get("/bpost", (req, res) => {
   })
     .then(res => res.text())
     .then(datas => {
-      console.log(datas);
       res.send(datas);
     })
     .catch(err => {

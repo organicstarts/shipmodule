@@ -94,9 +94,9 @@ class ReportLogging extends Component {
         user: scanner,
         date: moment().format("dddd, MMMM DD YYYY hh:mma")
       })
-      .then(response => {
+      .then(async response => {
         if (response.data.msg === "success") {
-          this.checkEastWestTotal(sku);
+          await this.checkEastWestTotal(sku);
           console.log("logged");
         } else if (response.data.msg === "fail") {
           console.log("failed to log.");

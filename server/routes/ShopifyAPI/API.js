@@ -51,9 +51,17 @@ router.get("/bpost", (req, res) => {
   const baseUrl = `http://www.bpost2.be/bpostinternational/track_trace/find.php?search=s&lng=en&trackcode=${
     req.query.tracking
   }`;
-  fetch(baseUrl, header)
+  fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/text",
+      Accept: "application/text"
+    }
+  })
     .then(res => res.text())
     .then(datas => {
+      console.log(datas);
       res.send(datas);
     })
     .catch(err => {

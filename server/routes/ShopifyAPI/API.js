@@ -49,7 +49,7 @@ router.get("/bpost", (req, res) => {
   });
 
   const baseUrl = `http://www.bpost2.be/bpostinternational/track_trace/find.php?search=s&lng=en&trackcode=${
-    req.body.tracking
+    req.query.tracking
   }`;
   fetch(baseUrl, header)
     .then(res => res.text())
@@ -107,26 +107,15 @@ router.get("/getorder", (req, res) => {
             longitude: datas.orders[0].shipping_address.longitude
           }
         };
+      } else {
+        res.send({});
       }
     })
     .then(info => {
-      fetch(
-        `http://www.bpost2.be/bpostinternational/track_trace/find.php?search=s&lng=en&trackcode=${
-          info.tracking
-        }`
-      )
-        .then(res => res.text())
-        .then(datas => {
-          if (info.tracking) {
-            info["carrierXML"] = datas;
-          } else {
-            info["carrierXML"] = null;
-          }
-          res.send(info);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      res.send(info);
+    })
+    .catch(err => {
+      console.log(err);
     });
 });
 

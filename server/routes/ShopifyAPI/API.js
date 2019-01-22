@@ -109,7 +109,7 @@ router.get("/getorder", (req, res) => {
           address: {
             city: datas.orders[0].shipping_address.city,
             zip: datas.orders[0].shipping_address.zip,
-            country: datas.orders[0].shipping_address.country_code,
+            country: datas.orders[0].shipping_address.country,
             latitude: datas.orders[0].shipping_address.latitude,
             longitude: datas.orders[0].shipping_address.longitude
           }

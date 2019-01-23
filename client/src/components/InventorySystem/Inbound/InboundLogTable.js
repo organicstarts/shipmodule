@@ -14,9 +14,11 @@ class InboundLogTable extends Component {
       dbDatas: {},
       datas: {},
       loading: true,
-      filter: { value: "", log: [] }
+      filter: { value: "", log: [] },
+      reverse: ""
     };
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -26,7 +28,10 @@ class InboundLogTable extends Component {
         const payload = snapshot.val();
         if (payload.log) {
           this.setState({
-            datas: this.state.filter.value !== "" ? this.filterLog(this.state.filter.value): payload.log,
+            datas:
+              this.state.filter.value !== ""
+                ? this.filterLog(this.state.filter.value)
+                : payload.log,
             dbDatas: payload.log
           });
           let storageRef = firebase.storage().ref();
@@ -96,22 +101,6 @@ class InboundLogTable extends Component {
       });
   }
 
-  getCarrier(tracking) {
-    if (tracking.includes("CD")) {
-      return "Post NL";
-    } else if (tracking.includes("CO")) {
-      return "DHL Economy";
-    } else if (tracking.includes("30100981")) {
-      return "Bpost";
-    } else if (tracking.includes("CP")) {
-      return "Lux";
-    } else if (tracking.length === 10) {
-      return "DHL Express";
-    } else {
-      return "N/A";
-    }
-  }
-
   filterLog(action = "none") {
     const { dbDatas } = this.state;
     if (action === "" || action === "none") {
@@ -152,35 +141,49 @@ class InboundLogTable extends Component {
 
   mapTableList() {
     const { datas } = this.state;
-    return Object.keys(datas)
-      .map(key => {
-        return (
-          <InboundLogDetail
-            key={key}
-            id={datas[key].key ? datas[key].key : key}
-            carrier={this.getCarrier(datas[key].trackingNumber)}
-            trackingNumber={datas[key].trackingNumber}
-            brand={datas[key].brand}
-            stage={datas[key].stage}
-            invoiceNum={datas[key].invoiceNum}
-            quantity={datas[key].quantity}
-            broken={datas[key].broken}
-            total={datas[key].total}
-            scanner={datas[key].scanner}
-            timeStamp={datas[key].timeStamp}
-            warehouseLocation={datas[key].warehouseLocation}
-            image={datas[key].image ? datas[key].image : ""}
-            handleTotal={this.totalChange.bind(this)}
-            show={datas[key].isChecked}
-          />
-        );
-      })
-      .sort(this.compare);
+    return Object.keys(datas).map(key => {
+      return (
+        <InboundLogDetail
+          key={key}
+          id={datas[key].key ? datas[key].key : key}
+          carrier={datas[key].carrier}
+          trackingNumber={datas[key].trackingNumber}
+          brand={datas[key].brand}
+          stage={datas[key].stage}
+          invoiceNum={datas[key].invoiceNum}
+          quantity={datas[key].quantity}
+          broken={datas[key].broken}
+          total={datas[key].total}
+          scanner={datas[key].scanner}
+          timeStamp={datas[key].timeStamp}
+          warehouseLocation={datas[key].warehouseLocation}
+          image={datas[key].image ? datas[key].image : ""}
+          handleTotal={this.totalChange.bind(this)}
+          show={datas[key].isChecked}
+        />
+      );
+    });
   }
 
-  compare(a, b) {
-    return a.props.invoiceNum - b.props.invoiceNum;
+  handleClick(e) {
+    const filter = e.currentTarget.getAttribute("name");
+    const { datas, reverse } = this.state;
+    if (reverse === filter) {
+      this.setState({
+        datas: Object.keys(datas)
+          .map(key => datas[key])
+          .reverse()
+      });
+    } else {
+      this.setState({
+        datas: Object.keys(datas)
+          .map(key => datas[key])
+          .sort(propComparator(filter)),
+        reverse: filter
+      });
+    }
   }
+
   renderLogList() {
     if (this.state.loading) {
       return (
@@ -208,40 +211,84 @@ class InboundLogTable extends Component {
         <Table celled collapsing textAlign="center">
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>
+              <Table.HeaderCell
+                style={{ cursor: "pointer" }}
+                name="carrier"
+                onClick={this.handleClick}
+              >
                 <strong>Carrier</strong>
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell
+                style={{ cursor: "pointer" }}
+                name="trackingNumber"
+                onClick={this.handleClick}
+              >
                 <strong>Tracking #</strong>
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell
+                style={{ cursor: "pointer" }}
+                name="invoiceNum"
+                onClick={this.handleClick}
+              >
                 <strong>Invoice #</strong>
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell
+                style={{ cursor: "pointer" }}
+                name="brand"
+                onClick={this.handleClick}
+              >
                 <strong>Brand</strong>
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell
+                style={{ cursor: "pointer" }}
+                name="stage"
+                onClick={this.handleClick}
+              >
                 <strong>Stage</strong>
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell
+                style={{ cursor: "pointer" }}
+                name="quantity"
+                onClick={this.handleClick}
+              >
                 <strong>Quantity</strong>
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell
+                style={{ cursor: "pointer" }}
+                name="broken"
+                onClick={this.handleClick}
+              >
                 <strong>Broken</strong>
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell
+                style={{ cursor: "pointer" }}
+                name="total"
+                onClick={this.handleClick}
+              >
                 <strong>Total</strong>
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell
+                style={{ cursor: "pointer" }}
+                name="scanner"
+                onClick={this.handleClick}
+              >
                 <strong>Scanner</strong>
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell
+                style={{ cursor: "pointer" }}
+                name="warehouseLocation"
+                onClick={this.handleClick}
+              >
                 <strong>Warehouse</strong>
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell style={{ cursor: "pointer" }}>
                 <strong>Invoice</strong>
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell
+                style={{ cursor: "pointer" }}
+                name="timeStamp"
+                onClick={this.handleClick}
+              >
                 <strong>Date</strong>
               </Table.HeaderCell>
             </Table.Row>
@@ -265,5 +312,22 @@ class InboundLogTable extends Component {
     );
   }
 }
+
+const propComparator = propName => {
+  return (a, b) => {
+    let x = a[propName];
+    let y = b[propName];
+    if (!x) {
+      x = 0;
+    }
+    if (!y) {
+      y = 0;
+    }
+    if (isNaN(x) && isNaN(y)) {
+      return x.localeCompare(y);
+    }
+    return x - y;
+  };
+};
 
 export default InboundLogTable;

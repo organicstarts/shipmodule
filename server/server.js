@@ -10,8 +10,6 @@ const nodemailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
 const app = express();
 
-
-
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
@@ -27,6 +25,7 @@ const router = express.Router();
 
 router.use("/os", require("./routes/BigCommerceAPI/API"));
 router.use("/osw", require("./routes/ShopifyAPI/API"));
+router.use("/ss", require("./routes/ShipstationAPI/API"));
 
 const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
@@ -57,7 +56,8 @@ router.post("/writeupcinfo", (req, res) => {
     stage: "N/A",
     package: req.body.case,
     individual: 1,
-    sku: `TEMP-${req.body.individualUpc}`
+    sku: `TEMP-${req.body.individualUpc}`,
+    productID: 0
   };
   let data = JSON.stringify(queue, null, 2);
   const htmlEmail = `<h3> New Product Information </h3>    
@@ -149,6 +149,7 @@ router.post("/writeinventorytofile", (req, res) => {
     .once("value", snap => {
       let logInventory = {
         trackingNumber: req.body.trackingNumber,
+        carrier: req.body.carrier,
         productID: req.body.productID,
         sku: req.body.sku,
         isChecked: false,
@@ -367,7 +368,6 @@ app.use(router);
 
 // any routes not picked up by the server api will be handled by the react router
 app.use("/*", staticFiles);
-
 
 app.set("port", process.env.PORT || 3001);
 

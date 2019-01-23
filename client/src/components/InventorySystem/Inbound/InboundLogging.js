@@ -184,6 +184,7 @@ class InboundLogging extends Component {
     axios
       .post("/writeinventorytofile", {
         trackingNumber,
+        carrier: this.getCarrier(trackingNumber),
         productID: skuInfo[sku].productID,
         sku: skuInfo[sku].sku,
         brand: skuInfo[sku].brand,
@@ -225,6 +226,21 @@ class InboundLogging extends Component {
     }
   }
 
+  getCarrier(tracking) {
+    if (tracking.includes("CD")) {
+      return "Post NL";
+    } else if (tracking.includes("CO")) {
+      return "DHL Economy";
+    } else if (tracking.includes("30100981")) {
+      return "Bpost";
+    } else if (tracking.includes("CP")) {
+      return "Lux";
+    } else if (tracking.length === 10) {
+      return "DHL Express";
+    } else {
+      return "Other";
+    }
+  }
   /*
 cycle input values per scan/user input
 tracking number > upc number > # of boxes > # of broken > photo of invoice > confirmation

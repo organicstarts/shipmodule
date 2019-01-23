@@ -243,6 +243,33 @@ router.put("/disableproduct", (req, res) => {
     });
 });
 
+router.put("/cancelorder", (req, res) => {
+  const baseUrl = `https://organicstart.com/api/v2/orders/${
+    req.body.ordernumber
+  }`;
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
+  });
 
+  fetch(baseUrl, {
+    method: "PUT",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      Authorization: `Basic ${encodedString}`,
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify({
+      status_id: 5
+    })
+  })
+    .then(e => {
+      res.json({ msg: "success" });
+    })
+    .catch(err => {
+      res.json({ msg: "fail" });
+    });
+});
 
 module.exports = router;

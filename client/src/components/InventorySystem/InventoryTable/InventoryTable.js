@@ -133,7 +133,7 @@ class InventoryTable extends Component {
       if (db === "eastcoast") dataName = "eastDatas";
       else dataName = "westDatas";
       axios
-        .put("/updateinventory", {
+        .put("fb/updateinventory", {
           noEquation: true,
           dbname: db,
           sku: key,

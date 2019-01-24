@@ -39,7 +39,7 @@ class FraudList extends Component {
     newCheckedStatus[index] = !this.state.checked[index];
     this.setState({ checked: newCheckedStatus });
     axios
-      .put("fraud/updatefraudtofile", {
+      .put("fb/updatefraudtofile", {
         checked: newCheckedStatus[index],
         orderNumber: e.orderNumber
       })
@@ -47,7 +47,7 @@ class FraudList extends Component {
         if (response.data.msg === "success") {
           let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
           axios
-            .post("/writetofile", {
+            .post("fb/writetofile", {
               action: newCheckedStatus[index] ? "Fraud Check" : "Fraud UnCheck",
               orderNumber: e.orderNumber,
               user: this.props.location.state.detail.displayName,
@@ -80,7 +80,7 @@ class FraudList extends Component {
     });
 
     axios
-      .post("/fraud/writefraudtofile", {
+      .post("fb/writefraudtofile", {
         saved: saved
       })
       .then(response => {

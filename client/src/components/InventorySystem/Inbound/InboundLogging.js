@@ -182,7 +182,7 @@ class InboundLogging extends Component {
     storageRef.child(trackingNumber).put(file);
 
     axios
-      .post("/writeinventorytofile", {
+      .post("fb/writeinventorytofile", {
         trackingNumber,
         carrier: this.getCarrier(trackingNumber),
         productID: skuInfo[sku].productID,

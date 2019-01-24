@@ -15,6 +15,12 @@ const header = {
   }
 };
 
+
+
+/*-------------------------------------------------------------------
+                            DELETE REQUESTS                            
+---------------------------------------------------------------------*/
+
 router.delete("/cancelorder", (req, res) => {
   const baseUrl = `https://ssapi.shipstation.com/orders?orderNumber=${
     req.body.ordernumber

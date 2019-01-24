@@ -62,7 +62,7 @@ class ToyLogging extends Component {
       .toLowerCase()
       .replace(/\s/g, "");
     axios
-      .put("/updateinventory", {
+      .put("fb/updateinventory", {
         dbname: `${warehouse}Report`,
         brand: toyInfo[key[index]],
         sku: key[index],

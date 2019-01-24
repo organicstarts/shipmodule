@@ -85,7 +85,7 @@ class OBReportLogging extends Component {
       .replace(/\s/g, "");
 
     axios
-      .put("/updateinventory", {
+      .put("fb/updateinventory", {
         dbname: `${warehouse}Report`,
         sku: `OB-${skuInfo[sku].sku}`,
         total: skuInfo[sku].individual * quantity,

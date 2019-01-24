@@ -177,6 +177,14 @@
       { "productID": 345, "amount": 6 }
     ]
   },
+  "HP-UK-HI": {
+    "brand": "HiPP UK",
+    "stage": "HI",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-UK-HI",
+    "productID": 112
+  },
   "HP-UK-1": {
     "brand": "HiPP UK",
     "stage": "1",
@@ -621,6 +629,14 @@
     "individual": 1,
     "sku": "OB-HP-DE-3",
     "productID": 206
+  },
+  "OB-HP-UK-HI": {
+    "brand": "Open/Broken HiPP UK",
+    "stage": "HI",
+    "package": 4,
+    "individual": 1,
+    "sku": "OB-HP-UK-HI",
+    "productID": 112
   },
   "OB-HP-UK-1": {
     "brand": "Open/Broken HiPP UK",

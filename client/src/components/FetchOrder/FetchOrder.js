@@ -35,7 +35,7 @@ class FetchOrder extends React.Component {
     this.setState({ loading: true });
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
     axios
-      .post("/writetofile", {
+      .post("fb/writetofile", {
         action: "Fetch Order",
         orderNumber,
         user: this.props.displayName,

@@ -15,6 +15,11 @@ const header = {
   }
 };
 
+/*-------------------------------------------------------------------
+                            GET REQUESTS                            
+---------------------------------------------------------------------*/
+
+
 router.get("/getorder", (req, res) => {
   //build api URL with user order number
   const baseUrl = `https://organicstart.com/api/v2/orders/${req.query.orderid}`;
@@ -155,6 +160,11 @@ router.get("/getinventorylevel", (req, res) => {
       res.send("");
     });
 });
+
+
+/*-------------------------------------------------------------------
+                            PUT REQUESTS                            
+---------------------------------------------------------------------*/
 
 router.put("/updateinventory", (req, res) => {
   const baseUrl = `https://organicstart.com/api/v2/products/${

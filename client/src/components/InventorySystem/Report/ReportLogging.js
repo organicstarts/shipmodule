@@ -86,7 +86,7 @@ class ReportLogging extends Component {
       .replace(/\s/g, "");
 
     axios
-      .put("/updateinventory", {
+      .put("fb/updateinventory", {
         dbname: `${warehouse}Report`,
         sku: skuInfo[sku].sku,
         brand: skuInfo[sku].brand,

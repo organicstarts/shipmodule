@@ -63,7 +63,7 @@ class BabyCareLogging extends Component {
       .replace(/\s/g, "");
 
     axios
-      .put("/updateinventory", {
+      .put("fb/updateinventory", {
         dbname: `${warehouse}Report`,
         sku: key[index],
         brand: babyCareInfo[key[index]],

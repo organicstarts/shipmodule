@@ -46,7 +46,7 @@ class BatchList extends Component {
     shipItems.map(async data => {
       if (skuInfo[data.sku]) {
         await axios
-          .put("/updateinventory", {
+          .put("fb/updateinventory", {
             dbname: warehouse,
             sku: data.sku,
             quantity: -data.combineTotal || -data.quantity
@@ -66,7 +66,7 @@ class BatchList extends Component {
   logprint() {
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
     axios
-      .post("/writetofile", {
+      .post("fb/writetofile", {
         action: "Print",
         batchNumber: this.props.location.state.detail.batchNumber,
         user: this.props.location.state.detail.user,

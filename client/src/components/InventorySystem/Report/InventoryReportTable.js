@@ -55,7 +55,7 @@ class InventoryLogTable extends Component {
     const { user, datas } = this.state;
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
     axios
-      .put("/updateinventory", {
+      .put("fb/updateinventory", {
         dbname: this.props.location.state.warehouse,
         sku: key,
         total: datas[key].total,
@@ -81,7 +81,7 @@ class InventoryLogTable extends Component {
         switch (x) {
           case 1:
             condition =
-              key.length > 4 && !key.includes("OB-") && !key.includes(" ");
+              key.length > 3 && !key.includes("OB-") && !key.includes(" ");
             break;
           case 2:
             condition = key.includes("OB-");

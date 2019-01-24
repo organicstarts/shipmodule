@@ -83,7 +83,7 @@ class InboundLogTable extends Component {
       productID: dbDatas[key].productID
     });
     axios
-      .put("/updateinventory", {
+      .put("fb/updateinventory", {
         dbname: warehouse,
         sku: dbDatas[key].sku,
         obsku:
@@ -199,8 +199,8 @@ class InboundLogTable extends Component {
     return (
       <Segment>
         <Form>
-          <FormGroup widths="equal" inline>
-            <label>Filter: </label>
+          <FormGroup widths="fifteen" inline>
+            <label>Invoice # Filter: </label>
             <Form.Input
               name="filter"
               value={this.state.filter.value}

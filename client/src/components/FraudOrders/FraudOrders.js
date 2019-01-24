@@ -67,7 +67,7 @@ class FraudOrders extends Component {
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
 
     axios
-      .post("/writetofile", {
+      .post("fb/writetofile", {
         action: "Fraud Search",
         user: this.state.displayName,
         currentTime

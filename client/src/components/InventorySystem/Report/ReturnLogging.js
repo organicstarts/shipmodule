@@ -85,7 +85,7 @@ class ReturnLogging extends Component {
       .replace(/\s/g, "");
 
     axios
-      .put("/updateinventory", {
+      .put("fb/updateinventory", {
         dbname: warehouse,
         noEquation: false,
         sku: skuInfo[sku].sku,

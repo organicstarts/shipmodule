@@ -13,7 +13,7 @@ import {
   getCoupon
 } from "../../helpers/BigCommerce/Orders";
 import products from "../../config/products.json";
-import productPerPackage from "../../config/productPerPackage.json";
+import productInfo from "../../config/productinfo.json";
 
 class BatchOrders extends React.Component {
   constructor(props) {
@@ -51,7 +51,7 @@ class BatchOrders extends React.Component {
     this.setState({ loading: true });
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
     axios
-      .post("/writetofile", {
+      .post("fb/writetofile", {
         action: "Generate Batch",
         batchNumber,
         user: this.props.displayName,
@@ -75,6 +75,8 @@ class BatchOrders extends React.Component {
           console.log("emailed");
         } else if (response.data.msg === "fail") {
           console.log("not emailed");
+        } else if (response.data.msg === "none") {
+          console.log("No unprinted batches");
         }
       });
     getBatch(this.state.batchNumber)
@@ -262,8 +264,11 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
     const { shipItems } = this.state;
 
     for (let item in shipItems) {
-      if (productPerPackage[shipItems[item].sku]) {
-        const packagePer = productPerPackage[shipItems[item].sku];
+      if (
+        productInfo[shipItems[item].sku] &&
+        !shipItems[item].sku.includes("OB-")
+      ) {
+        const packagePer = productInfo[shipItems[item].sku].package;
         let fullBox = 0;
         let loose = 0;
         if (

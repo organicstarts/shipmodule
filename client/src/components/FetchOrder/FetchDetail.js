@@ -24,7 +24,7 @@ class FetchDetail extends Component {
   logprint() {
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
     axios
-      .post("/writetofile", {
+      .post("fb/writetofile", {
         action: "Print",
         orderNumber: this.props.location.state.detail.orderNumber,
         user: this.props.location.state.detail.user,

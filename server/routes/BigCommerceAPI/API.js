@@ -270,7 +270,8 @@ router.put("/cancelorder", (req, res) => {
             Accept: "application/json"
           },
           body: JSON.stringify({
-            status_id: 5
+            status_id: 5,
+            customer_message: req.body.message
           })
         })
           .then(e => {

@@ -116,7 +116,8 @@ router.get("/getorder", (req, res) => {
             country: datas.orders[0].shipping_address.country,
             latitude: datas.orders[0].shipping_address.latitude,
             longitude: datas.orders[0].shipping_address.longitude
-          }
+          },
+          shippingMethod: datas.orders[0].shipping_lines[0].code
         };
       } else {
         res.send({});

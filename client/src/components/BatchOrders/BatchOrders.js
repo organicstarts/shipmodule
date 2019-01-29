@@ -305,11 +305,20 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
   }
   //helper func to compare warehouse locations
   compare(a, b) {
-    return (
-      a.warehouseLocation - b.warehouseLocation ||
-      a.warehouseLocation.localeCompare(b.warehouseLocation)
-    );
+    let x = a.warehouseLocation;
+    let y = b.warehouseLocation;
+    if (!x) {
+      x = 0;
+    }
+    if (!y) {
+      y = 0;
+    }
+    if (isNaN(x) && isNaN(y)) {
+      return x.localeCompare(y);
+    }
+    return x - y;
   }
+  
   compareBatch(a, b) {
     return b.orderNumber - a.orderNumber;
   }

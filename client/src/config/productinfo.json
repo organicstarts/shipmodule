@@ -411,7 +411,7 @@
   "TPFR-1": {
     "brand": "Topfer",
     "stage": "1",
-    "package": 6,
+    "package": 3,
     "individual": 1,
     "sku": "TPFR-1",
     "productID": 252,
@@ -424,7 +424,7 @@
   "TPFR-2": {
     "brand": "Topfer",
     "stage": "3",
-    "package": 6,
+    "package": 3,
     "individual": 1,
     "sku": "TPFR-2",
     "productID": 253,
@@ -437,7 +437,7 @@
   "TPFR-3": {
     "brand": "Topfer",
     "stage": "3",
-    "package": 6,
+    "package": 3,
     "individual": 1,
     "sku": "TPFR-3",
     "productID": 254,
@@ -450,7 +450,7 @@
   "TPFR-4": {
     "brand": "Topfer",
     "stage": "4",
-    "package": 6,
+    "package": 4,
     "individual": 1,
     "sku": "TPFR-4",
     "productID": 256,
@@ -463,7 +463,7 @@
   "TPFR-HA-PRE": {
     "brand": "Topfer HA",
     "stage": "PRE",
-    "package": 6,
+    "package": 3,
     "individual": 1,
     "sku": "TPFR-4",
     "productID": 396,
@@ -476,7 +476,7 @@
   "TPFR-HA-1": {
     "brand": "Topfer HA",
     "stage": "1",
-    "package": 6,
+    "package": 3,
     "individual": 1,
     "sku": "TPFR-HA-1",
     "productID": 695,

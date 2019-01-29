@@ -20,10 +20,6 @@ import Scanning from "./components/InventorySystem/Scanning";
 class Main extends Component {
   constructor() {
     super();
-    this.state = {
-      loading: false,
-      error: false
-    };
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.renderHome = this.renderHome.bind(this);
@@ -52,13 +48,13 @@ class Main extends Component {
     }
   }
   renderHome() {
-    if (this.state.loading) {
+    if (this.props.loading) {
       return (
         <ClipLoader
           sizeUnit={"px"}
           size={54}
           color={"#36D7B7"}
-          loading={this.state.loading}
+          loading={this.props.loading}
         />
       );
     }
@@ -96,16 +92,9 @@ class Main extends Component {
             </Button>
           </div>
         ) : (
-          <div>
-            {this.state.error ? (
-              <h1 className="red"> You don't belong here fool!</h1>
-            ) : (
-              ""
-            )}
-            <Button fluid size="large" color="green" onClick={this.login}>
-              Log In
-            </Button>
-          </div>
+          <Button fluid size="large" color="green" onClick={this.login}>
+            Log In
+          </Button>
         )}
       </div>
     );
@@ -143,7 +132,8 @@ function mapStateToProps({ authState }) {
   return {
     user: authState.user,
     displayName: authState.displayName,
-    email: authState.email
+    email: authState.email,
+    loading: authState.loading
   };
 }
 

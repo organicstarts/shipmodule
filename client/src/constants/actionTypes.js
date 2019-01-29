@@ -1,4 +1,7 @@
-export const STORY_ARCHIVE = "STORY_ARCHIVE";
+export const GET_BATCH = "GET_BATCH";
+export const BATCH_LOADED = "BATCH_LOADED";
+export const SET_SHIPMENT_ITEMS = "SET_SHIPMENT_ITEMS";
+
 export const AUTH_LOGOUT = "AUTH_LOGOUT";
 export const AUTH_LOGIN = "AUTH_LOGIN";
 export const AUTH_DATA_LOADED_IN = "AUTH_DATA_LOADED_IN";

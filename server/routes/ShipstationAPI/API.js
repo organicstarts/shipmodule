@@ -15,7 +15,30 @@ const header = {
   }
 };
 
+/*-------------------------------------------------------------------
+                            GET REQUESTS                            
+---------------------------------------------------------------------*/
+router.get("/getbatch", (req, res) => {
+  const baseUrl = `https://ssapi.shipstation.com/shipments?sortDir=DESC&page=1&pageSize=500&includeShipmentItems=true`;
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
+  });
 
+  fetch(baseUrl, header)
+    .then(res => res.json())
+    .then(datas => {
+      return datas.shipments.filter(data => {
+        return data.batchNumber === req.query.batchNumber;
+      });
+    })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(error => {
+      res.json({ msg: error });
+    });
+});
 
 /*-------------------------------------------------------------------
                             DELETE REQUESTS                            

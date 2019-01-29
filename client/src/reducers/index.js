@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import authReducer from './auth';
-import archiveReducer from './archive';
+import batchReducer from './batch';
 
 const rootReducer = combineReducers({
   authState: authReducer,
-  archiveState: archiveReducer,
+  batchState: batchReducer,
 });
 
 export default rootReducer;

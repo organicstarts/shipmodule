@@ -1,12 +1,14 @@
 import React from "react";
 import { Segment, Button, Form } from "semantic-ui-react";
+import { connect } from "react-redux";
+import { getBatch, setShipmentItems } from "../../actions/batch";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
 import { ClipLoader } from "react-spinners";
 import people from "../../config/people";
-import { getBatch } from "../../helpers/ShipStation/Shipments";
+// import { getBatch } from "../../helpers/ShipStation/Shipments";
 import {
   getOrder,
   getOrderCount,
@@ -34,7 +36,6 @@ class BatchOrders extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.calculatePackage = this.calculatePackage.bind(this);
     this.compare = this.compare.bind(this);
-    this.compareBatch = this.compareBatch.bind(this);
   }
 
   handleChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -49,42 +50,43 @@ class BatchOrders extends React.Component {
   handleSubmit() {
     const { batchNumber, picker, shipper } = this.state;
     this.setState({ loading: true });
-    let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
-    axios
-      .post("fb/writetofile", {
-        action: "Generate Batch",
-        batchNumber,
-        user: this.props.displayName,
-        picker,
-        shipper,
-        currentTime
-      })
-      .then(response => {
-        if (response.data.msg === "success") {
-          console.log("logged");
-        } else if (response.data.msg === "fail") {
-          console.log("failed to log.");
-        }
-      });
-    axios
-      .post("/batchcheckemail", {
-        batchNumber
-      })
-      .then(response => {
-        if (response.data.msg === "success") {
-          console.log("emailed");
-        } else if (response.data.msg === "fail") {
-          console.log("not emailed");
-        } else if (response.data.msg === "none") {
-          console.log("No unprinted batches");
-        }
-      });
-    getBatch(this.state.batchNumber)
+    // let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
+    // axios
+    //   .post("fb/writetofile", {
+    //     action: "Generate Batch",
+    //     batchNumber,
+    //     user: this.props.displayName,
+    //     picker,
+    //     shipper,
+    //     currentTime
+    //   })
+    //   .then(response => {
+    //     if (response.data.msg === "success") {
+    //       console.log("logged");
+    //     } else if (response.data.msg === "fail") {
+    //       console.log("failed to log.");
+    //     }
+    //   });
+    // axios
+    //   .post("/batchcheckemail", {
+    //     batchNumber
+    //   })
+    //   .then(response => {
+    //     if (response.data.msg === "success") {
+    //       console.log("emailed");
+    //     } else if (response.data.msg === "fail") {
+    //       console.log("not emailed");
+    //     } else if (response.data.msg === "none") {
+    //       console.log("No unprinted batches");
+    //     }
+    //   });
+
+    this.props
+      .getBatch(this.state.batchNumber)
       .then(async data => {
-        this.setState({
-          batchDatas: data.sort(this.compareBatch),
-          shipItems: this.sortShipments(data)
-        });
+        let shipItems = this.sortShipments(this.props.batchDatas);
+        console.log(shipItems);
+        this.props.setShipmentItems(shipItems);
         await Promise.all(
           data.map(async data => {
             if (data.orderNumber)
@@ -318,10 +320,6 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
     }
     return x - y;
   }
-  
-  compareBatch(a, b) {
-    return b.orderNumber - a.orderNumber;
-  }
 
   renderButton() {
     if (this.state.loading) {
@@ -385,4 +383,13 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
   }
 }
 
-export default withRouter(BatchOrders);
+function mapStateToProps({ batchState }) {
+  return {
+    batchDatas: batchState.batchDatas
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  { getBatch, setShipmentItems }
+)(withRouter(BatchOrders));

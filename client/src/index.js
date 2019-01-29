@@ -7,6 +7,8 @@ import ScrollToTop from "./components/common/ScrollToTop";
 import "./index.css";
 import App from "./App";
 
+
+
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>

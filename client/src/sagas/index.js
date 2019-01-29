@@ -1,11 +1,10 @@
-import { takeEvery, all } from 'redux-saga/effects';
-import { STORIES_FETCH } from '../constants/actionTypes';
-import { handleFetchStories } from './story';
+import { takeEvery } from "redux-saga/effects";
+import { AUTH_LOGIN, AUTH_LOGOUT, AUTH_CHECK } from "../constants/actionTypes";
+import { handleLogin, handleLogOut, handleLoginState } from "./auth";
 
-function *watchAll() {
-  yield all([
-    takeEvery(STORIES_FETCH, handleFetchStories),
-  ])
+export default function* watcherSaga() {
+  yield takeEvery(AUTH_LOGIN, handleLogin);
+  yield takeEvery(AUTH_LOGOUT, handleLogOut);
+  yield takeEvery(AUTH_CHECK, handleLoginState);
 }
 
-export default watchAll;

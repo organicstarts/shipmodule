@@ -1,4 +1,7 @@
-export const STORY_ARCHIVE = 'STORY_ARCHIVE';
-export const STORIES_FETCH = 'STORIES_FETCH';
-export const STORIES_ADD = 'STORIES_ADD';
-export const AUTH_LOGIN = 'AUTH_LOGIN';
+export const STORY_ARCHIVE = "STORY_ARCHIVE";
+export const AUTH_LOGOUT = "AUTH_LOGOUT";
+export const AUTH_LOGIN = "AUTH_LOGIN";
+export const AUTH_DATA_LOADED_IN = "AUTH_DATA_LOADED_IN";
+export const AUTH_DATA_LOADED_OUT = "AUTH_DATA_LOADED_OUT";
+export const AUTH_CHECK = "AUTH_CHECK";
+export const AUTH_CHECK_LOADED = "AUTH_CHECK_LOADED";

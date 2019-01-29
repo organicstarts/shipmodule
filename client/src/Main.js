@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { login, logout, checkLoginState } from "./actions/auth";
 import { Image } from "semantic-ui-react";
 import logo from "./logo.svg";
 import { ClipLoader } from "react-spinners";
@@ -11,7 +13,6 @@ import {
   Log,
   Inventory
 } from "./components";
-import { auth, provider } from "./config/firebaseconf";
 import { Button } from "semantic-ui-react";
 import "tachyons";
 import Scanning from "./components/InventorySystem/Scanning";
@@ -21,8 +22,6 @@ class Main extends Component {
     super();
     this.state = {
       loading: false,
-      user: null,
-      displayName: null,
       error: false
     };
     this.login = this.login.bind(this);
@@ -31,45 +30,15 @@ class Main extends Component {
   }
 
   login() {
-    this.setState({
-      loading: true
-    });
-    auth.signInWithPopup(provider).then(result => {
-      let email = result.additionalUserInfo.profile.hd;
-      let isNewUser = result.additionalUserInfo.isNewUser;
-      if (!isNewUser || email === "organicstart.com") {
-        this.setState({
-          user: result.user,
-          displayName: result.user.displayName,
-          loading: false,
-          error: false
-        });
-      } else {
-        result.user.delete().then(x => {
-          this.setState({
-            user: null,
-            loading: false,
-            error: true
-          });
-        });
-      }
-    });
+    this.props.login();
   }
 
   logout() {
-    auth.signOut().then(() => {
-      this.setState({
-        user: null
-      });
-    });
+    this.props.logout();
   }
 
   componentDidMount() {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        this.setState({ user, displayName: user.displayName });
-      }
-    });
+    this.props.checkLoginState();
   }
 
   compareEmail(email) {
@@ -95,27 +64,27 @@ class Main extends Component {
     }
     return (
       <div>
-        {this.state.user ? (
+        {this.props.user ? (
           <div>
             <MediaQuery minDeviceWidth={374}>
               <BatchOrders
-                displayName={this.state.displayName}
-                email={this.state.user.email}
+                displayName={this.props.displayName}
+                email={this.props.user.email}
               />
-              <FetchOrder displayName={this.state.displayName} />
-              <FraudOrders displayName={this.state.displayName} />
+              <FetchOrder displayName={this.props.displayName} />
+              <FraudOrders displayName={this.props.displayName} />
               <Inventory
-                displayName={this.state.displayName}
-                email={this.state.user.email}
+                displayName={this.props.displayName}
+                email={this.props.user.email}
                 compareEmail={this.compareEmail}
               />
             </MediaQuery>
             <Scanning
-              displayName={this.state.displayName}
-              email={this.state.user.email}
+              displayName={this.props.displayName}
+              email={this.props.user.email}
             />
 
-            {this.compareEmail(this.state.user.email) ? <Log /> : ""}
+            {this.compareEmail(this.props.user.email) ? <Log /> : ""}
             <Button
               style={{ marginTop: "25px" }}
               fluid
@@ -170,4 +139,15 @@ class Main extends Component {
   }
 }
 
-export default withRouter(Main);
+function mapStateToProps({ authState }) {
+  return {
+    user: authState.user,
+    displayName: authState.displayName,
+    email: authState.email
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  { login, logout, checkLoginState }
+)(withRouter(Main));

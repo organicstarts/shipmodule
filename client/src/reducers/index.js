@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import storyReducer from './story';
+import authReducer from './auth';
 import archiveReducer from './archive';
 
 const rootReducer = combineReducers({
-  storyState: storyReducer,
+  authState: authReducer,
   archiveState: archiveReducer,
 });
 

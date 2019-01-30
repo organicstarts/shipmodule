@@ -24,7 +24,7 @@ code {
 @media print {
   body {
     -webkit-print-color-adjust: exact;
-    opacity: .5 !important;
+    opacity: .75 !important;
     
   
   }

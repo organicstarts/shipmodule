@@ -137,7 +137,9 @@ function mapStateToProps({ authState }) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  { login, logout, checkLoginState }
-)(withRouter(Main));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { login, logout, checkLoginState }
+  )(Main)
+);

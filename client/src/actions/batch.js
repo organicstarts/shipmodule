@@ -1,10 +1,8 @@
 import { GET_BATCH, SET_SHIPMENT_ITEMS } from "../constants/actionTypes";
 
-const getBatch = (batchNumber, resolve, reject) => ({
+const getBatch = (batchNumber, history) => ({
   type: GET_BATCH,
-  batchNumber,
-  resolve: resolve,
-  reject: reject
+  payload: { batchNumber, history }
 });
 
 const setShipmentItems = shiptmentItems => ({

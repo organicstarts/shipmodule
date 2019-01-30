@@ -9,8 +9,9 @@ import axios from "axios";
 
 function* handleGetBatch(action) {
   try {
-    const payload = yield call(getBatch, action.batchNumber);
+    const payload = yield call(getBatch, action.payload.batchNumber);
     yield put({ type: BATCH_LOADED, payload });
+    yield put(action.payload.history.push("/batch"));
   } catch (e) {
     yield put({ type: "API_ERRORED", payload: e });
   }
@@ -43,7 +44,6 @@ const getBatch = batchNumber => {
       );
     })
     .then(data => {
-      console.log(data);
       return data;
     });
 };

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "./actions/auth";
 import Router from "./Router";
@@ -44,7 +45,8 @@ class App extends Component {
 
   check() {
     const now = Date.now();
-    const timeleft = this.getLastAction() + MINUTES_UNITL_AUTO_LOGOUT * 60 * 1000; //5 minutes
+    const timeleft =
+      this.getLastAction() + MINUTES_UNITL_AUTO_LOGOUT * 60 * 1000; //5 minutes
     const diff = timeleft - now;
     const isTimeout = diff < 0;
     if (isTimeout) {
@@ -61,7 +63,9 @@ class App extends Component {
   }
 }
 
-export default connect(
-  null,
-  { logout }
-)(App);
+export default withRouter(
+  connect(
+    null,
+    { logout }
+  )(App)
+);

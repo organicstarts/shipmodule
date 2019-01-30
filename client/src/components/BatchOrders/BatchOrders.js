@@ -8,12 +8,6 @@ import axios from "axios";
 import moment from "moment";
 import { ClipLoader } from "react-spinners";
 import people from "../../config/people";
-// import { getBatch } from "../../helpers/ShipStation/Shipments";
-import {
-  getOrder,
-  getOrderCount,
-  getCoupon
-} from "../../helpers/BigCommerce/Orders";
 import products from "../../config/products.json";
 import productInfo from "../../config/productinfo.json";
 
@@ -24,10 +18,6 @@ class BatchOrders extends React.Component {
       batchNumber: "",
       picker: "",
       shipper: "",
-      user: this.props.displayName,
-      email: this.props.email,
-      batchDatas: [],
-      shipItems: [],
       totalCount: 0,
       loading: false
     };
@@ -81,39 +71,38 @@ class BatchOrders extends React.Component {
     //     }
     //   });
 
-    this.props
-      .getBatch(this.state.batchNumber)
-      // .then(async data => {
-      //   let shipItems = this.sortShipments(this.props.batchDatas);
-      //   console.log(shipItems);
-      //   this.props.setShipmentItems(shipItems);
-      //   await Promise.all(
-      //     data.map(async data => {
-      //       if (data.orderNumber)
-      //         await getOrder(data.orderNumber).then(async x => {
-      //           if (x) {
-      //             data.bigCommerce = x;
-      //             await getOrderCount(x.customer_id).then(
-      //               y => (data.orderCount = y)
-      //             );
-      //           } else {
-      //             data.bigCommerce = null;
-      //             data.orderCount = null;
-      //           }
-      //         });
-      //       await getCoupon(data.orderNumber).then(
-      //         coupon => (data.couponInfo = coupon)
-      //       );
-      //     })
-      //   );
-      // })
-      // .then(x => {
-      //   this.calculatePackage();
-      //   this.props.history.push({
-      //     pathname: "/batch",
-      //     state: { detail: this.state }
-      //   });
-      // });
+    this.props.getBatch(batchNumber, this.props.history);
+    // .then(async data => {
+    //   let shipItems = this.sortShipments(this.props.batchDatas);
+    //   console.log(shipItems);
+    //   this.props.setShipmentItems(shipItems);
+    //   await Promise.all(
+    //     data.map(async data => {
+    //       if (data.orderNumber)
+    //         await getOrder(data.orderNumber).then(async x => {
+    //           if (x) {
+    //             data.bigCommerce = x;
+    //             await getOrderCount(x.customer_id).then(
+    //               y => (data.orderCount = y)
+    //             );
+    //           } else {
+    //             data.bigCommerce = null;
+    //             data.orderCount = null;
+    //           }
+    //         });
+    //       await getCoupon(data.orderNumber).then(
+    //         coupon => (data.couponInfo = coupon)
+    //       );
+    //     })
+    //   );
+    // })
+    // .then(x => {
+    //   this.calculatePackage();
+    // this.props.history.push({
+    //   pathname: "/batch",
+    //   state: { detail: this.state }
+    // });
+    // });
   }
   /*
 map through batchdatas, place in 1D array and create a key/value pair
@@ -383,13 +372,11 @@ Special case sku.includes("TK || first char is an integer") => parse data first 
   }
 }
 
-function mapStateToProps({ batchState }) {
-  return {
-    batchDatas: batchState.batchDatas
-  };
-}
 
-export default connect(
-  mapStateToProps,
-  { getBatch, setShipmentItems }
-)(withRouter(BatchOrders));
+
+export default withRouter(
+  connect(
+    null,
+    { getBatch, setShipmentItems }
+  )(BatchOrders)
+);

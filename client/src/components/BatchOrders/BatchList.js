@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import BatchDetail from "./BatchDetail";
@@ -16,13 +17,11 @@ class BatchList extends Component {
     super(props);
     this.state = {
       disable: false,
-      shipItems: this.props.location.state.detail.shipItems,
+      shipItems: this.props.batchDatas,
       warehouseLocation: Object.keys(people)
         .map(key => people[key])
         .filter(data =>
-          data.email.includes(
-            this.props.location.state.detail.email.split("@")[0]
-          )
+          this.props.email.includes(this.props.email.split("@")[0])
         )
     };
     this.logprint = this.logprint.bind(this);
@@ -83,7 +82,7 @@ class BatchList extends Component {
       });
   }
   render() {
-    if (this.props.location.state.detail.batchDatas.length < 1) {
+    if (this.props.batchDatas.length < 1) {
       return (
         <Segment style={{ marginTop: "50px" }}>
           <Link to="/">Go Back</Link>
@@ -120,9 +119,9 @@ class BatchList extends Component {
               }}
             >
               <strong>
-                Batch #{this.props.location.state.detail.batchNumber} <br />
+                Batch #{this.props.batchNumber} <br />
                 {formatDateTime(
-                  this.props.location.state.detail.batchDatas[0].create_date
+                  this.props.batchDatas[0].create_date
                 )}
               </strong>
             </p>
@@ -148,13 +147,13 @@ class BatchList extends Component {
             <div className="col-12">
               <strong>
                 Total Items Required:{" "}
-                {this.props.location.state.detail.totalCount}
+                {/*this.props.location.state.detail.totalCount*/}
               </strong>
             </div>
           </div>
           <br />
           <p>
-            Batch#:<b>{this.props.location.state.detail.batchNumber}</b>{" "}
+            Batch#:<b>{this.props.batchNumber}</b>{" "}
             <span style={{ paddingLeft: "10px" }}>
               Picker:_____________________ Checker:_____________________ # of
               Items Missed: _____________________
@@ -188,10 +187,10 @@ class BatchList extends Component {
     );
   }
 }
-const renderBatchList = props => {
-  const { shipItems } = props.location.state.detail;
+const renderBatchList = () => {
 
-  return shipItems.map(data => {
+
+  return this.props.batchDatas.map(data => {
     if (data.length > 1) {
       return data.map(data => (
         <BatchDetail
@@ -328,4 +327,16 @@ const styles = {
   }
 };
 
-export default BatchList;
+function mapStateToProps({ authState, batchState }) {
+  return {
+    displayName: authState.displayName,
+    email: authState.email,
+    batchDatas: batchState.batchDatas,
+    batchNumber: batchState.batchNumber
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(BatchList);

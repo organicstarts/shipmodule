@@ -13,7 +13,7 @@ const INITIAL_STATE = {
 };
 
 const applyBatch = (state, action) => {
-  const data = action.payload.data.sort(compareBatch);
+  const data = action.payload.sort(compareBatch);
   return {
     ...state,
     batchDatas: [...state.batchDatas, data]

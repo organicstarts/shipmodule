@@ -35,42 +35,37 @@ class BatchOrders extends React.Component {
   handleSubmit() {
     const { batchNumber, picker, shipper } = this.state;
     this.setState({ loading: true });
-    // let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
-    // axios
-    //   .post("fb/writetofile", {
-    //     action: "Generate Batch",
-    //     batchNumber,
-    //     user: this.props.displayName,
-    //     picker,
-    //     shipper,
-    //     currentTime
-    //   })
-    //   .then(response => {
-    //     if (response.data.msg === "success") {
-    //       console.log("logged");
-    //     } else if (response.data.msg === "fail") {
-    //       console.log("failed to log.");
-    //     }
-    //   });
-    // axios
-    //   .post("/batchcheckemail", {
-    //     batchNumber
-    //   })
-    //   .then(response => {
-    //     if (response.data.msg === "success") {
-    //       console.log("emailed");
-    //     } else if (response.data.msg === "fail") {
-    //       console.log("not emailed");
-    //     } else if (response.data.msg === "none") {
-    //       console.log("No unprinted batches");
-    //     }
-    //   });
-    const stateInfo = {
-      batchNumber,
-      picker,
-      shipper
-    };
-    this.props.getBatch(stateInfo, this.props.history);
+    let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
+    axios
+      .post("fb/writetofile", {
+        action: "Generate Batch",
+        batchNumber,
+        user: this.props.displayName,
+        picker,
+        shipper,
+        currentTime
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
+    axios
+      .post("/batchcheckemail", {
+        batchNumber
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("emailed");
+        } else if (response.data.msg === "fail") {
+          console.log("not emailed");
+        } else if (response.data.msg === "none") {
+          console.log("No unprinted batches");
+        }
+      });
+    this.props.getBatch({ batchNumber, picker, shipper }, this.props.history);
   }
 
   renderButton() {

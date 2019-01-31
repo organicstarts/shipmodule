@@ -1,5 +1,5 @@
 import { call, put } from "redux-saga/effects";
-import { BATCH_LOADED, BATCH_DETAIL_LOADED } from "../constants/actionTypes";
+import { BATCH_LOADED, FETCH_LOADED } from "../constants/actionTypes";
 import {
   getOrder,
   getOrderCount,
@@ -17,10 +17,11 @@ function* handleGetBatch(action) {
   }
 }
 
-function* handleGetBatchDetail(action) {
+function* handleGetOrderDetail(action) {
   try {
-    const payload = yield call(getBatchDetails, action.payload);
-    yield put({ type: BATCH_DETAIL_LOADED, payload });
+    const payload = yield call(getShipmentOrder, action.payload.orderNumber);
+    yield put({ type: FETCH_LOADED, payload });
+    action.payload.history.push("/fetch");
   } catch (e) {
     yield put({ type: "API_ERRORED", payload: e });
   }
@@ -29,6 +30,14 @@ function* handleGetBatchDetail(action) {
 const getBatch = batchNumber => {
   return axios
     .get(`ss/getbatch?batchNumber=${batchNumber}`)
+    .then(async data => {
+      return await getBatchDetails(data.data);
+    });
+};
+
+const getShipmentOrder = orderNumber => {
+  return axios
+    .get(`ss/getshipmentorder?orderNumber=${orderNumber}`)
     .then(async data => {
       return await getBatchDetails(data.data);
     });
@@ -57,4 +66,4 @@ const getBatchDetails = async data => {
   );
 };
 
-export { handleGetBatch, handleGetBatchDetail };
+export { handleGetBatch, handleGetOrderDetail };

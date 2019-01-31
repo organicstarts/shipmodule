@@ -1,10 +1,6 @@
 import React from "react";
-import { getShipOrder } from "../../helpers/ShipStation/Shipments";
-import {
-  getOrderCount,
-  getOrder,
-  getCoupon
-} from "../../helpers/BigCommerce/Orders";
+import { connect } from "react-redux";
+import { getOrderDetail } from "../../actions/batch";
 import { ClipLoader } from "react-spinners";
 import { withRouter } from "react-router-dom";
 import people from "../../config/people";
@@ -17,10 +13,8 @@ class FetchOrder extends React.Component {
     super(props);
     this.state = {
       orderNumber: "",
-      fetchData: [],
       picker: "",
-      shipper: "",
-      user: this.props.displayName
+      shipper: ""
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -51,31 +45,10 @@ class FetchOrder extends React.Component {
         }
       });
 
-    getShipOrder(orderNumber)
-      .then(async data => {
-        this.setState({
-          fetchData: data
-        });
-
-        await getOrder(data.orderNumber).then(async x => {
-          if (x) {
-            data.bigCommerce = x;
-            await getOrderCount(x.customer_id).then(y => (data.orderCount = y));
-          } else {
-            data.bigCommerce = null;
-            data.orderCount = null;
-          }
-        });
-        await getCoupon(data.orderNumber).then(
-          coupon => (data.couponInfo = coupon)
-        );
-      })
-      .then(x => {
-        this.props.history.push({
-          pathname: "/fetch",
-          state: { detail: this.state }
-        });
-      });
+    this.props.getOrderDetail(
+      { orderNumber, picker, shipper },
+      this.props.history
+    );
   }
 
   renderButton() {
@@ -140,4 +113,9 @@ class FetchOrder extends React.Component {
   }
 }
 
-export default withRouter(FetchOrder);
+export default withRouter(
+  connect(
+    null,
+    { getOrderDetail }
+  )(FetchOrder)
+);

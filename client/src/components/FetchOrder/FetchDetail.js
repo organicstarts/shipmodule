@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import moment from "moment";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.jpg";
 import "./fetchdetail.css";
 import boxes from "../../config/boxes";
 import packages from "../../config/packages";
 import { iconQuotes } from "../../config/peopleicon";
+import { ClipLoader } from "react-spinners";
 import axios from "axios";
 
 class FetchDetail extends Component {
@@ -26,10 +28,10 @@ class FetchDetail extends Component {
     axios
       .post("fb/writetofile", {
         action: "Print",
-        orderNumber: this.props.location.state.detail.orderNumber,
-        user: this.props.location.state.detail.user,
-        picker: this.props.location.state.detail.picker,
-        shipper: this.props.location.state.detail.shipper,
+        orderNumber: this.props.orderNumber,
+        user: this.props.user,
+        picker: this.props.picker,
+        shipper: this.props.shipper,
         currentTime
       })
       .then(response => {
@@ -41,14 +43,24 @@ class FetchDetail extends Component {
       });
   }
   render() {
-    const { fetchData, picker, shipper } = this.props.location.state.detail;
-    console.log(fetchData)
+    const { fetchDatas, picker, shipper, loading } = this.props;
+    console.log(fetchDatas);
+    if (loading) {
+      return (
+        <ClipLoader
+          sizeUnit={"px"}
+          size={34}
+          color={"#36D7B7"}
+          loading={loading}
+        />
+      );
+    }
     return (
       <div>
-        <Link to="/" className="noprint">
-          Go Back
-        </Link>
         <div className="packing-slip">
+          <Link to="/" className="noprint">
+            Go Back
+          </Link>
           <div className="row header pad-top">
             <div className="col-4 text-center">
               <img src={logo} className="img-fluid" alt="logo" />
@@ -66,59 +78,65 @@ class FetchDetail extends Component {
             >
               <br />
               <strong>
-                {fetchData.orderCount > 3 ? (
+                {fetchDatas.orderCount > 3 ? (
                   <p>&#8212;</p>
                 ) : (
-                  fetchData.orderCount
+                  fetchDatas.orderCount
                 )}
               </strong>
               <br />
-              {fetchData.carrierCode === "fedex"
-                ? ["FDX", <br key={fetchData.orderNumber} />]
+              {fetchDatas.carrierCode === "fedex"
+                ? ["FDX", <br key={fetchDatas.orderNumber} />]
                 : ""}
-              {getCarrier(fetchData.carrierCode, fetchData.packageCode)}
-              {calculateBox(fetchData.dimensions)}
+              {getCarrier(fetchDatas.carrierCode, fetchDatas.packageCode)}
+              {calculateBox(fetchDatas.dimensions)}
             </div>
           </div>
           <div className="ui divider shipping-info" />
           <div className="row details">
             <div className="col-7">
               <h1 className="shipping-name">
-                {fetchData.shipTo.name.toUpperCase()}
+                {fetchDatas.shipTo.name.toUpperCase()}
               </h1>
-              Customer <strong>{fetchData.bigCommerce.customer_id}</strong>
+              Customer <strong>{fetchDatas.bigCommerce.customer_id}</strong>
               <br />
-              {fetchData.customerEmail}
+              {fetchDatas.customerEmail}
               <br />
-              {fetchData.shipTo.company
-                ? [fetchData.shipTo.company, <br key={fetchData.orderNumber} />]
+              {fetchDatas.shipTo.company
+                ? [
+                    fetchDatas.shipTo.company,
+                    <br key={fetchDatas.orderNumber} />
+                  ]
                 : ""}
-              {fetchData.shipTo.street1}
+              {fetchDatas.shipTo.street1}
               <br />
-              {fetchData.shipTo.street2
-                ? [fetchData.shipTo.street2, <br key={fetchData.orderNumber} />]
+              {fetchDatas.shipTo.street2
+                ? [
+                    fetchDatas.shipTo.street2,
+                    <br key={fetchDatas.orderNumber} />
+                  ]
                 : ""}
-              {fetchData.shipTo.city}, {fetchData.shipTo.state}{" "}
-              {fetchData.shipTo.postalCode}
+              {fetchDatas.shipTo.city}, {fetchDatas.shipTo.state}{" "}
+              {fetchDatas.shipTo.postalCode}
               <br />
             </div>
             <div className="col-5">
-              <strong>{getTotal(fetchData.shipmentItems)}</strong> Total Items
+              <strong>{getTotal(fetchDatas.shipmentItems)}</strong> Total Items
               <br />
-              Order <strong>#{fetchData.orderNumber}</strong>
+              Order <strong>#{fetchDatas.orderNumber}</strong>
               <br />
-              Batch <strong>#{fetchData.batchNumber}</strong>
+              Batch <strong>#{fetchDatas.batchNumber}</strong>
               <br />
               Order placed on the{" "}
-              <strong>{formatDate(fetchData.bigCommerce.date_created)}</strong>
+              <strong>{formatDate(fetchDatas.bigCommerce.date_created)}</strong>
               <br />
               Shipped on the{" "}
-              <strong>{formatDate(fetchData.bigCommerce.date_shipped)}</strong>
+              <strong>{formatDate(fetchDatas.bigCommerce.date_shipped)}</strong>
               <br />
               <small>
                 {calculateTime(
-                  fetchData.bigCommerce.date_created,
-                  fetchData.bigCommerce.date_shipped
+                  fetchDatas.bigCommerce.date_created,
+                  fetchDatas.bigCommerce.date_shipped
                 )}
               </small>
             </div>
@@ -156,8 +174,8 @@ class FetchDetail extends Component {
               </tr>
             </thead>
             <tbody>
-              {renderOrder(fetchData.shipmentItems)}
-              {renderCoupon(fetchData.couponInfo)}
+              {renderOrder(fetchDatas.shipmentItems)}
+              {renderCoupon(fetchDatas.couponInfo)}
             </tbody>
             <tfoot>
               <tr>
@@ -174,7 +192,7 @@ class FetchDetail extends Component {
                 <th
                   style={{ padding: ".78571429em .78571429em 0 .78571429em" }}
                 >
-                  ${calculateTotal(fetchData.shipmentItems)}
+                  ${calculateTotal(fetchDatas.shipmentItems)}
                 </th>
               </tr>
               <tr>
@@ -190,7 +208,10 @@ class FetchDetail extends Component {
                   <strong>Shipping</strong>
                 </th>
                 <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
-                  ${parseFloat(fetchData.bigCommerce.shipping_cost_inc_tax).toFixed(2)}
+                  $
+                  {parseFloat(
+                    fetchDatas.bigCommerce.shipping_cost_inc_tax
+                  ).toFixed(2)}
                 </th>
               </tr>
               <tr>
@@ -208,7 +229,7 @@ class FetchDetail extends Component {
                 <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
                   $-
                   {parseFloat(
-                    fetchData.bigCommerce.store_credit_amount
+                    fetchDatas.bigCommerce.store_credit_amount
                   ).toFixed(2)}
                 </th>
               </tr>
@@ -223,10 +244,10 @@ class FetchDetail extends Component {
                 <th style={{ borderTop: "none" }}>
                   $
                   {calculateTotal(
-                    fetchData.shipmentItems,
-                    parseFloat(fetchData.bigCommerce.shipping_cost_inc_tax),
-                    fetchData.bigCommerce.store_credit_amount,
-                    fetchData.couponInfo
+                    fetchDatas.shipmentItems,
+                    parseFloat(fetchDatas.bigCommerce.shipping_cost_inc_tax),
+                    fetchDatas.bigCommerce.store_credit_amount,
+                    fetchDatas.couponInfo
                   )}
                 </th>
               </tr>
@@ -420,4 +441,22 @@ const renderOrder = items => {
   });
 };
 
-export default FetchDetail;
+function mapStateToProps({ authState, batchState }) {
+  return {
+    displayName: authState.displayName,
+    warehouseLocation: authState.warehouseLocation,
+    email: authState.email,
+    picker: batchState.picker,
+    shipper: batchState.shipper,
+    totalCount: batchState.totalCount,
+    fetchDatas: batchState.fetchDatas,
+    orderNumber: batchState.orderNumber,
+    shipmentItems: batchState.shipmentItems,
+    loading: batchState.loading
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(FetchDetail);

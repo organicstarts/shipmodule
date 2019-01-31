@@ -4,74 +4,74 @@
     "text": "Jonathan",
     "value": "jonathan",
     "warehouse": "East coast",
-    "email": "jonathan@organictstart.com"
+    "email": "jonathan@organicstart.com"
   },
   {
     "key": "2",
     "text": "Julian",
     "value": "julian",
     "warehouse": "East coast",
-    "email": "julian@organictstart.com"
+    "email": "julian@organicstart.com"
   },
   {
     "key": "3",
     "text": "Luis",
     "value": "luis",
     "warehouse": "East coast",
-    "email": "luis@organictstart.com"
+    "email": "luis@organicstart.com"
   },
   {
     "key": "4",
     "text": "Steve",
     "value": "steve",
     "warehouse": "East coast",
-    "email": "steve@organictstart.com"
+    "email": "steve@organicstart.com"
   },
   {
     "key": "5",
     "text": "David",
     "value": "david",
     "warehouse": "East coast",
-    "email": "david@organictstart.com"
+    "email": "david@organicstart.com"
   },
   {
     "key": "6",
     "text": "Richard",
     "value": "richard",
     "warehouse": "East coast",
-    "email": "richard@organictstart.com"
+    "email": "richard@organicstart.com"
   },
   {
     "key": "7",
     "text": "Romario",
     "value": "romario",
     "warehouse": "East coast",
-    "email": "romario@organictstart.com"
+    "email": "romario@organicstart.com"
   },
   {
     "key": "9",
     "text": "Chris",
     "value": "chris",
     "warehouse": "East coast",
-    "email": "chris@organictstart.com"
+    "email": "chris@organicstart.com"
   },
   {
     "key": "10",
     "text": "Jason",
     "value": "jason",
     "warehouse": "East coast",
-    "email": "jason@organictstart.com"
+    "email": "jason@organicstart.com"
   },
   {
     "key": "11",
     "text": "Training",
     "value": "training",
     "warehouse": "East coast",
-    "email": "training@organictstart.com"
+    "email": "training@organicstart.com"
   },
   {
     "key": "12",
     "warehouse":"East coast",
-    "email": "yvan@organictstart.com"
+    "email": "yvan@organicstart.com"
   }
 ]

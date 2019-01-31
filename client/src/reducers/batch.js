@@ -1,6 +1,8 @@
 import {
   BATCH_LOADED,
+  FETCH_LOADED,
   GET_BATCH,
+  GET_ORDER_DETAIL,
   SET_SHIPMENT_ITEMS
 } from "../constants/actionTypes";
 import _ from "lodash";
@@ -229,10 +231,12 @@ const compareBatch = (a, b) => {
 
 const INITIAL_STATE = {
   batchNumber: "",
+  orderNumber: "",
   picker: "",
   shipper: "",
   batchDatas: [],
   shipmentItems: [],
+  fetchDatas: [],
   loading: true
 };
 
@@ -244,6 +248,13 @@ const applyBatch = (state, action) => {
   });
 };
 
+const applyFetch = (state, action) => {
+  const data = action.payload[0];
+  return Object.assign({}, state, {
+    fetchDatas: data,
+    loading: false
+  });
+};
 const setShipmentItems = state => {
   const data = sortShipments(state.shipmentItems);
   const totalCount = data.totalCount;
@@ -265,11 +276,22 @@ function batchReducer(state = INITIAL_STATE, action) {
         loading: true
       });
     }
+    case GET_ORDER_DETAIL: {
+      return Object.assign({}, state, {
+        orderNumber: action.payload.orderNumber,
+        picker: action.payload.picker,
+        shipper: action.payload.shipper,
+        loading: true
+      });
+    }
     case BATCH_LOADED: {
       return applyBatch(state, action);
     }
     case SET_SHIPMENT_ITEMS: {
       return setShipmentItems(state);
+    }
+    case FETCH_LOADED: {
+      return applyFetch(state, action);
     }
     default:
       return state;

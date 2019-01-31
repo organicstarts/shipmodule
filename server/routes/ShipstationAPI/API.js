@@ -40,6 +40,25 @@ router.get("/getbatch", (req, res) => {
     });
 });
 
+router.get("/getshipmentorder", (req, res) => {
+  const baseUrl = `https://ssapi.shipstation.com/shipments?orderNumber=${
+    req.query.orderNumber
+  }&includeShipmentItems=true`;
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
+  });
+
+  fetch(baseUrl, header)
+    .then(res => res.json())
+    .then(data => {
+      res.send(data.shipments);
+    })
+    .catch(error => {
+      res.json({ msg: error });
+    });
+});
+
 /*-------------------------------------------------------------------
                             DELETE REQUESTS                            
 ---------------------------------------------------------------------*/

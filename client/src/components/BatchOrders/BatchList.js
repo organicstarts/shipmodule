@@ -7,7 +7,6 @@ import BatchDetail from "./BatchDetail";
 import SlipDetail from "./SlipDetail";
 import boxes from "../../config/boxes";
 import packages from "../../config/packages";
-import people from "../../config/people.json";
 import skuInfo from "../../config/productinfo.json";
 import { iconQuotes } from "../../config/peopleicon";
 import { Segment, Button } from "semantic-ui-react";
@@ -18,13 +17,7 @@ class BatchList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      disable: false,
-      shipItems: this.props.batchDatas,
-      warehouseLocation: Object.keys(people)
-        .map(key => people[key])
-        .filter(data =>
-          this.props.email.includes(this.props.email.split("@")[0])
-        )
+      disable: false
     };
     this.logprint = this.logprint.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -39,13 +32,12 @@ class BatchList extends Component {
   }
 
   handleClick() {
-    const { shipItems, warehouseLocation } = this.state;
     this.setState({ disable: true });
-    const warehouse = warehouseLocation[0].warehouse
+    const warehouse = this.props.warehouseLocation
       .toLowerCase()
       .replace(/\s/g, "");
 
-    shipItems.map(async data => {
+    this.props.shipmentItems.map(async data => {
       if (skuInfo[data.sku]) {
         await axios
           .put("fb/updateinventory", {
@@ -359,6 +351,7 @@ const styles = {
 function mapStateToProps({ authState, batchState }) {
   return {
     displayName: authState.displayName,
+    warehouseLocation: authState.warehouseLocation,
     email: authState.email,
     picker: batchState.picker,
     shipper: batchState.shipper,
@@ -366,8 +359,7 @@ function mapStateToProps({ authState, batchState }) {
     batchDatas: batchState.batchDatas,
     batchNumber: batchState.batchNumber,
     shipmentItems: batchState.shipmentItems,
-    loading: batchState.loading,
-
+    loading: batchState.loading
   };
 }
 

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { setShipmentItems } from "../../actions/batch";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import BatchDetail from "./BatchDetail";
@@ -10,6 +11,7 @@ import people from "../../config/people.json";
 import skuInfo from "../../config/productinfo.json";
 import { iconQuotes } from "../../config/peopleicon";
 import { Segment, Button } from "semantic-ui-react";
+import { ClipLoader } from "react-spinners";
 import axios from "axios";
 
 class BatchList extends Component {
@@ -29,6 +31,7 @@ class BatchList extends Component {
   }
   componentDidMount() {
     window.addEventListener("afterprint", this.logprint);
+    this.props.setShipmentItems();
   }
 
   componentWillUnmount() {
@@ -67,10 +70,10 @@ class BatchList extends Component {
     axios
       .post("fb/writetofile", {
         action: "Print",
-        batchNumber: this.props.location.state.detail.batchNumber,
-        user: this.props.location.state.detail.user,
-        picker: this.props.location.state.detail.picker,
-        shipper: this.props.location.state.detail.shipper,
+        batchNumber: this.props.batchNumber,
+        user: this.props.displayName,
+        picker: this.props.picker,
+        shipper: this.props.shipper,
         currentTime
       })
       .then(response => {
@@ -81,6 +84,114 @@ class BatchList extends Component {
         }
       });
   }
+
+  renderBatchList = () => {
+    const { shipmentItems, loading } = this.props;
+
+    if (loading) {
+      return (
+        <ClipLoader
+          sizeUnit={"px"}
+          size={34}
+          color={"#36D7B7"}
+          loading={loading}
+        />
+      );
+    }
+
+    return shipmentItems.map(data => {
+      if (data.length > 1) {
+        return data.map(data => {
+          return (
+            <BatchDetail
+              key={data.orderItemId}
+              sku={data.sku}
+              text={data.name}
+              image={data.imageUrl}
+              quantity={data.combineTotal ? data.combineTotal : data.quantity}
+              warehouse={data.warehouseLocation}
+              options={data.options ? data.options[0].value : ""}
+            />
+          );
+        });
+      }
+      return (
+        <BatchDetail
+          key={data.orderItemId}
+          sku={data.sku}
+          text={data.aliasName}
+          image={data.imageUrl}
+          quantity={data.combineTotal ? data.combineTotal : data.quantity}
+          warehouse={data.warehouseLocation}
+          fullBox={data.fullBox ? data.fullBox : null}
+          loose={data.loose ? data.loose : null}
+          options={data.options ? data.options[0].value : ""}
+        />
+      );
+    });
+  };
+
+  renderSlipList = () => {
+    const { batchDatas, picker, shipper, loading } = this.props;
+
+    if (loading) {
+      return (
+        <div style={{ margin: "0 auto", textAlign: "center" }}>
+          <ClipLoader
+            sizeUnit={"px"}
+            size={500}
+            color={"#36D7B7"}
+            loading={loading}
+          />
+        </div>
+      );
+    }
+    return batchDatas.map(data => {
+      return (
+        <SlipDetail
+          key={data.orderId}
+          customerId={data.bigCommerce ? data.bigCommerce.customer_id : null}
+          message={data.bigCommerce ? data.bigCommerce.customer_message : ""}
+          carrier={data.carrierCode}
+          orderTotal={data.orderCount}
+          carrierCode={getCarrier(data.carrierCode, data.packageCode)}
+          box={calculateBox(data.dimensions)}
+          batchNumber={data.batchNumber}
+          shipmentInfo={data.shipmentItems}
+          picker={iconQuotes[picker]}
+          shipper={iconQuotes[shipper]}
+          name={data.shipTo.name}
+          email={data.customerEmail}
+          company={data.shipTo.company}
+          street1={data.shipTo.street1}
+          street2={data.shipTo.street2}
+          city={data.shipTo.city}
+          state={data.shipTo.state}
+          zip={data.shipTo.postalCode}
+          total={getTotal(data.shipmentItems)}
+          credit={data.bigCommerce ? data.bigCommerce.store_credit_amount : 0}
+          orderID={data.orderNumber}
+          created={
+            data.bigCommerce ? formatDate(data.bigCommerce.date_created) : null
+          }
+          shipDate={
+            data.bigCommerce ? formatDate(data.bigCommerce.date_shipped) : null
+          }
+          coupon={data.couponInfo}
+          shipmentCost={data.bigCommerce.shipping_cost_inc_tax}
+          shipDuration={
+            data.bigCommerce
+              ? calculateTime(
+                  data.bigCommerce.date_created,
+                  data.bigCommerce.date_shipped
+                )
+              : null
+          }
+        />
+      );
+    });
+  };
+
   render() {
     if (this.props.batchDatas.length < 1) {
       return (
@@ -90,6 +201,7 @@ class BatchList extends Component {
         </Segment>
       );
     }
+
     return (
       <div>
         <div style={styles.pickList}>
@@ -120,9 +232,7 @@ class BatchList extends Component {
             >
               <strong>
                 Batch #{this.props.batchNumber} <br />
-                {formatDateTime(
-                  this.props.batchDatas[0].create_date
-                )}
+                {formatDateTime(this.props.batchDatas[0].create_date)}
               </strong>
             </p>
           </div>
@@ -142,13 +252,10 @@ class BatchList extends Component {
               <strong>#</strong>
             </div>
           </div>
-          <div>{renderBatchList(this.props)}</div>
+          <div>{this.renderBatchList()}</div>
           <div className="row" style={{ textAlign: "right" }}>
             <div className="col-12">
-              <strong>
-                Total Items Required:{" "}
-                {/*this.props.location.state.detail.totalCount*/}
-              </strong>
+              <strong>Total Items Required: {this.props.totalCount}</strong>
             </div>
           </div>
           <br />
@@ -182,91 +289,13 @@ class BatchList extends Component {
           </p>
         </div>
 
-        <div style={{ margin: "0 auto" }}>{renderSlipList(this.props)}</div>
+        <div style={{ margin: "0 auto" }}>
+          {this.renderSlipList(this.props)}
+        </div>
       </div>
     );
   }
 }
-const renderBatchList = () => {
-
-
-  return this.props.batchDatas.map(data => {
-    if (data.length > 1) {
-      return data.map(data => (
-        <BatchDetail
-          key={data.orderItemId}
-          sku={data.sku}
-          text={data.name}
-          image={data.imageUrl}
-          quantity={data.combineTotal ? data.combineTotal : data.quantity}
-          warehouse={data.warehouseLocation}
-          options={data.options ? data.options[0].value : ""}
-        />
-      ));
-    }
-    return (
-      <BatchDetail
-        key={data.orderItemId}
-        sku={data.sku}
-        text={data.aliasName}
-        image={data.imageUrl}
-        quantity={data.combineTotal ? data.combineTotal : data.quantity}
-        warehouse={data.warehouseLocation}
-        fullBox={data.fullBox ? data.fullBox : null}
-        loose={data.loose ? data.loose : null}
-        options={data.options ? data.options[0].value : ""}
-      />
-    );
-  });
-};
-
-const renderSlipList = props => {
-  const { batchDatas, picker, shipper } = props.location.state.detail;
-  return batchDatas.map(data => {
-    return (
-      <SlipDetail
-        key={data.orderId}
-        customerId={data.bigCommerce ? data.bigCommerce.customer_id : null}
-        message={data.bigCommerce ? data.bigCommerce.customer_message : ""}
-        carrier={data.carrierCode}
-        orderTotal={data.orderCount}
-        carrierCode={getCarrier(data.carrierCode, data.packageCode)}
-        box={calculateBox(data.dimensions)}
-        batchNumber={data.batchNumber}
-        shipmentInfo={data.shipmentItems}
-        picker={iconQuotes[picker]}
-        shipper={iconQuotes[shipper]}
-        name={data.shipTo.name}
-        email={data.customerEmail}
-        company={data.shipTo.company}
-        street1={data.shipTo.street1}
-        street2={data.shipTo.street2}
-        city={data.shipTo.city}
-        state={data.shipTo.state}
-        zip={data.shipTo.postalCode}
-        total={getTotal(data.shipmentItems)}
-        credit={data.bigCommerce ? data.bigCommerce.store_credit_amount : 0}
-        orderID={data.orderNumber}
-        created={
-          data.bigCommerce ? formatDate(data.bigCommerce.date_created) : null
-        }
-        shipDate={
-          data.bigCommerce ? formatDate(data.bigCommerce.date_shipped) : null
-        }
-        coupon={data.couponInfo}
-        shipmentCost={data.bigCommerce.shipping_cost_inc_tax}
-        shipDuration={
-          data.bigCommerce
-            ? calculateTime(
-                data.bigCommerce.date_created,
-                data.bigCommerce.date_shipped
-              )
-            : null
-        }
-      />
-    );
-  });
-};
 
 const getCarrier = (carrier, boxPackage) => {
   if (packages[carrier][boxPackage]) {
@@ -331,12 +360,18 @@ function mapStateToProps({ authState, batchState }) {
   return {
     displayName: authState.displayName,
     email: authState.email,
+    picker: batchState.picker,
+    shipper: batchState.shipper,
+    totalCount: batchState.totalCount,
     batchDatas: batchState.batchDatas,
-    batchNumber: batchState.batchNumber
+    batchNumber: batchState.batchNumber,
+    shipmentItems: batchState.shipmentItems,
+    loading: batchState.loading,
+
   };
 }
 
 export default connect(
   mapStateToProps,
-  null
+  { setShipmentItems }
 )(BatchList);

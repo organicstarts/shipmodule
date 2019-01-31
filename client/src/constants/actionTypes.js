@@ -1,5 +1,7 @@
 export const GET_BATCH = "GET_BATCH";
 export const BATCH_LOADED = "BATCH_LOADED";
+export const GET_BATCH_DETAIL = "GET_BATCH_DETAIL";
+export const BATCH_DETAIL_LOADED = "BATCH_DETAIL_LOADED";
 export const SET_SHIPMENT_ITEMS = "SET_SHIPMENT_ITEMS";
 
 export const AUTH_LOGOUT = "AUTH_LOGOUT";

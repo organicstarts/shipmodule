@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { logout } from "./actions/auth";
 import Router from "./Router";
 
-const MINUTES_UNITL_AUTO_LOGOUT = 5; // in mins
+const MINUTES_UNITL_AUTO_LOGOUT = 1; // in mins
 const CHECK_INTERVAL = 15000; // in ms
 const STORE_KEY = "lastAction";
 
@@ -46,7 +46,7 @@ class App extends Component {
   check() {
     const now = Date.now();
     const timeleft =
-      this.getLastAction() + MINUTES_UNITL_AUTO_LOGOUT * 60 * 1000; //5 minutes
+      this.getLastAction() + MINUTES_UNITL_AUTO_LOGOUT * 60 * 60000; //1 hr
     const diff = timeleft - now;
     const isTimeout = diff < 0;
     if (isTimeout) {

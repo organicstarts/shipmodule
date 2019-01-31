@@ -1,13 +1,19 @@
-import { GET_BATCH, SET_SHIPMENT_ITEMS } from "../constants/actionTypes";
+import { GET_BATCH, GET_BATCH_DETAIL, SET_SHIPMENT_ITEMS } from "../constants/actionTypes";
 
-const getBatch = (batchNumber, history) => ({
-  type: GET_BATCH,
-  payload: { batchNumber, history }
+const getBatch = (stateInfo, history) => {
+  const { picker, shipper, batchNumber } = stateInfo;
+  return {
+    type: GET_BATCH,
+    payload: { batchNumber, shipper, picker, history }
+  };
+};
+const setShipmentItems = () => ({
+  type: SET_SHIPMENT_ITEMS
 });
 
-const setShipmentItems = shiptmentItems => ({
-  type: SET_SHIPMENT_ITEMS,
-  shiptmentItems
+const getBatchDetail = payload => ({
+  type: GET_BATCH_DETAIL,
+  payload
 });
 
-export { getBatch, setShipmentItems };
+export { getBatch, setShipmentItems, getBatchDetail };

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import authReducer from './auth';
-import batchReducer from './batch';
+import batchReducer from './order';
 
 const rootReducer = combineReducers({
   authState: authReducer,

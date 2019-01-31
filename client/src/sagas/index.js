@@ -7,7 +7,7 @@ import {
   GET_ORDER_DETAIL
 } from "../constants/actionTypes";
 import { handleLogin, handleLogOut, handleLoginState } from "./auth";
-import { handleGetBatch, handleGetOrderDetail } from "./batch";
+import { handleGetBatch, handleGetOrderDetail } from "./order";
 
 export default function* watcherSaga() {
   yield takeEvery(AUTH_LOGIN, handleLogin);

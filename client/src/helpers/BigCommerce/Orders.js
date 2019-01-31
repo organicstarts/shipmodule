@@ -1,4 +1,3 @@
-import * as log from "../Log";
 import axios from "axios";
 
 export const getOrder = async orderNumber => {
@@ -7,7 +6,7 @@ export const getOrder = async orderNumber => {
     .then(dataArray => {
       return dataArray.data;
     })
-    .catch(log.error);
+    .catch(error => console.log(error));
 };
 
 export const getAllOrders = async minId => {
@@ -16,7 +15,7 @@ export const getAllOrders = async minId => {
     .then(dataArray => {
       return dataArray.data;
     })
-    .catch(log.error);
+    .catch(error => console.log(error));
 };
 
 export const getShippingInfo = async orderId => {
@@ -25,7 +24,7 @@ export const getShippingInfo = async orderId => {
     .then(dataArray => {
       return dataArray.data;
     })
-    .catch(log.error);
+    .catch(error => console.log(error));
 };
 
 export const getOrderCount = async customerNumber => {
@@ -34,7 +33,7 @@ export const getOrderCount = async customerNumber => {
     .then(dataArray => {
       return dataArray.data.length;
     })
-    .catch(log.error);
+    .catch(error => console.log(error));
 };
 
 export const getCoupon = async orderNumber => {
@@ -44,5 +43,5 @@ export const getCoupon = async orderNumber => {
       if (dataArray.data) return dataArray.data;
       return "";
     })
-    .catch(log.error);
+    .catch(error => console.log(error));
 };

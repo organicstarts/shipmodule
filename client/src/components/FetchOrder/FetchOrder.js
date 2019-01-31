@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { getOrderDetail } from "../../actions/batch";
+import { getOrderDetail } from "../../actions/order";
 import { ClipLoader } from "react-spinners";
 import { withRouter } from "react-router-dom";
 import people from "../../config/people";

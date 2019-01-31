@@ -65,7 +65,7 @@ class FraudOrders extends Component {
   handleClick() {
     this.setState({ loading: true });
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
-
+    console.log(this.state.savedData.length)
     axios
       .post("fb/writetofile", {
         action: "Fraud Search",

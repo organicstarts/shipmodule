@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { setShipmentItems } from "../../actions/batch";
+import { setShipmentItems } from "../../actions/order";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import BatchDetail from "./BatchDetail";

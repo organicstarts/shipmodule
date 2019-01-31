@@ -1,7 +1,7 @@
 import React from "react";
 import { Segment, Button, Form } from "semantic-ui-react";
 import { connect } from "react-redux";
-import { getBatch, setShipmentItems } from "../../actions/batch";
+import { getBatch, setShipmentItems } from "../../actions/order";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";

@@ -1,9 +1,9 @@
 import "module-alias/register";
 const router = require("express").Router();
 const fetch = require("node-fetch");
-import shopify from "@bgauth/auth.json";
-const username = shopify.shopify.user;
-const password = shopify.shopify.key;
+import tracking from "@bgauth/auth.json";
+const username = tracking.shopify.user;
+const password = tracking.shopify.key;
 const header = {
   method: "GET",
   headers: {
@@ -16,6 +16,26 @@ const header = {
 /*-------------------------------------------------------------------
                             GET REQUESTS                            
 ---------------------------------------------------------------------*/
+router.get("/canadapost", (req, res) => {
+  const baseUrl = `https://ct.soa-gw.canadapost.ca/vis/track/pin/${
+    req.query.tracking
+  }/summary`;
+  let encodedString = Buffer.from(tracking.canadaPost.user + ":" + tracking.canadaPost.key).toString("base64");
+
+  fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/vnd.cpc.track+xml",
+      Authorization: `Basic ${encodedString}`,
+      "Accept-language": "en-CA"
+    }
+  })
+    .then(res => res.text())
+    .then(data => res.send(data))
+    .catch(err => {
+      console.log(err);
+    });
+});
 
 router.get("/usps", (req, res) => {
   res.set({

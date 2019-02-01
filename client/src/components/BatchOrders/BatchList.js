@@ -24,7 +24,7 @@ class BatchList extends Component {
   }
   componentDidMount() {
     window.addEventListener("afterprint", this.logprint);
-    this.props.setShipmentItems();
+    this.props.setShipmentItems(this.props.warehouseLocation);
   }
 
   componentWillUnmount() {

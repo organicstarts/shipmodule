@@ -1,6 +1,8 @@
 import {
   BATCH_LOADED,
   FETCH_LOADED,
+  ALL_ORDERS_LOADED,
+  GET_ALL_ORDERS,
   GET_BATCH,
   GET_ORDER_DETAIL,
   SET_SHIPMENT_ITEMS
@@ -14,7 +16,7 @@ map through batchdatas, place in 1D array and create a key/value pair
 map through Keys(sku) -> add quantities of each object in key to totalCount
 Special case sku.includes("TK || first char is an integer") => parse data first to combine with existing matching skus 
 */
-const sortShipments = data => {
+const sortShipments = (data, warehouse) => {
   const shipmentArray = data.map(shipItems => shipItems);
   let items = [];
   let count = 0;
@@ -131,6 +133,15 @@ const sortShipments = data => {
     count += group[key][0].combineTotal
       ? group[key][0].combineTotal
       : group[key][0].quantity;
+
+    if (group[key][0].warehouseLocation.includes(",")) {
+      const binPickNum = group[key][0].warehouseLocation.split(", ");
+      if (warehouse === "East coast") {
+        group[key][0].warehouseLocation = binPickNum[0];
+      } else if (warehouse === "West coast") {
+        group[key][0].warehouseLocation = binPickNum[1]
+      }
+    }
   }
 
   if (tkSku) {
@@ -237,6 +248,8 @@ const INITIAL_STATE = {
   batchDatas: [],
   shipmentItems: [],
   fetchDatas: [],
+  savedFraud: [],
+  fraudDatas: [],
   loading: true
 };
 
@@ -255,8 +268,17 @@ const applyFetch = (state, action) => {
     loading: false
   });
 };
-const setShipmentItems = state => {
-  const data = sortShipments(state.shipmentItems);
+
+const applyFraud = (state, action) => {
+  const data = action.payload[0];
+  return Object.assign({}, state, {
+    fraudDatas: data,
+    loading: false
+  });
+};
+
+const setShipmentItems = (state, action) => {
+  const data = sortShipments(state.shipmentItems, action.warehouse);
   const totalCount = data.totalCount;
   const calculatedData = calculatePackage(data.sortable);
   return Object.assign({}, state, {
@@ -288,10 +310,19 @@ function batchReducer(state = INITIAL_STATE, action) {
       return applyBatch(state, action);
     }
     case SET_SHIPMENT_ITEMS: {
-      return setShipmentItems(state);
+      return setShipmentItems(state, action);
     }
     case FETCH_LOADED: {
       return applyFetch(state, action);
+    }
+    case GET_ALL_ORDERS: {
+      return Object.assign({}, state, {
+        savedFraud: action.payload.savedData,
+        loading: true
+      });
+    }
+    case ALL_ORDERS_LOADED: {
+      return applyFraud(state, action);
     }
     default:
       return state;

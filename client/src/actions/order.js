@@ -1,6 +1,7 @@
 import {
   GET_BATCH,
   GET_ORDER_DETAIL,
+  GET_ALL_ORDERS,
   SET_SHIPMENT_ITEMS
 } from "../constants/actionTypes";
 
@@ -11,8 +12,9 @@ const getBatch = (stateInfo, history) => {
     payload: { batchNumber, shipper, picker, history }
   };
 };
-const setShipmentItems = () => ({
-  type: SET_SHIPMENT_ITEMS
+const setShipmentItems = warehouse => ({
+  type: SET_SHIPMENT_ITEMS,
+  warehouse
 });
 
 const getOrderDetail = (stateInfo, history) => {
@@ -23,4 +25,12 @@ const getOrderDetail = (stateInfo, history) => {
   };
 };
 
-export { getBatch, setShipmentItems, getOrderDetail };
+const getAllOrders = (stateInfo, history) => {
+  const { oneData, savedData } = stateInfo;
+  return {
+    type: GET_ALL_ORDERS,
+    payload: { oneData, savedData, history }
+  };
+};
+
+export { getBatch, setShipmentItems, getOrderDetail, getAllOrders };

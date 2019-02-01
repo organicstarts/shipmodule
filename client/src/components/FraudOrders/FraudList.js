@@ -1,22 +1,24 @@
 import React, { Component } from "react";
 import FraudDetail from "./FraudDetail";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { ClipLoader } from "react-spinners";
 import axios from "axios";
 
 class FraudList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      toggle: props.location.state.detail.fraudDatas.map(element => false),
-      saveFraud: props.location.state.detail.savedData,
-      checked: props.location.state.detail.fraudDatas.map(element => {
-        if (element.checked) {
-          return element.checked;
-        } else {
-          return false;
-        }
-      })
+      // toggle:this.props.fraudDatas.map(element => false),
+      // saveFraud: this.props.savedData,
+      // checked: this.props.fraudDatas.map(element => {
+      //   if (element.checked) {
+      //     return element.checked;
+      //   } else {
+      //     return false;
+      //   }
+      // })
     };
   }
 
@@ -69,31 +71,32 @@ class FraudList extends Component {
   /*
   Save order numbers that came up with possible fraud errors to fraud/log firebase
   */
-  componentDidMount() {
-    const { newData } = this.props.location.state.detail;
-    let saved = [];
-    newData.reverse().map(data => {
-      if (checkError(data)) {
-        return saved.push(data);
-      }
-      return null;
-    });
+  // componentDidMount() {
+  //   const { newData } = this.props.location.state.detail;
+  //   let saved = [];
+  //   newData.reverse().map(data => {
+  //     if (checkError(data)) {
+  //       return saved.push(data);
+  //     }
+  //     return null;
+  //   });
 
-    axios
-      .post("fb/writefraudtofile", {
-        saved: saved
-      })
-      .then(response => {
-        if (response.data.msg === "success") {
-          console.log("logged");
-        } else if (response.data.msg === "fail") {
-          console.log("failed to log.");
-        }
-      });
-  }
+  //   axios
+  //     .post("fb/writefraudtofile", {
+  //       saved: saved
+  //     })
+  //     .then(response => {
+  //       if (response.data.msg === "success") {
+  //         console.log("logged");
+  //       } else if (response.data.msg === "fail") {
+  //         console.log("failed to log.");
+  //       }
+  //     });
+  // }
 
-  renderFraudList = props => {
-    const { fraudDatas } = props.location.state.detail;
+  renderFraudList = () => {
+    const { fraudDatas } = this.props;
+    console.log(fraudDatas)
     return fraudDatas
       .map((data, index) => {
         return (
@@ -137,10 +140,20 @@ class FraudList extends Component {
   };
 
   render() {
+    if (this.state.loading) {
+      return (
+        <ClipLoader
+          sizeUnit={"px"}
+          size={720}
+          color={"#36D7B7"}
+          loading={this.state.loading}
+        />
+      );
+    }
     return (
       <div className="container">
         <Link to="/">Go Back</Link>
-        {this.renderFraudList(this.props)}
+        {this.renderFraudList()}
       </div>
     );
   }
@@ -204,4 +217,16 @@ const checkError = data => {
   }
 };
 
-export default FraudList;
+function mapStateToProps({ authState, batchState }) {
+  return {
+    displayName: authState.displayName,
+    fraudDatas: batchState.fraudDatas,
+    savedDatas: batchState.savedDatas,
+    loading: batchState.loading
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(FraudList);

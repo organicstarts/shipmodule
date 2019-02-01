@@ -4,10 +4,15 @@ import {
   AUTH_LOGOUT,
   AUTH_CHECK,
   GET_BATCH,
-  GET_ORDER_DETAIL
+  GET_ORDER_DETAIL,
+  GET_ALL_ORDERS
 } from "../constants/actionTypes";
 import { handleLogin, handleLogOut, handleLoginState } from "./auth";
-import { handleGetBatch, handleGetOrderDetail } from "./order";
+import {
+  handleGetBatch,
+  handleGetOrderDetail,
+  handleGetAllOrders
+} from "./order";
 
 export default function* watcherSaga() {
   yield takeEvery(AUTH_LOGIN, handleLogin);
@@ -15,4 +20,5 @@ export default function* watcherSaga() {
   yield takeEvery(AUTH_CHECK, handleLoginState);
   yield takeEvery(GET_BATCH, handleGetBatch);
   yield takeEvery(GET_ORDER_DETAIL, handleGetOrderDetail);
+  yield takeEvery(GET_ALL_ORDERS, handleGetAllOrders);
 }

@@ -1,5 +1,9 @@
 import { call, put } from "redux-saga/effects";
-import { BATCH_LOADED, FETCH_LOADED } from "../constants/actionTypes";
+import {
+  BATCH_LOADED,
+  FETCH_LOADED,
+  ALL_ORDERS_LOADED
+} from "../constants/actionTypes";
 import axios from "axios";
 
 function* handleGetBatch(action) {
@@ -17,6 +21,16 @@ function* handleGetOrderDetail(action) {
     const payload = yield call(getShipmentOrder, action.payload.orderNumber);
     yield put({ type: FETCH_LOADED, payload });
     action.payload.history.push("/fetch");
+  } catch (e) {
+    yield put({ type: "API_ERRORED", payload: e });
+  }
+}
+
+function* handleGetAllOrders(action) {
+  try {
+    const payload = yield call(getAllOrders, action.payload.oneData);
+    yield put({ type: ALL_ORDERS_LOADED, payload });
+    action.payload.history.push("/fraud");
   } catch (e) {
     yield put({ type: "API_ERRORED", payload: e });
   }
@@ -76,6 +90,21 @@ const getAllOrders = async minId => {
     .then(dataArray => {
       return dataArray.data;
     })
+    .then(async datas => {
+      console.log(datas)
+      return await Promise.all(
+        datas.map(async data => {
+          if (data.id)
+            await getShippingInfo(data.id).then(async x => {
+              data.shippingInfo = x;
+            });
+          await getOrderCount(data.customer_id).then(
+            y => (data.orderCount = y)
+          );
+          return data;
+        })
+      );
+    })
     .catch(error => console.log(error));
 };
 
@@ -107,4 +136,4 @@ const getCoupon = async orderNumber => {
     .catch(error => console.log(error));
 };
 
-export { handleGetBatch, handleGetOrderDetail };
+export { handleGetBatch, handleGetOrderDetail, handleGetAllOrders };

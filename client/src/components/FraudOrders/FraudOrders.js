@@ -1,12 +1,9 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { getAllOrders } from "../../actions/order";
 import { ClipLoader } from "react-spinners";
 import { Button, Segment } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
-import {
-  getOrderCount,
-  getAllOrders,
-  getShippingInfo
-} from "../../helpers/BigCommerce/Orders";
 import firebase from "../../config/firebaseconf";
 import axios from "axios";
 import moment from "moment";
@@ -20,7 +17,7 @@ class FraudOrders extends Component {
       fraudDatas: [],
       savedData: [],
       newData: [],
-      oneData: {}
+      oneData: 0
     };
     this.handleClick = this.handleClick.bind(this);
     this.firebaseRef = firebase.database().ref(`/fraud`);
@@ -32,7 +29,7 @@ class FraudOrders extends Component {
         if (payload) {
           const key = Object.keys(snapshot.val());
           this.setState({
-            oneData: payload[key]
+            oneData: payload[key].id + 1
           });
         }
       })
@@ -42,7 +39,7 @@ class FraudOrders extends Component {
     this.fraudRef.orderByKey().on("value", snapshot => {
       const payload = snapshot.val();
       if (payload) {
-        let dataArray = []
+        let dataArray = [];
         Object.keys(payload).map(key => dataArray.push(payload[key]));
         this.setState({
           savedData: dataArray
@@ -63,9 +60,9 @@ class FraudOrders extends Component {
   push to fraudlist
   */
   handleClick() {
+    const { oneData, savedData } = this.state;
     this.setState({ loading: true });
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
-    console.log(this.state.savedData.length)
     axios
       .post("fb/writetofile", {
         action: "Fraud Search",
@@ -79,37 +76,35 @@ class FraudOrders extends Component {
           console.log("failed to log.");
         }
       });
-      
-    getAllOrders(
-      this.state.oneData? this.state.oneData.id + 1 : 0
-    )
-      .then(async data => {
-        await Promise.all(
-          data.map(async data => {
-            if (data.id)
-              await getShippingInfo(data.id).then(async x => {
-                data.shippingInfo = x;
-              });
-            await getOrderCount(data.customer_id).then(
-              y => (data.orderCount = y)
-            );
-          })
-        );
-        let tempArray = JSON.parse(JSON.stringify(data));
-        if (this.state.savedData.length > 0) {
-          this.state.savedData.map(save => tempArray.push(save));
-        }
-        this.setState({
-          fraudDatas: tempArray,
-          newData: data
-        });
-      })
-      .then(x => {
-        this.props.history.push({
-          pathname: "/fraud",
-          state: { detail: this.state }
-        });
-      });
+
+    this.props.getAllOrders({ oneData, savedData }, this.props.history)
+      // .then(async data => {
+      //   await Promise.all(
+      //     data.map(async data => {
+      //       if (data.id)
+      //         await getShippingInfo(data.id).then(async x => {
+      //           data.shippingInfo = x;
+      //         });
+      //       await getOrderCount(data.customer_id).then(
+      //         y => (data.orderCount = y)
+      //       );
+      //     })
+      //   );
+      //   let tempArray = JSON.parse(JSON.stringify(data));
+      //   if (this.state.savedData.length > 0) {
+      //     this.state.savedData.map(save => tempArray.push(save));
+      //   }
+      //   this.setState({
+      //     fraudDatas: tempArray,
+      //     newData: data
+      //   });
+      // })
+      // .then(x => {
+      //   this.props.history.push({
+      //     pathname: "/fraud",
+      //     state: { detail: this.state }
+      //   });
+      // });
   }
   renderButton() {
     if (this.state.loading) {
@@ -137,4 +132,11 @@ class FraudOrders extends Component {
   }
 }
 
-export default withRouter(FraudOrders);
+
+
+export default withRouter(
+  connect(
+    null,
+    { getAllOrders }
+  )(FraudOrders)
+);

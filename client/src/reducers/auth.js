@@ -28,7 +28,8 @@ const authUserLogIn = (state, action) => {
       user: action.payload.user,
       email: action.payload.user.email,
       displayName: action.payload.user.displayName,
-      warehouseLocation: warehouse[0].warehouse,
+      warehouseLocation:
+        warehouse.length > 0 ? warehouse[0].warehouse : "East coast",
       loading: false
     });
   }
@@ -53,9 +54,8 @@ const authCheckUser = (state, action) => {
       user: action.payload,
       email: action.payload.email,
       displayName: action.payload.displayName,
-      warehouseLocation: warehouse
-        ? warehouse[0].warehouse
-        : "East coast",
+      warehouseLocation:
+        warehouse.length > 0 ? warehouse[0].warehouse : "East coast",
       loading: false
     });
   }

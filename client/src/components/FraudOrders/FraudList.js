@@ -100,7 +100,6 @@ class FraudList extends Component {
 
   renderFraudList = () => {
     const { fraudDatas } = this.props;
-    console.log(fraudDatas);
     return fraudDatas
       .map((data, index) => {
         return (

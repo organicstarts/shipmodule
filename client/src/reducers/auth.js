@@ -53,7 +53,9 @@ const authCheckUser = (state, action) => {
       user: action.payload,
       email: action.payload.email,
       displayName: action.payload.displayName,
-      warehouseLocation: warehouse[0].warehouse,
+      warehouseLocation: warehouse
+        ? warehouse[0].warehouse
+        : "East coast",
       loading: false
     });
   }

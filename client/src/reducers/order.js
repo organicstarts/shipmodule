@@ -250,6 +250,7 @@ const INITIAL_STATE = {
   fetchDatas: [],
   savedFraud: [],
   fraudDatas: [],
+  newDatas:[],
   loading: true
 };
 
@@ -270,9 +271,10 @@ const applyFetch = (state, action) => {
 };
 
 const applyFraud = (state, action) => {
-  const data = action.payload[0];
+  const data = action.payload;
   return Object.assign({}, state, {
-    fraudDatas: data,
+    newDatas: data,
+    fraudDatas: state.savedFraud.concat(data),
     loading: false
   });
 };

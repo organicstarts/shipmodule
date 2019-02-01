@@ -91,7 +91,6 @@ const getAllOrders = async minId => {
       return dataArray.data;
     })
     .then(async datas => {
-      console.log(datas)
       return await Promise.all(
         datas.map(async data => {
           if (data.id)

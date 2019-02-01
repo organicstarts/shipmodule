@@ -10,15 +10,14 @@ class FraudList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // toggle:this.props.fraudDatas.map(element => false),
-      // saveFraud: this.props.savedData,
-      // checked: this.props.fraudDatas.map(element => {
-      //   if (element.checked) {
-      //     return element.checked;
-      //   } else {
-      //     return false;
-      //   }
-      // })
+      toggle: this.props.fraudDatas.map(element => false),
+      checked: this.props.fraudDatas.map(element => {
+        if (element.checked) {
+          return element.checked;
+        } else {
+          return false;
+        }
+      })
     };
   }
 
@@ -52,7 +51,7 @@ class FraudList extends Component {
             .post("fb/writetofile", {
               action: newCheckedStatus[index] ? "Fraud Check" : "Fraud UnCheck",
               orderNumber: e.orderNumber,
-              user: this.props.location.state.detail.displayName,
+              user: this.props.displayName,
               currentTime
             })
             .then(response => {
@@ -71,32 +70,37 @@ class FraudList extends Component {
   /*
   Save order numbers that came up with possible fraud errors to fraud/log firebase
   */
-  // componentDidMount() {
-  //   const { newData } = this.props.location.state.detail;
-  //   let saved = [];
-  //   newData.reverse().map(data => {
-  //     if (checkError(data)) {
-  //       return saved.push(data);
-  //     }
-  //     return null;
-  //   });
+  componentDidMount() {
+    setTimeout(
+      function() {
+        const { newDatas } = this.props;
+        let saved = [];
+        newDatas.reverse().map(data => {
+          if (checkError(data)) {
+            return saved.push(data);
+          }
+          return null;
+        });
 
-  //   axios
-  //     .post("fb/writefraudtofile", {
-  //       saved: saved
-  //     })
-  //     .then(response => {
-  //       if (response.data.msg === "success") {
-  //         console.log("logged");
-  //       } else if (response.data.msg === "fail") {
-  //         console.log("failed to log.");
-  //       }
-  //     });
-  // }
+        axios
+          .post("fb/writefraudtofile", {
+            saved: saved
+          })
+          .then(response => {
+            if (response.data.msg === "success") {
+              console.log("logged");
+            } else if (response.data.msg === "fail") {
+              console.log("failed to log.");
+            }
+          });
+      }.bind(this),
+      3000
+    );
+  }
 
   renderFraudList = () => {
     const { fraudDatas } = this.props;
-    console.log(fraudDatas)
+    console.log(fraudDatas);
     return fraudDatas
       .map((data, index) => {
         return (
@@ -221,7 +225,8 @@ function mapStateToProps({ authState, batchState }) {
   return {
     displayName: authState.displayName,
     fraudDatas: batchState.fraudDatas,
-    savedDatas: batchState.savedDatas,
+    savedFraud: batchState.savedFraud,
+    newDatas: batchState.newDatas,
     loading: batchState.loading
   };
 }

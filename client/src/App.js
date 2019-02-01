@@ -46,7 +46,7 @@ class App extends Component {
   check() {
     const now = Date.now();
     const timeleft =
-      this.getLastAction() + MINUTES_UNITL_AUTO_LOGOUT * 60 * 60000; //1 hr
+      this.getLastAction() + MINUTES_UNITL_AUTO_LOGOUT * 60 * 900; //15 min
     const diff = timeleft - now;
     const isTimeout = diff < 0;
     if (isTimeout) {

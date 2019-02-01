@@ -41,7 +41,8 @@ const authUserLogOut = (state, action) => {
     user: "",
     email: "",
     displayName: "",
-    warehouseLocation: ""
+    warehouseLocation: "",
+    loading: false
   });
 };
 

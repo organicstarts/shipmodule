@@ -1,9 +1,12 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import Main from "./Main";
-import BatchList from './components/BatchOrders/BatchList';
-import FraudList from './components/FraudOrders/FraudList';
-import LogList from './components/AdminLogs/LogList';
+import Batch from "./components/BatchOrders/BatchOrders";
+import BatchList from "./components/BatchOrders/BatchList";
+import Fraud from "./components/FraudOrders/FraudOrders";
+import FraudList from "./components/FraudOrders/FraudList";
+import LogList from "./components/AdminLogs/LogList";
+import Fetch from "./components/FetchOrder/FetchOrder";
 import FetchDetail from "./components/FetchOrder/FetchDetail";
 import InboundLogging from "./components/InventorySystem/Inbound/InboundLogging";
 import InventoryTable from "./components/InventorySystem/InventoryTable/InventoryTable";
@@ -19,9 +22,12 @@ const Router = () => (
   <main>
     <Switch>
       <Route exact path="/" component={Main} />
-      <Route path="/batch" component={BatchList} />
-      <Route path="/fraud" component={FraudList} />
-      <Route path="/fetch" component={FetchDetail} />
+      <Route path="/batch" component={Batch} />
+      <Route path="/batchList" component={BatchList} />
+      <Route path="/fraud" component={Fraud} />
+      <Route path="/fraudList" component={FraudList} />
+      <Route path="/fetch" component={Fetch} />
+      <Route path="/fetchDetail" component={FetchDetail} />
       <Route path="/log" component={LogList} />
       <Route path="/inboundLogging" component={InboundLogging} />
       <Route path="/inboundLogTable" component={InboundLogTable} />

@@ -60,10 +60,9 @@ router.get("/getshipmentorder", (req, res) => {
 });
 
 /*-------------------------------------------------------------------
-                            DELETE REQUESTS                            
+                            POST REQUESTS                            
 ---------------------------------------------------------------------*/
-
-router.delete("/cancelorder", (req, res) => {
+router.post("/cancelorder", (req, res) => {
   const baseUrl = `https://ssapi.shipstation.com/orders?orderNumber=${
     req.body.ordernumber
   }`;
@@ -75,18 +74,27 @@ router.delete("/cancelorder", (req, res) => {
   fetch(baseUrl, header)
     .then(res => res.json())
     .then(async e => {
-      await fetch(
-        `https://ssapi.shipstation.com/orders/${e.orders[0].orderId}`,
-        {
-          method: "DELETE",
+      if (e.orders[0].customerEmail === req.body.email) {
+        console.log(e.orders[0].orderId);
+        await fetch(`https://ssapi.shipstation.com/orders/createorder`, {
+          method: "POST",
           headers: {
-            "Access-Control-Allow-Origin": "*",
             Authorization: `Basic ${encodedString}`,
-            "Content-Type": "application/json",
-            Accept: "application/json"
-          }
-        }
-      );
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            advancedOptions: { storeId: 135943 },
+            orderNumber: e.orders[0].orderNumber,
+            orderKey: e.orders[0].orderKey,
+            orderDate: e.orders[0].orderDate,
+            orderStatus: "cancelled",
+            billTo: e.orders[0].billTo,
+            shipTo: e.orders[0].shipTo
+          })
+        })
+          .then(e => e.json())
+          .then(x => console.log(x));
+      }
     })
     .then(e => {
       res.json({ msg: "success" });

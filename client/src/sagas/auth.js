@@ -52,7 +52,7 @@ const logOut = () => {
 };
 
 const logIn = () => {
-  return auth.signInWithPopup(provider).then(result => {
+  return auth.signInWithRedirect(provider).then(result => {
     let email = result.additionalUserInfo.profile.hd;
     let isNewUser = result.additionalUserInfo.isNewUser;
     if (!isNewUser || email === "organicstart.com") {

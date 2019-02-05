@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import InventoryReportDetail from "./InventoryReportDetail";
+import { connect } from "react-redux";
 import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import firebase from "../../../config/firebaseconf";
@@ -13,7 +14,7 @@ class InventoryLogTable extends Component {
     this.state = {
       datas: {},
       loading: true,
-      user: this.props.location.state.detail.user
+      user: this.props.displayName
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -114,7 +115,6 @@ class InventoryLogTable extends Component {
       });
   }
 
- 
   renderLogList() {
     if (this.state.loading) {
       return (
@@ -173,4 +173,14 @@ class InventoryLogTable extends Component {
   }
 }
 
-export default InventoryLogTable;
+function mapStateToProps({ authState }) {
+  return {
+    displayName: authState.displayName
+  };
+}
+
+
+export default connect(
+  mapStateToProps,
+  null
+)(InventoryLogTable);

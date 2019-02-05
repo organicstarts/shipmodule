@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import {
   Segment,
   Form,
@@ -12,7 +13,6 @@ import { ClipLoader } from "react-spinners";
 import moment from "moment";
 import firebase from "../../../config/firebaseconf";
 import axios from "axios";
-import people from "../../../config/people.json";
 import upc from "../../../config/upc.json";
 import skuInfo from "../../../config/productinfo.json";
 import "../inventory.css";
@@ -34,15 +34,7 @@ class InboundLogging extends Component {
       brand: "",
       quantity: "",
       broken: "",
-      count: 0,
-      scanner: this.props.location.state.detail.user,
-      warehouseLocation: Object.keys(people)
-        .map(key => people[key])
-        .filter(data =>
-          data.email.includes(
-            this.props.location.state.detail.email.split("@")[0]
-          )
-        )
+      count: 0
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleNewSubmit = this.handleNewSubmit.bind(this);
@@ -173,10 +165,9 @@ class InboundLogging extends Component {
       file,
       quantity,
       broken,
-      scanner,
-      warehouseLocation,
       invoiceNum
     } = this.state;
+    const { displayName, warehouseLocation } = this.props;
     let sku = upc[upcNum];
     let storageRef = firebase.storage().ref("images");
     storageRef.child(trackingNumber).put(file);
@@ -193,9 +184,9 @@ class InboundLogging extends Component {
         broken: broken ? parseInt(broken) : 0,
         total: skuInfo[sku].package * quantity,
         invoiceNum: invoiceNum,
-        scanner,
+        scanner: displayName,
         timeStamp: moment().format("dddd, MMMM DD YYYY hh:mma"),
-        warehouseLocation: warehouseLocation[0].warehouse
+        warehouseLocation: warehouseLocation
       })
       .then(response => {
         if (response.data.msg === "success") {
@@ -598,6 +589,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
   }
 
   render() {
+
     return (
       <Container fluid style={{ marginTop: "50px" }}>
         {this.renderInput()}
@@ -606,4 +598,14 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
   }
 }
 
-export default InboundLogging;
+function mapStateToProps({ authState }) {
+  return {
+    displayName: authState.displayName,
+    warehouseLocation: authState.warehouseLocation
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(InboundLogging);

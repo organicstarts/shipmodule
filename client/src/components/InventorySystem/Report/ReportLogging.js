@@ -1,9 +1,9 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Form, Button, Label, Container, Grid } from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
 import moment from "moment";
 import axios from "axios";
-import people from "../../../config/people.json";
 import upc from "../../../config/upc.json";
 import skuInfo from "../../../config/productinfo.json";
 import firebase from "../../../config/firebaseconf";
@@ -16,15 +16,7 @@ class ReportLogging extends Component {
       isTyped: false,
       upcNum: "",
       quantity: "",
-      count: 0,
-      scanner: this.props.location.state.detail.user,
-      warehouseLocation: Object.keys(people)
-        .map(key => people[key])
-        .filter(data =>
-          data.email.includes(
-            this.props.location.state.detail.email.split("@")[0]
-          )
-        )
+      count: 0
     };
     this.handleChange = this.handleChange.bind(this);
     this.updateInventory = this.updateInventory.bind(this);
@@ -79,7 +71,8 @@ class ReportLogging extends Component {
   reset all states
   */
   updateInventory() {
-    const { upcNum, quantity, scanner, warehouseLocation } = this.state;
+    const { upcNum, quantity } = this.state;
+    const { displayName, warehouseLocation } = this.props;
     let sku = upc[upcNum];
     const warehouse = warehouseLocation[0].warehouse
       .toLowerCase()
@@ -91,7 +84,7 @@ class ReportLogging extends Component {
         sku: skuInfo[sku].sku,
         brand: skuInfo[sku].brand,
         total: skuInfo[sku].package * quantity,
-        user: scanner,
+        user: displayName,
         date: moment().format("dddd, MMMM DD YYYY hh:mma")
       })
       .then(async response => {
@@ -140,7 +133,6 @@ class ReportLogging extends Component {
           payload.eastcoastReport[key].total +
           payload.westcoastReport[key].total;
 
-        console.log(total);
         if (total > 300 && total < 400) {
           await this.disableBundle(skuInfo[key].bundleID, 24);
           await this.enableBundle(skuInfo[key].bundleID, 12);
@@ -327,4 +319,14 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
   }
 }
 
-export default ReportLogging;
+function mapStateToProps({ authState }) {
+  return {
+    displayName: authState.displayName,
+    warehouseLocation: authState.warehouseLocation
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(ReportLogging);

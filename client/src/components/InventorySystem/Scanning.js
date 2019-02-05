@@ -7,9 +7,7 @@ class Scanning extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
-      user: this.props.displayName,
-      email: this.props.email
+      loading: false
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -17,7 +15,6 @@ class Scanning extends Component {
   handleClick(id) {
     this.setState({ loading: true });
     let path = "";
-    let warehouse = "";
     switch (id) {
       case 0: {
         path = "reportLogging";
@@ -35,7 +32,7 @@ class Scanning extends Component {
       case 4:
         path = "/toyLogging";
         break;
-        case 5:
+      case 5:
         path = "/returnLogging";
         break;
       default:
@@ -44,8 +41,7 @@ class Scanning extends Component {
     }
 
     this.props.history.push({
-      pathname: path,
-      state: { detail: this.state, warehouse: warehouse ? warehouse : "" }
+      pathname: path
     });
   }
 

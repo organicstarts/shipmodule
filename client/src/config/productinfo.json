@@ -777,7 +777,7 @@
   "OB-TPFR-1": {
     "brand": "Open/Broken Topfer",
     "stage": "1",
-    "package": 6,
+    "package": 3,
     "individual": 1,
     "sku": "OB-TPFR-1",
     "productID": 322
@@ -785,7 +785,7 @@
   "OB-TPFR-2": {
     "brand": "Open/Broken Topfer",
     "stage": "3",
-    "package": 6,
+    "package": 3,
     "individual": 1,
     "sku": "OB-TPFR-2",
     "productID": 323
@@ -793,7 +793,7 @@
   "OB-TPFR-3": {
     "brand": "Open/Broken Topfer",
     "stage": "3",
-    "package": 6,
+    "package": 3,
     "individual": 1,
     "sku": "OB-TPFR-3",
     "productID": 366
@@ -801,7 +801,7 @@
   "OB-TPFR-4": {
     "brand": "Open/Broken Topfer",
     "stage": "4",
-    "package": 6,
+    "package": 4,
     "individual": 1,
     "sku": "OB-TPFR-4",
     "productID": 324
@@ -809,7 +809,7 @@
   "OB-TPFR-HA-PRE": {
     "brand": "Open/Broken Topfer HA",
     "stage": "PRE",
-    "package": 6,
+    "package": 3,
     "individual": 1,
     "sku": "OB-TPFR-4",
     "productID": 325
@@ -817,7 +817,7 @@
   "OB-TPFR-HA-1": {
     "brand": "Open/Broken Topfer HA",
     "stage": "1",
-    "package": 6,
+    "package": 3,
     "individual": 1,
     "sku": "OB-TPFR-HA-1",
     "productID": 695

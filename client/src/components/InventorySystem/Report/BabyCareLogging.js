@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Form, Button, Label, Container, Grid } from "semantic-ui-react";
 import moment from "moment";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
-import people from "../../../config/people.json";
+
 import babyCareInfo from "../../../config/babycareproduct.json";
 import "../inventory.css";
 
@@ -15,15 +16,7 @@ class BabyCareLogging extends Component {
       loading: false,
       quantity: "",
       index: 0,
-      key: Object.keys(babyCareInfo).map(key => key),
-      scanner: this.props.location.state.detail.user,
-      warehouseLocation: Object.keys(people)
-        .map(key => people[key])
-        .filter(data =>
-          data.email.includes(
-            this.props.location.state.detail.email.split("@")[0]
-          )
-        )
+      key: Object.keys(babyCareInfo).map(key => key)
     };
     this.handleChange = this.handleChange.bind(this);
     this.updateInventory = this.updateInventory.bind(this);
@@ -57,10 +50,9 @@ class BabyCareLogging extends Component {
   reset all states
   */
   updateInventory() {
-    const { quantity, key, index, scanner, warehouseLocation } = this.state;
-    const warehouse = warehouseLocation[0].warehouse
-      .toLowerCase()
-      .replace(/\s/g, "");
+    const { quantity, key, index } = this.state;
+    const { displayName, warehouseLocation } = this.props;
+    const warehouse = warehouseLocation.toLowerCase().replace(/\s/g, "");
 
     axios
       .put("fb/updateinventory", {
@@ -68,7 +60,7 @@ class BabyCareLogging extends Component {
         sku: key[index],
         brand: babyCareInfo[key[index]],
         total: quantity ? parseInt(quantity) : 0,
-        user: scanner,
+        user: displayName,
         date: moment().format("dddd, MMMM DD YYYY hh:mma")
       })
       .then(response => {
@@ -177,4 +169,14 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
   }
 }
 
-export default BabyCareLogging;
+function mapStateToProps({ authState }) {
+  return {
+    displayName: authState.displayName,
+    warehouseLocation: authState.warehouseLocation
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(BabyCareLogging);

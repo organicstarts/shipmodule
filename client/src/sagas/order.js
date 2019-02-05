@@ -10,7 +10,7 @@ function* handleGetBatch(action) {
   try {
     const payload = yield call(getBatch, action.payload.batchNumber);
     yield put({ type: BATCH_LOADED, payload });
-    action.payload.history.push("/batch");
+    action.payload.history.push("/batchList");
   } catch (e) {
     yield put({ type: "API_ERRORED", payload: e });
   }
@@ -20,7 +20,7 @@ function* handleGetOrderDetail(action) {
   try {
     const payload = yield call(getShipmentOrder, action.payload.orderNumber);
     yield put({ type: FETCH_LOADED, payload });
-    action.payload.history.push("/fetch");
+    action.payload.history.push("/fetchDetail");
   } catch (e) {
     yield put({ type: "API_ERRORED", payload: e });
   }
@@ -30,7 +30,7 @@ function* handleGetAllOrders(action) {
   try {
     const payload = yield call(getAllOrders, action.payload.oneData);
     yield put({ type: ALL_ORDERS_LOADED, payload });
-    action.payload.history.push("/fraud");
+    action.payload.history.push("/fraudList");
   } catch (e) {
     yield put({ type: "API_ERRORED", payload: e });
   }

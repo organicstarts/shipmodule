@@ -1,9 +1,9 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Form, Button, Label, Container, Grid } from "semantic-ui-react";
 import moment from "moment";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
-import people from "../../../config/people.json";
 import toyInfo from "../../../config/toy.json";
 import "../inventory.css";
 
@@ -15,15 +15,7 @@ class ToyLogging extends Component {
       loading: false,
       key: Object.keys(toyInfo).map(key => key),
       quantity: "",
-      index: 0,
-      scanner: this.props.location.state.detail.user,
-      warehouseLocation: Object.keys(people)
-        .map(key => people[key])
-        .filter(data =>
-          data.email.includes(
-            this.props.location.state.detail.email.split("@")[0]
-          )
-        )
+      index: 0
     };
     this.handleChange = this.handleChange.bind(this);
     this.updateInventory = this.updateInventory.bind(this);
@@ -57,17 +49,16 @@ class ToyLogging extends Component {
   reset all states
   */
   updateInventory() {
-    const { key, quantity, index, scanner, warehouseLocation } = this.state;
-    const warehouse = warehouseLocation[0].warehouse
-      .toLowerCase()
-      .replace(/\s/g, "");
+    const { key, quantity, index } = this.state;
+    const { displayName, warehouseLocation } = this.props;
+    const warehouse = warehouseLocation.toLowerCase().replace(/\s/g, "");
     axios
       .put("fb/updateinventory", {
         dbname: `${warehouse}Report`,
         brand: toyInfo[key[index]],
         sku: key[index],
         total: quantity ? parseInt(quantity) : 0,
-        user: scanner,
+        user: displayName,
         date: moment().format("dddd, MMMM DD YYYY hh:mma")
       })
       .then(response => {
@@ -175,4 +166,14 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
   }
 }
 
-export default ToyLogging;
+function mapStateToProps({ authState }) {
+  return {
+    displayName: authState.displayName,
+    warehouseLocation: authState.warehouseLocation
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(ToyLogging);

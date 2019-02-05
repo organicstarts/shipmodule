@@ -1,20 +1,16 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Button, Segment } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 
 class Inventory extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loading: false,
-      user: this.props.displayName,
-      email: this.props.email
-    };
+
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick(id) {
-    this.setState({ loading: true });
     let path = "";
     let warehouse = "";
     switch (id) {
@@ -39,7 +35,7 @@ class Inventory extends Component {
 
     this.props.history.push({
       pathname: path,
-      state: { detail: this.state, warehouse: warehouse ? warehouse : "" }
+      state: {  warehouse: warehouse ? warehouse : "" }
     });
   }
 
@@ -57,7 +53,7 @@ class Inventory extends Component {
         id: 4,
         name: "View Inbound Inventory Log",
         color: "teal",
-        show: this.props.compareEmail(this.state.email) ? true : false
+        show: this.props.compareEmail(this.props.email) ? true : false
       }
     ];
 
@@ -86,4 +82,15 @@ class Inventory extends Component {
   }
 }
 
-export default withRouter(Inventory);
+function mapStateToProps({ authState }) {
+  return {
+    email: authState.email
+  };
+}
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    null
+  )(Inventory)
+);

@@ -3,6 +3,9 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "./actions/auth";
 import Router from "./Router";
+import { Image } from "semantic-ui-react";
+import logo from "./logo.svg";
+import MediaQuery from "react-responsive";
 
 const MINUTES_UNITL_AUTO_LOGOUT = 1; // in mins
 const CHECK_INTERVAL = 15000; // in ms
@@ -56,7 +59,27 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="App">
+      <div className="App ">
+        <header className="noprint" style={{ margin: "50px" }}>
+          <MediaQuery minDeviceWidth={374}>
+            {matches => {
+              if (matches) {
+                return (
+                  <Image
+                    src={logo}
+                    size="medium"
+                    centered
+                    alt="Organic Start"
+                  />
+                );
+              } else {
+                return (
+                  <Image src={logo} size="small" centered alt="Organic Start" />
+                );
+              }
+            }}
+          </MediaQuery>
+        </header>
         <Router />
       </div>
     );

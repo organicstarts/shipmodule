@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { login, checkLoginState } from "../../actions/auth";
 import logo from "../../logo.svg";
 import { Button, Image } from "semantic-ui-react";
+import { ClipLoader } from "react-spinners";
 
 class Auth extends Component {
   constructor(props) {
@@ -20,6 +21,18 @@ class Auth extends Component {
 
   render() {
     const { children } = this.props;
+    if (this.props.loading) {
+      return (
+        <div className="App container tc" style={{ margin: "50px auto" }}>
+          <ClipLoader
+            sizeUnit={"px"}
+            size={720}
+            color={"#36D7B7"}
+            loading={this.props.loading}
+          />
+        </div>
+      );
+    }
     if (this.props.displayName) {
       return <React.Fragment>{children}</React.Fragment>;
     } else {

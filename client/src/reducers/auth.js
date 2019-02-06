@@ -2,7 +2,8 @@ import {
   AUTH_DATA_LOADED_OUT,
   AUTH_DATA_LOADED_IN,
   AUTH_CHECK_LOADED,
-  AUTH_LOGIN
+  AUTH_LOGIN,
+  AUTH_CHECK
 } from "../constants/actionTypes";
 import people from "../config/people.json";
 
@@ -76,6 +77,12 @@ function authReducer(state = INITIAL_STATE, action) {
     }
     case AUTH_LOGIN: {
       return setLoading(state, action);
+    }
+    case AUTH_CHECK: {
+      return { ...state, loading: true };
+    }
+    case "API_ERRORED": {
+      return { ...state, loading: false };
     }
     default:
       return state;

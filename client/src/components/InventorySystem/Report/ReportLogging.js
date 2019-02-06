@@ -74,9 +74,7 @@ class ReportLogging extends Component {
     const { upcNum, quantity } = this.state;
     const { displayName, warehouseLocation } = this.props;
     let sku = upc[upcNum];
-    const warehouse = warehouseLocation[0].warehouse
-      .toLowerCase()
-      .replace(/\s/g, "");
+    const warehouse = warehouseLocation.toLowerCase().replace(/\s/g, "");
 
     axios
       .put("fb/updateinventory", {

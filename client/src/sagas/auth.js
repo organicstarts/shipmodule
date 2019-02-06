@@ -46,7 +46,8 @@ const checkLoginState = () => {
 };
 
 const logOut = () => {
-  auth.signOut().then(() => {
+  return auth.signOut().then(() => {
+    document.location.href = "https://www.google.com/accounts/logout";
     return null;
   });
 };

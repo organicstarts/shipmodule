@@ -3,7 +3,7 @@
     "key": "1",
     "text": "Jonathan",
     "value": "jonathan",
-    "warehouse": "East coast",
+    "warehouse": "West coast",
     "email": "jonathan@organicstart.com"
   },
   {
@@ -24,14 +24,14 @@
     "key": "4",
     "text": "Steve",
     "value": "steve",
-    "warehouse": "East coast",
+    "warehouse": "West coast",
     "email": "steve@organicstart.com"
   },
   {
     "key": "5",
     "text": "David",
     "value": "david",
-    "warehouse": "East coast",
+    "warehouse": "West coast",
     "email": "david@organicstart.com"
   },
   {
@@ -71,7 +71,7 @@
   },
   {
     "key": "12",
-    "warehouse":"East coast",
+    "warehouse":"West coast",
     "email": "yvan@organicstart.com"
   }
 ]

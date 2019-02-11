@@ -63,15 +63,8 @@
     "email": "jason@organicstart.com"
   },
   {
-    "key": "11",
-    "text": "Training",
-    "value": "training",
-    "warehouse": "East coast",
-    "email": "training@organicstart.com"
-  },
-  {
     "key": "12",
-    "warehouse":"West coast",
+    "warehouse": "East coast",
     "email": "yvan@organicstart.com"
   }
 ]

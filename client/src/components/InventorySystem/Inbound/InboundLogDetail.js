@@ -47,6 +47,14 @@ const InboundLogDetail = props => {
             disabled={props.show ? false : true}
             name="undo"
           />
+          <Icon
+            onClick={() => props.deleteInventory(props.id)}
+            style={styles.hover}
+            bordered
+            inverted
+            color="red"
+            name="delete"
+          />
         </Table.Cell>
         <Table.Cell style={styles.border}>{props.timeStamp}</Table.Cell>
       </Table.Row>

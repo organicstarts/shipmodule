@@ -265,6 +265,10 @@ class BatchList extends Component {
           </p>
           <br />
           <p>
+            Set Started:_______________ Set Finished:_______________ Ship
+            Started:_______________ Ship Finished:_______________
+          </p>
+          <p>
             # of mistakes:_______________ Table Notes:
             ____________________________________________________________________________
             <br />

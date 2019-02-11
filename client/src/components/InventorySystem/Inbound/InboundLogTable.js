@@ -57,6 +57,26 @@ class InboundLogTable extends Component {
     this.firebaseRef.off();
   }
 
+  deleteInventory(key) {
+    if (window.confirm("are you sure you want to delete?")) {
+      // axios
+      //   .delete("fb/deleteinventory", {
+      //     data: {
+      //       id: key
+      //     }
+      //   })
+      //   .then(response => {
+      //     if (response.data.msg === "success") {
+      //       console.log("Deleted Item");
+      //     } else {
+      //       console.log("Item not deleted");
+      //     }
+      //   });
+    } else {
+      return false;
+    }
+  }
+
   totalChange(key) {
     const { dbDatas } = this.state;
     const bool = dbDatas[key].isChecked;
@@ -120,7 +140,6 @@ class InboundLogTable extends Component {
         }
         return null;
       });
-    console.log(result);
     return result;
   }
 
@@ -160,6 +179,7 @@ class InboundLogTable extends Component {
           image={datas[key].image ? datas[key].image : ""}
           handleTotal={this.totalChange.bind(this)}
           show={datas[key].isChecked}
+          deleteInventory={this.deleteInventory.bind(this)}
         />
       );
     });

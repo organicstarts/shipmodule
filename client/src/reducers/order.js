@@ -133,13 +133,14 @@ const sortShipments = (data, warehouse) => {
     count += group[key][0].combineTotal
       ? group[key][0].combineTotal
       : group[key][0].quantity;
-
-    if (group[key][0].warehouseLocation.includes(",")) {
-      const binPickNum = group[key][0].warehouseLocation.split(", ");
-      if (warehouse === "East coast") {
-        group[key][0].warehouseLocation = binPickNum[0];
-      } else if (warehouse === "West coast") {
-        group[key][0].warehouseLocation = binPickNum[1]
+    if (group[key][0].warehouseLocation) {
+      if (group[key][0].warehouseLocation.includes(",")) {
+        const binPickNum = group[key][0].warehouseLocation.split(", ");
+        if (warehouse === "East coast") {
+          group[key][0].warehouseLocation = binPickNum[0];
+        } else if (warehouse === "West coast") {
+          group[key][0].warehouseLocation = binPickNum[1];
+        }
       }
     }
   }
@@ -250,7 +251,7 @@ const INITIAL_STATE = {
   fetchDatas: [],
   savedFraud: [],
   fraudDatas: [],
-  newDatas:[],
+  newDatas: [],
   loading: true
 };
 

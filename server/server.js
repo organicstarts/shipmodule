@@ -37,25 +37,36 @@ app.use(staticFiles);
 ---------------------------------------------------------------------*/
 
 router.post("/writeupc", (req, res) => {
-  let rawData = fs.readFileSync("../client/src/config/upc.json");
+  let rawData = fs.readFileSync(
+    path.join(__dirname, "../../client/src/config/upc.json") ||
+      "../client/src/config/productinfo.json"
+  );
   let queue = JSON.parse(rawData);
   queue[req.body.individualUpc] = `TEMP-${req.body.individualUpc}`;
   queue[req.body.caseUpc] = `TEMP-${req.body.individualUpc}`;
   let data = JSON.stringify(queue, null, 2);
-  fs.writeFile("../client/src/config/upc.json", data, err => {
-    if (err) {
+  fs.writeFile(
+    path.join(__dirname, "../../client/src/config/upc.json") ||
+      "../client/src/config/productinfo.json",
+    data,
+    err => {
+      if (err) {
+        res.json({
+          msg: "fail"
+        });
+      }
       res.json({
-        msg: "fail"
+        msg: "success"
       });
     }
-    res.json({
-      msg: "success"
-    });
-  });
+  );
 });
 
 router.post("/writeupcinfo", (req, res) => {
-  let rawData = fs.readFileSync("../client/src/config/productinfo.json");
+  let rawData = fs.readFileSync(
+    path.join(__dirname, "../../client/src/config/productinfo.json") ||
+      "../client/src/config/productinfo.json"
+  );
   let queue = JSON.parse(rawData);
   queue[`TEMP-${req.body.individualUpc}`] = {
     brand: `TEMP-${req.body.individualUpc}`,
@@ -93,16 +104,21 @@ router.post("/writeupcinfo", (req, res) => {
   };
 
   transporter.sendMail(mailOptions);
-  fs.writeFile("../client/src/config/productinfo.json", data, err => {
-    if (err) {
+  fs.writeFile(
+    path.join(__dirname, "../../client/src/config/productinfo.json") ||
+      "../client/src/config/productinfo.json",
+    data,
+    err => {
+      if (err) {
+        res.json({
+          msg: "fail"
+        });
+      }
       res.json({
-        msg: "fail"
+        msg: "success"
       });
     }
-    res.json({
-      msg: "success"
-    });
-  });
+  );
 });
 
 /*-------------------------------------------------------------------

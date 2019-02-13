@@ -7,6 +7,7 @@ const fs = require("fs");
 const cors = require("cors");
 const admin = require("firebase-admin");
 import path from "path";
+const uuidv5 = require("uuid/v5");
 const nodemailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
 const app = express();
@@ -31,6 +32,60 @@ router.use("/fb", require("./routes/FirebaseAPI/API"));
 
 const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
+
+/*-------------------------------------------------------------------
+                            AUTH CUSTOM TOKEN                            
+---------------------------------------------------------------------*/
+router.post("/customToken", (req, res) => {
+  let userRecord = cred.login.filter(user => {
+    return user.pin === req.body.pin;
+  });
+  const NAMESPACE = "9f282611-e0fd-5650-8953-89c8e342da0b";
+  let uuid = uuidv5(userRecord[0].user, NAMESPACE);
+  if (uuid) {
+    admin
+      .auth()
+      .createCustomToken(uuid)
+      .then(customToken => {
+        admin
+          .auth()
+          .getUser(uuid)
+          .then(() => {
+            admin
+              .auth()
+              .updateUser(uuid, {
+                displayName: userRecord[0].user,
+                email: userRecord[0].email
+              })
+              .then(() => {
+                res.send(customToken);
+              })
+              .catch(error => console.log(error.message));
+          })
+          .catch(error => {
+            if (error.code === "auth/user-not-found") {
+              admin
+                .auth()
+                .createUser({
+                  displayName: userRecord[0].user,
+                  email: userRecord[0].email,
+                  uid: uuid
+                })
+                .then(() => {
+                  res.send(customToken);
+                });
+            }
+          });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  } else {
+    res.json({
+      msg: "fail"
+    });
+  }
+});
 
 /*-------------------------------------------------------------------
                             WRITE TO FILE                            

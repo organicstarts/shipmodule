@@ -4,11 +4,12 @@ import {
   AUTH_DATA_LOADED_OUT,
   AUTH_CHECK_LOADED
 } from "../constants/actionTypes";
-import { auth, provider } from "../config/firebaseconf";
+import axios from "axios";
+import { auth } from "../config/firebaseconf";
 
-function* handleLogin() {
+function* handleLogin(action) {
   try {
-    const payload = yield call(logIn);
+    const payload = yield call(logIn, action.payload);
     yield put({ type: AUTH_DATA_LOADED_IN, payload });
   } catch (e) {
     yield put({ type: "API_ERRORED", payload: e });
@@ -47,23 +48,38 @@ const checkLoginState = () => {
 
 const logOut = () => {
   return auth.signOut().then(() => {
-    document.location.href = "https://www.google.com/accounts/logout";
+     document.location.href = "/";
     return null;
   });
 };
 
-const logIn = () => {
-  return auth.signInWithRedirect(provider).then(result => {
-    let email = result.additionalUserInfo.profile.hd;
-    let isNewUser = result.additionalUserInfo.isNewUser;
-    if (!isNewUser || email === "organicstart.com") {
-      return result;
-    } else {
-      result.user.delete().then(x => {
-        return null;
-      });
-    }
-  });
+const logIn = pin => {
+  return axios
+    .post("/customToken", {
+      pin
+    })
+    .then(token => {
+      return auth
+        .signInWithCustomToken(token.data)
+        .then(result => {
+          return result;
+        })
+        .catch(error => {
+          console.log(error.message);
+        });
+    });
+
+  // return auth.signInWithRedirect(provider).then(result => {
+  //   let email = result.additionalUserInfo.profile.hd;
+  //   let isNewUser = result.additionalUserInfo.isNewUser;
+  //   if (!isNewUser || email === "organicstart.com") {
+  //     return result;
+  //   } else {
+  //     result.user.delete().then(x => {
+  //       return null;
+  //     });
+  //   }
+  // });
 };
 
 export { handleLogin, handleLogOut, handleLoginState };

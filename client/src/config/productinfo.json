@@ -861,6 +861,13 @@
     "individual": 1,
     "sku": "HOL-BAN-GB",
     "productID": 316
+  },
+  "HOL-HAFER": {
+    "brand": "Holle Cereal",
+    "stage": "Haferflocken",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-HAFER",
+    "productID": 93
   }
-  
 }

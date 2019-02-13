@@ -231,7 +231,7 @@ const SlipDetail = props => {
               />
             </td>
             <td style={{ textAlign: "center" }}>
-              <h3 className="ui header">Prepared by {props.shipper.name}</h3>
+              <h3 className="ui header">Shipped by {props.shipper.name}</h3>
               <div className="sub header" style={{ color: "#000" }}>
                 "{props.shipper.quote}"
               </div>

@@ -869,5 +869,13 @@
     "individual": 1,
     "sku": "HOL-HAFER",
     "productID": 93
+  },
+  "HP-GN": {
+    "brand": "HiPP",
+    "stage": "Good Night",
+    "package": 12,
+    "individual": 1,
+    "sku": "HP-GN",
+    "productID": 110
   }
 }

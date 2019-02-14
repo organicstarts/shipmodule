@@ -170,7 +170,7 @@ class InboundLogging extends Component {
     const { displayName, warehouseLocation } = this.props;
     let sku = upc[upcNum];
     let storageRef = firebase.storage().ref("images");
-
+    this.setState({ loading: true });
     storageRef
       .child(trackingNumber)
       .put(file)
@@ -201,6 +201,7 @@ class InboundLogging extends Component {
       })
       .then(() => {
         this.setState({
+          loading: false,
           count: 0,
           trackingNumber: "",
           upcNum: "",
@@ -539,27 +540,33 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
       </Form.Field>
     );
   }
-
-  renderConfirmation() {
-    const {
-      trackingNumber,
-      quantity,
-      upcNum,
-      broken,
-      loading,
-      invoiceNum
-    } = this.state;
-    let sku = upc[upcNum];
-    if (loading) {
+  renderButton() {
+    if (this.state.loading) {
       return (
         <ClipLoader
           sizeUnit={"px"}
           size={34}
           color={"#36D7B7"}
-          loading={loading}
+          loading={this.state.loading}
+          style={{marginRight: "25px"}}
         />
       );
     }
+    return (
+      <Button
+        onClick={this.handleSubmit}
+        size="massive"
+        color="olive"
+        type="submit"
+      >
+        Yes
+      </Button>
+    );
+  }
+  renderConfirmation() {
+    const { trackingNumber, quantity, upcNum, broken, invoiceNum } = this.state;
+    let sku = upc[upcNum];
+
     return (
       <div className="tc">
         <h2>Is this information correct?</h2>
@@ -578,14 +585,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
           <List.Item>Invoice #: {invoiceNum ? invoiceNum : 0}</List.Item>
         </List>
 
-        <Button
-          onClick={this.handleSubmit}
-          size="massive"
-          color="olive"
-          type="submit"
-        >
-          Yes
-        </Button>
+        {this.renderButton()}
 
         <Button onClick={this.subtract} size="massive" color="red">
           No

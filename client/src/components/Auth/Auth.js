@@ -4,8 +4,9 @@ import { login, checkLoginState } from "../../actions/auth";
 import logo from "../../logo.svg";
 import { Button, Image, Form } from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
-// import Keyboard from "react-simple-keyboard";
+import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
+import "./Auth.css";
 
 class Auth extends Component {
   constructor(props) {
@@ -15,6 +16,8 @@ class Auth extends Component {
       layoutName: "default"
     };
     this.handleChange = this.handleChange.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
     this.login = this.login.bind(this);
   }
   handleChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -28,6 +31,28 @@ class Auth extends Component {
 
   onChange = input => {
     this.setState({ pin: input });
+  };
+
+  onKeyPress = button => {
+    const { pin } = this.state;
+    switch (button) {
+      case "{bksp}": {
+        this.setState({
+          ...pin,
+          pin: this.state.pin.length > 0 ? this.state.pin.length - 1 : ""
+        });
+        break;
+      }
+      case "{clr}": {
+        this.setState({
+          pin: ""
+        });
+        this.keyboard.clearInput();
+        break;
+      }
+      default:
+        return;
+    }
   };
 
   render() {
@@ -64,13 +89,25 @@ class Auth extends Component {
                 required
                 autoFocus
               />
-              {/* <Keyboard
-                name="pin"
-                layoutName={this.state.layoutName}
-                value={this.state.pin}
-                onChange={input => this.onChange(input)}
-              /> */}
             </Form.Field>
+
+            <Keyboard
+              ref={r => (this.keyboard = r)}
+              name="pin"
+              layoutName={this.state.layoutName}
+              value={this.state.pin}
+              onChange={this.onChange}
+              onKeyPress={this.onKeyPress}
+              theme={"hg-theme-default hg-layout-default myTheme "}
+              layout={{
+                default: ["1 2 3", "4 5 6", "7 8 9", "{clr} 0 {bksp}"]
+              }}
+              display={{
+                "{bksp}": "del",
+                "{clr}": "clear"
+              }}
+            />
+
             <Button type="submit" fluid size="large" color="green">
               Log In
             </Button>

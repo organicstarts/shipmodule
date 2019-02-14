@@ -170,41 +170,47 @@ class InboundLogging extends Component {
     const { displayName, warehouseLocation } = this.props;
     let sku = upc[upcNum];
     let storageRef = firebase.storage().ref("images");
-    storageRef.child(trackingNumber).put(file);
 
-    axios
-      .post("fb/writeinventorytofile", {
-        trackingNumber,
-        carrier: this.getCarrier(trackingNumber),
-        productID: skuInfo[sku].productID,
-        sku: skuInfo[sku].sku,
-        brand: skuInfo[sku].brand,
-        stage: skuInfo[sku].stage,
-        quantity: parseInt(quantity * skuInfo[sku].package - broken),
-        broken: broken ? parseInt(broken) : 0,
-        total: skuInfo[sku].package * quantity,
-        invoiceNum: invoiceNum,
-        scanner: displayName,
-        timeStamp: moment().format("dddd, MMMM DD YYYY hh:mma"),
-        warehouseLocation: warehouseLocation
+    storageRef
+      .child(trackingNumber)
+      .put(file)
+      .then(async () => {
+        await axios
+          .post("fb/writeinventorytofile", {
+            trackingNumber,
+            carrier: this.getCarrier(trackingNumber),
+            productID: skuInfo[sku].productID,
+            sku: skuInfo[sku].sku,
+            brand: skuInfo[sku].brand,
+            stage: skuInfo[sku].stage,
+            quantity: parseInt(quantity * skuInfo[sku].package - broken),
+            broken: broken ? parseInt(broken) : 0,
+            total: skuInfo[sku].package * quantity,
+            invoiceNum: invoiceNum,
+            scanner: displayName,
+            timeStamp: moment().format("dddd, MMMM DD YYYY hh:mma"),
+            warehouseLocation: warehouseLocation
+          })
+          .then(response => {
+            if (response.data.msg === "success") {
+              console.log("logged");
+            } else if (response.data.msg === "fail") {
+              console.log("failed to log.");
+            }
+          });
       })
-      .then(response => {
-        if (response.data.msg === "success") {
-          console.log("logged");
-        } else if (response.data.msg === "fail") {
-          console.log("failed to log.");
-        }
-      });
-
-    this.setState({
-      count: 0,
-      trackingNumber: "",
-      upcNum: "",
-      brand: "",
-      quantity: "",
-      broken: "",
-      invoiceNum: ""
-    });
+      .then(() => {
+        this.setState({
+          count: 0,
+          trackingNumber: "",
+          upcNum: "",
+          brand: "",
+          quantity: "",
+          broken: "",
+          invoiceNum: ""
+        });
+      })
+      .catch(error => alert(error.message + " Contact Yvan"));
   }
 
   checkError() {
@@ -222,11 +228,11 @@ class InboundLogging extends Component {
       return "Post NL";
     } else if (tracking.includes("CO")) {
       return "DHL Economy";
-    } else if (tracking.includes("30100981")) {
+    } else if (tracking.includes("30100981") || tracking.includes("EA")) {
       return "Bpost";
     } else if (tracking.includes("CP")) {
       return "Lux";
-    } else if (tracking.length === 10) {
+    } else if (tracking.length === 10 || tracking.includes("JJD")) {
       return "DHL Express";
     } else {
       return "Other";
@@ -574,14 +580,14 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
 
         <Button
           onClick={this.handleSubmit}
-          size="medium"
+          size="massive"
           color="olive"
           type="submit"
         >
           Yes
         </Button>
 
-        <Button onClick={this.subtract} size="medium" color="red">
+        <Button onClick={this.subtract} size="massive" color="red">
           No
         </Button>
       </div>
@@ -589,7 +595,6 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
   }
 
   render() {
-
     return (
       <Container fluid style={{ marginTop: "50px" }}>
         {this.renderInput()}

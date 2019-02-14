@@ -48,7 +48,7 @@ const checkLoginState = () => {
 
 const logOut = () => {
   return auth.signOut().then(() => {
-     document.location.href = "/";
+    document.location.href = "/";
     return null;
   });
 };
@@ -62,6 +62,7 @@ const logIn = pin => {
       return auth
         .signInWithCustomToken(token.data)
         .then(result => {
+          document.location.href = "/";
           return result;
         })
         .catch(error => {

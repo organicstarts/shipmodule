@@ -82,7 +82,7 @@ function authReducer(state = INITIAL_STATE, action) {
       return { ...state, loading: true };
     }
     case "API_ERRORED": {
-      return { ...state, loading: false };
+      return { ...INITIAL_STATE };
     }
     default:
       return state;

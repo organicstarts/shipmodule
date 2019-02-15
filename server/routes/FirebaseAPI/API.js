@@ -203,19 +203,20 @@ router.put("/updateinventory", (req, res) => {
                             DELETE REQUESTS                            
 ---------------------------------------------------------------------*/
 router.delete("/deleteinventory", (req, res) => {
-  console.log(`${req.body.id}`)
+  console.log(`${req.body.id}`);
   let dataRef = admin.database().ref(`/inventory/log/${req.body.id}`);
 
-  // dataRef
-  //   .remove()
-  //   .then(() => {
-  //     res.json({
-  //       msg: "success"
-  //     });
-  //   })
-  //   .catch(error => {
-  //     console.log("Remove failed: " + error.message);
-  //   });
+  dataRef
+    .remove()
+    .then(() => {
+      res.json({
+        msg: "success"
+      });
+    })
+    .catch(error => {
+      console.log("Remove failed: " + error.message);
+      res.json({ msg: "failed" });
+    });
 });
 
 module.exports = router;

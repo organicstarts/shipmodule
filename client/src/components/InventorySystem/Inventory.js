@@ -35,7 +35,7 @@ class Inventory extends Component {
 
     this.props.history.push({
       pathname: path,
-      state: {  warehouse: warehouse ? warehouse : "" }
+      state: { warehouse: warehouse ? warehouse : "" }
     });
   }
 
@@ -48,7 +48,12 @@ class Inventory extends Component {
         show: true
       },
       { id: 2, name: "West Coast Reporting Table", color: "vk", show: true },
-      { id: 3, name: "View Inventory", color: "orange", show: true },
+      {
+        id: 3,
+        name: "View Inventory",
+        color: "orange",
+        show: this.props.compareEmail(this.props.email) ? true : false
+      },
       {
         id: 4,
         name: "View Inbound Inventory Log",

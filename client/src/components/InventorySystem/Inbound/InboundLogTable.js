@@ -32,22 +32,23 @@ class InboundLogTable extends Component {
               this.state.filter.value !== ""
                 ? this.filterLog(this.state.filter.value)
                 : payload.log,
-            dbDatas: payload.log
+            dbDatas: payload.log,
+            loading: false
           });
-          let storageRef = firebase.storage().ref();
+          // let storageRef = firebase.storage().ref();
 
-          Object.keys(payload.log).forEach(key => {
-            storageRef
-              .child(`images/${payload.log[key].trackingNumber}`)
-              .getDownloadURL()
-              .then(url => {
-                payload.log[key].image = url;
-                this.setState({ loading: false });
-              })
-              .catch(err => {
-                console.log("file not found!");
-              });
-          });
+          // Object.keys(payload.log).forEach(key => {
+          //   storageRef
+          //     .child(`images/${payload.log[key].trackingNumber}`)
+          //     .getDownloadURL()
+          //     .then(url => {
+          //       payload.log[key].image = url;
+          //       this.setState({ loading: false });
+          //     })
+          //     .catch(err => {
+          //       console.log("file not found!");
+          //     });
+          // });
         }
       })
       .bind(this);
@@ -59,19 +60,21 @@ class InboundLogTable extends Component {
 
   deleteInventory(key) {
     if (window.confirm("are you sure you want to delete?")) {
-      // axios
-      //   .delete("fb/deleteinventory", {
-      //     data: {
-      //       id: key
-      //     }
-      //   })
-      //   .then(response => {
-      //     if (response.data.msg === "success") {
-      //       console.log("Deleted Item");
-      //     } else {
-      //       console.log("Item not deleted");
-      //     }
-      //   });
+      this.setState({ loading: true });
+      axios
+        .delete("fb/deleteinventory", {
+          data: {
+            id: key
+          }
+        })
+        .then(response => {
+          if (response.data.msg === "success") {
+            console.log("Deleted Item");
+          } else {
+            console.log("Item not deleted");
+          }
+        })
+        .catch(error => console.log(error.message));
     } else {
       return false;
     }

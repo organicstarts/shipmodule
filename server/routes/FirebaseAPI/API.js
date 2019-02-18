@@ -44,6 +44,44 @@ router.post("/writeinventorytofile", (req, res) => {
 });
 
 /*
+save inbound products to inventory archive
+ */
+router.post("/archiveinventory", (req, res) => {
+  let dataRef = admin.database().ref("/inventory");
+
+  dataRef
+    .once("value", snap => {
+      let logInventory = {
+        trackingNumber: req.body.trackingNumber,
+        carrier: req.body.carrier,
+        productID: req.body.productID,
+        sku: req.body.sku,
+        isChecked: req.body.isChecked,
+        brand: req.body.brand,
+        stage: req.body.stage,
+        quantity: req.body.quantity,
+        broken: req.body.broken,
+        invoiceNum: req.body.invoiceNum,
+        total: req.body.total,
+        scanner: req.body.scanner,
+        warehouseLocation: req.body.warehouseLocation,
+        timeStamp: req.body.timeStamp
+      };
+      dataRef.child("archive").push(logInventory);
+    })
+    .then(x => {
+      res.json({
+        msg: "success"
+      });
+    })
+    .catch(e => {
+      res.json({
+        msg: "fail"
+      });
+    });
+});
+
+/*
 log all the actions user does in the app (clicking, printing, completing fraud status)
 */
 router.post("/writetofile", (req, res) => {

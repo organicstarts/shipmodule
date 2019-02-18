@@ -133,10 +133,15 @@ class FraudOrders extends Component {
 }
 
 
+const mapStateToProps = ({ authState }) => {
+  return {
+    displayName: authState.displayName,
+  };
+};
 
 export default withRouter(
   connect(
-    null,
+    mapStateToProps,
     { getAllOrders }
   )(FraudOrders)
 );

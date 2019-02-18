@@ -28,6 +28,9 @@ class Inventory extends Component {
       case 4:
         path = "/inboundLogTable";
         break;
+      case 5:
+        path = "/archiveLogTable";
+        break;
       default:
         path = "/";
         break;
@@ -58,6 +61,11 @@ class Inventory extends Component {
         id: 4,
         name: "View Inbound Inventory Log",
         color: "teal",
+        show: this.props.compareEmail(this.props.email) ? true : false
+      },      {
+        id: 5,
+        name: "View Archive Inbound Log",
+        color: "facebook",
         show: this.props.compareEmail(this.props.email) ? true : false
       }
     ];

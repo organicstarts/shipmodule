@@ -2,7 +2,7 @@ import React from "react";
 import { Table, Modal, Image, Icon } from "semantic-ui-react";
 import "../inventory.css";
 
-const InboundLogDetail = props => {
+const ArchiveLogDetail = props => {
   return (
     <Table.Body>
       <Table.Row>
@@ -48,7 +48,7 @@ const InboundLogDetail = props => {
             name="undo"
           />
           <Icon
-            onClick={() => props.archiveInventory(props.id)}
+            onClick={() => props.deleteInventory(props.id)}
             style={styles.hover}
             bordered
             inverted
@@ -62,7 +62,7 @@ const InboundLogDetail = props => {
   );
 };
 
-export default InboundLogDetail;
+export default ArchiveLogDetail;
 
 const styles = {
   border: {

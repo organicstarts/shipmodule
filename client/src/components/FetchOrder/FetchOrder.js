@@ -113,9 +113,15 @@ class FetchOrder extends React.Component {
   }
 }
 
+const mapStateToProps = ({ authState }) => {
+  return {
+    displayName: authState.displayName,
+  };
+};
+
 export default withRouter(
   connect(
-    null,
+    mapStateToProps,
     { getOrderDetail }
   )(FetchOrder)
 );

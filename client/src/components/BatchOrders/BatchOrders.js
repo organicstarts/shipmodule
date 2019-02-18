@@ -130,9 +130,15 @@ class BatchOrders extends React.Component {
   }
 }
 
+const mapStateToProps = ({ authState }) => {
+  return {
+    displayName: authState.displayName
+  };
+};
+
 export default withRouter(
   connect(
-    null,
+    mapStateToProps,
     { getBatch, setShipmentItems }
   )(BatchOrders)
 );

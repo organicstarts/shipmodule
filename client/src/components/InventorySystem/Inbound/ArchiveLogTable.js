@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import InboundLogDetail from "./InboundLogDetail";
+import ArchiveLogDetail from "./ArchiveLogDetail";
 import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import firebase from "../../../config/firebaseconf";
@@ -7,7 +7,7 @@ import skuInfo from "../../../config/productinfo.json";
 import { Segment, Table, Form, FormGroup } from "semantic-ui-react";
 import axios from "axios";
 
-class InboundLogTable extends Component {
+class ArchiveLogTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,13 +26,13 @@ class InboundLogTable extends Component {
     this.firebaseRef
       .on("value", async snapshot => {
         const payload = snapshot.val();
-        if (payload.log) {
+        if (payload.archive) {
           this.setState({
             datas:
               this.state.filter.value !== ""
                 ? this.filterLog(this.state.filter.value)
-                : payload.log,
-            dbDatas: payload.log,
+                : payload.archive,
+            dbDatas: payload.archive,
             loading: false
           });
           // let storageRef = firebase.storage().ref();
@@ -58,42 +58,26 @@ class InboundLogTable extends Component {
     this.firebaseRef.off();
   }
 
-  archiveInventory(key) {
-    const { dbDatas } = this.state;
-    this.setState({ loading: true });
-    
-    axios
-      .post("fb/archiveInventory", {
-        trackingNumber: dbDatas[key].trackingNumber,
-        carrier: dbDatas[key].carrier,
-        productID: dbDatas[key].productID,
-        isChecked: dbDatas[key].isChecked ? dbDatas[key].isChecked : false,
-        sku: dbDatas[key].sku,
-        brand: dbDatas[key].brand,
-        stage: dbDatas[key].stage,
-        quantity: dbDatas[key].quantity,
-        broken: dbDatas[key].broken,
-        total: dbDatas[key].total,
-        invoiceNum: dbDatas[key].invoiceNum,
-        scanner: dbDatas[key].scanner,
-        timeStamp: dbDatas[key].timeStamp,
-        warehouseLocation: dbDatas[key].warehouseLocation
-      })
-      .then(() => {
-        axios.delete("fb/deleteinventory", {
+  deleteInventory(key) {
+    if (window.confirm("are you sure you want to delete?")) {
+      this.setState({ loading: true });
+      axios
+        .delete("fb/deleteinventory", {
           data: {
             id: key
           }
-        });
-      })
-      .then(response => {
-        if (response.data.msg === "success") {
-          console.log("Deleted Item");
-        } else {
-          console.log("Item not deleted");
-        }
-      })
-      .catch(error => console.log(error.message));
+        })
+        .then(response => {
+          if (response.data.msg === "success") {
+            console.log("Deleted Item");
+          } else {
+            console.log("Item not deleted");
+          }
+        })
+        .catch(error => console.log(error.message));
+    } else {
+      return false;
+    }
   }
 
   totalChange(key) {
@@ -181,11 +165,9 @@ class InboundLogTable extends Component {
     const { datas } = this.state;
     return Object.keys(datas).map(key => {
       return (
-        <InboundLogDetail
+        <ArchiveLogDetail
           key={key}
           id={datas[key].key ? datas[key].key : key}
-          sku={datas[key].sku}
-          productID={datas[key].productID}
           carrier={datas[key].carrier}
           trackingNumber={datas[key].trackingNumber}
           brand={datas[key].brand}
@@ -200,7 +182,7 @@ class InboundLogTable extends Component {
           image={datas[key].image ? datas[key].image : ""}
           handleTotal={this.totalChange.bind(this)}
           show={datas[key].isChecked}
-          archiveInventory={this.archiveInventory.bind(this)}
+          deleteInventory={this.deleteInventory.bind(this)}
         />
       );
     });
@@ -371,4 +353,4 @@ const propComparator = propName => {
   };
 };
 
-export default InboundLogTable;
+export default ArchiveLogTable;

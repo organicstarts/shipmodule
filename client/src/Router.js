@@ -17,6 +17,7 @@ import ReturnLogging from "./components/InventorySystem/Report/ReturnLogging";
 import OBReportLogging from "./components/InventorySystem/Report/OBReportLogging";
 import BabyCareLogging from "./components/InventorySystem/Report/BabyCareLogging";
 import ToyLogging from "./components/InventorySystem/Report/ToyLogging";
+import ArchiveLogTable from "./components/InventorySystem/Inbound/ArchiveLogTable";
 
 const Router = () => (
   <main>
@@ -31,6 +32,7 @@ const Router = () => (
       <Route path="/log" component={LogList} />
       <Route path="/inboundLogging" component={InboundLogging} />
       <Route path="/inboundLogTable" component={InboundLogTable} />
+      <Route path="/archiveLogTable" component={ArchiveLogTable} />
       <Route path="/inventoryTable" component={InventoryTable} />
       <Route path="/inventoryReport" component={InventoryReportTable} />
       <Route path="/reportLogging" component={ReportLogging} />

@@ -21,7 +21,12 @@ const InboundLogDetail = props => {
         <Table.Cell style={styles.border}>
           <Modal
             trigger={
-              <Icon style={styles.hover} bordered name="file alternate" />
+              <Icon
+                onClick={() => props.loadImage(props.trackingNumber)}
+                style={styles.hover}
+                bordered
+                name="file alternate"
+              />
             }
             closeIcon
           >

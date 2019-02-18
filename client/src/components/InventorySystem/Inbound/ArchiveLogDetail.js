@@ -21,7 +21,12 @@ const ArchiveLogDetail = props => {
         <Table.Cell style={styles.border}>
           <Modal
             trigger={
-              <Icon style={styles.hover} bordered name="file alternate" />
+              <Icon
+                style={styles.hover}
+                onClick={() => props.loadImage(props.trackingNumber)}
+                bordered
+                name="file alternate"
+              />
             }
             closeIcon
           >

@@ -15,6 +15,7 @@ class InboundLogTable extends Component {
       datas: {},
       loading: true,
       filter: { value: "", log: [] },
+      image: "",
       reverse: ""
     };
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -58,10 +59,24 @@ class InboundLogTable extends Component {
     this.firebaseRef.off();
   }
 
+  loadImage(trackingNumber) {
+    let storageRef = firebase.storage().ref();
+
+    storageRef
+      .child(`images/${trackingNumber}`)
+      .getDownloadURL()
+      .then(url => {
+        this.setState({ loading: false, image: url });
+      })
+      .catch(err => {
+        console.log("file not found!");
+      });
+  }
+
   archiveInventory(key) {
     const { dbDatas } = this.state;
     this.setState({ loading: true });
-    
+
     axios
       .post("fb/archiveInventory", {
         trackingNumber: dbDatas[key].trackingNumber,
@@ -82,6 +97,7 @@ class InboundLogTable extends Component {
       .then(() => {
         axios.delete("fb/deleteinventory", {
           data: {
+            db: "log",
             id: key
           }
         });
@@ -178,7 +194,7 @@ class InboundLogTable extends Component {
   };
 
   mapTableList() {
-    const { datas } = this.state;
+    const { datas, image } = this.state;
     return Object.keys(datas).map(key => {
       return (
         <InboundLogDetail
@@ -197,7 +213,8 @@ class InboundLogTable extends Component {
           scanner={datas[key].scanner}
           timeStamp={datas[key].timeStamp}
           warehouseLocation={datas[key].warehouseLocation}
-          image={datas[key].image ? datas[key].image : ""}
+          image={image}
+          loadImage={this.loadImage.bind(this)}
           handleTotal={this.totalChange.bind(this)}
           show={datas[key].isChecked}
           archiveInventory={this.archiveInventory.bind(this)}

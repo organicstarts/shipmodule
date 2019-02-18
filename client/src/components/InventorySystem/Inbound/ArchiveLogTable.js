@@ -15,6 +15,7 @@ class ArchiveLogTable extends Component {
       datas: {},
       loading: true,
       filter: { value: "", log: [] },
+      image: "",
       reverse: ""
     };
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -58,12 +59,26 @@ class ArchiveLogTable extends Component {
     this.firebaseRef.off();
   }
 
+  loadImage(trackingNumber) {
+    let storageRef = firebase.storage().ref();
+
+    storageRef
+      .child(`images/${trackingNumber}`)
+      .getDownloadURL()
+      .then(url => {
+        this.setState({ loading: false, image: url });
+      })
+      .catch(err => {
+        console.log("file not found!");
+      });
+  }
   deleteInventory(key) {
     if (window.confirm("are you sure you want to delete?")) {
       this.setState({ loading: true });
       axios
         .delete("fb/deleteinventory", {
           data: {
+            db: "archive",
             id: key
           }
         })
@@ -162,7 +177,7 @@ class ArchiveLogTable extends Component {
   };
 
   mapTableList() {
-    const { datas } = this.state;
+    const { datas, image } = this.state;
     return Object.keys(datas).map(key => {
       return (
         <ArchiveLogDetail
@@ -179,7 +194,8 @@ class ArchiveLogTable extends Component {
           scanner={datas[key].scanner}
           timeStamp={datas[key].timeStamp}
           warehouseLocation={datas[key].warehouseLocation}
-          image={datas[key].image ? datas[key].image : ""}
+          image={image}
+          loadImage={this.loadImage.bind(this)}
           handleTotal={this.totalChange.bind(this)}
           show={datas[key].isChecked}
           deleteInventory={this.deleteInventory.bind(this)}

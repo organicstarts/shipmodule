@@ -133,7 +133,7 @@ class ArchiveLogTable extends Component {
       })
       .then(response => {
         if (response.data.msg === "success") {
-          let update = firebase.database().ref("/inventory/log");
+          let update = firebase.database().ref("/inventory/archive");
           update.child(key).update({ isChecked: !bool });
         }
       });

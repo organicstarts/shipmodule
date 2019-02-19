@@ -32,7 +32,7 @@ class OpenBrokenTable extends Component {
   componentDidMount() {
     const bgData = {};
     this.firebaseRef = firebase.database().ref(`/inventory`);
-    this.firebaseRef.once("value", async snapshot => {
+    this.firebaseRef.on("value", async snapshot => {
       const payload = snapshot.val();
       if (payload.eastOB) {
         this.setState({
@@ -81,10 +81,6 @@ class OpenBrokenTable extends Component {
       case "westcoast":
         data = this.state.westDatas;
         dataName = "westDatas";
-        break;
-      case "bigcommerce":
-        data = this.state.bgDatas;
-        dataName = "bgDatas";
         break;
       default:
         data = "";

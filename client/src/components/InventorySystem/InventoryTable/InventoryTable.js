@@ -55,7 +55,7 @@ class InventoryTable extends Component {
   componentDidMount() {
     const bgData = {};
     this.firebaseRef = firebase.database().ref(`/inventory`);
-    this.firebaseRef.once("value", async snapshot => {
+    this.firebaseRef.on("value", async snapshot => {
       const payload = snapshot.val();
       if (payload.eastcoast) {
         this.setState({
@@ -106,10 +106,6 @@ class InventoryTable extends Component {
         data = this.state.westDatas;
         dataName = "westDatas";
         break;
-      case "bigcommerce":
-        data = this.state.bgDatas;
-        dataName = "bgDatas";
-        break;
       default:
         data = "";
         break;
@@ -122,16 +118,26 @@ class InventoryTable extends Component {
       value = 0;
     }
     data[e.target.placeholder].total = parseInt(value);
+    let bgTotal = this.state.bgDatas;
+    bgTotal[e.target.placeholder].total = this.calculateTotal(
+      this.state.eastDatas[e.target.placeholder].total,
+      this.state.westDatas[e.target.placeholder].total
+    );
     this.setState({
-      [dataName]: data
+      [dataName]: data,
+      bgDatas: bgTotal
     });
   };
-
   totalChange(key, db) {
     let dataName;
     if (db === "eastcoast" || db === "westcoast") {
-      if (db === "eastcoast") dataName = "eastDatas";
-      else dataName = "westDatas";
+      if (db === "eastcoast") {
+        dataName = "eastDatas";
+        db = "eastcoast";
+      } else {
+        dataName = "westDatas";
+        db = "westcoast";
+      }
       axios
         .put("fb/updateinventory", {
           noEquation: true,
@@ -146,13 +152,12 @@ class InventoryTable extends Component {
             console.log("failed to log.");
           }
         });
-    } else if (db === "bigcommerce") {
-      dataName = "bgDatas";
+
       axios
         .put("os/updateinventory", {
           noEquation: true,
-          inventory_level: this.state[dataName][key].total,
-          productID: this.state[dataName][key].id
+          inventory_level: this.state.bgDatas[key].total,
+          productID: this.state.bgDatas[key].id
         })
         .then(response => {
           if (response.data.msg === "success") {
@@ -186,26 +191,42 @@ class InventoryTable extends Component {
     });
   }
 
-  async handleOutOfStockSingle(key) {
-    const { bgDatas } = this.state;
+  handleOutOfStockSingle(key) {
+    const { bgDatas, eastDatas, westDatas } = this.state;
     const tempBGData = { ...bgDatas };
     if (bgDatas[key].availability === "available") {
-      axios.put("os/disableproduct", {
-        productID: tempBGData[key].id,
-        availability: "disabled"
-      });
-      tempBGData[key].availability = "disabled";
-      await this.disableBundle(tempBGData[key].bundles);
+      axios
+        .put("os/disableproduct", {
+          productID: tempBGData[key].id,
+          availability: "disabled",
+          inventory_level: 0
+        })
+        .then(async () => {
+          await this.disableBundle(tempBGData[key].bundles);
+          tempBGData[key].availability = "disabled";
+          tempBGData[key].total = 0;
+          this.setState({ bgDatas: tempBGData });
+        });
     } else {
-      axios.put("os/disableproduct", {
-        productID: tempBGData[key].id,
-        availability: "available"
-      });
-      tempBGData[key].availability = "available";
-      await this.enableBundle(tempBGData[key].bundles);
+      axios
+        .put("os/disableproduct", {
+          productID: tempBGData[key].id,
+          availability: "available",
+          inventory_level: this.calculateTotal(
+            eastDatas[key].total,
+            westDatas[key].total
+          )
+        })
+        .then(async () => {
+          await this.enableBundle(tempBGData[key].bundles);
+          tempBGData[key].availability = "available";
+          tempBGData[key].total = this.calculateTotal(
+            eastDatas[key].total,
+            westDatas[key].total
+          );
+          this.setState({ bgDatas: tempBGData });
+        });
     }
-
-    this.setState({ bgDatas: tempBGData });
   }
 
   handleOutOfStockBundle(key) {
@@ -230,7 +251,9 @@ class InventoryTable extends Component {
       bgDatas: tempBGData
     });
   }
-
+  calculateTotal(east, west) {
+    return east + west;
+  }
   mapTableList() {
     const { eastDatas, westDatas, bgDatas, toggle } = this.state;
 

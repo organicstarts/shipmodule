@@ -69,15 +69,16 @@ const InventoryReportDetail = props => {
               placeholder={props.sku}
               onChange={props.handleChange}
               type="text"
+              disabled
             />
-            <Button
+            {/* <Button
               style={{ marginTop: "5%" }}
               onClick={() => props.handleSubmitButton(props.sku, "bigcommerce")}
               color="olive"
               compact
               floated="right"
               icon="checkmark"
-            />
+            /> */}
           </Table.Cell>
         ) : (
           <Table.Cell style={styles.border}>
@@ -91,12 +92,16 @@ const InventoryReportDetail = props => {
             icon="box"
             color={props.availability === "disabled" ? "red" : "green"}
           />
-          <Button
-            onClick={() => props.handleOutOfStockBundle(props.sku)}
-            icon="boxes"
-            color={props.bundleAvailability === "disabled" ? "red" : "green"}
-            disabled={props.disable}
-          />
+          {props.bundleAvailability !== "" ? (
+            <Button
+              onClick={() => props.handleOutOfStockBundle(props.sku)}
+              icon="boxes"
+              color={props.bundleAvailability === "disabled" ? "red" : "green"}
+              disabled={props.disable}
+            />
+          ) : (
+            ""
+          )}
           <a
             target="_blank"
             rel="noopener noreferrer"

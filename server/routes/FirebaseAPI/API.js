@@ -201,6 +201,12 @@ router.put("/updateinventory", (req, res) => {
     .once("value", snap => snap.val())
     .then(x => {
       if (
+        (req.body.dbname === "eastOB" || req.body.dbname === "westOB") &&
+        req.body.noEquation
+      ) {
+        dataRef.child(req.body.sku).update({ total: req.body.total });
+      }
+      else if (
         (req.body.dbname === "eastcoast" || req.body.dbname === "westcoast") &&
         req.body.noEquation
       ) {

@@ -18,6 +18,7 @@ import OBReportLogging from "./components/InventorySystem/Report/OBReportLogging
 import BabyCareLogging from "./components/InventorySystem/Report/BabyCareLogging";
 import ToyLogging from "./components/InventorySystem/Report/ToyLogging";
 import ArchiveLogTable from "./components/InventorySystem/Inbound/ArchiveLogTable";
+import OpenBrokenTable from "./components/InventorySystem/InventoryTable/OpenBrokenTable";
 
 const Router = () => (
   <main>
@@ -33,6 +34,7 @@ const Router = () => (
       <Route path="/inboundLogging" component={InboundLogging} />
       <Route path="/inboundLogTable" component={InboundLogTable} />
       <Route path="/archiveLogTable" component={ArchiveLogTable} />
+      <Route path="/openBrokenTable" component={OpenBrokenTable} />
       <Route path="/inventoryTable" component={InventoryTable} />
       <Route path="/inventoryReport" component={InventoryReportTable} />
       <Route path="/reportLogging" component={ReportLogging} />

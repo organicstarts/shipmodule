@@ -23,12 +23,15 @@ class Inventory extends Component {
         warehouse = "westcoastReport";
         break;
       case 3:
-        path = "/inventoryTable";
+        path = "/openBrokenTable";
         break;
       case 4:
-        path = "/inboundLogTable";
+        path = "/inventoryTable";
         break;
       case 5:
+        path = "/inboundLogTable";
+        break;
+      case 6:
         path = "/archiveLogTable";
         break;
       default:
@@ -53,17 +56,24 @@ class Inventory extends Component {
       { id: 2, name: "West Coast Reporting Table", color: "vk", show: true },
       {
         id: 3,
+        name: "View Open/Broken Inventory",
+        color: "google plus",
+        show: true
+      },
+      {
+        id: 4,
         name: "View Inventory",
         color: "orange",
         show: this.props.compareEmail(this.props.email) ? true : false
       },
       {
-        id: 4,
+        id: 5,
         name: "View Inbound Inventory Log",
         color: "teal",
         show: this.props.compareEmail(this.props.email) ? true : false
-      },      {
-        id: 5,
+      },
+      {
+        id: 6,
         name: "View Archive Inbound Log",
         color: "facebook",
         show: this.props.compareEmail(this.props.email) ? true : false

@@ -240,7 +240,8 @@ router.put("/disableproduct", (req, res) => {
       Accept: "application/json"
     },
     body: JSON.stringify({
-      availability: req.body.availability
+      availability: req.body.availability,
+      inventory_level: req.body.inventory_level
     })
   })
     .then(e => {
@@ -250,7 +251,6 @@ router.put("/disableproduct", (req, res) => {
       res.json({ msg: "fail" });
     });
 });
-
 
 router.put("/cancelorder", (req, res) => {
   const baseUrl = `https://organicstart.com/api/v2/orders/${

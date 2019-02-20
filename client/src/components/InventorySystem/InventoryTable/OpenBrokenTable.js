@@ -4,7 +4,7 @@ import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import firebase from "../../../config/firebaseconf";
 import axios from "axios";
-import { Segment, Table } from "semantic-ui-react";
+import { Segment, Table, Button } from "semantic-ui-react";
 
 class OpenBrokenTable extends Component {
   constructor(props) {
@@ -15,12 +15,14 @@ class OpenBrokenTable extends Component {
       westDatas: {},
       bgDatas: {},
       loading: true,
+      buttonLoading: false,
       editable: false
     };
     this.handleOutOfStockSingle = this.handleOutOfStockSingle.bind(this);
     this.toggleInput = this.toggleInput.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.totalChange = this.totalChange.bind(this);
+    this.calculateAllTotal = this.calculateAllTotal.bind(this);
   }
 
   toggleInput(index) {
@@ -34,15 +36,15 @@ class OpenBrokenTable extends Component {
     this.firebaseRef = firebase.database().ref(`/inventory`);
     this.firebaseRef.on("value", async snapshot => {
       const payload = snapshot.val();
-      if (payload.eastOB) {
+      if (payload.eastcoastOB) {
         this.setState({
-          eastDatas: payload.eastOB,
-          westDatas: payload.westOB,
-          toggle: Object.keys(payload.eastOB).map(element => false)
+          eastDatas: payload.eastcoastOB,
+          westDatas: payload.westcoastOB,
+          toggle: Object.keys(payload.eastcoastOB).map(element => false)
         });
 
         await axios.get("os/getcategories").then(async datas => {
-          Object.keys(payload.eastOB).forEach(key => {
+          Object.keys(payload.eastcoastOB).forEach(key => {
             datas.data.forEach(data => {
               data.forEach(dataInfo => {
                 if (dataInfo.sku === key) {
@@ -110,10 +112,10 @@ class OpenBrokenTable extends Component {
     if (db === "eastcoast" || db === "westcoast") {
       if (db === "eastcoast") {
         dataName = "eastDatas";
-        db = "eastOB";
+        db = "eastcoastOB";
       } else {
         dataName = "westDatas";
-        db = "westOB";
+        db = "westcoastOB";
       }
       axios
         .put("fb/updateinventory", {
@@ -186,6 +188,43 @@ class OpenBrokenTable extends Component {
 
   calculateTotal(east, west) {
     return east + west;
+  }
+
+  calculateAllTotal() {
+    const { bgDatas, eastDatas, westDatas } = this.state;
+    this.setState({ buttonLoading: true });
+    const tempBGData = { ...bgDatas };
+    Promise.all(
+      Object.keys(bgDatas).map(async key => {
+        let total = this.calculateTotal(
+          eastDatas[key].total,
+          westDatas[key].total
+        );
+        if (total > 0) {
+          await axios
+            .put("os/disableproduct", {
+              availability: "available",
+              inventory_level: total,
+              productID: bgDatas[key].id
+            })
+            .then(() => {
+              tempBGData[key].availability = "available";
+              tempBGData[key].total = total;
+            });
+        } else {
+          await axios
+            .put("os/disableproduct", {
+              availability: "disabled",
+              inventory_level: total,
+              productID: bgDatas[key].id
+            })
+            .then(() => {
+              tempBGData[key].availability = "disabled";
+              tempBGData[key].total = total;
+            });
+        }
+      })
+    ).then(() => this.setState({ bgDatas: tempBGData, buttonLoading: false }));
   }
 
   mapTableList() {
@@ -267,9 +306,25 @@ class OpenBrokenTable extends Component {
       <Segment compact style={{ margin: "50px auto" }}>
         <Link to="/" className="noprint">
           Go Back
-        </Link>{" "}
-        <br />
-        {this.renderLogList()}
+        </Link>
+        {this.state.buttonLoading ? (
+          <ClipLoader
+            sizeUnit={"px"}
+            size={54}
+            color={"#36D7B7"}
+            loading={this.state.buttonLoading}
+          />
+        ) : (
+          <Button
+            style={{ margin: "10px 50px" }}
+            className="noprint"
+            color="green"
+            onClick={this.calculateAllTotal}
+          >
+            Calculate Total
+          </Button>
+        )}
+        <div> {this.renderLogList()}</div>
       </Segment>
     );
   }

@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Form, Button, Label, Container, Grid } from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
-import moment from "moment";
+//import moment from "moment";
 import axios from "axios";
 import upc from "../../../config/upc.json";
 import skuInfo from "../../../config/productinfo.json";
 import "../inventory.css";
+
 
 class OBReportLogging extends Component {
   constructor(props) {
@@ -71,17 +72,23 @@ class OBReportLogging extends Component {
   */
   updateInventory() {
     const { upcNum, quantity } = this.state;
-    const { displayName, warehouseLocation } = this.props;
+    const { warehouseLocation } = this.props;
     let sku = upc[upcNum];
     const warehouse = warehouseLocation.toLowerCase().replace(/\s/g, "");
-
+    let skuKey;
+    if (sku.includes("HP-NL")) {
+      skuKey = `4-OB-${skuInfo[sku].sku}`;
+    } else {
+      skuKey = `OB-${skuInfo[sku].sku}`;
+    }
     axios
       .put("fb/updateinventory", {
-        dbname: `${warehouse}Report`,
-        sku: `OB-${skuInfo[sku].sku}`,
-        total: skuInfo[sku].individual * quantity,
-        user: displayName,
-        date: moment().format("dddd, MMMM DD YYYY hh:mma")
+        noEquation: true,
+        dbname: `${warehouse}OB`,
+        sku: skuKey,
+        total: skuInfo[sku].individual * quantity
+        // user: displayName,
+        // date: moment().format("dddd, MMMM DD YYYY hh:mma")
       })
       .then(response => {
         if (response.data.msg === "success") {

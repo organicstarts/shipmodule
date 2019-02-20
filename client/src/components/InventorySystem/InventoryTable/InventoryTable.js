@@ -4,7 +4,7 @@ import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import firebase from "../../../config/firebaseconf";
 import axios from "axios";
-import { Segment, Table } from "semantic-ui-react";
+import { Segment, Table, Button } from "semantic-ui-react";
 
 class InventoryTable extends Component {
   constructor(props) {
@@ -22,6 +22,7 @@ class InventoryTable extends Component {
     this.toggleInput = this.toggleInput.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.totalChange = this.totalChange.bind(this);
+    this.calculateAllTotal = this.calculateAllTotal.bind(this);
   }
 
   toggleInput(index) {
@@ -34,17 +35,34 @@ class InventoryTable extends Component {
     let bundle = [];
     let bundleObj = {};
     datas.forEach(dataInfo => {
+      let skusplit = [];
       if (
         dataInfo.sku.includes(key) &&
         dataInfo.sku.length > key.length &&
         !dataInfo.sku.includes("OB-")
       ) {
+        if (dataInfo.sku.includes("TK")) {
+          let tempSku = dataInfo.sku.split(/TK-.\d*-/)[1];
+          let split = tempSku.split(/-/);
+
+          if (
+            tempSku.charAt(0) === "H" &&
+            (tempSku.includes(`HP-DE`) || tempSku.includes(`HP-UK`))
+          ) {
+            skusplit[0] = split[0] + "-" + split[1] + "-" + split[2];
+            skusplit[1] = split[3] + "-" + split[4] + "-" + split[5];
+          } else {
+            skusplit[0] = split[0] + "-" + split[1];
+            skusplit[1] = split[2] + "-" + split[3];
+          }
+        }
         bundleObj = {
           id: dataInfo.id,
           total: dataInfo.inventory_level,
           tracking: dataInfo.inventory_tracking,
           custom_url: dataInfo.custom_url,
-          availability: dataInfo.availability
+          availability: dataInfo.availability,
+          tk: skusplit.length > 0 ? skusplit : ""
         };
         bundle.push(bundleObj);
       }
@@ -182,12 +200,24 @@ class InventoryTable extends Component {
   }
 
   enableBundle(datas) {
+    const { bgDatas } = this.state;
+
     return datas.forEach(data => {
-      axios.put("os/disableproduct", {
-        productID: data.id,
-        availability: "available"
-      });
-      data.availability = "available";
+      if (
+        data.tk.length > 0 &&
+        (bgDatas[data.tk[0]].total < 100 || bgDatas[data.tk[1]].total < 100)
+      ) {
+        axios.put("os/disableproduct", {
+          productID: data.id,
+          availability: "disabled"
+        });
+      } else {
+        axios.put("os/disableproduct", {
+          productID: data.id,
+          availability: "available"
+        });
+        data.availability = "available";
+      }
     });
   }
 
@@ -202,9 +232,9 @@ class InventoryTable extends Component {
           inventory_level: 0
         })
         .then(async () => {
-          await this.disableBundle(tempBGData[key].bundles);
           tempBGData[key].availability = "disabled";
           tempBGData[key].total = 0;
+          await this.disableBundle(tempBGData[key].bundles);
           this.setState({ bgDatas: tempBGData });
         });
     } else {
@@ -218,12 +248,12 @@ class InventoryTable extends Component {
           )
         })
         .then(async () => {
-          await this.enableBundle(tempBGData[key].bundles);
           tempBGData[key].availability = "available";
           tempBGData[key].total = this.calculateTotal(
             eastDatas[key].total,
             westDatas[key].total
           );
+          await this.enableBundle(tempBGData[key].bundles);
           this.setState({ bgDatas: tempBGData });
         });
     }
@@ -233,7 +263,15 @@ class InventoryTable extends Component {
     const { bgDatas } = this.state;
     const tempBGData = { ...bgDatas };
     tempBGData[key].bundles.forEach(data => {
-      if (data.availability === "available") {
+      if (
+        data.tk.length > 0 &&
+        (bgDatas[data.tk[0]].total < 100 || bgDatas[data.tk[1]].total < 100)
+      ) {
+        axios.put("os/disableproduct", {
+          productID: data.id,
+          availability: "disabled"
+        });
+      } else if (data.availability === "available") {
         axios.put("os/disableproduct", {
           productID: data.id,
           availability: "disabled"
@@ -254,6 +292,50 @@ class InventoryTable extends Component {
   calculateTotal(east, west) {
     return east + west;
   }
+
+  calculateAllTotal() {
+    const { bgDatas, eastDatas, westDatas } = this.state;
+    this.setState({ buttonLoading: true });
+    const tempBGData = { ...bgDatas };
+    Promise.all(
+      Object.keys(bgDatas).map(async key => {
+        let total = this.calculateTotal(
+          eastDatas[key].total,
+          westDatas[key].total
+        );
+        if (total > 0) {
+          await axios
+            .put("os/disableproduct", {
+              availability: "available",
+              inventory_level: total,
+              productID: bgDatas[key].id
+            })
+            .then(async () => {
+              tempBGData[key].availability = "available";
+              tempBGData[key].total = total;
+              if (total > 100) {
+                await this.enableBundle(tempBGData[key].bundles);
+              }
+            });
+        } else {
+          await axios
+            .put("os/disableproduct", {
+              availability: "disabled",
+              inventory_level: total,
+              productID: bgDatas[key].id
+            })
+            .then(async () => {
+              tempBGData[key].availability = "disabled";
+              tempBGData[key].total = total;
+              if (total < 100) {
+                await this.disableBundle(tempBGData[key].bundles);
+              }
+            });
+        }
+      })
+    ).then(() => this.setState({ bgDatas: tempBGData, buttonLoading: false }));
+  }
+
   mapTableList() {
     const { eastDatas, westDatas, bgDatas, toggle } = this.state;
 
@@ -346,9 +428,25 @@ class InventoryTable extends Component {
       <Segment compact style={{ margin: "50px auto" }}>
         <Link to="/" className="noprint">
           Go Back
-        </Link>{" "}
-        <br />
-        {this.renderLogList()}
+        </Link>
+        {this.state.buttonLoading ? (
+          <ClipLoader
+            sizeUnit={"px"}
+            size={54}
+            color={"#36D7B7"}
+            loading={this.state.buttonLoading}
+          />
+        ) : (
+          <Button
+            style={{ margin: "10px 50px" }}
+            className="noprint"
+            color="green"
+            onClick={this.calculateAllTotal}
+          >
+            Calculate Total
+          </Button>
+        )}
+        <div>{this.renderLogList()}</div>
       </Segment>
     );
   }

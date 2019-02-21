@@ -228,6 +228,14 @@
       { "productID": 338, "amount": 6 }
     ]
   },
+  "HP-GN": {
+    "brand": "HiPP",
+    "stage": "Good Night",
+    "package": 12,
+    "individual": 1,
+    "sku": "HP-GN",
+    "productID": 110
+  },
   "HC-PRE": {
     "brand": "Holle Cow",
     "stage": "PRE",
@@ -408,6 +416,19 @@
     "sku": "NC-3",
     "productID": 124
   },
+  "TPFR-PRE": {
+    "brand": "Topfer",
+    "stage": "PRE",
+    "package": 3,
+    "individual": 1,
+    "sku": "TPFR-PRE",
+    "productID": 255,
+    "bundleID": [
+      { "productID": 397, "amount": 12 },
+      { "productID": 395, "amount": 3 },
+      { "productID": 396, "amount": 6 }
+    ]
+  },
   "TPFR-1": {
     "brand": "Topfer",
     "stage": "1",
@@ -465,8 +486,8 @@
     "stage": "PRE",
     "package": 3,
     "individual": 1,
-    "sku": "TPFR-4",
-    "productID": 396,
+    "sku": "TPFR-HA-PRE",
+    "productID": 692,
     "bundleID": [
       { "productID": 699, "amount": 12 },
       { "productID": 697, "amount": 3 },
@@ -774,6 +795,14 @@
     "sku": "OB-NC-3",
     "productID": 408
   },
+  "OB-TPFR-PRE": {
+    "brand": "Open/Broken Topfer",
+    "stage": "PRE",
+    "package": 3,
+    "individual": 1,
+    "sku": "OB-TPFR-PRE",
+    "productID": 325
+  },
   "OB-TPFR-1": {
     "brand": "Open/Broken Topfer",
     "stage": "1",
@@ -811,8 +840,8 @@
     "stage": "PRE",
     "package": 3,
     "individual": 1,
-    "sku": "OB-TPFR-4",
-    "productID": 325
+    "sku": "OB-TPFR-HA-PRE",
+    "productID": 795
   },
   "OB-TPFR-HA-1": {
     "brand": "Open/Broken Topfer HA",
@@ -862,6 +891,14 @@
     "sku": "HOL-BAN-GB",
     "productID": 316
   },
+  "HOL-GRIEB": {
+    "brand": "Holle Cereal",
+    "stage": "Grieb",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-GRIEB",
+    "productID": 91
+  },
   "HOL-HAFER": {
     "brand": "Holle Cereal",
     "stage": "Haferflocken",
@@ -870,12 +907,20 @@
     "sku": "HOL-HAFER",
     "productID": 93
   },
-  "HP-GN": {
-    "brand": "HiPP",
-    "stage": "Good Night",
+  "HOL-HIRSE-MLK" :{
+    "brand": "Holle Cereal",
+    "stage": "Hirse",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-HIRSE-MLK",
+    "productID": 171
+  },
+  "HOL-PEARAPR-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Pear Apricot",
     "package": 12,
     "individual": 1,
-    "sku": "HP-GN",
-    "productID": 110
+    "sku": "HOL-PEARAPR-PURE",
+    "productID": 190
   }
 }

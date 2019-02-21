@@ -1,8 +1,15 @@
 .hg-standardBtn {
   max-width: 100%;
-
 }
 
 .hg-theme-default {
   margin-bottom: 10px;
+}
+
+.hg-button-clr {
+  width: 20px;
+}
+
+.hg-button-bksp {
+  width: 20px;
 }

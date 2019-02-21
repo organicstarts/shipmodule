@@ -91,7 +91,7 @@ class Auth extends Component {
             style={{ height: "100%" }}
             verticalAlign="middle"
           >
-            <Grid.Column style={{ maxWidth: 450 }}>
+            <Grid.Column style={{ maxWidth: 550 }}>
               <Header as="h2" color="teal" textAlign="center">
                 <Image src={logo} /> Log-in to your account
               </Header>
@@ -126,7 +126,7 @@ class Auth extends Component {
                     }}
                   />
 
-                  <Button type="submit" fluid size="large" color="green">
+                  <Button type="submit" fluid size="large" color="teal">
                     Log In
                   </Button>
                 </Segment>

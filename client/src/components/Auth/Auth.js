@@ -1,8 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { login, checkLoginState } from "../../actions/auth";
-import logo from "../../logo.svg";
-import { Button, Image, Form } from "semantic-ui-react";
+import logo from "../../logo.png";
+import {
+  Button,
+  Form,
+  Grid,
+  Header,
+  Image,
+  Message,
+  Segment
+} from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
@@ -73,45 +81,68 @@ class Auth extends Component {
       return <React.Fragment>{children}</React.Fragment>;
     } else {
       return (
-        <div className="App container tc" style={{ margin: "50px auto" }}>
-          <header style={{ marginBottom: "50px" }}>
-            <Image src={logo} size="medium" centered alt="Organic Start" />
-          </header>
-          <Form onSubmit={this.login}>
-            <Form.Field>
-              <Form.Input
-                fluid
-                label="Pin Number"
-                placeholder="123456"
-                name="pin"
-                value={this.state.pin}
-                onChange={this.handleChange}
-                required
-                autoFocus
-              />
-            </Form.Field>
+        <div className="login-form">
+          {/*
+          Heads up! The styles below are necessary for the correct render of this example.
+          You can do same with CSS, the main idea is that all the elements up to the `Grid`
+          below must have a height of 100%.
+        */}
+          <style>{`
+          body > div,
+          body > div > div,
+          body > div > div > div.login-form {
+            height: 100%;
+          }
+        `}</style>
+          <Grid
+            textAlign="center"
+            style={{ height: "100%" }}
+            verticalAlign="middle"
+          >
+            <Grid.Column style={{ maxWidth: 450 }}>
+              {/* <div className="App container tc" style={{ margin: "50px auto" }}> */}
+              <Header as="h2" color="teal" textAlign="center">
+                <Image src={logo} /> Log-in to your account
+              </Header>
+              <Form onSubmit={this.login} size="large">
+                <Segment stacked>
+                  <Form.Input
+                    fluid
+                    icon="lock open"
+                    iconPosition="left"
+                    placeholder="pin number"
+                    name="pin"
+                    value={this.state.pin}
+                    onChange={this.handleChange}
+                    required
+                    autoFocus
+                  />
 
-            <Keyboard
-              ref={r => (this.keyboard = r)}
-              name="pin"
-              layoutName={this.state.layoutName}
-              value={this.state.pin}
-              onChange={this.onChange}
-              onKeyPress={this.onKeyPress}
-              theme={"hg-theme-default hg-layout-default myTheme "}
-              layout={{
-                default: ["1 2 3", "4 5 6", "7 8 9", "{clr} 0 {bksp}"]
-              }}
-              display={{
-                "{bksp}": "del",
-                "{clr}": "clear"
-              }}
-            />
+                  <Keyboard
+                    ref={r => (this.keyboard = r)}
+                    name="pin"
+                    layoutName={this.state.layoutName}
+                    value={this.state.pin}
+                    onChange={this.onChange}
+                    onKeyPress={this.onKeyPress}
+                    theme={"hg-theme-default hg-layout-default myTheme "}
+                    layout={{
+                      default: ["1 2 3", "4 5 6", "7 8 9", "{clr} 0 {bksp}"]
+                    }}
+                    display={{
+                      "{bksp}": "del",
+                      "{clr}": "clear"
+                    }}
+                  />
 
-            <Button type="submit" fluid size="large" color="green">
-              Log In
-            </Button>
-          </Form>
+                  <Button type="submit" fluid size="large" color="green">
+                    Log In
+                  </Button>
+                </Segment>
+              </Form>
+              {/* </div> */}
+            </Grid.Column>
+          </Grid>
         </div>
       );
     }

@@ -2,15 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { login, checkLoginState } from "../../actions/auth";
 import logo from "../../logo.png";
-import {
-  Button,
-  Form,
-  Grid,
-  Header,
-  Image,
-  Message,
-  Segment
-} from "semantic-ui-react";
+import { Button, Form, Grid, Header, Image, Segment } from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
@@ -100,7 +92,6 @@ class Auth extends Component {
             verticalAlign="middle"
           >
             <Grid.Column style={{ maxWidth: 450 }}>
-              {/* <div className="App container tc" style={{ margin: "50px auto" }}> */}
               <Header as="h2" color="teal" textAlign="center">
                 <Image src={logo} /> Log-in to your account
               </Header>
@@ -140,7 +131,6 @@ class Auth extends Component {
                   </Button>
                 </Segment>
               </Form>
-              {/* </div> */}
             </Grid.Column>
           </Grid>
         </div>

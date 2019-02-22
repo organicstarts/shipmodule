@@ -1,6 +1,5 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "./actions/auth";
 import Router from "./Router";
@@ -11,13 +10,15 @@ import {
   Grid,
   Header,
   Icon,
+  Dropdown,
   Image,
   List,
   Menu,
   Responsive,
   Segment,
   Sidebar,
-  Visibility
+  Visibility,
+  Transition
 } from "semantic-ui-react";
 import logo from "./logo.svg";
 import MediaQuery from "react-responsive";
@@ -26,28 +27,40 @@ const MINUTES_UNITL_AUTO_LOGOUT = 1; // in mins
 const CHECK_INTERVAL = 15000; // in ms
 const STORE_KEY = "lastAction";
 
-const getWidth = () => {
-  const isSSR = typeof window === "undefined";
-
-  return isSSR ? Responsive.onlyTablet.minWidth : window.innerWidth;
-};
-
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { sidebarOpened: true };
+    this.state = {
+      sidebarOpened: true,
+      width: window.outerWidth,
+      visible: true,
+      activeItem: "home"
+    };
     this.check();
     this.initListener();
     this.initInterval();
   }
   handleSidebarHide = () => this.setState({ sidebarOpened: false });
 
-  handleToggle = () => this.setState({ sidebarOpened: true });
+  handleToggle = () => this.setState({ visible: !this.state.visible });
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
   getLastAction() {
     return parseInt(localStorage.getItem(STORE_KEY));
   }
 
+  componentDidMount() {
+    window.addEventListener("resize", this.update);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.update);
+  }
+  update = () => {
+    this.setState({
+      width: window.outerWidth
+    });
+  };
   setLastAction(lastAction) {
     localStorage.setItem(STORE_KEY, lastAction.toString());
   }
@@ -83,44 +96,126 @@ class App extends Component {
     }
   }
   render() {
-    const { sidebarOpened } = this.state;
-    console.log(getWidth)
-    if (getWidth < 400) {
-      this.setState({ sidebarOpened: false });
-    }
-    return (
-      <div className="App ">
-        <Responsive getWidth={getWidth} as={Segment}>
-          <Sidebar
-            as={Menu}
-            animation="push"
-            inverted
-            onHide={this.handleSidebarHide}
-            vertical
-            visible={sidebarOpened}
-            width="thin"
-          >
-            <Menu.Item as="a" active>
-              Home
-            </Menu.Item>
-            <Menu.Item as="a">Work</Menu.Item>
-            <Menu.Item as="a">Company</Menu.Item>
-            <Menu.Item as="a">Careers</Menu.Item>
-            <Menu.Item as="a">Log in</Menu.Item>
-            <Menu.Item as="a">Sign Up</Menu.Item>
-          </Sidebar>
+    const { width, visible, activeItem } = this.state;
+    console.log(width);
 
-          <Sidebar.Pusher dimmed={sidebarOpened}>
-            {!sidebarOpened ? (
-              <Menu.Item onClick={this.handleToggle}>
-                <Icon name="sidebar" />
+    return (
+      <div className="App">
+        <Menu fixed="top" inverted>
+          <Menu.Item as={Link} to="/">
+            <Image
+              size="mini"
+              src="/logo.png"
+              style={{ marginRight: "1.5em" }}
+            />
+            Brainiac
+          </Menu.Item>
+          <Menu.Item as="a" onClick={this.handleToggle}>
+            <Icon name="sidebar" />
+          </Menu.Item>
+          <Menu.Item position="right">
+            <Button color="red" onClick={this.props.logout}>
+              Sign Out
+            </Button>
+          </Menu.Item>
+        </Menu>
+        <Transition.Group animation="fade right" duration={500}>
+          {visible && width > 400 && (
+            <Menu
+              fixed="left"
+              vertical
+              inverted
+              pointing
+              size="large"
+              style={{
+                paddingTop: "20px",
+                marginTop: "50px"
+              }}
+            >
+              <Menu.Item
+                as={Link}
+                to="/"
+                name="home"
+                active={activeItem === "home"}
+                onClick={this.handleItemClick}
+              >
+                Home
               </Menu.Item>
-            ) : (
-              ""
-            )}
-            <Router />
-          </Sidebar.Pusher>
-        </Responsive>
+
+              <Menu.Item
+                as={Link}
+                to="/batch"
+                name="batch"
+                active={activeItem === "batch"}
+                onClick={this.handleItemClick}
+              >
+                Batch Order
+              </Menu.Item>
+
+              <Menu.Item
+                as={Link}
+                to="/fetch"
+                name="fetch"
+                active={activeItem === "fetch"}
+                onClick={this.handleItemClick}
+              >
+                Fetch Order
+              </Menu.Item>
+
+              <Menu.Item
+                as={Link}
+                to="/fraud"
+                name="fraud"
+                active={activeItem === "fraud"}
+                onClick={this.handleItemClick}
+              >
+                Fraud Search
+              </Menu.Item>
+            </Menu>
+          )}
+        </Transition.Group>
+
+        <Transition.Group animation="fade right" duration={500}>
+          {!visible && width < 400 && (
+            <Menu
+              fixed="left"
+              vertical
+              inverted
+              icon
+              style={{
+                paddingTop: "20px",
+                marginTop: "50px"
+              }}
+            >
+              <Menu.Item as={Link} to="/">
+                <Icon name="home" />
+              </Menu.Item>
+
+              <Menu.Item as={Link} to="/batch">
+                <Icon name="list alternate outline" />
+              </Menu.Item>
+
+              <Menu.Item as={Link} to="/fetch">
+                <Icon name="newspaper outline" />
+              </Menu.Item>
+
+              <Menu.Item as={Link} to="/fraud">
+                <Icon name="eye" />
+              </Menu.Item>
+
+              <Menu.Item as={Link} to="/inventoryTable">
+                <Icon name="sitemap" />
+              </Menu.Item>
+            </Menu>
+          )}
+        </Transition.Group>
+        <Container
+          
+          textAlign="center"
+          style={{ paddingLeft: "2em", marginTop: "100px" }}
+        >
+          <Router />
+        </Container>
       </div>
     );
   }

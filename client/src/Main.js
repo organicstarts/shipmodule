@@ -72,7 +72,7 @@ class Main extends Component {
     );
   }
   render() {
-    return <div className="App container tc">{this.renderHome()}</div>;
+    return <div>{this.renderHome()}</div>;
   }
 }
 

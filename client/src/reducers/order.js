@@ -217,17 +217,16 @@ const compare = (a, b) => {
   let x = a.warehouseLocation;
   let y = b.warehouseLocation;
   if (!x) {
-    x = 0;
-  }
-  if (isNaN(x)) {
+    x = 999;
+  } else if (isNaN(x)) {
     x = x.charCodeAt(0) + 100;
   }
-  if (isNaN(y)) {
+  if (!y) {
+    y = 999;
+  } else if (isNaN(y)) {
     y = y.charCodeAt(0) + 100;
   }
-  if (!y) {
-    y = 0;
-  }
+
   if (isNaN(x) && isNaN(y)) {
     return x.localeCompare(y);
   }

@@ -515,6 +515,30 @@
     "sku": "HP-PL-HA-1",
     "productID": 782
   },
+  "KAB-1": {
+    "brand": "Kabrita Gold",
+    "stage": "1",
+    "package": 6,
+    "individual": 1,
+    "sku": "KAB-1",
+    "productID": 792
+  },
+  "KAB-2": {
+    "brand": "Kabrita Gold",
+    "stage": "2",
+    "package": 6,
+    "individual": 1,
+    "sku": "KAB-2",
+    "productID": 793
+  },
+  "KAB-3": {
+    "brand": "Kabrita Gold",
+    "stage": "3",
+    "package": 6,
+    "individual": 1,
+    "sku": "KAB-3",
+    "productID": 794
+  },
   "6-HP-DE-PRE-PRMX-BTL": {
     "brand": "Premix HiPP",
     "stage": "PRE",
@@ -907,7 +931,7 @@
     "sku": "HOL-HAFER",
     "productID": 93
   },
-  "HOL-HIRSE-MLK" :{
+  "HOL-HIRSE-MLK": {
     "brand": "Holle Cereal",
     "stage": "Hirse",
     "package": 6,

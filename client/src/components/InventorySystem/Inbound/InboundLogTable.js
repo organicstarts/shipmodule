@@ -21,39 +21,39 @@ class InboundLogTable extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
-
-  componentDidMount() {
-    this.firebaseRef = firebase.database().ref(`/inventory`);
-    this.firebaseRef
-      .on("value", async snapshot => {
-        const payload = snapshot.val();
-        if (payload.log) {
-          this.setState({
-            datas:
-              this.state.filter.value !== ""
-                ? this.filterLog(this.state.filter.value)
-                : payload.log,
-            dbDatas: payload.log,
-            loading: false
-          });
-          // let storageRef = firebase.storage().ref();
-
-          // Object.keys(payload.log).forEach(key => {
-          //   storageRef
-          //     .child(`images/${payload.log[key].trackingNumber}`)
-          //     .getDownloadURL()
-          //     .then(url => {
-          //       payload.log[key].image = url;
-          //       this.setState({ loading: false });
-          //     })
-          //     .catch(err => {
-          //       console.log("file not found!");
-          //     });
-          // });
-        }
-      })
-      .bind(this);
+  getData() {
+    this.firebaseRef = firebase.database().ref(`/inventory/log`);
+    this.firebaseRef.on("value", async snapshot => {
+      const payload = snapshot.val();
+      if (payload) {
+        this.setState({
+          datas:
+            this.state.filter.value !== ""
+              ? this.filterLog(this.state.filter.value)
+              : payload,
+          dbDatas: payload,
+          loading: false
+        });
+      }
+    });
   }
+  componentDidMount() {
+    this.getData();
+  }
+  // let storageRef = firebase.storage().ref();
+
+  // Object.keys(payload.log).forEach(key => {
+  //   storageRef
+  //     .child(`images/${payload.log[key].trackingNumber}`)
+  //     .getDownloadURL()
+  //     .then(url => {
+  //       payload.log[key].image = url;
+  //       this.setState({ loading: false });
+  //     })
+  //     .catch(err => {
+  //       console.log("file not found!");
+  //     });
+  // });
 
   componentWillUnmount() {
     this.firebaseRef.off();
@@ -73,43 +73,56 @@ class InboundLogTable extends Component {
       });
   }
 
-  archiveInventory(key) {
+  async archiveInventory(key) {
     const { dbDatas } = this.state;
-    this.setState({ loading: true });
+    if (window.confirm("are you sure you want to delete?")) {
+      this.setState({ loading: true });
 
-    axios
-      .post("fb/archiveInventory", {
-        trackingNumber: dbDatas[key].trackingNumber,
-        carrier: dbDatas[key].carrier,
-        productID: dbDatas[key].productID,
-        isChecked: dbDatas[key].isChecked ? dbDatas[key].isChecked : false,
-        sku: dbDatas[key].sku,
-        brand: dbDatas[key].brand,
-        stage: dbDatas[key].stage,
-        quantity: dbDatas[key].quantity,
-        broken: dbDatas[key].broken,
-        total: dbDatas[key].total,
-        invoiceNum: dbDatas[key].invoiceNum,
-        scanner: dbDatas[key].scanner,
-        timeStamp: dbDatas[key].timeStamp,
-        warehouseLocation: dbDatas[key].warehouseLocation
-      })
-      .then(async () => {
-        await axios.delete("fb/deleteinventory", {
+      await axios
+        .post("fb/archiveInventory", {
+          trackingNumber: dbDatas[key].trackingNumber,
+          carrier: dbDatas[key].carrier,
+          productID: dbDatas[key].productID,
+          isChecked: dbDatas[key].isChecked ? dbDatas[key].isChecked : false,
+          sku: dbDatas[key].sku,
+          brand: dbDatas[key].brand,
+          stage: dbDatas[key].stage,
+          quantity: dbDatas[key].quantity,
+          broken: dbDatas[key].broken,
+          total: dbDatas[key].total,
+          invoiceNum: dbDatas[key].invoiceNum,
+          scanner: dbDatas[key].scanner,
+          timeStamp: dbDatas[key].timeStamp,
+          warehouseLocation: dbDatas[key].warehouseLocation
+        })
+        .then(response => {
+          if (response.data.msg === "success") {
+            console.log("Archived Item");
+          } else {
+            console.log("Item not deleted");
+          }
+        })
+        .catch(error => console.log(error.message));
+
+      await axios
+        .delete("fb/deleteinventory", {
           data: {
             db: "log",
             id: key
           }
-        });
-      })
-      .then(response => {
-        if (response.data.msg === "success") {
-          console.log("Deleted Item");
-        } else {
-          console.log("Item not deleted");
-        }
-      })
-      .catch(error => console.log(error.message));
+        })
+        .then(async response => {
+          if (response.data.msg === "success") {
+            console.log("Deleted Item");
+            await this.getData();
+          } else {
+            console.log("Item not deleted");
+          }
+        })
+        .catch(error => console.log(error.message));
+    } else {
+      return false;
+    }
   }
 
   totalChange(key) {
@@ -160,6 +173,17 @@ class InboundLogTable extends Component {
     const { dbDatas } = this.state;
     if (action === "" || action === "none") {
       const result = Object.keys(dbDatas).map(key => dbDatas[key]);
+      return result;
+    }
+    if (action === "n/a") {
+      const result = Object.keys(dbDatas)
+        .map(key => {
+          dbDatas[key].key = key;
+          return dbDatas[key];
+        })
+        .filter(data => {
+          if (!data.invoiceNum) return data;
+        });
       return result;
     }
     const result = Object.keys(dbDatas)

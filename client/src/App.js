@@ -168,7 +168,7 @@ class App extends Component {
           )}
         </Transition.Group>
         <MediaQuery minDeviceWidth={374} className="noprint">
-          <Transition.Group animation="fade right" duration={500}>
+          <Transition.Group className="noprint" animation="fade right" duration={500}>
             {!visible && (
               <Menu
                 className="noprint"

@@ -94,8 +94,8 @@ class InboundLogTable extends Component {
         timeStamp: dbDatas[key].timeStamp,
         warehouseLocation: dbDatas[key].warehouseLocation
       })
-      .then(() => {
-        axios.delete("fb/deleteinventory", {
+      .then(async () => {
+        await axios.delete("fb/deleteinventory", {
           data: {
             db: "log",
             id: key

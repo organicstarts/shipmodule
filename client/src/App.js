@@ -13,6 +13,7 @@ import {
 } from "semantic-ui-react";
 import logo from "./logo.png";
 import MediaQuery from "react-responsive";
+import "./index.css";
 
 const MINUTES_UNITL_AUTO_LOGOUT = 1; // in mins
 const CHECK_INTERVAL = 15000; // in ms
@@ -92,7 +93,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Menu fixed="top" inverted>
+        <Menu fixed="top" inverted className="noprint">
           <Menu.Item as={Link} to="/">
             <Image size="mini" src={logo} style={{ marginRight: "1.5em" }} />
             Brainiac
@@ -106,9 +107,14 @@ class App extends Component {
             </Button>
           </Menu.Item>
         </Menu>
-        <Transition.Group animation="fade right" duration={500}>
+        <Transition.Group
+          className="noprint"
+          animation="fade right"
+          duration={500}
+        >
           {visible && width > 500 && (
             <Menu
+              className="noprint"
               fixed="left"
               vertical
               inverted
@@ -161,10 +167,11 @@ class App extends Component {
             </Menu>
           )}
         </Transition.Group>
-        <MediaQuery minDeviceWidth={374}>
+        <MediaQuery minDeviceWidth={374} className="noprint">
           <Transition.Group animation="fade right" duration={500}>
             {!visible && (
               <Menu
+                className="noprint"
                 fixed="left"
                 vertical
                 inverted

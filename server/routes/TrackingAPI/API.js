@@ -105,12 +105,20 @@ router.get("/getorder", (req, res) => {
   const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders?name=${
     req.query.orderid
   }`;
+
   fetch(baseUrl, header)
     .then(res => res.json())
     .then(async datas => {
+      let isAuth;
+      if (req.query.inHouse) {
+        isAuth = true;
+      } else {
+        isAuth =
+          datas.orders[0].contact_email === req.query.email ? true : false;
+      }
       if (
         datas.orders[0] &&
-        datas.orders[0].contact_email === req.query.email &&
+        isAuth &&
         datas.orders[0].order_number === parseInt(req.query.orderid)
       ) {
         // let carrier = datas.orders[0].note
@@ -129,7 +137,7 @@ router.get("/getorder", (req, res) => {
           tracking: datas.orders[0].note
             ? datas.orders[0].note.split("Tracking Number: ")[1].split("\n")[0]
             : datas.orders[0].note,
-            // trackingObj,
+          // trackingObj,
           createdAt: datas.orders[0].created_at,
           updatedAt: datas.orders[0].updated_at,
           lineItems: datas.orders[0].line_items.map(data => {

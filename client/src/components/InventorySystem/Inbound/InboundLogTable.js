@@ -127,16 +127,16 @@ class InboundLogTable extends Component {
       total = dbDatas[key].quantity;
       broken = dbDatas[key].broken;
     }
-    if (dbDatas[key].broken !== 0) {
-      axios.put("os/updateinventory", {
-        inventory_level: broken,
-        productID: dbDatas[`OB-${key}`].productID
-      });
-    }
-    axios.put("os/updateinventory", {
-      inventory_level: total,
-      productID: dbDatas[key].productID
-    });
+    // if (dbDatas[key].broken !== 0) {
+    //   axios.put("os/updateinventory", {
+    //     inventory_level: broken,
+    //     productID: dbDatas[`OB-${key}`].productID
+    //   });
+    // }
+    // axios.put("os/updateinventory", {
+    //   inventory_level: total,
+    //   productID: dbDatas[key].productID
+    // });
     axios
       .put("fb/updateinventory", {
         dbname: warehouse,

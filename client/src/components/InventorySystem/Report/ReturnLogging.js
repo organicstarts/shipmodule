@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Form, Button, Label, Container, Grid } from "semantic-ui-react";
+import { Form, Button, Label, Grid } from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
 import moment from "moment";
 import axios from "axios";
@@ -234,9 +234,9 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
 
   render() {
     return (
-      <Container fluid style={{ marginTop: "50px" }}>
+      <div style={{ marginTop: "50px" }}>
         {this.renderInput()}
-      </Container>
+      </div>
     );
   }
 }

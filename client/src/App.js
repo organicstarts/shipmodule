@@ -6,21 +6,12 @@ import Router from "./Router";
 import {
   Button,
   Container,
-  Divider,
-  Grid,
-  Header,
   Icon,
-  Dropdown,
   Image,
-  List,
   Menu,
-  Responsive,
-  Segment,
-  Sidebar,
-  Visibility,
   Transition
 } from "semantic-ui-react";
-import logo from "./logo.svg";
+import logo from "./logo.png";
 import MediaQuery from "react-responsive";
 
 const MINUTES_UNITL_AUTO_LOGOUT = 1; // in mins
@@ -58,7 +49,8 @@ class App extends Component {
   }
   update = () => {
     this.setState({
-      width: window.outerWidth
+      width: window.outerWidth,
+      visible: this.state.width > 500 ? true : false
     });
   };
   setLastAction(lastAction) {
@@ -97,17 +89,12 @@ class App extends Component {
   }
   render() {
     const { width, visible, activeItem } = this.state;
-    console.log(width);
 
     return (
       <div className="App">
         <Menu fixed="top" inverted>
           <Menu.Item as={Link} to="/">
-            <Image
-              size="mini"
-              src="/logo.png"
-              style={{ marginRight: "1.5em" }}
-            />
+            <Image size="mini" src={logo} style={{ marginRight: "1.5em" }} />
             Brainiac
           </Menu.Item>
           <Menu.Item as="a" onClick={this.handleToggle}>
@@ -120,7 +107,7 @@ class App extends Component {
           </Menu.Item>
         </Menu>
         <Transition.Group animation="fade right" duration={500}>
-          {visible && width > 400 && (
+          {visible && width > 500 && (
             <Menu
               fixed="left"
               vertical
@@ -174,45 +161,43 @@ class App extends Component {
             </Menu>
           )}
         </Transition.Group>
+        <MediaQuery minDeviceWidth={374}>
+          <Transition.Group animation="fade right" duration={500}>
+            {!visible && (
+              <Menu
+                fixed="left"
+                vertical
+                inverted
+                icon
+                style={{
+                  paddingTop: "20px",
+                  marginTop: "50px"
+                }}
+              >
+                <Menu.Item as={Link} to="/">
+                  <Icon name="home" />
+                </Menu.Item>
 
-        <Transition.Group animation="fade right" duration={500}>
-          {!visible && width < 400 && (
-            <Menu
-              fixed="left"
-              vertical
-              inverted
-              icon
-              style={{
-                paddingTop: "20px",
-                marginTop: "50px"
-              }}
-            >
-              <Menu.Item as={Link} to="/">
-                <Icon name="home" />
-              </Menu.Item>
+                <Menu.Item as={Link} to="/batch">
+                  <Icon name="list alternate outline" />
+                </Menu.Item>
 
-              <Menu.Item as={Link} to="/batch">
-                <Icon name="list alternate outline" />
-              </Menu.Item>
+                <Menu.Item as={Link} to="/fetch">
+                  <Icon name="newspaper outline" />
+                </Menu.Item>
 
-              <Menu.Item as={Link} to="/fetch">
-                <Icon name="newspaper outline" />
-              </Menu.Item>
-
-              <Menu.Item as={Link} to="/fraud">
-                <Icon name="eye" />
-              </Menu.Item>
-
-              <Menu.Item as={Link} to="/inventoryTable">
-                <Icon name="sitemap" />
-              </Menu.Item>
-            </Menu>
-          )}
-        </Transition.Group>
+                <Menu.Item as={Link} to="/fraud">
+                  <Icon name="eye" />
+                </Menu.Item>
+              </Menu>
+            )}
+          </Transition.Group>
+        </MediaQuery>
         <Container
-          
-          textAlign="center"
-          style={{ paddingLeft: "2em", marginTop: "100px" }}
+          style={{
+            paddingLeft: "2em",
+            marginTop: "100px"
+          }}
         >
           <Router />
         </Container>

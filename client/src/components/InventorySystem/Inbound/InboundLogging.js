@@ -1,14 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  Segment,
-  Form,
-  Button,
-  List,
-  Label,
-  Container,
-  Grid
-} from "semantic-ui-react";
+import { Segment, Form, Button, List, Label, Grid } from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
 import moment from "moment";
 import firebase from "../../../config/firebaseconf";
@@ -548,7 +540,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
           size={34}
           color={"#36D7B7"}
           loading={this.state.loading}
-          style={{marginRight: "25px"}}
+          style={{ marginRight: "25px" }}
         />
       );
     }
@@ -595,11 +587,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
   }
 
   render() {
-    return (
-      <Container fluid style={{ marginTop: "50px" }}>
-        {this.renderInput()}
-      </Container>
-    );
+    return <div style={{ marginTop: "50px" }}>{this.renderInput()}</div>;
   }
 }
 

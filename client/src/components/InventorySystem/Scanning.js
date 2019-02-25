@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Segment, Grid, Header } from "semantic-ui-react";
+import { Button, Segment, Grid, Header, Icon } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 import MediaQuery from "react-responsive";
 
@@ -47,37 +47,63 @@ class Scanning extends Component {
 
   render() {
     let buttons = [
-      { id: 0, name: "Report Scan", color: "teal", show: true },
-      { id: 1, name: "Inbound Scan", color: "blue", show: true },
-      { id: 2, name: "Open Broken Scan", color: "orange", show: true },
-      { id: 3, name: "Baby Care Scan", color: "yellow", show: true },
-      { id: 4, name: "Toy Scan", color: "red", show: true },
-      { id: 5, name: "Return Scan", color: "green", show: true }
+      {
+        id: 0,
+        icon: "clipboard outline",
+        name: "Report Scan",
+        color: "teal",
+        show: true
+      },
+      { id: 1, icon: "zip", name: "Inbound Scan", color: "blue", show: true },
+      {
+        id: 2,
+        icon: "broken chain",
+        name: "Open Broken Scan",
+        color: "orange",
+        show: true
+      },
+      {
+        id: 3,
+        icon: "fly",
+        name: "Baby Care Scan",
+        color: "yellow",
+        show: true
+      },
+      { id: 4, icon: "tag", name: "Toy Scan", color: "red", show: true },
+      { id: 5, icon: "tv", name: "Return Scan", color: "green", show: true }
     ];
 
     return (
-      <Segment color="blue" padded={window.innerWidth > 374 ? "very" : null}>
+      <div>
         <MediaQuery maxWidth={374}>
-          <Header color="olive" block>
+          <Header color="olive">
             Inventory Scanning
           </Header>
           <Grid columns={2}>
             {buttons.map(button => {
               if (button.show) {
                 return (
-                  <Grid.Column key={button.name}>
+                  <Grid.Column
+                    key={button.name}
+                    stretched
+                    style={{ padding: "0", textAlign: "center" }}
+                  >
                     <Button
                       key={button.name}
-                      circular
                       style={{
                         padding: 0,
-                        margin: "15px auto",
-                        width: "100px",
                         height: "100px"
                       }}
+                      fluid
                       color={button.color}
                       onClick={() => this.handleClick(button.id)}
                     >
+                      <Icon
+                        size="large"
+                        style={{ margin: "8px -0.571429em 15px -0.214286em" }}
+                        name={button.icon}
+                      />{" "}
+                      <br />
                       {button.name}
                     </Button>
                   </Grid.Column>
@@ -88,27 +114,30 @@ class Scanning extends Component {
             })}
           </Grid>
         </MediaQuery>
+
         <MediaQuery minWidth={374}>
-          {buttons.map(button => {
-            if (button.show) {
-              return (
-                <Button
-                  key={button.id}
-                  fluid
-                  style={{ marginBottom: "15px" }}
-                  size="large"
-                  color={button.color}
-                  onClick={() => this.handleClick(button.id)}
-                >
-                  {button.name}
-                </Button>
-              );
-            } else {
-              return "";
-            }
-          })}
+          <Segment color="blue">
+            {buttons.map(button => {
+              if (button.show) {
+                return (
+                  <Button
+                    key={button.id}
+                    fluid
+                    style={{ marginBottom: "15px" }}
+                    size="large"
+                    color={button.color}
+                    onClick={() => this.handleClick(button.id)}
+                  >
+                    {button.name}
+                  </Button>
+                );
+              } else {
+                return "";
+              }
+            })}
+          </Segment>
         </MediaQuery>
-      </Segment>
+      </div>
     );
   }
 }

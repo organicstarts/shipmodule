@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Form, Button, Label, Container, Grid } from "semantic-ui-react";
+import { Form, Button, Label, Grid } from "semantic-ui-react";
 import moment from "moment";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
@@ -116,7 +116,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
         />
         <Grid padded="horizontally">
           <Grid.Row columns={3}>
-            <Grid.Column textAlign="center">
+            <Grid.Column >
               <Button
                 style={{ marginTop: "25px" }}
                 onClick={this.subtract}
@@ -127,7 +127,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
                 Back
               </Button>
             </Grid.Column>
-            <Grid.Column textAlign="center">
+            <Grid.Column >
               <Button
                 style={{ marginTop: "25px" }}
                 onClick={this.clear}
@@ -138,7 +138,7 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
                 Clear
               </Button>
             </Grid.Column>
-            <Grid.Column textAlign="center">
+            <Grid.Column >
               <Button
                 style={{ marginTop: "25px" }}
                 onClick={() => {
@@ -159,9 +159,9 @@ tracking number > upc number > # of boxes > # of broken > photo of invoice > con
   }
   render() {
     return (
-      <Container fluid style={{ marginTop: "50px" }}>
+      <div style={{ marginTop: "50px" }}>
         {this.renderInput()}
-      </Container>
+      </div>
     );
   }
 }

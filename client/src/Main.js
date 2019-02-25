@@ -11,7 +11,6 @@ import {
   Log,
   Inventory
 } from "./components";
-import { Button } from "semantic-ui-react";
 import "tachyons";
 import Scanning from "./components/InventorySystem/Scanning";
 
@@ -58,21 +57,14 @@ class Main extends Component {
         </MediaQuery>
         <Scanning />
 
-        {this.compareEmail(this.props.email) ? <Log /> : ""}
-        <Button
-          style={{ marginTop: "25px" }}
-          fluid
-          size="large"
-          color="green"
-          onClick={this.logout}
-        >
-          Log Out
-        </Button>
+        <MediaQuery minDeviceWidth={374}>
+          {this.compareEmail(this.props.email) ? <Log /> : ""}
+        </MediaQuery>
       </div>
     );
   }
   render() {
-    return <div className="App container tc">{this.renderHome()}</div>;
+    return <div>{this.renderHome()}</div>;
   }
 }
 

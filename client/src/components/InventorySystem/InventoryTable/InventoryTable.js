@@ -61,7 +61,7 @@ class InventoryTable extends Component {
           total: dataInfo.inventory_level,
           tracking: dataInfo.inventory_tracking,
           custom_url: dataInfo.custom_url,
-          availability: dataInfo.availability,
+          // availability: dataInfo.availability,
           tk: skusplit.length > 0 ? skusplit : ""
         };
         bundle.push(bundleObj);
@@ -92,7 +92,7 @@ class InventoryTable extends Component {
                     total: dataInfo.inventory_level,
                     tracking: dataInfo.inventory_tracking,
                     custom_url: dataInfo.custom_url,
-                    availability: dataInfo.availability,
+                    // availability: dataInfo.availability,
                     bundles: this.getBundles(data, key)
                   };
                 }
@@ -189,71 +189,67 @@ class InventoryTable extends Component {
     }
   }
 
-  disableBundle(datas) {
+  disableBundle(datas, total) {
     return datas.forEach(data => {
       axios.put("os/disableproduct", {
         productID: data.id,
-        availability: "disabled"
+        tracking: "simple",
+        inventory_level: 0
       });
-      data.availability = "disabled";
+      data.tracking = "simple";
     });
   }
 
-  enableBundle(datas) {
-    const { bgDatas } = this.state;
-
+  enableBundle(datas, total) {
     return datas.forEach(data => {
-      if (
-        data.tk.length > 0 &&
-        (bgDatas[data.tk[0]].total < 100 || bgDatas[data.tk[1]].total < 100)
-      ) {
-        axios.put("os/disableproduct", {
-          productID: data.id,
-          availability: "disabled"
-        });
-      } else {
-        axios.put("os/disableproduct", {
-          productID: data.id,
-          availability: "available"
-        });
-        data.availability = "available";
-      }
+      axios.put("os/disableproduct", {
+        productID: data.id,
+        tracking: "none",
+        inventory_level: total
+      });
+      data.tracking = "none";
     });
   }
 
   handleOutOfStockSingle(key) {
     const { bgDatas, eastDatas, westDatas } = this.state;
     const tempBGData = { ...bgDatas };
-    if (bgDatas[key].availability === "available") {
+    if (bgDatas[key].tracking === "none") {
       axios
         .put("os/disableproduct", {
           productID: tempBGData[key].id,
-          availability: "disabled",
+          tracking: "simple",
           inventory_level: 0
         })
         .then(async () => {
-          tempBGData[key].availability = "disabled";
+          tempBGData[key].tracking = "simple";
           tempBGData[key].total = 0;
-          await this.disableBundle(tempBGData[key].bundles);
+          await this.disableBundle(
+            tempBGData[key].bundles,
+            tempBGData[key].total
+          );
           this.setState({ bgDatas: tempBGData });
         });
     } else {
       axios
         .put("os/disableproduct", {
           productID: tempBGData[key].id,
-          availability: "available",
+          tracking: "none",
           inventory_level: this.calculateTotal(
             eastDatas[key].total,
             westDatas[key].total
           )
         })
         .then(async () => {
-          tempBGData[key].availability = "available";
+          tempBGData[key].tracking = "none";
           tempBGData[key].total = this.calculateTotal(
             eastDatas[key].total,
             westDatas[key].total
           );
-          await this.enableBundle(tempBGData[key].bundles);
+          await this.enableBundle(
+            tempBGData[key].bundles,
+            tempBGData[key].total
+          );
           this.setState({ bgDatas: tempBGData });
         });
     }
@@ -269,20 +265,20 @@ class InventoryTable extends Component {
       ) {
         axios.put("os/disableproduct", {
           productID: data.id,
-          availability: "disabled"
+          tracking: "simple"
         });
-      } else if (data.availability === "available") {
+      } else if (data.tracking === "simple") {
         axios.put("os/disableproduct", {
           productID: data.id,
-          availability: "disabled"
+          tracking: "none"
         });
-        data.availability = "disabled";
+        data.tracking = "none";
       } else {
         axios.put("os/disableproduct", {
           productID: data.id,
-          availability: "available"
+          tracking: "simple"
         });
-        data.availability = "available";
+        data.tracking = "simple";
       }
     });
     this.setState({
@@ -306,12 +302,12 @@ class InventoryTable extends Component {
         if (total > 0) {
           await axios
             .put("os/disableproduct", {
-              availability: "available",
+              tracking: "none",
               inventory_level: total,
               productID: bgDatas[key].id
             })
             .then(async () => {
-              tempBGData[key].availability = "available";
+              tempBGData[key].tracking = "none";
               tempBGData[key].total = total;
               if (total > 100) {
                 await this.enableBundle(tempBGData[key].bundles);
@@ -320,12 +316,12 @@ class InventoryTable extends Component {
         } else {
           await axios
             .put("os/disableproduct", {
-              availability: "disabled",
+              tracking: "simple",
               inventory_level: total,
               productID: bgDatas[key].id
             })
             .then(async () => {
-              tempBGData[key].availability = "disabled";
+              tempBGData[key].tracking = "simple";
               tempBGData[key].total = total;
               if (total < 100) {
                 await this.disableBundle(tempBGData[key].bundles);
@@ -355,7 +351,7 @@ class InventoryTable extends Component {
           timeStamp={eastDatas[key].timeStamp}
           inputRef={input => (this.textInput = input)}
           link={bgDatas[key] ? bgDatas[key].custom_url : ""}
-          availability={bgDatas[key] ? bgDatas[key].availability : ""}
+          // availability={bgDatas[key] ? bgDatas[key].availability : ""}
           disable={
             bgDatas[key]
               ? bgDatas[key].bundles.length < 1
@@ -363,12 +359,12 @@ class InventoryTable extends Component {
                 : false
               : true
           }
-          bundleAvailability={
+          bundleTracking={
             bgDatas[key]
               ? bgDatas[key].bundles[0]
-                ? bgDatas[key].bundles[0].availability
-                : "disabled"
-              : "disabled"
+                ? bgDatas[key].bundles[0].tracking
+                : "simple"
+              : "simple"
           }
           handleOutOfStockSingle={this.handleOutOfStockSingle}
           handleOutOfStockBundle={this.handleOutOfStockBundle}

@@ -230,7 +230,6 @@ router.put("/disableproduct", (req, res) => {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
   });
-
   fetch(baseUrl, {
     method: "PUT",
     headers: {
@@ -240,7 +239,7 @@ router.put("/disableproduct", (req, res) => {
       Accept: "application/json"
     },
     body: JSON.stringify({
-      availability: req.body.availability,
+      inventory_tracking: req.body.tracking,
       inventory_level: req.body.inventory_level
     })
   })

@@ -20,6 +20,7 @@ class InboundLogTable extends Component {
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
   }
   getData() {
     this.firebaseRef = firebase.database().ref(`/inventory/log`);
@@ -37,6 +38,7 @@ class InboundLogTable extends Component {
       }
     });
   }
+
   componentDidMount() {
     this.getData();
   }
@@ -169,7 +171,7 @@ class InboundLogTable extends Component {
       });
   }
 
-  filterLog(action = "none") {
+  filterLog(action = "none", label, db = "") {
     const { dbDatas } = this.state;
     if (action === "" || action === "none") {
       const result = Object.keys(dbDatas).map(key => dbDatas[key]);
@@ -190,8 +192,12 @@ class InboundLogTable extends Component {
         return dbDatas[key];
       })
       .filter(data => {
-        if (data.invoiceNum) {
-          if (data.invoiceNum.includes(action)) {
+        if (data[label]) {
+          if (db !== "") {
+            if (data.invoiceNum.includes(db) && data[label].includes(action)) {
+              return data;
+            }
+          } else if (!db && data[label].includes(action)) {
             return data;
           }
         }
@@ -199,13 +205,25 @@ class InboundLogTable extends Component {
       });
     return result;
   }
-
+  handleSelectChange = (e, data) =>
+    this.setState(
+      {
+        filter: {
+          value: this.state.filter.value,
+          log: this.filterLog(data.value, data.name, this.state.filter.value)
+        }
+      },
+      () => {
+        const { filter } = this.state;
+        this.setState({ datas: filter.log });
+      }
+    );
   handleInputChange = (e, data) => {
     this.setState(
       {
-        [data.name]: {
+        filter: {
           value: data.value,
-          log: this.filterLog(data.value)
+          log: this.filterLog(data.value, data.name)
         }
       },
       () => {
@@ -280,11 +298,26 @@ class InboundLogTable extends Component {
       <Segment>
         <Form>
           <FormGroup widths="fifteen" inline>
-            <label>Invoice # Filter: </label>
             <Form.Input
-              name="filter"
+              name="invoiceNum"
+              label="Invoice # Filter"
               value={this.state.filter.value}
               onChange={this.handleInputChange}
+            />
+            <Form.Select
+              label="Carrier"
+              placeholder="Select One"
+              name="carrier"
+              options={[
+                { text: "None", value: "" },
+                { text: "Bpost", value: "Bpost" },
+                { text: "DHL Economy", value: "DHL Economy" },
+                { text: "DHL Express", value: "DHL Express" },
+                { text: "Lux", value: "Lux" },
+                { text: "Post NL", value: "Post NL" },
+                { text: "Other", value: "Other" }
+              ]}
+              onChange={this.handleSelectChange}
             />
           </FormGroup>
         </Form>

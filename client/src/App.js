@@ -93,7 +93,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Menu fixed="top" inverted className="noprint">
+        <Menu fixed="top" className="noprint navbar">
           <Menu.Item as={Link} to="/">
             <Image size="mini" src={logo} style={{ marginRight: "1.5em" }} />
             Brainiac
@@ -117,12 +117,11 @@ class App extends Component {
               className="noprint"
               fixed="left"
               vertical
-              inverted
               pointing
               size="small"
               style={{
                 paddingTop: "20px",
-                marginTop: "50px"
+                marginTop: "65px"
               }}
             >
               <Menu.Item
@@ -168,13 +167,16 @@ class App extends Component {
           )}
         </Transition.Group>
         <MediaQuery minDeviceWidth={374} className="noprint">
-          <Transition.Group className="noprint" animation="fade right" duration={500}>
+          <Transition.Group
+            className="noprint"
+            animation="fade right"
+            duration={500}
+          >
             {!visible && (
               <Menu
                 className="noprint"
                 fixed="left"
                 vertical
-                inverted
                 icon
                 style={{
                   paddingTop: "20px",

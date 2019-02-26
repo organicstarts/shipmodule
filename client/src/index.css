@@ -20,17 +20,16 @@ code {
   max-width: 600px;
 }
 
+.navbar {
+  background-color: #94c120 !important;
+}
 
 @media print {
   body {
     -webkit-print-color-adjust: exact;
-    opacity: .75 !important;
-    
-  
+    opacity: 0.75 !important;
   }
   .noprint {
     display: none !important;
   }
-
-
 }

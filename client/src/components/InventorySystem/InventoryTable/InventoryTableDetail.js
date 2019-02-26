@@ -91,17 +91,17 @@ const InventoryReportDetail = props => {
             onClick={() => props.handleOutOfStockSingle(props.sku)}
             icon="box"
             color={
-              props.availability === "disabled" ||
+              props.bgTracking === "simple" ||
               (props.bgTotal === 0 && props.bgTracking === "simple")
                 ? "red"
                 : "green"
             }
           />
-          {props.bundleAvailability !== "" ? (
+          {props.bundleTracking !== "" ? (
             <Button
               onClick={() => props.handleOutOfStockBundle(props.sku)}
               icon="boxes"
-              color={props.bundleAvailability === "disabled" ? "red" : "green"}
+              color={props.bundleTracking === "simple" ? "red" : "green"}
               disabled={props.disable}
             />
           ) : (

@@ -37,7 +37,7 @@ class BatchList extends Component {
         .reverse();
       let batchInLog = false;
 
-      result.slice(0, 20).map((data, i) => {
+      result.slice(1, 20).map(data => {
         if (data.batch === this.props.batchNumber) {
           batchInLog = true;
           return "";
@@ -46,24 +46,26 @@ class BatchList extends Component {
       });
 
       if (!batchInLog) {
-        this.props.shipmentItems.map(async data => {
-          if (skuInfo[data.sku] && !data.sku.includes("HOL")) {
-            console.log(data.sku);
-            await axios
-              .put("fb/updateinventory", {
-                dbname: warehouse,
-                sku: data.sku,
-                quantity: -data.combineTotal || -data.quantity
-              })
-              .then(response => {
-                if (response.data.msg === "success") {
-                  console.log("inventory logged");
-                } else if (response.data.msg === "fail") {
-                  console.log("failed to log.");
-                }
-              });
-          }
-        });
+        Promise.all(
+          this.props.shipmentItems.map(async data => {
+            if (skuInfo[data.sku] && !data.sku.includes("HOL")) {
+              console.log(data.sku);
+              await axios
+                .put("fb/updateinventory", {
+                  dbname: warehouse,
+                  sku: data.sku,
+                  quantity: -data.combineTotal || -data.quantity
+                })
+                .then(response => {
+                  if (response.data.msg === "success") {
+                    console.log("inventory logged");
+                  } else if (response.data.msg === "fail") {
+                    console.log("failed to log.");
+                  }
+                });
+            }
+          })
+        );
       }
     });
   }

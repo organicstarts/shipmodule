@@ -62,6 +62,12 @@ router.get("/getshipmentorder", (req, res) => {
 /*-------------------------------------------------------------------
                             POST REQUESTS                            
 ---------------------------------------------------------------------*/
+// router.post("/signin", (req, res) => {
+//   baseUrl = "https://ss5.shipstation.com/api/auth/GetToken";
+
+//   fetch(baseUrl, header).then( res => { })
+// });
+
 router.post("/cancelorder", (req, res) => {
   const baseUrl = `https://ssapi.shipstation.com/orders?orderNumber=${
     req.body.ordernumber

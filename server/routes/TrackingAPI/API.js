@@ -121,18 +121,23 @@ router.get("/getorder", (req, res) => {
         isAuth &&
         datas.orders[0].order_number === parseInt(req.query.orderid)
       ) {
-        let carrier = datas.orders[0].note
-          .split("\n")
-          .filter(carrier => carrier.includes("Carrier"));
-        let trackingNum = datas.orders[0].note
-          .split("\n")
-          .filter(tracking => tracking.includes("Tracking Number"));
         let trackingObj = {};
-        carrier.map((carrier, i) => {
-          carrier = carrier.split(": ")[1];
-          trackingNum[i] = trackingNum[i].split(": ")[1];
-          trackingObj[carrier] = trackingNum[i];
-        });
+        if (datas.orders[0].note) {
+          let carrier = datas.orders[0].note
+            .split("\n")
+            .filter(carrier => carrier.includes("Carrier"));
+          let trackingNum = datas.orders[0].note
+            .split("\n")
+            .filter(tracking => tracking.includes("Tracking Number"));
+
+          carrier.map((carrier, i) => {
+            carrier = carrier.split(": ")[1];
+            trackingNum[i] = trackingNum[i].split(": ")[1];
+            trackingObj[carrier] = trackingNum[i];
+          });
+        } else {
+          trackingObj = null;
+        }
         return {
           tracking:
             // datas.orders[0].note

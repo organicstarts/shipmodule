@@ -121,23 +121,24 @@ router.get("/getorder", (req, res) => {
         isAuth &&
         datas.orders[0].order_number === parseInt(req.query.orderid)
       ) {
-        // let carrier = datas.orders[0].note
-        //   .split("\n")
-        //   .filter(carrier => carrier.includes("Carrier"));
-        // let trackingNum = datas.orders[0].note
-        //   .split("\n")
-        //   .filter(tracking => tracking.includes("Tracking Number"));
-        // let trackingObj = {};
-        // carrier.map((carrier, i) => {
-        //   carrier = carrier.split(": ")[1];
-        //   trackingNum[i] = trackingNum[i].split(": ")[1];
-        //   trackingObj[carrier] = trackingNum[i];
-        // });
+        let carrier = datas.orders[0].note
+          .split("\n")
+          .filter(carrier => carrier.includes("Carrier"));
+        let trackingNum = datas.orders[0].note
+          .split("\n")
+          .filter(tracking => tracking.includes("Tracking Number"));
+        let trackingObj = {};
+        carrier.map((carrier, i) => {
+          carrier = carrier.split(": ")[1];
+          trackingNum[i] = trackingNum[i].split(": ")[1];
+          trackingObj[carrier] = trackingNum[i];
+        });
         return {
-          tracking: datas.orders[0].note
-            ? datas.orders[0].note.split("Tracking Number: ")[1].split("\n")[0]
-            : datas.orders[0].note,
-          // trackingObj,
+          tracking:
+            // datas.orders[0].note
+            //   ? datas.orders[0].note.split("Tracking Number: ")[1].split("\n")[0]
+            //   : datas.orders[0].note,
+            trackingObj,
           createdAt: datas.orders[0].created_at,
           updatedAt: datas.orders[0].updated_at,
           lineItems: datas.orders[0].line_items.map(data => {

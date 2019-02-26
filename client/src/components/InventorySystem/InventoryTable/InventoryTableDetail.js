@@ -90,7 +90,12 @@ const InventoryReportDetail = props => {
           <Button
             onClick={() => props.handleOutOfStockSingle(props.sku)}
             icon="box"
-            color={props.availability === "disabled" ? "red" : "green"}
+            color={
+              props.availability === "disabled" ||
+              (props.bgTotal === 0 && props.bgTracking === "simple")
+                ? "red"
+                : "green"
+            }
           />
           {props.bundleAvailability !== "" ? (
             <Button

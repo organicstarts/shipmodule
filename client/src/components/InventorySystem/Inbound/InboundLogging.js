@@ -210,7 +210,7 @@ class InboundLogging extends Component {
     if (this.state.count > 0 && this.state.trackingNumber.length < 5) {
       alert("The Tracking number is not valid");
       this.setState({ count: 0, trackingNumber: "" });
-    } else if (this.state.count > 1 && this.state.upcNum.length !== 13) {
+    } else if (this.state.count > 1 && this.state.upcNum.length < 13) {
       alert("The UPC number is not valid");
       this.setState({ count: 1, upcNum: "" });
     }

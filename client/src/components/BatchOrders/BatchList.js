@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { setShipmentItems } from "../../actions/order";
+import firebase from "../../config/firebaseconf";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import BatchDetail from "./BatchDetail";
@@ -9,7 +10,7 @@ import boxes from "../../config/boxes";
 import packages from "../../config/packages";
 import skuInfo from "../../config/productinfo.json";
 import { iconQuotes } from "../../config/peopleicon";
-import { Segment, Button } from "semantic-ui-react";
+import { Segment } from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
 
@@ -20,42 +21,84 @@ class BatchList extends Component {
       disable: false
     };
     this.logprint = this.logprint.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    // this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount() {
     window.addEventListener("afterprint", this.logprint);
     this.props.setShipmentItems(this.props.warehouseLocation);
+    const warehouse = this.props.warehouseLocation
+      .toLowerCase()
+      .replace(/\s/g, "");
+    this.dataRef = firebase.database().ref("/action/log");
+    this.dataRef.on("value", snapshot => {
+      const payload = snapshot.val();
+      const result = Object.keys(payload)
+        .map(key => payload[key])
+        .reverse();
+      let batchInLog = false;
+
+      result.slice(0, 20).map((data, i) => {
+        if (data.batch === this.props.batchNumber) {
+          batchInLog = true;
+          return "";
+        }
+        return "";
+      });
+
+      if (!batchInLog) {
+        this.props.shipmentItems.map(async data => {
+          if (skuInfo[data.sku] && !data.sku.includes("HOL")) {
+            console.log(data.sku);
+            await axios
+              .put("fb/updateinventory", {
+                dbname: warehouse,
+                sku: data.sku,
+                quantity: -data.combineTotal || -data.quantity
+              })
+              .then(response => {
+                if (response.data.msg === "success") {
+                  console.log("inventory logged");
+                } else if (response.data.msg === "fail") {
+                  console.log("failed to log.");
+                }
+              });
+          }
+        });
+      }
+    });
   }
 
   componentWillUnmount() {
     window.removeEventListener("afterprint", this.logprint);
+    this.dataRef.off();
   }
 
-  handleClick() {
-    this.setState({ disable: true });
-    const warehouse = this.props.warehouseLocation
-      .toLowerCase()
-      .replace(/\s/g, "");
+  // reduceInventory() {}
+  // handleClick() {
+  //   this.setState({ disable: true });
+  //   const warehouse = this.props.warehouseLocation
+  //     .toLowerCase()
+  //     .replace(/\s/g, "");
 
-    this.props.shipmentItems.map(async data => {
-      if (skuInfo[data.sku]) {
-        await axios
-          .put("fb/updateinventory", {
-            dbname: warehouse,
-            sku: data.sku,
-            quantity: -data.combineTotal || -data.quantity
-          })
-          .then(response => {
-            if (response.data.msg === "success") {
-              console.log("logged");
-            } else if (response.data.msg === "fail") {
-              console.log("failed to log.");
-            }
-          });
-      }
-      return "";
-    });
-  }
+  //   this.props.shipmentItems.map(async data => {
+  //     if (skuInfo[data.sku]) {
+  //       await axios
+  //         .put("fb/updateinventory", {
+  //           dbname: warehouse,
+  //           sku: data.sku,
+  //           quantity: -data.combineTotal || -data.quantity
+  //         })
+  //         .then(response => {
+  //           if (response.data.msg === "success") {
+  //             console.log("logged");
+  //           } else if (response.data.msg === "fail") {
+  //             console.log("failed to log.");
+  //           }
+  //         });
+  //     }
+  //     return "";
+  //   });
+  // }
 
   logprint() {
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
@@ -200,7 +243,7 @@ class BatchList extends Component {
           <Link to="/" className="noprint">
             Go Back
           </Link>
-          <Button
+          {/* <Button
             style={{ margin: "10px 50px" }}
             className="noprint"
             color="green"
@@ -208,7 +251,7 @@ class BatchList extends Component {
             disabled={this.state.disable}
           >
             Subtract from Database
-          </Button>
+          </Button> */}
           <div className="row">
             <h1 className="col-6" style={styles.margin}>
               Product Pick List

@@ -181,9 +181,7 @@ class InboundLogTable extends Component {
           dbDatas[key].key = key;
           return dbDatas[key];
         })
-        .filter(data => {
-          if (!data.invoiceNum) return data;
-        });
+        .filter(data => !data.invoiceNum);
       return result;
     }
     const result = Object.keys(dbDatas)

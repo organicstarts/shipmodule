@@ -119,7 +119,7 @@ class App extends Component {
               vertical
               inverted
               pointing
-              size="large"
+              size="small"
               style={{
                 paddingTop: "20px",
                 marginTop: "50px"

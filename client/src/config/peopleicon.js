@@ -1,6 +1,7 @@
 import {
   david,
   julian,
+  daniel,
   luis,
   richard,
   romario,
@@ -63,5 +64,15 @@ export const iconQuotes = {
         name: "Jason",
         quote: "Here for a good time, not a long time.",
         icon: jason
+    },
+    john: {
+        name: "John",
+        quote: "With great power, comes great responsibilities.",
+        icon: daniel
+    },
+    johnny: {
+        name: "Johnny",
+        quote: "With great power, comes great responsibilities.",
+        icon: daniel
     }
 }

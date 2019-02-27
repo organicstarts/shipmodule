@@ -87,12 +87,21 @@ const InventoryReportDetail = props => {
         )}
 
         <Table.Cell style={styles.border}>
+          {props.handleInfinite !== "" ? (
+            <Button
+              onClick={() => props.handleInfinite(props.sku)}
+              color={props.bgTracking === "simple" ? "red" : "green"}
+            >
+              <span>&infin;</span>
+            </Button>
+          ) : (
+            ""
+          )}
           <Button
             onClick={() => props.handleOutOfStockSingle(props.sku)}
             icon="box"
             color={
-              props.bgTracking === "simple" ||
-              (props.bgTotal === 0 && props.bgTracking === "simple")
+              props.bgTotal === 0 && props.bgTracking === "simple"
                 ? "red"
                 : "green"
             }
@@ -101,8 +110,12 @@ const InventoryReportDetail = props => {
             <Button
               onClick={() => props.handleOutOfStockBundle(props.sku)}
               icon="boxes"
-              color={props.bundleTracking === "simple" ? "red" : "green"}
-              disabled={props.disable}
+              color={
+                props.bundleTotal === 0 && props.bundleTracking === "simple"
+                  ? "red"
+                  : "green"
+              }
+              disabled={props.bgTotal === 0 ? true : props.disable}
             />
           ) : (
             ""

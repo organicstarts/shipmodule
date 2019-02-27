@@ -17,9 +17,7 @@ const header = {
                             GET REQUESTS                            
 ---------------------------------------------------------------------*/
 router.get("/canadapost", (req, res) => {
-  const baseUrl = `https://ct.soa-gw.canadapost.ca/vis/track/pin/${
-    req.query.tracking
-  }/summary`;
+  const baseUrl = `https://soa-gw.canadapost.ca/vis/track/pin/${req.query.tracking}/detail`;
   let encodedString = Buffer.from(
     tracking.canadaPost.user + ":" + tracking.canadaPost.key
   ).toString("base64");

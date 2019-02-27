@@ -180,7 +180,7 @@ class App extends Component {
                 icon
                 style={{
                   paddingTop: "20px",
-                  marginTop: "50px"
+                  marginTop: "65px"
                 }}
               >
                 <Menu.Item as={Link} to="/">

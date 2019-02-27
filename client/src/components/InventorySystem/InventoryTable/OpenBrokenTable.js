@@ -53,7 +53,7 @@ class OpenBrokenTable extends Component {
                     total: dataInfo.inventory_level,
                     tracking: dataInfo.inventory_tracking,
                     custom_url: dataInfo.custom_url,
-                    availability: dataInfo.availability
+                    // availability: dataInfo.availability
                   };
                 }
               });
@@ -150,18 +150,22 @@ class OpenBrokenTable extends Component {
     }
   }
 
-  async handleOutOfStockSingle(key) {
+  handleOutOfStockSingle(key) {
     const { bgDatas, eastDatas, westDatas } = this.state;
-    const tempBGData = bgDatas;
-    if (bgDatas[key].availability === "available") {
+    const tempBGData = { ...bgDatas };
+    const total = this.calculateTotal(
+      eastDatas[key].total,
+      westDatas[key].total
+    );
+    if (bgDatas[key].total !== 0) {
       axios
         .put("os/disableproduct", {
           productID: tempBGData[key].id,
-          availability: "disabled",
+          tracking: "simple",
           inventory_level: 0
         })
-        .then(() => {
-          tempBGData[key].availability = "disabled";
+        .then(async () => {
+          tempBGData[key].tracking = "simple";
           tempBGData[key].total = 0;
           this.setState({ bgDatas: tempBGData });
         });
@@ -169,18 +173,12 @@ class OpenBrokenTable extends Component {
       axios
         .put("os/disableproduct", {
           productID: tempBGData[key].id,
-          availability: "available",
-          inventory_level: this.calculateTotal(
-            eastDatas[key].total,
-            westDatas[key].total
-          )
+          tracking: "simple",
+          inventory_level: total
         })
-        .then(() => {
-          tempBGData[key].availability = "available";
-          tempBGData[key].total = this.calculateTotal(
-            eastDatas[key].total,
-            westDatas[key].total
-          );
+        .then(async () => {
+          tempBGData[key].tracking = "simple";
+          tempBGData[key].total = total;
           this.setState({ bgDatas: tempBGData });
         });
     }
@@ -203,23 +201,23 @@ class OpenBrokenTable extends Component {
         if (total > 0) {
           await axios
             .put("os/disableproduct", {
-              availability: "available",
+              tracking: "simple",
               inventory_level: total,
               productID: bgDatas[key].id
             })
-            .then(() => {
-              tempBGData[key].availability = "available";
+            .then(async () => {
+              tempBGData[key].tracking = "simple";
               tempBGData[key].total = total;
             });
         } else {
           await axios
             .put("os/disableproduct", {
-              availability: "disabled",
+              tracking: "simple",
               inventory_level: total,
               productID: bgDatas[key].id
             })
-            .then(() => {
-              tempBGData[key].availability = "disabled";
+            .then(async () => {
+              tempBGData[key].tracking = "simple";
               tempBGData[key].total = total;
             });
         }
@@ -246,9 +244,11 @@ class OpenBrokenTable extends Component {
           timeStamp={eastDatas[key].timeStamp}
           inputRef={input => (this.textInput = input)}
           link={bgDatas[key] ? bgDatas[key].custom_url : ""}
-          availability={bgDatas[key] ? bgDatas[key].availability : ""}
+          // availability={bgDatas[key] ? bgDatas[key].availability : ""}
           disable={true}
-          bundleAvailability={""}
+          handleInfinite={""}
+          showInfinite={false}
+          bundleTracking={""}
           handleOutOfStockSingle={this.handleOutOfStockSingle}
           toggleInput={this.toggleInput}
           showInput={toggle[index]}

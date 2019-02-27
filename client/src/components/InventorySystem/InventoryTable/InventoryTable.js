@@ -19,6 +19,7 @@ class InventoryTable extends Component {
     };
     this.handleOutOfStockSingle = this.handleOutOfStockSingle.bind(this);
     this.handleOutOfStockBundle = this.handleOutOfStockBundle.bind(this);
+    this.handleInfinite = this.handleInfinite.bind(this);
     this.toggleInput = this.toggleInput.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.totalChange = this.totalChange.bind(this);
@@ -136,17 +137,13 @@ class InventoryTable extends Component {
       value = 0;
     }
     data[e.target.placeholder].total = parseInt(value);
-    let bgTotal = this.state.bgDatas;
-    bgTotal[e.target.placeholder].total = this.calculateTotal(
-      this.state.eastDatas[e.target.placeholder].total,
-      this.state.westDatas[e.target.placeholder].total
-    );
     this.setState({
-      [dataName]: data,
-      bgDatas: bgTotal
+      [dataName]: data
     });
   };
-  totalChange(key, db) {
+  async totalChange(key, db) {
+    const { eastDatas, westDatas, bgDatas } = this.state;
+    const tempBGData = { ...bgDatas };
     let dataName;
     if (db === "eastcoast" || db === "westcoast") {
       if (db === "eastcoast") {
@@ -156,6 +153,12 @@ class InventoryTable extends Component {
         dataName = "westDatas";
         db = "westcoast";
       }
+
+      const total = this.calculateTotal(
+        eastDatas[key].total,
+        westDatas[key].total
+      );
+
       axios
         .put("fb/updateinventory", {
           noEquation: true,
@@ -174,8 +177,8 @@ class InventoryTable extends Component {
       axios
         .put("os/updateinventory", {
           noEquation: true,
-          inventory_level: this.state.bgDatas[key].total,
-          productID: this.state.bgDatas[key].id
+          inventory_level: total,
+          productID: bgDatas[key].id
         })
         .then(response => {
           if (response.data.msg === "success") {
@@ -184,37 +187,61 @@ class InventoryTable extends Component {
             console.log("failed to log.");
           }
         });
+      if (total > 100) {
+        await this.enableBundle(tempBGData[key].bundles, total / 2);
+      } else {
+        await this.disableBundle(tempBGData[key].bundles);
+      }
+      tempBGData[key].total = total;
+      this.setState({ bgDatas: tempBGData });
     } else {
       console.log("database not found!");
     }
   }
 
-  disableBundle(datas, total) {
+  disableBundle(datas) {
     return datas.forEach(data => {
       axios.put("os/disableproduct", {
         productID: data.id,
         tracking: "simple",
         inventory_level: 0
       });
-      data.tracking = "simple";
+      data.total = 0;
     });
   }
 
-  enableBundle(datas, total) {
+  enableBundle(datas, total = 0) {
+    const { bgDatas } = this.state;
     return datas.forEach(data => {
-      axios.put("os/disableproduct", {
-        productID: data.id,
-        tracking: "none",
-        inventory_level: total
-      });
-      data.tracking = "none";
+      if (
+        data.tk.length > 0 &&
+        (bgDatas[data.tk[0]].total < 100 || bgDatas[data.tk[1]].total < 100)
+      ) {
+        axios.put("os/disableproduct", {
+          productID: data.id,
+          tracking: "simple",
+          inventory_level: 0
+        });
+        data.total = 0;
+      } else {
+        axios.put("os/disableproduct", {
+          productID: data.id,
+          tracking: "simple",
+          inventory_level: total
+        });
+        data.total = total;
+      }
     });
   }
 
   handleOutOfStockSingle(key) {
     const { bgDatas, eastDatas, westDatas } = this.state;
     const tempBGData = { ...bgDatas };
-    if (bgDatas[key].tracking === "none") {
+    const total = this.calculateTotal(
+      eastDatas[key].total,
+      westDatas[key].total
+    );
+    if (bgDatas[key].total !== 0) {
       axios
         .put("os/disableproduct", {
           productID: tempBGData[key].id,
@@ -224,40 +251,63 @@ class InventoryTable extends Component {
         .then(async () => {
           tempBGData[key].tracking = "simple";
           tempBGData[key].total = 0;
-          await this.disableBundle(
-            tempBGData[key].bundles,
-            tempBGData[key].total
-          );
+          await this.disableBundle(tempBGData[key].bundles);
           this.setState({ bgDatas: tempBGData });
         });
     } else {
       axios
         .put("os/disableproduct", {
           productID: tempBGData[key].id,
-          tracking: "none",
-          inventory_level: this.calculateTotal(
-            eastDatas[key].total,
-            westDatas[key].total
-          )
+          tracking: "simple",
+          inventory_level: total
         })
         .then(async () => {
-          tempBGData[key].tracking = "none";
-          tempBGData[key].total = this.calculateTotal(
-            eastDatas[key].total,
-            westDatas[key].total
-          );
-          await this.enableBundle(
-            tempBGData[key].bundles,
-            tempBGData[key].total
-          );
+          tempBGData[key].tracking = "simple";
+          tempBGData[key].total = total;
+          // await this.enableBundle(
+          //   tempBGData[key].bundles,
+          //   tempBGData[key].total
+          // );
           this.setState({ bgDatas: tempBGData });
         });
     }
   }
-
-  handleOutOfStockBundle(key) {
+  handleInfinite(key) {
     const { bgDatas } = this.state;
     const tempBGData = { ...bgDatas };
+
+    if (bgDatas[key].tracking === "none") {
+      axios
+        .put("os/disableproduct", {
+          productID: tempBGData[key].id,
+          tracking: "simple"
+        })
+        .then(async () => {
+          tempBGData[key].tracking = "simple";
+          tempBGData[key].total = 0;
+          await this.disableBundle(tempBGData[key].bundles);
+          this.setState({ bgDatas: tempBGData });
+        });
+    } else {
+      axios
+        .put("os/disableproduct", {
+          productID: tempBGData[key].id,
+          tracking: "none"
+        })
+        .then(async () => {
+          tempBGData[key].tracking = "none";
+          //await this.enableBundle(tempBGData[key].bundles);
+          this.setState({ bgDatas: tempBGData });
+        });
+    }
+  }
+  handleOutOfStockBundle(key) {
+    const { bgDatas, eastDatas, westDatas } = this.state;
+    const tempBGData = { ...bgDatas };
+    const total = this.calculateTotal(
+      eastDatas[key].total,
+      westDatas[key].total
+    );
     tempBGData[key].bundles.forEach(data => {
       if (
         data.tk.length > 0 &&
@@ -265,20 +315,25 @@ class InventoryTable extends Component {
       ) {
         axios.put("os/disableproduct", {
           productID: data.id,
-          tracking: "simple"
+          tracking: "simple",
+          inventory_level: 0
         });
-      } else if (data.tracking === "simple") {
+      } else if (data.total !== 0) {
         axios.put("os/disableproduct", {
           productID: data.id,
-          tracking: "none"
+          tracking: "simple",
+          inventory_level: 0
         });
-        data.tracking = "none";
+        data.tracking = "simple";
+        data.total = 0;
       } else {
         axios.put("os/disableproduct", {
           productID: data.id,
-          tracking: "simple"
+          tracking: "simple",
+          inventory_level: total / 2
         });
         data.tracking = "simple";
+        data.total = total / 2;
       }
     });
     this.setState({
@@ -302,15 +357,15 @@ class InventoryTable extends Component {
         if (total > 0) {
           await axios
             .put("os/disableproduct", {
-              tracking: "none",
+              tracking: "simple",
               inventory_level: total,
               productID: bgDatas[key].id
             })
             .then(async () => {
-              tempBGData[key].tracking = "none";
+              tempBGData[key].tracking = "simple";
               tempBGData[key].total = total;
               if (total > 100) {
-                await this.enableBundle(tempBGData[key].bundles);
+                await this.enableBundle(tempBGData[key].bundles, total / 2);
               }
             });
         } else {
@@ -366,6 +421,14 @@ class InventoryTable extends Component {
                 : "simple"
               : "simple"
           }
+          bundleTotal={
+            bgDatas[key]
+              ? bgDatas[key].bundles[0]
+                ? bgDatas[key].bundles[0].total
+                : 0
+              : 0
+          }
+          handleInfinite={this.handleInfinite}
           handleOutOfStockSingle={this.handleOutOfStockSingle}
           handleOutOfStockBundle={this.handleOutOfStockBundle}
           toggleInput={this.toggleInput}

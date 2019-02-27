@@ -183,7 +183,8 @@
     "package": 4,
     "individual": 1,
     "sku": "HP-UK-HI",
-    "productID": 112
+    "productID": 112,
+    "bundleID": [{ "productID": 115, "amount": 6 }]
   },
   "HP-UK-1": {
     "brand": "HiPP UK",
@@ -681,7 +682,7 @@
     "package": 4,
     "individual": 1,
     "sku": "OB-HP-UK-HI",
-    "productID": 112
+    "productID": 321
   },
   "OB-HP-UK-1": {
     "brand": "Open/Broken HiPP UK",
@@ -946,5 +947,61 @@
     "individual": 1,
     "sku": "HOL-PEARAPR-PURE",
     "productID": 190
+  },
+  "HOL-CRNFLK": {
+    "brand": "Holle Cereal",
+    "stage": "Junior Muesli",
+    "package": 8,
+    "individual": 1,
+    "sku": "HOL-CRNFLK",
+    "productID": 277
+  },
+  "HOL-BAN-MLK": {
+    "brand": "Holle Cereal",
+    "stage": "Banana with Milk",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-BAN-MLK",
+    "productID": 132
+  },
+  "HOL-DNKL": {
+    "brand": "Holle Cereal",
+    "stage": "Dinkel",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-DNKL",
+    "productID": 89
+  },
+  "HOL-DNKL-MLK": {
+    "brand": "Holle Cereal",
+    "stage": "Dinkel with Milk",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-DNKL-MLK",
+    "productID": 131
+  },
+  "HOL-DNKL-RUSK": {
+    "brand": "Holle Cereal",
+    "stage": "Dinkel Rusks",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-DNKL-RUSK",
+    "productID": 209
+  },
+  "HOL-MUSLI": {
+    "brand": "Holle Cereal",
+    "stage": "Musli",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-MUSLI",
+    "productID": 94
+  },
+  "HOL-APPBAN-BAR": {
+    "brand": "Holle Bar",
+    "stage": "Apple Banana",
+    "package": 35,
+    "individual": 1,
+    "sku": "HOL-APPBAN-BAR",
+    "productID": 140
   }
 }

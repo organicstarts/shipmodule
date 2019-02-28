@@ -259,7 +259,7 @@ router.put("/cancelorder", (req, res) => {
   fetch(baseUrl, header)
     .then(res => res.json())
     .then(data => {
-      if (data.billing_address.email === req.body.email) {
+      if (req.body.noEmail || data.billing_address.email === req.body.email) {
         fetch(baseUrl, {
           method: "PUT",
           headers: {

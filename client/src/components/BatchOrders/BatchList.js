@@ -50,19 +50,36 @@ class BatchList extends Component {
           this.props.shipmentItems.map(async data => {
             if (skuInfo[data.sku] && !data.sku.includes("HOL")) {
               console.log(data.sku);
-              await axios
-                .put("fb/updateinventory", {
-                  dbname: warehouse,
-                  sku: data.sku,
-                  quantity: -data.combineTotal || -data.quantity
-                })
-                .then(response => {
-                  if (response.data.msg === "success") {
-                    console.log("inventory logged");
-                  } else if (response.data.msg === "fail") {
-                    console.log("failed to log.");
-                  }
-                });
+              if (data.sku.includes("OB-")) {
+                
+                await axios
+                  .put("fb/updateinventory", {
+                    dbname: `${warehouse}OB`,
+                    sku: data.sku,
+                    quantity: -data.combineTotal || -data.quantity
+                  })
+                  .then(response => {
+                    if (response.data.msg === "success") {
+                      console.log("inventory logged");
+                    } else if (response.data.msg === "fail") {
+                      console.log("failed to log.");
+                    }
+                  });
+              } else {
+                await axios
+                  .put("fb/updateinventory", {
+                    dbname: warehouse,
+                    sku: data.sku,
+                    quantity: -data.combineTotal || -data.quantity
+                  })
+                  .then(response => {
+                    if (response.data.msg === "success") {
+                      console.log("inventory logged");
+                    } else if (response.data.msg === "fail") {
+                      console.log("failed to log.");
+                    }
+                  });
+              }
             }
           })
         );

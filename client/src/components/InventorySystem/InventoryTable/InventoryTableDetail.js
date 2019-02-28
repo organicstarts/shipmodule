@@ -22,14 +22,6 @@ const InventoryReportDetail = props => {
               onChange={props.handleChange}
               type="text"
             />
-            <Button
-              style={{ marginTop: "5%" }}
-              onClick={() => props.handleSubmitButton(props.sku, "eastcoast")}
-              color="olive"
-              compact
-              floated="right"
-              icon="checkmark"
-            />
           </Table.Cell>
         ) : (
           <Table.Cell style={styles.border}>{props.eastTotal}</Table.Cell>
@@ -46,20 +38,12 @@ const InventoryReportDetail = props => {
               onChange={props.handleChange}
               type="text"
             />
-            <Button
-              style={{ marginTop: "5%" }}
-              onClick={() => props.handleSubmitButton(props.sku, "westcoast")}
-              color="olive"
-              compact
-              floated="right"
-              icon="checkmark"
-            />
           </Table.Cell>
         ) : (
           <Table.Cell style={styles.border}>{props.westTotal}</Table.Cell>
         )}
 
-        {props.showInput && props.bgTracking !== "none" ? (
+        {props.showInput ? (
           <Table.Cell style={styles.border}>
             <Input
               style={{ width: "75px" }}
@@ -79,6 +63,14 @@ const InventoryReportDetail = props => {
               floated="right"
               icon="checkmark"
             /> */}
+            <Button
+              style={{ marginTop: "5%" }}
+              onClick={() => props.handleSubmitButton(props.sku)}
+              color="olive"
+              compact
+              floated="right"
+              icon="checkmark"
+            />
           </Table.Cell>
         ) : (
           <Table.Cell style={styles.border}>

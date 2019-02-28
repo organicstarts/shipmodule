@@ -80,8 +80,7 @@ router.post("/cancelorder", (req, res) => {
   fetch(baseUrl, header)
     .then(res => res.json())
     .then(async e => {
-      if (e.orders[0].customerEmail === req.body.email) {
-        console.log(e.orders[0].orderId);
+      if (req.body.noEmail || e.orders[0].customerEmail === req.body.email) {
         await fetch(`https://ssapi.shipstation.com/orders/createorder`, {
           method: "POST",
           headers: {
@@ -97,9 +96,7 @@ router.post("/cancelorder", (req, res) => {
             billTo: e.orders[0].billTo,
             shipTo: e.orders[0].shipTo
           })
-        })
-          .then(e => e.json())
-          .then(x => console.log(x));
+        });
       }
     })
     .then(e => {

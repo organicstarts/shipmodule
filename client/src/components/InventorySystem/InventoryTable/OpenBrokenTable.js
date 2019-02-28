@@ -52,7 +52,7 @@ class OpenBrokenTable extends Component {
                     id: dataInfo.id,
                     total: dataInfo.inventory_level,
                     tracking: dataInfo.inventory_tracking,
-                    custom_url: dataInfo.custom_url,
+                    custom_url: dataInfo.custom_url
                     // availability: dataInfo.availability
                   };
                 }
@@ -107,47 +107,50 @@ class OpenBrokenTable extends Component {
     });
   };
 
-  totalChange(key, db) {
-    let dataName;
-    if (db === "eastcoast" || db === "westcoast") {
-      if (db === "eastcoast") {
-        dataName = "eastDatas";
-        db = "eastcoastOB";
-      } else {
-        dataName = "westDatas";
-        db = "westcoastOB";
-      }
-      axios
-        .put("fb/updateinventory", {
-          noEquation: true,
-          dbname: db,
-          sku: key,
-          total: this.state[dataName][key].total
-        })
-        .then(response => {
-          if (response.data.msg === "success") {
-            console.log("logged");
-          } else if (response.data.msg === "fail") {
-            console.log("failed to log.");
-          }
-        });
+  totalChange(key) {
+    axios
+      .put("fb/updateinventory", {
+        noEquation: true,
+        dbname: "eastcoastOB",
+        sku: key,
+        total: this.state.eastDatas[key].total
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
 
-      axios
-        .put("os/updateinventory", {
-          noEquation: true,
-          inventory_level: this.state.bgDatas[key].total,
-          productID: this.state.bgDatas[key].id
-        })
-        .then(response => {
-          if (response.data.msg === "success") {
-            console.log("logged");
-          } else if (response.data.msg === "fail") {
-            console.log("failed to log.");
-          }
-        });
-    } else {
-      console.log("database not found!");
-    }
+    axios
+      .put("fb/updateinventory", {
+        noEquation: true,
+        dbname: "westcoastOB",
+        sku: key,
+        total: this.state.westDatas[key].total
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
+
+    axios
+      .put("os/updateinventory", {
+        noEquation: true,
+        inventory_level: this.state.bgDatas[key].total,
+        productID: this.state.bgDatas[key].id
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
   }
 
   handleOutOfStockSingle(key) {

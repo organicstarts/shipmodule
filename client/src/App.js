@@ -163,6 +163,16 @@ class App extends Component {
               >
                 Fraud Search
               </Menu.Item>
+
+              <Menu.Item
+                as={Link}
+                to="/cancel"
+                name="cancel"
+                active={activeItem === "cancel"}
+                onClick={this.handleItemClick}
+              >
+                Cancel Order
+              </Menu.Item>
             </Menu>
           )}
         </Transition.Group>

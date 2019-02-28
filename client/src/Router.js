@@ -1,34 +1,37 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import Main from "./Main";
-import Batch from "./components/BatchOrders/BatchOrders";
-import BatchList from "./components/BatchOrders/BatchList";
-import Fraud from "./components/FraudOrders/FraudOrders";
-import FraudList from "./components/FraudOrders/FraudList";
-import LogList from "./components/AdminLogs/LogList";
-import Fetch from "./components/FetchOrder/FetchOrder";
-import FetchDetail from "./components/FetchOrder/FetchDetail";
-import InboundLogging from "./components/InventorySystem/Inbound/InboundLogging";
-import InventoryTable from "./components/InventorySystem/InventoryTable/InventoryTable";
-import InboundLogTable from "./components/InventorySystem/Inbound/InboundLogTable";
-import InventoryReportTable from "./components/InventorySystem/Report/InventoryReportTable";
-import ReportLogging from "./components/InventorySystem/Report/ReportLogging";
-import ReturnLogging from "./components/InventorySystem/Report/ReturnLogging";
-import OBReportLogging from "./components/InventorySystem/Report/OBReportLogging";
-import BabyCareLogging from "./components/InventorySystem/Report/BabyCareLogging";
-import ToyLogging from "./components/InventorySystem/Report/ToyLogging";
-import ArchiveLogTable from "./components/InventorySystem/Inbound/ArchiveLogTable";
-import OpenBrokenTable from "./components/InventorySystem/InventoryTable/OpenBrokenTable";
+import {
+  BatchOrders,
+  FraudOrders,
+  FetchOrder,
+  BatchList,
+  FraudList,
+  FetchDetail,
+  LogList,
+  InboundLogging,
+  InventoryTable,
+  InboundLogTable,
+  InventoryReportTable,
+  ArchiveLogTable,
+  ReportLogging,
+  ReturnLogging,
+  OBReportLogging,
+  BabyCareLogging,
+  ToyLogging,
+  OpenBrokenTable,
+  CancelOrder
+} from "./components/";
 
 const Router = () => (
   <main>
     <Switch>
       <Route exact path="/" component={Main} />
-      <Route path="/batch" component={Batch} />
+      <Route path="/batch" component={BatchOrders} />
       <Route path="/batchList" component={BatchList} />
-      <Route path="/fraud" component={Fraud} />
+      <Route path="/fraud" component={FraudOrders} />
       <Route path="/fraudList" component={FraudList} />
-      <Route path="/fetch" component={Fetch} />
+      <Route path="/fetch" component={FetchOrder} />
       <Route path="/fetchDetail" component={FetchDetail} />
       <Route path="/log" component={LogList} />
       <Route path="/inboundLogging" component={InboundLogging} />
@@ -42,6 +45,7 @@ const Router = () => (
       <Route path="/obReportLogging" component={OBReportLogging} />
       <Route path="/babycareLogging" component={BabyCareLogging} />
       <Route path="/toyLogging" component={ToyLogging} />
+      <Route path="/cancel" component={CancelOrder} />
     </Switch>
   </main>
 );

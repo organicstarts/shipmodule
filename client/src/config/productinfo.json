@@ -1003,5 +1003,29 @@
     "individual": 1,
     "sku": "HOL-APPBAN-BAR",
     "productID": 140
+  },
+  "HOL-TAP": {
+    "brand": "Holle Cereal",
+    "stage": "Tapioka",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-TAP",
+    "productID": 365
+  },
+  "HOL-APPBAN-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Apple Banana",
+    "package": 12,
+    "individual": 1,
+    "sku": "HOL-APPBAN-PURE",
+    "productID": 186
+  },
+  "HOL-PEARAPPBLUOATS-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Pear Apple Blueberry with Oats",
+    "package": 12,
+    "individual": 1,
+    "sku": "HOL-PEARAPPBLUOATS-PURE",
+    "productID": 180
   }
 }

@@ -144,59 +144,59 @@ class InventoryTable extends Component {
   async totalChange(key, db) {
     const { eastDatas, westDatas, bgDatas } = this.state;
     const tempBGData = { ...bgDatas };
-    let dataName;
-    if (db === "eastcoast" || db === "westcoast") {
-      if (db === "eastcoast") {
-        dataName = "eastDatas";
-        db = "eastcoast";
-      } else {
-        dataName = "westDatas";
-        db = "westcoast";
-      }
+    const total = this.calculateTotal(
+      eastDatas[key].total,
+      westDatas[key].total
+    );
 
-      const total = this.calculateTotal(
-        eastDatas[key].total,
-        westDatas[key].total
-      );
-
-      axios
-        .put("fb/updateinventory", {
-          noEquation: true,
-          dbname: db,
-          sku: key,
-          total: this.state[dataName][key].total
-        })
-        .then(response => {
-          if (response.data.msg === "success") {
-            console.log("logged");
-          } else if (response.data.msg === "fail") {
-            console.log("failed to log.");
-          }
-        });
-
-      axios
-        .put("os/updateinventory", {
-          noEquation: true,
-          inventory_level: total,
-          productID: bgDatas[key].id
-        })
-        .then(response => {
-          if (response.data.msg === "success") {
-            console.log("logged");
-          } else if (response.data.msg === "fail") {
-            console.log("failed to log.");
-          }
-        });
-      if (total > 100) {
-        await this.enableBundle(tempBGData[key].bundles, total / 2);
-      } else {
-        await this.disableBundle(tempBGData[key].bundles);
-      }
-      tempBGData[key].total = total;
-      this.setState({ bgDatas: tempBGData });
+    axios
+      .put("fb/updateinventory", {
+        noEquation: true,
+        dbname: "eastcoast",
+        sku: key,
+        total: eastDatas[key].total
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
+    axios
+      .put("fb/updateinventory", {
+        noEquation: true,
+        dbname: "westcoast",
+        sku: key,
+        total: westDatas[key].total
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
+    axios
+      .put("os/updateinventory", {
+        noEquation: true,
+        inventory_level: total,
+        productID: bgDatas[key].id
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
+    if (total > 100) {
+      await this.enableBundle(tempBGData[key].bundles, total / 2);
     } else {
-      console.log("database not found!");
+      await this.disableBundle(tempBGData[key].bundles);
     }
+    tempBGData[key].total = total;
+    this.setState({ bgDatas: tempBGData });
   }
 
   disableBundle(datas) {
@@ -273,18 +273,22 @@ class InventoryTable extends Component {
     }
   }
   handleInfinite(key) {
-    const { bgDatas } = this.state;
+    const { eastDatas, westDatas, bgDatas } = this.state;
     const tempBGData = { ...bgDatas };
-
+    const total = this.calculateTotal(
+      eastDatas[key].total,
+      westDatas[key].total
+    );
     if (bgDatas[key].tracking === "none") {
       axios
         .put("os/disableproduct", {
           productID: tempBGData[key].id,
-          tracking: "simple"
+          tracking: "simple",
+          inventory_level: total
         })
         .then(async () => {
           tempBGData[key].tracking = "simple";
-          tempBGData[key].total = 0;
+          tempBGData[key].total = total;
           await this.disableBundle(tempBGData[key].bundles);
           this.setState({ bgDatas: tempBGData });
         });

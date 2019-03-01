@@ -53,7 +53,7 @@ const InboundLogDetail = props => {
             name="undo"
           />
           <Icon
-            onClick={() => props.archiveInventory(props.id)}
+            onClick={() => props.archiveInventory(props.id, props.index)}
             style={styles.hover}
             bordered
             inverted

@@ -21,10 +21,9 @@ class InboundLogTable extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
-  }
-  getData() {
+
     this.firebaseRef = firebase.database().ref(`/inventory/log`);
-    this.firebaseRef.on("value", async snapshot => {
+    this.firebaseRef.once("value", async snapshot => {
       const payload = snapshot.val();
       if (payload) {
         this.setState({
@@ -39,9 +38,6 @@ class InboundLogTable extends Component {
     });
   }
 
-  componentDidMount() {
-    this.getData();
-  }
   // let storageRef = firebase.storage().ref();
 
   // Object.keys(payload.log).forEach(key => {
@@ -75,56 +71,63 @@ class InboundLogTable extends Component {
       });
   }
 
-  async archiveInventory(key) {
-    const { dbDatas } = this.state;
-    if (window.confirm("are you sure you want to delete?")) {
-      this.setState({ loading: true });
+  async archiveInventory(key, index) {
+    const { dbDatas, datas } = this.state;
+    const tempDBData = { ...dbDatas };
+    const tempData = { ...datas };
+    // if (window.confirm("are you sure you want to delete?")) {
+    // this.setState({ loading: true });
 
-      await axios
-        .post("fb/archiveInventory", {
-          trackingNumber: dbDatas[key].trackingNumber,
-          carrier: dbDatas[key].carrier,
-          productID: dbDatas[key].productID,
-          isChecked: dbDatas[key].isChecked ? dbDatas[key].isChecked : false,
-          sku: dbDatas[key].sku,
-          brand: dbDatas[key].brand,
-          stage: dbDatas[key].stage,
-          quantity: dbDatas[key].quantity,
-          broken: dbDatas[key].broken,
-          total: dbDatas[key].total,
-          invoiceNum: dbDatas[key].invoiceNum,
-          scanner: dbDatas[key].scanner,
-          timeStamp: dbDatas[key].timeStamp,
-          warehouseLocation: dbDatas[key].warehouseLocation
-        })
-        .then(response => {
-          if (response.data.msg === "success") {
-            console.log("Archived Item");
-          } else {
-            console.log("Item not deleted");
-          }
-        })
-        .catch(error => console.log(error.message));
+    await axios
+      .post("fb/archiveInventory", {
+        trackingNumber: dbDatas[key].trackingNumber,
+        carrier: dbDatas[key].carrier,
+        productID: dbDatas[key].productID,
+        isChecked: dbDatas[key].isChecked ? dbDatas[key].isChecked : false,
+        sku: dbDatas[key].sku,
+        brand: dbDatas[key].brand,
+        stage: dbDatas[key].stage,
+        quantity: dbDatas[key].quantity,
+        broken: dbDatas[key].broken,
+        total: dbDatas[key].total,
+        invoiceNum: dbDatas[key].invoiceNum,
+        scanner: dbDatas[key].scanner,
+        timeStamp: dbDatas[key].timeStamp,
+        warehouseLocation: dbDatas[key].warehouseLocation
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("Archived Item");
+        } else {
+          console.log("Item not deleted");
+        }
+      })
+      .catch(error => console.log(error.message));
 
-      await axios
-        .delete("fb/deleteinventory", {
-          data: {
-            db: "log",
-            id: key
-          }
-        })
-        .then(async response => {
-          if (response.data.msg === "success") {
-            console.log("Deleted Item");
-            await this.getData();
-          } else {
-            console.log("Item not deleted");
-          }
-        })
-        .catch(error => console.log(error.message));
-    } else {
-      return false;
-    }
+    await axios
+      .delete("fb/deleteinventory", {
+        data: {
+          db: "log",
+          id: key
+        }
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          delete tempDBData[key];
+          tempData[index] = "";
+          this.setState({
+            dbDatas: tempDBData,
+            datas: tempData
+          });
+          console.log("Deleted Item");
+        } else {
+          console.log("Item not deleted");
+        }
+      })
+      .catch(error => console.log(error.message));
+    // } else {
+    //   return false;
+    // }
   }
 
   totalChange(key) {
@@ -235,10 +238,11 @@ class InboundLogTable extends Component {
 
   mapTableList() {
     const { datas, image } = this.state;
-    return Object.keys(datas).map(key => {
+    return Object.keys(datas).map((key, index) => {
       return (
         <InboundLogDetail
           key={key}
+          index={index}
           id={datas[key].key ? datas[key].key : key}
           sku={datas[key].sku}
           productID={datas[key].productID}

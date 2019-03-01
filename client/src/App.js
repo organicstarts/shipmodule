@@ -51,7 +51,7 @@ class App extends Component {
   update = () => {
     this.setState({
       width: window.outerWidth,
-      visible: this.state.width > 500 ? true : false
+      visible: this.state.width > 767 ? true : false
     });
   };
   setLastAction(lastAction) {
@@ -93,9 +93,13 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Menu fixed="top" className="noprint navbar">
+        <Menu fixed="top" borderless className="noprint navbar">
           <Menu.Item as={Link} to="/">
-            <Image size="mini" src={logo} style={{ marginRight: "1.5em" }} />
+            <Image
+              size="mini"
+              src={logo}
+              style={{ marginRight: "1.5em", zIndex: 2 }}
+            />
             Brainiac
           </Menu.Item>
           <Menu.Item as="a" onClick={this.handleToggle}>
@@ -112,7 +116,7 @@ class App extends Component {
           animation="fade right"
           duration={500}
         >
-          {visible && width > 500 && (
+          {visible && width > 767 && (
             <Menu
               className="noprint"
               fixed="left"
@@ -120,8 +124,10 @@ class App extends Component {
               pointing
               size="small"
               style={{
+                zIndex: 1,
                 paddingTop: "20px",
-                marginTop: "65px"
+                marginTop: "50px",
+                boxShadow: ".15px 1px 30px -9px #555"
               }}
             >
               <Menu.Item
@@ -189,8 +195,10 @@ class App extends Component {
                 vertical
                 icon
                 style={{
+                  zIndex: 1,
                   paddingTop: "20px",
-                  marginTop: "65px"
+                  marginTop: "50px",
+                  boxShadow: ".15px 1px 30px -9px #555"
                 }}
               >
                 <Menu.Item as={Link} to="/">
@@ -213,9 +221,12 @@ class App extends Component {
           </Transition.Group>
         </MediaQuery>
         <Container
+          fluid
           style={{
-            paddingLeft: "2em",
-            marginTop: "100px"
+            paddingLeft: "10%",
+            marginTop: "95px",
+            width: "95%",
+            position: "relative"
           }}
         >
           <Router />

@@ -1027,5 +1027,21 @@
     "individual": 1,
     "sku": "HOL-PEARAPPBLUOATS-PURE",
     "productID": 180
+  },
+  "HOL-APPSTRW-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Apple Strawberry",
+    "package": 12,
+    "individual": 1,
+    "sku": "HOL-APPSTRW-PURE",
+    "productID": 179
+  },
+  "HOL-PEARPCHRASSPT-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Pear Peach Rasberry Spelt",
+    "package": 12,
+    "individual": 1,
+    "sku": "HOL-PEARPCHRASSPT-PURE",
+    "productID": 187
   }
 }

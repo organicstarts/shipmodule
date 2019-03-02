@@ -32,4 +32,7 @@ code {
   .noprint {
     display: none !important;
   }
+  .nopadding {
+    padding-left: 0 !important;
+  }
 }

@@ -1043,5 +1043,37 @@
     "individual": 1,
     "sku": "HOL-PEARPCHRASSPT-PURE",
     "productID": 187
+  },
+  "HOL-PRAPP-BISC": {
+    "brand": "Holle Biscuit",
+    "stage": "Pear and Apple",
+    "package": 12,
+    "individual": 1,
+    "sku": "HOL-PRAPP-BISC",
+    "productID": 376
+  },
+  "HOL-REIS": {
+    "brand": "Holle Cereal",
+    "stage": "Reisflocken",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-REIS",
+    "productID": 90
+  },
+  "HOL-PEARAPPSPIN-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Pear Apple Spinach",
+    "package": 12,
+    "individual": 1,
+    "sku": "HOL-PEARAPPSPIN-PURE",
+    "productID": 203
+  },
+  "HOL-BANORA-FB-MINI": {
+    "brand": "Holle Fruit Bar Minis",
+    "stage": "Banana Oranga",
+    "package": 10,
+    "individual": 1,
+    "sku": "HOL-BANORA-FB-MINI",
+    "productID": 375
   }
 }

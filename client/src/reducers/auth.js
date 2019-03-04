@@ -3,7 +3,8 @@ import {
   AUTH_DATA_LOADED_IN,
   AUTH_CHECK_LOADED,
   AUTH_LOGIN,
-  AUTH_CHECK
+  AUTH_CHECK,
+  TOKEN_LOADED
 } from "../constants/actionTypes";
 import people from "../config/people.json";
 
@@ -12,7 +13,8 @@ const INITIAL_STATE = {
   displayName: "",
   email: "",
   warehouseLocation: "",
-  loading: false
+  loading: false,
+  token: ""
 };
 
 const setLoading = (state, action) => {
@@ -64,6 +66,12 @@ const authCheckUser = (state, action) => {
   return state;
 };
 
+const setToken = (state, action) => {
+  return Object.assign({}, state, {
+    token: action.payload.data
+  });
+};
+
 function authReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case AUTH_DATA_LOADED_IN: {
@@ -80,6 +88,9 @@ function authReducer(state = INITIAL_STATE, action) {
     }
     case AUTH_CHECK: {
       return { ...state, loading: true };
+    }
+    case TOKEN_LOADED: {
+      return setToken(state, action);
     }
     case "API_ERRORED": {
       return { ...INITIAL_STATE };

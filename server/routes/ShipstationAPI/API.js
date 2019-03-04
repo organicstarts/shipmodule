@@ -62,11 +62,74 @@ router.get("/getshipmentorder", (req, res) => {
 /*-------------------------------------------------------------------
                             POST REQUESTS                            
 ---------------------------------------------------------------------*/
-// router.post("/signin", (req, res) => {
-//   baseUrl = "https://ss5.shipstation.com/api/auth/GetToken";
 
-//   fetch(baseUrl, header).then( res => { })
-// });
+router.post("/getshipmentmetrics", (req, res) => {
+  const baseUrl = `https://ss5.shipstation.com/api/charts/shipmentmetrics?startDate=${req.body.startDate}&endDate=${
+    req.body.endDate
+  }`;
+
+  fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "Authorization-Token": req.body.token
+    }
+  })
+    .then(res => res.json())
+    .then(data => {
+      res.send(data);
+    })
+    .catch(error => {
+      res.json({ msg: error });
+    });
+});
+
+router.post("/getordermetrics", (req, res) => {
+  const baseUrl = `https://ss5.shipstation.com/api/charts/ordermetrics?startDate=${req.body.startDate}&endDate=${
+    req.body.endDate
+  }`;
+
+  fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "Authorization-Token": req.body.token
+    }
+  })
+    .then(res => res.json())
+    .then(data => {
+      res.send(data);
+    })
+    .catch(error => {
+      res.json({ msg: error });
+    });
+});
+
+
+router.post("/gettoken", (req, res) => {
+  const baseUrl = "https://ss5.shipstation.com/api/auth/GetToken";
+
+  fetch(baseUrl, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      username: "yvan@organicstart.com",
+      password: "boxing123"
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      res.send(data.token);
+    })
+    .catch(error => {
+      res.json({ msg: error });
+    });
+});
 
 router.post("/cancelorder", (req, res) => {
   const baseUrl = `https://ssapi.shipstation.com/orders?orderNumber=${

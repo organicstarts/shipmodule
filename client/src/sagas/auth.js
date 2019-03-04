@@ -2,7 +2,8 @@ import { call, put } from "redux-saga/effects";
 import {
   AUTH_DATA_LOADED_IN,
   AUTH_DATA_LOADED_OUT,
-  AUTH_CHECK_LOADED
+  AUTH_CHECK_LOADED,
+  TOKEN_LOADED
 } from "../constants/actionTypes";
 import axios from "axios";
 import { auth } from "../config/firebaseconf";
@@ -33,6 +34,19 @@ function* handleLoginState() {
     yield put({ type: "API_ERRORED", payload: e });
   }
 }
+
+function* handleGetToken() {
+  try {
+    const payload = yield call(getToken);
+    yield put({ type: TOKEN_LOADED, payload });
+  } catch (e) {
+    yield put({ type: "API_ERRORED", payload: e });
+  }
+}
+
+const getToken = () => {
+  return axios.post("ss/gettoken").then(result => result);
+};
 
 const checkLoginState = () => {
   return new Promise((resolve, reject) => {
@@ -83,4 +97,4 @@ const logIn = pin => {
   // });
 };
 
-export { handleLogin, handleLogOut, handleLoginState };
+export { handleLogin, handleLogOut, handleLoginState, handleGetToken };

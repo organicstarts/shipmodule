@@ -1,31 +1,35 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { login, logout, checkLoginState } from "./actions/auth";
+import { getShipmentMetrics, getOrderMetrics } from "./actions/metrics";
 import { ClipLoader } from "react-spinners";
 import { withRouter } from "react-router-dom";
 import MediaQuery from "react-responsive";
 import PieChart from "react-minimal-pie-chart";
 import Chart from "react-google-charts";
-import {
-  BatchOrders,
-  FetchOrder,
-  FraudOrders,
-  Log,
-  Inventory
-} from "./components";
+import { BatchOrders, Log, Inventory } from "./components";
 import "tachyons";
-import graph from "./images/staticgraph.PNG";
 import Scanning from "./components/InventorySystem/Scanning";
-import { Grid, Image, Segment, Header } from "semantic-ui-react";
+import { Grid, Segment, Header } from "semantic-ui-react";
+import moment from "moment";
 
 class Main extends Component {
   constructor() {
     super();
-
     this.logout = this.logout.bind(this);
     this.renderHome = this.renderHome.bind(this);
   }
 
+  componentDidMount() {
+    let endTime = moment().format("M/D/YYYY");
+    let startTime = moment()
+      .subtract(1, "months")
+      .format("M/D/YYYY");
+    if (this.props.token) {
+      this.props.getShipmentMetrics(this.props.token, startTime, endTime);
+      this.props.getOrderMetrics(this.props.token, startTime, endTime);
+    }
+  }
   logout() {
     this.props.logout();
   }
@@ -53,12 +57,33 @@ class Main extends Component {
     }
     return (
       <div>
-        <h3 style={{ color: "red" }}>***ignore graphs. WIP***</h3>
         <Grid columns={3} stackable>
           <MediaQuery minDeviceWidth={374}>
             <Grid.Row columns={1}>
               <Grid.Column>
-                <Image size="massive" src={graph} style={{ width: "100%" }} />
+                <Segment>
+                  <Chart
+                    height={"400px"}
+                    chartType="ColumnChart"
+                    loader={<div>Loading Chart</div>}
+                    data={this.props.metricsByInterval}
+                    options={{
+                      chartArea: {
+                        width: "100%"
+                      },
+                      legend: {
+                        position: "top"
+                      },
+                      title: "Company Performance",
+                      subtitle: "Orders Shipped, New Orders",
+                      animation: {
+                        duration: 1200,
+                        easing: "linear",
+                        startup: true
+                      }
+                    }}
+                  />
+                </Segment>
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
@@ -66,70 +91,72 @@ class Main extends Component {
                 <BatchOrders />
               </Grid.Column>
               <Grid.Column width={6}>
-                <Segment>
-                  <Chart
-                    width={"auto"}
-                    height={"350px"}
-                    chartType="Bar"
-                    loader={<div>Loading Chart</div>}
-                    data={[
-                      ["Age", "Open Orders"],
-                      ["1", 8488],
-                      ["2", 7111],
-                      ["3", 953],
-                      ["4", 42],
-                      ["5+", 88]
-                    ]}
-                    options={{
-                      // Material design options
-                      chart: {
-                        title: "Fulfillment Speed",
-                        subtitle: "Open order aging"
-                      },
-                      bars: "horizontal",
-                      axes: {
-                        y: {
-                          0: { side: "right" }
-                        }
-                      }
-                    }}
+                {this.props.shippedLoading ? (
+                  <ClipLoader
+                    sizeUnit={"px"}
+                    size={54}
+                    color={"#36D7B7"}
+                    loading={this.props.shippedLoading}
                   />
-                </Segment>
+                ) : (
+                  <Segment>
+                    <Chart
+                      height={"350px"}
+                      chartType="BarChart"
+                      loader={<div>Loading Chart</div>}
+                      data={this.props.metricsByFilltime}
+                      options={{
+                        chartArea: {
+                          width: "100%"
+                        },
+                        title: "Fulfillment Speed",
+                        legend: {
+                          position: "top"
+                        },
+                        bars: "horizontal",
+                        animation: {
+                          duration: 1200,
+                          easing: "linear",
+                          startup: true
+                        },
+                        axes: {
+                          y: {
+                            0: { side: "right" }
+                          }
+                        }
+                      }}
+                    />
+                  </Segment>
+                )}
               </Grid.Column>
               <Grid.Column width={4}>
-                <Segment>
-                  <Header size="large" textAlign="center">
-                    East Coast v. West Coast Shipments
-                  </Header>
-                  <PieChart
-                    data={[
-                      {
-                        title: "osEast",
-                        value: 15691,
-                        color: "#E38627"
-                      },
-                      {
-                        title: "osWest",
-                        value: 15691,
-                        color: "#C13C37"
-                      }
-                    ]}
-                    label
-                    labelStyle={{
-                      fontSize: "5px",
-                      fontFamily: "sans-serif",
-                      fill: "#121212"
-                    }}
-                    radius={42}
-                    labelPosition={112}
-                    style={{ height: "250px" }}
-                    startAngle={90}
-                    lengthAngle={360}
-                    animate
+                {this.props.shippedLoading ? (
+                  <ClipLoader
+                    sizeUnit={"px"}
+                    size={54}
+                    color={"#36D7B7"}
+                    loading={this.props.shippedLoading}
                   />
-                  OS East: 999 <br />
-                  OS West: 999 <br />
-                </Segment>
+                ) : (
+                  <Segment>
+                    <Chart
+                      width={"100%"}
+                      height={"500px"}
+                      chartType="PieChart"
+                      loader={<div>Loading Chart</div>}
+                      data={this.props.metricsByUser}
+                      options={{
+                        chartArea: {
+                          width: "100%",
+                          height: "80%"
+                        },
+                        legend: "top",
+                        title: "East Coast v. West Coast Shipments",
+                        pieStartAngle: 45
+                      }}
+                    />
+                  </Segment>
+                )}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={1}>
@@ -158,17 +185,22 @@ class Main extends Component {
   }
 }
 
-function mapStateToProps({ authState }) {
+function mapStateToProps({ authState, metricState }) {
   return {
     displayName: authState.displayName,
     email: authState.email,
-    loading: authState.loading
+    loading: authState.loading,
+    token: authState.token,
+    metricsByUser: metricState.shipmentMetrics.byUser,
+    metricsByFilltime: metricState.shipmentMetrics.byFillTime,
+    shippedLoading: metricState.shippedLoading,
+    metricsByInterval: metricState.orderMetrics.byInterval
   };
 }
 
 export default withRouter(
   connect(
     mapStateToProps,
-    { login, logout, checkLoginState }
+    { login, logout, checkLoginState, getShipmentMetrics, getOrderMetrics }
   )(Main)
 );

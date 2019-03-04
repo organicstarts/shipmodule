@@ -121,13 +121,15 @@ class App extends Component {
               className="noprint"
               fixed="left"
               vertical
+              inverted
               pointing
               size="small"
               style={{
                 zIndex: 1,
                 paddingTop: "20px",
                 marginTop: "50px",
-                boxShadow: ".15px 1px 30px -9px #555"
+                boxShadow: ".15px 1px 30px -9px #555",
+                backgroundColor: "#303030"
               }}
             >
               <Menu.Item
@@ -194,11 +196,13 @@ class App extends Component {
                 fixed="left"
                 vertical
                 icon
+                inverted
                 style={{
                   zIndex: 1,
                   paddingTop: "20px",
                   marginTop: "50px",
-                  boxShadow: ".15px 1px 30px -9px #555"
+                  boxShadow: ".15px 1px 30px -9px #555",
+                  backgroundColor: "#303030"
                 }}
               >
                 <Menu.Item as={Link} to="/">

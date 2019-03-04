@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { login, checkLoginState } from "../../actions/auth";
+import { login, checkLoginState, getToken } from "../../actions/auth";
 import logo from "../../logo.png";
 import { Button, Form, Grid, Header, Image, Segment } from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
@@ -27,6 +27,7 @@ class Auth extends Component {
 
   componentDidMount() {
     this.props.checkLoginState();
+    this.props.getToken();
   }
 
   onChange = input => {
@@ -149,5 +150,5 @@ const mapStateToProps = ({ authState }) => {
 
 export default connect(
   mapStateToProps,
-  { login, checkLoginState }
+  { login, checkLoginState, getToken }
 )(Auth);

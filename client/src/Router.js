@@ -8,8 +8,10 @@ import {
   BatchList,
   FraudList,
   FetchDetail,
+  Log,
   LogList,
   InboundLogging,
+  Inventory,
   InventoryTable,
   InboundLogTable,
   InventoryReportTable,
@@ -20,7 +22,8 @@ import {
   BabyCareLogging,
   ToyLogging,
   OpenBrokenTable,
-  CancelOrder
+  CancelOrder,
+  Scanning
 } from "./components/";
 
 const Router = () => (
@@ -33,7 +36,10 @@ const Router = () => (
       <Route path="/fraudList" component={FraudList} />
       <Route path="/fetch" component={FetchOrder} />
       <Route path="/fetchDetail" component={FetchDetail} />
-      <Route path="/log" component={LogList} />
+      <Route path="/log" component={Log} />
+      <Route path="/logList" component={LogList} />
+      <Route path="/scanning" component={Scanning} />
+      <Route path="/inventory" component={Inventory} />
       <Route path="/inboundLogging" component={InboundLogging} />
       <Route path="/inboundLogTable" component={InboundLogTable} />
       <Route path="/archiveLogTable" component={ArchiveLogTable} />

@@ -1,0 +1,23 @@
+.Map {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.Map-map {
+  height: 500px;
+  width: 750px;
+}
+
+.label {
+  padding-top: 15px;
+  margin-bottom: 0;
+}
+.hoverinfo {
+  padding: 4px;
+  border-radius: 1px;
+  background-color: #fff;
+  box-shadow: 1px 1px 5px #ccc;
+  font-size: 12px;
+  border: 1px solid #ccc;
+}

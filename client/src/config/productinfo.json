@@ -1075,5 +1075,37 @@
     "individual": 1,
     "sku": "HOL-BANORA-FB-MINI",
     "productID": 375
+  },
+  "HOL-PEACHAPP-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Apple Peach & Fruits",
+    "package": 12,
+    "individual": 1,
+    "sku": "HOL-PEACHAPP-PURE",
+    "productID": 202
+  },
+  "HOL-PEARAPP-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Apple Pear & Fruits",
+    "package": 12,
+    "individual": 1,
+    "sku": "HOL-PEARAPP-PURE",
+    "productID": 212
+  },
+  "HOL-APPBANPEAR-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Apple Banana Pear",
+    "package": 12,
+    "individual": 1,
+    "sku": "HOL-APPBANPEAR-PURE",
+    "productID": 177
+  },
+  "HOL-APPMANG-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Apple Mango",
+    "package": 12,
+    "individual": 1,
+    "sku": "HOL-APPMANG-PURE",
+    "productID": 188
   }
 }

@@ -1,17 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { login, logout, checkLoginState } from "./actions/auth";
-import { getShipmentMetrics, getOrderMetrics } from "./actions/metrics";
+import {
+  getShipmentMetrics,
+  getOrderMetrics,
+  getCustomerMetrics
+} from "./actions/metrics";
 import { ClipLoader } from "react-spinners";
 import { withRouter } from "react-router-dom";
 import MediaQuery from "react-responsive";
-import PieChart from "react-minimal-pie-chart";
 import Chart from "react-google-charts";
-import { BatchOrders, Log, Inventory } from "./components";
 import "tachyons";
 import Scanning from "./components/InventorySystem/Scanning";
-import { Grid, Segment, Header } from "semantic-ui-react";
+import { Grid, Segment, Container } from "semantic-ui-react";
 import moment from "moment";
+import USmap from "./components/DataMap/USmap";
 
 class Main extends Component {
   constructor() {
@@ -28,22 +31,13 @@ class Main extends Component {
     if (this.props.token) {
       this.props.getShipmentMetrics(this.props.token, startTime, endTime);
       this.props.getOrderMetrics(this.props.token, startTime, endTime);
+      this.props.getCustomerMetrics(this.props.token, startTime, endTime);
     }
   }
   logout() {
     this.props.logout();
   }
 
-  compareEmail(email) {
-    switch (email) {
-      case "yvan@organicstart.com":
-      case "peter@organicstart.com":
-      case "isaiah@organicstart.com":
-        return true;
-      default:
-        return false;
-    }
-  }
   renderHome() {
     if (this.props.loading) {
       return (
@@ -87,44 +81,26 @@ class Main extends Component {
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
-              <Grid.Column width={6}>
-                <BatchOrders />
-              </Grid.Column>
-              <Grid.Column width={6}>
-                {this.props.shippedLoading ? (
+              <Grid.Column width={8}>
+                {this.props.customerLoading ? (
                   <ClipLoader
                     sizeUnit={"px"}
                     size={54}
                     color={"#36D7B7"}
-                    loading={this.props.shippedLoading}
+                    loading={this.props.customerLoading}
                   />
                 ) : (
                   <Segment>
-                    <Chart
-                      height={"350px"}
-                      chartType="BarChart"
-                      loader={<div>Loading Chart</div>}
-                      data={this.props.metricsByFilltime}
-                      options={{
-                        chartArea: {
-                          width: "100%"
-                        },
-                        title: "Fulfillment Speed",
-                        legend: {
-                          position: "top"
-                        },
-                        bars: "horizontal",
-                        animation: {
-                          duration: 1200,
-                          easing: "linear",
-                          startup: true
-                        },
-                        axes: {
-                          y: {
-                            0: { side: "right" }
-                          }
-                        }
-                      }}
+                    <USmap
+                      data={this.props.metricsByState}
+                      eastLabel={[
+                        <div key={1} className="box red" />,
+                        `East Total: ${this.props.metricsByStateEast}`
+                      ]}
+                      westLabel={[
+                        <div key={2} className="box blue" />,
+                        `West Total: ${this.props.metricsByStateWest}`
+                      ]}
                     />
                   </Segment>
                 )}
@@ -139,40 +115,93 @@ class Main extends Component {
                   />
                 ) : (
                   <Segment>
-                    <Chart
-                      width={"100%"}
-                      height={"500px"}
-                      chartType="PieChart"
-                      loader={<div>Loading Chart</div>}
-                      data={this.props.metricsByUser}
-                      options={{
-                        chartArea: {
-                          width: "100%",
-                          height: "80%"
-                        },
-                        legend: "top",
-                        title: "East Coast v. West Coast Shipments",
-                        pieStartAngle: 45
-                      }}
-                    />
+                    <Segment>
+                      <Chart
+                        height={"350px"}
+                        chartType="PieChart"
+                        loader={<div>Loading Chart</div>}
+                        data={this.props.metricsByFilltime}
+                        options={{
+                          chartArea: {
+                            width: "100%"
+                          },
+                          pieHole: 0.5,
+                          title: "Fulfillment Speed",
+                          legend: {
+                            position: "top"
+                          },
+                          pieSliceText: "value",
+                          animation: {
+                            duration: 1200,
+                            easing: "linear",
+                            startup: true
+                          }
+                        }}
+                      />
+                    </Segment>
+                    <Grid columns={2}>
+                      <Grid.Row>
+                        <Grid.Column>
+                          <Segment>Returns: {this.props.returns}</Segment>
+                        </Grid.Column>
+                        <Grid.Column>
+                          <Segment>Shipments: {this.props.shipments}</Segment>
+                        </Grid.Column>
+                        <Grid.Column>
+                          <Segment>
+                            {this.props.metricsByCarrier[0].name}:{" "}
+                            {this.props.metricsByCarrier[0].count}
+                          </Segment>
+                        </Grid.Column>
+                        <Grid.Column>
+                          <Segment>
+                            {this.props.metricsByCarrier[1].name}:{" "}
+                            {this.props.metricsByCarrier[1].count}
+                          </Segment>
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
                   </Segment>
                 )}
               </Grid.Column>
-            </Grid.Row>
-            <Grid.Row columns={1}>
-              <Grid.Column>
-                <Inventory compareEmail={this.compareEmail} />
+              <Grid.Column width={4}>
+                {this.props.shippedLoading ? (
+                  <ClipLoader
+                    sizeUnit={"px"}
+                    size={54}
+                    color={"#36D7B7"}
+                    loading={this.props.shippedLoading}
+                  />
+                ) : (
+                  <Container>
+                    <Segment>
+                      <Chart
+                        width={"100%"}
+                        height={"500px"}
+                        chartType="PieChart"
+                        loader={<div>Loading Chart</div>}
+                        data={this.props.metricsByUser}
+                        options={{
+                          chartArea: {
+                            width: "100%",
+                            height: "80%"
+                          },
+                          legend: "top",
+                          title: "East Coast v. West Coast Shipments",
+                          pieStartAngle: 45
+                        }}
+                      />
+                    </Segment>
+                  </Container>
+                )}
               </Grid.Column>
             </Grid.Row>
           </MediaQuery>
-          <Grid.Row>
-            <Grid.Column>
-              <Scanning />
-            </Grid.Column>
 
-            <MediaQuery minDeviceWidth={374}>
+          <Grid.Row>
+            <MediaQuery maxDeviceWidth={374}>
               <Grid.Column>
-                {this.compareEmail(this.props.email) ? <Log /> : ""}
+                <Scanning />
               </Grid.Column>
             </MediaQuery>
           </Grid.Row>
@@ -194,13 +223,27 @@ function mapStateToProps({ authState, metricState }) {
     metricsByUser: metricState.shipmentMetrics.byUser,
     metricsByFilltime: metricState.shipmentMetrics.byFillTime,
     shippedLoading: metricState.shippedLoading,
-    metricsByInterval: metricState.orderMetrics.byInterval
+    metricsByInterval: metricState.orderMetrics.byInterval,
+    metricsByState: metricState.customerMetrics.byState,
+    metricsByStateEast: metricState.customerMetrics.eastTotal,
+    metricsByStateWest: metricState.customerMetrics.westTotal,
+    customerLoading: metricState.customerLoading,
+    returns: metricState.shipmentMetrics.returns,
+    shipments: metricState.shipmentMetrics.shipments,
+    metricsByCarrier: metricState.shipmentMetrics.byCarrier
   };
 }
 
 export default withRouter(
   connect(
     mapStateToProps,
-    { login, logout, checkLoginState, getShipmentMetrics, getOrderMetrics }
+    {
+      login,
+      logout,
+      checkLoginState,
+      getShipmentMetrics,
+      getOrderMetrics,
+      getCustomerMetrics
+    }
   )(Main)
 );

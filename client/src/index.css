@@ -25,6 +25,22 @@ code {
   background-color: #94c120 !important;
 }
 
+.box {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-top: 8px;
+  margin-right: 5px;
+  border-radius: 50px
+}
+
+.red {
+  background: #cc4731;
+}
+.blue {
+  background: #306596;
+}
+
 @media print {
   body {
     -webkit-print-color-adjust: exact;

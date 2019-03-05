@@ -1,4 +1,8 @@
-import { GET_SHIPMENT_METRICS, GET_ORDER_METRICS } from "../constants/actionTypes";
+import {
+  GET_SHIPMENT_METRICS,
+  GET_ORDER_METRICS,
+  GET_CUSTOMER_METRICS
+} from "../constants/actionTypes";
 
 const getShipmentMetrics = (token, startDate, endDate) => ({
   type: GET_SHIPMENT_METRICS,
@@ -10,4 +14,9 @@ const getOrderMetrics = (token, startDate, endDate) => ({
   payload: { token, startDate, endDate }
 });
 
-export { getShipmentMetrics, getOrderMetrics };
+const getCustomerMetrics = (token, startDate, endDate) => ({
+  type: GET_CUSTOMER_METRICS,
+  payload: { token, startDate, endDate }
+});
+
+export { getShipmentMetrics, getOrderMetrics, getCustomerMetrics };

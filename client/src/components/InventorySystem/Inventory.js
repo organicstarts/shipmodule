@@ -10,6 +10,16 @@ class Inventory extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
+  compareEmail(email) {
+    switch (email) {
+      case "yvan@organicstart.com":
+      case "peter@organicstart.com":
+      case "isaiah@organicstart.com":
+        return true;
+      default:
+        return false;
+    }
+  }
   handleClick(id) {
     let path = "";
     let warehouse = "";
@@ -64,19 +74,19 @@ class Inventory extends Component {
         id: 4,
         name: "View Inventory",
         color: "orange",
-        show: this.props.compareEmail(this.props.email) ? true : false
+        show: this.compareEmail(this.props.email) ? true : false
       },
       {
         id: 5,
         name: "View Inbound Inventory Log",
         color: "teal",
-        show: this.props.compareEmail(this.props.email) ? true : false
+        show: this.compareEmail(this.props.email) ? true : false
       },
       {
         id: 6,
         name: "View Archive Inbound Log",
         color: "facebook",
-        show: this.props.compareEmail(this.props.email) ? true : false
+        show: this.compareEmail(this.props.email) ? true : false
       }
     ];
 

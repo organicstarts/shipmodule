@@ -19,6 +19,7 @@ import BabyCareLogging from "./InventorySystem/Report/BabyCareLogging";
 import ToyLogging from "./InventorySystem/Report/ToyLogging";
 import OpenBrokenTable from "./InventorySystem/InventoryTable/OpenBrokenTable";
 import CancelOrder from "./CancelOrder/CancelOrder";
+import Scanning from "./InventorySystem/Scanning";
 
 export {
   BatchOrders,
@@ -41,5 +42,6 @@ export {
   BabyCareLogging,
   ToyLogging,
   OpenBrokenTable,
-  CancelOrder
+  CancelOrder,
+  Scanning
 };

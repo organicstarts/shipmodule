@@ -1,12 +1,15 @@
 import {
   SHIPMENT_METRICS_LOADED,
-  ORDER_METRICS_LOADED
+  ORDER_METRICS_LOADED,
+  CUSTOMER_METRICS_LOADED
 } from "../constants/actionTypes";
 import moment from "moment";
-
+import stateAbbrv from "../config/states_hash_abbrv.json";
 const INITIAL_STATE = {
   shipmentMetrics: [],
   orderMetrics: [],
+  customerMetrics: {},
+  customerLoading: true,
   shippedLoading: true,
   orderLoading: true
 };
@@ -29,7 +32,13 @@ const setShipmentMetrics = (state, action) => {
   });
 
   return Object.assign({}, state, {
-    shipmentMetrics: { byUser: byUser, byFillTime: byFillTime },
+    shipmentMetrics: {
+      byUser: byUser,
+      byFillTime: byFillTime,
+      byCarrier: action.payload.byCarrier,
+      returns: action.payload.summary.returns,
+      shipments: action.payload.summary.shipments
+    },
     shippedLoading: false
   });
 };
@@ -46,6 +55,30 @@ const setOrderMetrics = (state, action) => {
   });
 };
 
+const setCustomerMetrics = (state, action) => {
+  let byState = {};
+  let eastCount = 0;
+  let westCount = 0;
+  action.payload.byState.map(data => {
+    if (stateAbbrv[data.name]) {
+      let stateCode = stateAbbrv[data.name].code;
+      let stateLocation = stateAbbrv[data.name].location;
+      if (stateLocation === "east") eastCount += data.count;
+      if (stateLocation === "west") westCount += data.count;
+      byState[stateCode] = { data: data.count, fillKey: stateLocation };
+    }
+    return byState;
+  });
+  return Object.assign({}, state, {
+    customerMetrics: {
+      byState: byState,
+      eastTotal: eastCount,
+      westTotal: westCount
+    },
+    customerLoading: false
+  });
+};
+
 function metricReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case SHIPMENT_METRICS_LOADED: {
@@ -53,6 +86,9 @@ function metricReducer(state = INITIAL_STATE, action) {
     }
     case ORDER_METRICS_LOADED: {
       return setOrderMetrics(state, action);
+    }
+    case CUSTOMER_METRICS_LOADED: {
+      return setCustomerMetrics(state, action);
     }
     case "API_ERRORED": {
       return { ...INITIAL_STATE };

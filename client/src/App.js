@@ -77,6 +77,16 @@ class App extends Component {
     }, CHECK_INTERVAL);
   }
 
+  compareEmail(email) {
+    switch (email) {
+      case "yvan@organicstart.com":
+      case "peter@organicstart.com":
+      case "isaiah@organicstart.com":
+        return true;
+      default:
+        return false;
+    }
+  }
   check() {
     const now = Date.now();
     const timeleft =
@@ -171,6 +181,24 @@ class App extends Component {
               >
                 Fraud Search
               </Menu.Item>
+              <Menu.Item
+                as={Link}
+                to="/inventory"
+                name="inventory"
+                active={activeItem === "inventory"}
+                onClick={this.handleItemClick}
+              >
+                Inventory
+              </Menu.Item>
+              <Menu.Item
+                as={Link}
+                to="/scanning"
+                name="scanning"
+                active={activeItem === "scanning"}
+                onClick={this.handleItemClick}
+              >
+                Scanning
+              </Menu.Item>
 
               <Menu.Item
                 as={Link}
@@ -181,6 +209,17 @@ class App extends Component {
               >
                 Cancel Order
               </Menu.Item>
+              {this.compareEmail(this.props.email) && (
+                <Menu.Item
+                  as={Link}
+                  to="/log"
+                  name="log"
+                  active={activeItem === "log"}
+                  onClick={this.handleItemClick}
+                >
+                  Admin Log
+                </Menu.Item>
+              )}
             </Menu>
           )}
         </Transition.Group>
@@ -220,6 +259,20 @@ class App extends Component {
                 <Menu.Item as={Link} to="/fraud">
                   <Icon name="eye" />
                 </Menu.Item>
+                <Menu.Item as={Link} to="/inventory">
+                  <Icon name="warehouse" />
+                </Menu.Item>
+                <Menu.Item as={Link} to="/scanning">
+                  <Icon name="barcode" />
+                </Menu.Item>
+                <Menu.Item as={Link} to="/cancel">
+                  <Icon name="user cancel" />
+                </Menu.Item>
+                {this.compareEmail(this.props.email) && (
+                  <Menu.Item as={Link} to="/log">
+                    <Icon name="book" />
+                  </Menu.Item>
+                )}
               </Menu>
             )}
           </Transition.Group>
@@ -241,9 +294,15 @@ class App extends Component {
   }
 }
 
+function mapStateToProps({ authState }) {
+  return {
+    email: authState.email
+  };
+}
+
 export default withRouter(
   connect(
-    null,
+    mapStateToProps,
     { logout }
   )(App)
 );

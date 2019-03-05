@@ -1,7 +1,8 @@
 import { call, put } from "redux-saga/effects";
 import {
   SHIPMENT_METRICS_LOADED,
-  ORDER_METRICS_LOADED
+  ORDER_METRICS_LOADED,
+  CUSTOMER_METRICS_LOADED
 } from "../constants/actionTypes";
 import axios from "axios";
 
@@ -18,6 +19,14 @@ function* handleGetOrderMetrics(action) {
   try {
     const payload = yield call(getOrderMetrics, action.payload);
     yield put({ type: ORDER_METRICS_LOADED, payload });
+  } catch (e) {
+    yield put({ type: "API_ERRORED", payload: e });
+  }
+}
+function* handleGetCustomerMetrics(action) {
+  try {
+    const payload = yield call(getCustomerMetrics, action.payload);
+    yield put({ type: CUSTOMER_METRICS_LOADED, payload });
   } catch (e) {
     yield put({ type: "API_ERRORED", payload: e });
   }
@@ -49,4 +58,21 @@ const getOrderMetrics = async payload => {
     });
 };
 
-export { handleGetShipmentMetrics, handleGetOrderMetrics };
+const getCustomerMetrics = async payload => {
+  return await axios
+    .post("ss/getcustomermetrics", {
+      token: payload.token,
+      startDate: payload.startDate,
+      endDate: payload.endDate
+    })
+    .then(result => result.data)
+    .catch(error => {
+      console.log(error.message);
+    });
+};
+
+export {
+  handleGetShipmentMetrics,
+  handleGetOrderMetrics,
+  handleGetCustomerMetrics
+};

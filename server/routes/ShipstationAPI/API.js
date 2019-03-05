@@ -107,6 +107,28 @@ router.post("/getordermetrics", (req, res) => {
     });
 });
 
+router.post("/getcustomermetrics", (req, res) => {
+  const baseUrl = `https://ss5.shipstation.com/api/charts/customermetrics?startDate=${req.body.startDate}&endDate=${
+    req.body.endDate
+  }`;
+
+  fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "Authorization-Token": req.body.token
+    }
+  })
+    .then(res => res.json())
+    .then(data => {
+      res.send(data);
+    })
+    .catch(error => {
+      res.json({ msg: error });
+    });
+});
+
 
 router.post("/gettoken", (req, res) => {
   const baseUrl = "https://ss5.shipstation.com/api/auth/GetToken";

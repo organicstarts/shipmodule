@@ -84,7 +84,7 @@ const InventoryReportDetail = props => {
               onClick={() => props.handleInfinite(props.sku)}
               color={props.bgTracking === "simple" ? "red" : "green"}
             >
-              <span>&infin;</span>
+              <i className="fas fa-infinity" />
             </Button>
           ) : (
             ""

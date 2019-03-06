@@ -30,6 +30,7 @@ class Datamap extends React.Component {
   }
 
   componentDidMount() {
+   
     if (this.props.responsive) {
       window.addEventListener("resize", this.resizeMap);
     }
@@ -106,6 +107,7 @@ class Datamap extends React.Component {
   }
 
   resizeMap() {
+    console.log(this.props.responsive)
     this.map.resize();
   }
 

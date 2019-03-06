@@ -8,6 +8,7 @@ class USmap extends React.Component {
       <Map label={this.props.eastLabel} label2={this.props.westLabel}>
         <Datamap
           scope="usa"
+          responsive={true}
           geographyConfig={{
             highlightBorderColor: "#bada55",
             popupTemplate: (geography, data) =>

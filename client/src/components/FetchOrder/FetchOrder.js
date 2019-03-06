@@ -4,7 +4,7 @@ import { getOrderDetail } from "../../actions/order";
 import { ClipLoader } from "react-spinners";
 import { withRouter } from "react-router-dom";
 import people from "../../config/people";
-import { Segment, Button, Form } from "semantic-ui-react";
+import { Segment, Button, Form, Header } from "semantic-ui-react";
 import axios from "axios";
 import moment from "moment";
 
@@ -76,6 +76,9 @@ class FetchOrder extends React.Component {
   render() {
     return (
       <Segment color="yellow" padded="very">
+        <Header size="large" textAlign="center">
+          Create Packing slip
+        </Header>
         <Form size="large" onSubmit={this.handleSubmit}>
           <Form.Field>
             <Form.Input
@@ -106,7 +109,7 @@ class FetchOrder extends React.Component {
               required
             />
           </Form.Group>
-          {this.renderButton()}
+          <div style={{ textAlign: "center" }}>{this.renderButton()}</div>
         </Form>
       </Segment>
     );
@@ -115,7 +118,7 @@ class FetchOrder extends React.Component {
 
 const mapStateToProps = ({ authState }) => {
   return {
-    displayName: authState.displayName,
+    displayName: authState.displayName
   };
 };
 

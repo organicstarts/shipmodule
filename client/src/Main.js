@@ -4,7 +4,8 @@ import { login, logout, checkLoginState } from "./actions/auth";
 import {
   getShipmentMetrics,
   getOrderMetrics,
-  getCustomerMetrics
+  getCustomerMetrics,
+  getProductMetrics
 } from "./actions/metrics";
 import { ClipLoader } from "react-spinners";
 import { withRouter } from "react-router-dom";
@@ -12,7 +13,15 @@ import MediaQuery from "react-responsive";
 import Chart from "react-google-charts";
 import "tachyons";
 import Scanning from "./components/InventorySystem/Scanning";
-import { Grid, Segment, Container } from "semantic-ui-react";
+import {
+  Grid,
+  Segment,
+  Container,
+  Table,
+  Image,
+  Icon,
+  Button
+} from "semantic-ui-react";
 import moment from "moment";
 import USmap from "./components/DataMap/USmap";
 
@@ -21,6 +30,7 @@ class Main extends Component {
     super();
     this.logout = this.logout.bind(this);
     this.renderHome = this.renderHome.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -32,12 +42,69 @@ class Main extends Component {
       this.props.getShipmentMetrics(this.props.token, startTime, endTime);
       this.props.getOrderMetrics(this.props.token, startTime, endTime);
       this.props.getCustomerMetrics(this.props.token, startTime, endTime);
+      this.props.getProductMetrics(this.props.token, startTime, endTime);
     }
   }
   logout() {
     this.props.logout();
   }
 
+  handleClick(e) {
+    let startTime = "";
+    let endTime = "";
+    switch (e.target.name) {
+      case "day": {
+        endTime = moment().format("M/D/YYYY");
+        startTime = moment().format("M/D/YYYY");
+        break;
+      }
+      case "week": {
+        endTime = moment().format("M/D/YYYY");
+        startTime = moment()
+          .subtract(1, "weeks")
+          .format("M/D/YYYY");
+        break;
+      }
+      case "month": {
+        endTime = moment().format("M/D/YYYY");
+        startTime = moment()
+          .subtract(1, "months")
+          .format("M/D/YYYY");
+        break;
+      }
+      default:
+        return false;
+    }
+    if (this.props.token) {
+      this.props.getShipmentMetrics(this.props.token, startTime, endTime);
+      this.props.getOrderMetrics(this.props.token, startTime, endTime);
+      this.props.getCustomerMetrics(this.props.token, startTime, endTime);
+      this.props.getProductMetrics(this.props.token, startTime, endTime);
+    }
+  }
+  getProducts() {
+    if (this.props.top5) {
+      return this.props.top5.map((data, i) => {
+        return (
+          <Table.Row key={data.name}>
+            <Table.Cell textAlign="center">{++i}</Table.Cell>
+            <Table.Cell singleLine>
+              <Image
+                src={data.image}
+                style={{ maxHeight: "25px", width: "auto" }}
+                size="mini"
+                inline
+                spaced="right"
+              />
+              {data.name}
+            </Table.Cell>
+            <Table.Cell>{data.count}</Table.Cell>
+          </Table.Row>
+        );
+      });
+    }
+    return false;
+  }
   renderHome() {
     if (this.props.loading) {
       return (
@@ -53,6 +120,17 @@ class Main extends Component {
       <div>
         <Grid columns={3} stackable>
           <MediaQuery minDeviceWidth={374}>
+            <div>
+              <Button color="olive" onClick={this.handleClick} name="day">
+                Day
+              </Button>
+              <Button color="olive" onClick={this.handleClick} name="week">
+                Week
+              </Button>
+              <Button color="olive" onClick={this.handleClick} name="month">
+                Month
+              </Button>
+            </div>
             <Grid.Row columns={1}>
               <Grid.Column>
                 <Segment>
@@ -63,11 +141,13 @@ class Main extends Component {
                     data={this.props.metricsByInterval}
                     options={{
                       chartArea: {
-                        width: "100%"
+                        width: "95%"
                       },
+                      colors: ["#94C120", "#FBBD09"],
                       legend: {
                         position: "top"
                       },
+
                       title: "Company Performance",
                       subtitle: "Orders Shipped, New Orders",
                       animation: {
@@ -114,7 +194,39 @@ class Main extends Component {
                     loading={this.props.shippedLoading}
                   />
                 ) : (
-                  <Segment>
+                  <Container>
+                    <Grid columns="equal">
+                      <Grid.Row style={{ margin: "auto" }}>
+                        <Grid.Column>
+                          <Segment color="orange">
+                            <Icon name="archive" />
+                            Orders: {this.props.orders}
+                          </Segment>
+                        </Grid.Column>
+                        <Grid.Column>
+                          <Segment color="olive">
+                            <Icon name="truck" />
+                            Shipments: {this.props.shipments}
+                          </Segment>
+                        </Grid.Column>
+                      </Grid.Row>
+                      <Grid.Row style={{ margin: "auto" }}>
+                        <Grid.Column>
+                          <Segment color="blue">
+                            <i className="fab fa-usps" />
+                            {this.props.metricsByCarrier[0].name}:{" "}
+                            {this.props.metricsByCarrier[0].count}
+                          </Segment>
+                        </Grid.Column>
+                        <Grid.Column>
+                          <Segment color="purple">
+                            <i className="fab fa-fedex" />
+                            {this.props.metricsByCarrier[1].name}:{" "}
+                            {this.props.metricsByCarrier[1].count}
+                          </Segment>
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
                     <Segment>
                       <Chart
                         height={"350px"}
@@ -139,29 +251,7 @@ class Main extends Component {
                         }}
                       />
                     </Segment>
-                    <Grid columns={2}>
-                      <Grid.Row>
-                        <Grid.Column>
-                          <Segment>Returns: {this.props.returns}</Segment>
-                        </Grid.Column>
-                        <Grid.Column>
-                          <Segment>Shipments: {this.props.shipments}</Segment>
-                        </Grid.Column>
-                        <Grid.Column>
-                          <Segment>
-                            {this.props.metricsByCarrier[0].name}:{" "}
-                            {this.props.metricsByCarrier[0].count}
-                          </Segment>
-                        </Grid.Column>
-                        <Grid.Column>
-                          <Segment>
-                            {this.props.metricsByCarrier[1].name}:{" "}
-                            {this.props.metricsByCarrier[1].count}
-                          </Segment>
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </Segment>
+                  </Container>
                 )}
               </Grid.Column>
               <Grid.Column width={4}>
@@ -177,7 +267,7 @@ class Main extends Component {
                     <Segment>
                       <Chart
                         width={"100%"}
-                        height={"500px"}
+                        height={"600px"}
                         chartType="PieChart"
                         loader={<div>Loading Chart</div>}
                         data={this.props.metricsByUser}
@@ -186,6 +276,8 @@ class Main extends Component {
                             width: "100%",
                             height: "80%"
                           },
+                          pieSliceText: "value",
+                          colors: ["#306596", "#cc4731"],
                           legend: "top",
                           title: "East Coast v. West Coast Shipments",
                           pieStartAngle: 45
@@ -194,6 +286,66 @@ class Main extends Component {
                     </Segment>
                   </Container>
                 )}
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row columns={2}>
+              <Grid.Column width={6}>
+                {this.props.productLoading ? (
+                  <ClipLoader
+                    sizeUnit={"px"}
+                    size={54}
+                    color={"#36D7B7"}
+                    loading={this.props.customerLoading}
+                  />
+                ) : (
+                  <Segment stacked>
+                    <Table celled stackable size="small">
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.Cell>Rank</Table.Cell>
+                          <Table.Cell>Product</Table.Cell>
+                          <Table.Cell>Count</Table.Cell>
+                        </Table.Row>
+                      </Table.Header>
+                      <Table.Body>{this.getProducts()}</Table.Body>
+                    </Table>
+                  </Segment>
+                )}
+              </Grid.Column>
+
+              <Grid.Column width={10}>
+                <Segment>
+                  <Chart
+                    height={"400px"}
+                    chartType="LineChart"
+                    loader={<div>Loading Chart</div>}
+                    data={this.props.metricsByCustomers}
+                    options={{
+                      colors: ["#FBBD09", "#94C120"],
+                      chartArea: {
+                        width: "90%"
+                      },
+                      legend: {
+                        position: "top"
+                      },
+                      hAxis: {
+                        title: "Days"
+                      },
+                      vAxis: {
+                        title: "Customers"
+                      },
+                      series: {
+                        1: { curveType: "function" }
+                      },
+                      title: "Customer Datas",
+                      animation: {
+                        duration: 1200,
+                        easing: "linear",
+                        startup: true
+                      }
+                    }}
+                  />
+                </Segment>
               </Grid.Column>
             </Grid.Row>
           </MediaQuery>
@@ -227,10 +379,12 @@ function mapStateToProps({ authState, metricState }) {
     metricsByState: metricState.customerMetrics.byState,
     metricsByStateEast: metricState.customerMetrics.eastTotal,
     metricsByStateWest: metricState.customerMetrics.westTotal,
+    metricsByCustomers: metricState.customerMetrics.byInterval,
     customerLoading: metricState.customerLoading,
-    returns: metricState.shipmentMetrics.returns,
-    shipments: metricState.shipmentMetrics.shipments,
-    metricsByCarrier: metricState.shipmentMetrics.byCarrier
+    shipments: metricState.orderMetrics.shipments,
+    orders: metricState.orderMetrics.orders,
+    metricsByCarrier: metricState.shipmentMetrics.byCarrier,
+    top5: metricState.productMetrics.top5
   };
 }
 
@@ -243,7 +397,8 @@ export default withRouter(
       checkLoginState,
       getShipmentMetrics,
       getOrderMetrics,
-      getCustomerMetrics
+      getCustomerMetrics,
+      getProductMetrics
     }
   )(Main)
 );

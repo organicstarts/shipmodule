@@ -1,5 +1,5 @@
 import React from "react";
-import { Segment, Button, Form } from "semantic-ui-react";
+import { Segment, Button, Form, Header } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { getBatch, setShipmentItems } from "../../actions/order";
 import { withRouter } from "react-router-dom";
@@ -93,6 +93,9 @@ class BatchOrders extends React.Component {
   render() {
     return (
       <Segment color="olive" padded="very">
+        <Header size="large" textAlign="center">
+          Create Pick list + Packing slip
+        </Header>
         <Form size="large" onSubmit={this.handleSubmit}>
           <Form.Field>
             <Form.Input
@@ -123,7 +126,7 @@ class BatchOrders extends React.Component {
               required
             />
           </Form.Group>
-          {this.renderButton()}
+          <div style={{ textAlign: "center" }}> {this.renderButton()}</div>
         </Form>
       </Segment>
     );

@@ -279,7 +279,7 @@ class App extends Component {
         </MediaQuery>
         <Container
           fluid
-          className="nopadding"
+          className="nopadding print-remove-margin"
           style={{
             paddingLeft: "10%",
             marginTop: "95px",

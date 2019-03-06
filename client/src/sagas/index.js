@@ -9,7 +9,8 @@ import {
   GET_TOKEN,
   GET_SHIPMENT_METRICS,
   GET_ORDER_METRICS,
-  GET_CUSTOMER_METRICS
+  GET_CUSTOMER_METRICS,
+  GET_PRODUCT_METRICS
 } from "../constants/actionTypes";
 import {
   handleLogin,
@@ -25,7 +26,8 @@ import {
 import {
   handleGetShipmentMetrics,
   handleGetOrderMetrics,
-  handleGetCustomerMetrics
+  handleGetCustomerMetrics,
+  handleGetProductMetrics
 } from "./metrics";
 
 export default function* watcherSaga() {
@@ -39,4 +41,5 @@ export default function* watcherSaga() {
   yield takeEvery(GET_SHIPMENT_METRICS, handleGetShipmentMetrics);
   yield takeEvery(GET_ORDER_METRICS, handleGetOrderMetrics);
   yield takeEvery(GET_CUSTOMER_METRICS, handleGetCustomerMetrics);
+  yield takeEvery(GET_PRODUCT_METRICS, handleGetProductMetrics);
 }

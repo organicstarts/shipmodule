@@ -46,6 +46,11 @@ code {
     -webkit-print-color-adjust: exact;
     opacity: 0.75 !important;
   }
+  .print-remove-margin {
+    margin: 0 auto !important;
+    padding: 0!important;
+  }
+
   .noprint {
     display: none !important;
   }

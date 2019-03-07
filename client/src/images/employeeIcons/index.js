@@ -12,3 +12,4 @@ export const steve = require('./steve.jpg');
 export const training = require('./training.jpg')
 export const chris = require('./chris.png')
 export const jason = require('./jason.jpeg')
+export const yvan = require('./yvan.png')

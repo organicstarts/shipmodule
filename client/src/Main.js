@@ -88,17 +88,17 @@ class Main extends Component {
         return (
           <Table.Row key={data.name}>
             <Table.Cell textAlign="center">{++i}</Table.Cell>
-            <Table.Cell singleLine>
+            <Table.Cell>
               <Image
                 src={data.image}
-                style={{ maxHeight: "25px", width: "auto" }}
+                style={{ maxHeight: "25px", width: "20px" }}
                 size="mini"
                 inline
                 spaced="right"
               />
               {data.name}
             </Table.Cell>
-            <Table.Cell>{data.count}</Table.Cell>
+            <Table.Cell >{data.count}</Table.Cell>
           </Table.Row>
         );
       });
@@ -289,7 +289,7 @@ class Main extends Component {
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
-              <Grid.Column width={6}>
+              <Grid.Column width={4}>
                 {this.props.productLoading ? (
                   <ClipLoader
                     sizeUnit={"px"}
@@ -299,7 +299,7 @@ class Main extends Component {
                   />
                 ) : (
                   <Segment stacked>
-                    <Table celled stackable size="small">
+                    <Table celled stackable collapsing size="small">
                       <Table.Header>
                         <Table.Row>
                           <Table.Cell>Rank</Table.Cell>
@@ -313,7 +313,7 @@ class Main extends Component {
                 )}
               </Grid.Column>
 
-              <Grid.Column width={10}>
+              <Grid.Column width={12}>
                 <Segment>
                   <Chart
                     height={"400px"}

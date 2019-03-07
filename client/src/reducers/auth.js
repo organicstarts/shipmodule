@@ -7,6 +7,8 @@ import {
   TOKEN_LOADED
 } from "../constants/actionTypes";
 import people from "../config/people.json";
+import { iconQuotes } from "../config/peopleicon";
+import photoDefault from "../images/default-photo.jpg";
 
 const INITIAL_STATE = {
   user: "",
@@ -14,7 +16,8 @@ const INITIAL_STATE = {
   email: "",
   warehouseLocation: "",
   loading: false,
-  token: ""
+  token: "",
+  profileImg: ""
 };
 
 const setLoading = (state, action) => {
@@ -23,6 +26,7 @@ const setLoading = (state, action) => {
   });
 };
 const authUserLogIn = (state, action) => {
+  const name = action.payload.user.displayName.split(" ")[0].toLowerCase();
   const warehouse = Object.keys(people)
     .map(key => people[key])
     .filter(data => data.email.includes(action.payload.user.email));
@@ -33,7 +37,8 @@ const authUserLogIn = (state, action) => {
       displayName: action.payload.user.displayName,
       warehouseLocation:
         warehouse.length > 0 ? warehouse[0].warehouse : "East coast",
-      loading: false
+      loading: false,
+      profileImg: iconQuotes[name] ? iconQuotes[name].icon : photoDefault
     });
   }
   return state;
@@ -45,11 +50,13 @@ const authUserLogOut = (state, action) => {
     email: "",
     displayName: "",
     warehouseLocation: "",
-    loading: false
+    loading: false,
+    profileImg: ""
   });
 };
 
 const authCheckUser = (state, action) => {
+  const name = action.payload.displayName.split(" ")[0].toLowerCase();
   const warehouse = Object.keys(people)
     .map(key => people[key])
     .filter(data => data.email.includes(action.payload.email));
@@ -60,7 +67,8 @@ const authCheckUser = (state, action) => {
       displayName: action.payload.displayName,
       warehouseLocation:
         warehouse.length > 0 ? warehouse[0].warehouse : "East coast",
-      loading: false
+      loading: false,
+      profileImg: iconQuotes[name] ? iconQuotes[name].icon : photoDefault
     });
   }
   return state;

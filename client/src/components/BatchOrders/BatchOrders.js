@@ -1,5 +1,5 @@
 import React from "react";
-import { Segment, Button, Form, Header } from "semantic-ui-react";
+import { Segment, Button, Form, Label } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { getBatch, setShipmentItems } from "../../actions/order";
 import { withRouter } from "react-router-dom";
@@ -92,42 +92,45 @@ class BatchOrders extends React.Component {
   }
   render() {
     return (
-      <Segment color="olive" padded="very">
-        <Header size="large" textAlign="center">
+      <Segment color="olive" raised>
+        <Label as="a" color="olive" ribbon>
           Create Pick list + Packing slip
-        </Header>
-        <Form size="large" onSubmit={this.handleSubmit}>
-          <Form.Field>
-            <Form.Input
-              fluid
-              label="Batch Number"
-              placeholder="123456"
-              name="batchNumber"
-              value={this.state.batchNumber}
-              onChange={this.handleChange}
-              required
-            />
-          </Form.Field>
-          <Form.Group widths="equal">
-            <Form.Select
-              label="Picker"
-              placeholder="Select One"
-              name="picker"
-              options={people}
-              onChange={this.handleSelectChange}
-              required
-            />
-            <Form.Select
-              label="Shipper"
-              placeholder="Select One"
-              name="shipper"
-              options={people}
-              onChange={this.handleSelectChange}
-              required
-            />
-          </Form.Group>
-          <div style={{ textAlign: "center" }}> {this.renderButton()}</div>
-        </Form>
+        </Label>
+
+        <Segment padded="very" stacked>
+          <Form size="large" onSubmit={this.handleSubmit}>
+            <Form.Field>
+              <Form.Input
+                fluid
+                label="Batch Number"
+                placeholder="123456"
+                name="batchNumber"
+                value={this.state.batchNumber}
+                onChange={this.handleChange}
+                required
+              />
+            </Form.Field>
+            <Form.Group widths="equal">
+              <Form.Select
+                label="Picker"
+                placeholder="Select One"
+                name="picker"
+                options={people}
+                onChange={this.handleSelectChange}
+                required
+              />
+              <Form.Select
+                label="Shipper"
+                placeholder="Select One"
+                name="shipper"
+                options={people}
+                onChange={this.handleSelectChange}
+                required
+              />
+            </Form.Group>
+            <div style={{ textAlign: "center" }}> {this.renderButton()}</div>
+          </Form>
+        </Segment>
       </Segment>
     );
   }

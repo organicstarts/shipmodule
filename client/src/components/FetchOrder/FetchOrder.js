@@ -4,7 +4,7 @@ import { getOrderDetail } from "../../actions/order";
 import { ClipLoader } from "react-spinners";
 import { withRouter } from "react-router-dom";
 import people from "../../config/people";
-import { Segment, Button, Form, Header } from "semantic-ui-react";
+import { Segment, Button, Form, Label } from "semantic-ui-react";
 import axios from "axios";
 import moment from "moment";
 
@@ -66,7 +66,7 @@ class FetchOrder extends React.Component {
       <Button
         disabled={this.state.picker && this.state.shipper ? false : true}
         size="large"
-        color="olive"
+        color="orange"
         type="submit"
       >
         Fetch Order
@@ -75,42 +75,44 @@ class FetchOrder extends React.Component {
   }
   render() {
     return (
-      <Segment color="yellow" padded="very">
-        <Header size="large" textAlign="center">
+      <Segment color="orange" raised>
+        <Label as="a" color="orange" ribbon>
           Create Packing slip
-        </Header>
-        <Form size="large" onSubmit={this.handleSubmit}>
-          <Form.Field>
-            <Form.Input
-              fluid
-              label="Order Number"
-              placeholder="123456"
-              name="orderNumber"
-              value={this.state.orderNumber}
-              onChange={this.handleChange}
-              required
-            />
-          </Form.Field>
-          <Form.Group widths="equal">
-            <Form.Select
-              label="Picker"
-              placeholder="Select One"
-              name="picker"
-              options={people}
-              onChange={this.handleSelectChange}
-              required
-            />
-            <Form.Select
-              label="Shipper"
-              placeholder="Select One"
-              name="shipper"
-              options={people}
-              onChange={this.handleSelectChange}
-              required
-            />
-          </Form.Group>
-          <div style={{ textAlign: "center" }}>{this.renderButton()}</div>
-        </Form>
+        </Label>
+        <Segment padded="very" stacked>
+          <Form size="large" onSubmit={this.handleSubmit}>
+            <Form.Field>
+              <Form.Input
+                fluid
+                label="Order Number"
+                placeholder="123456"
+                name="orderNumber"
+                value={this.state.orderNumber}
+                onChange={this.handleChange}
+                required
+              />
+            </Form.Field>
+            <Form.Group widths="equal">
+              <Form.Select
+                label="Picker"
+                placeholder="Select One"
+                name="picker"
+                options={people}
+                onChange={this.handleSelectChange}
+                required
+              />
+              <Form.Select
+                label="Shipper"
+                placeholder="Select One"
+                name="shipper"
+                options={people}
+                onChange={this.handleSelectChange}
+                required
+              />
+            </Form.Group>
+            <div style={{ textAlign: "center" }}>{this.renderButton()}</div>
+          </Form>
+        </Segment>
       </Segment>
     );
   }

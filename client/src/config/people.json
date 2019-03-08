@@ -71,13 +71,20 @@
   },
   {
     "key": "12",
-    "text": "Johnny",
-    "value": "johnny",
-    "warehouse": "East coast",
-    "email": "johnny@organicstart.com"
+    "text": "Chandler",
+    "value": "chandler",
+    "warehouse": "West coast",
+    "email": "chandler@organicstart.com"
   },
   {
     "key": "13",
+    "text": "Joseph",
+    "value": "joseph",
+    "warehouse": "West coast",
+    "email": "joseph@organicstart.com"
+  },
+  {
+    "key": "14",
     "warehouse": "East coast",
     "email": "yvan@organicstart.com"
   }

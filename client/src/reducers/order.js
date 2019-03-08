@@ -251,7 +251,8 @@ const INITIAL_STATE = {
   savedFraud: [],
   fraudDatas: [],
   newDatas: [],
-  loading: true
+  loading: true,
+  prevBatch: []
 };
 
 const applyBatch = (state, action) => {
@@ -293,11 +294,27 @@ const setShipmentItems = (state, action) => {
 function batchReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case GET_BATCH: {
+      let saveBatchInfo = state.prevBatch;
+      if (saveBatchInfo.length > 4) {
+        saveBatchInfo.shift();
+      }
+      if (
+        !saveBatchInfo.find(
+          data => action.payload.batchNumber === data.batchNumber
+        )
+      ) {
+        saveBatchInfo.push({
+          batchNumber: action.payload.batchNumber,
+          picker: action.payload.picker,
+          shipper: action.payload.shipper
+        });
+      }
       return Object.assign({}, state, {
         batchNumber: action.payload.batchNumber,
         picker: action.payload.picker,
         shipper: action.payload.shipper,
-        loading: true
+        loading: true,
+        prevBatch: saveBatchInfo
       });
     }
     case GET_ORDER_DETAIL: {

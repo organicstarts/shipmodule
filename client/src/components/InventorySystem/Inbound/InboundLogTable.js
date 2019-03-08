@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import _ from "lodash";
 import InboundLogDetail from "./InboundLogDetail";
 import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
@@ -11,6 +12,8 @@ class InboundLogTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      column: null,
+      direction: null,
       dbDatas: {},
       datas: {},
       loading: true,
@@ -19,21 +22,24 @@ class InboundLogTable extends Component {
       reverse: ""
     };
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    // this.handleClick = this.handleClick.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
 
     this.firebaseRef = firebase.database().ref(`/inventory/log`);
     this.firebaseRef.once("value", async snapshot => {
       const payload = snapshot.val();
       if (payload) {
-        this.setState({
-          datas:
-            this.state.filter.value !== ""
-              ? this.filterLog(this.state.filter.value)
-              : payload,
-          dbDatas: payload,
-          loading: false
-        });
+        this.setState(
+          {
+            dbDatas: payload,
+            loading: false
+          },
+          () => {
+            this.setState({
+              datas: this.filterLog(this.state.filter.value)
+            });
+          }
+        );
       }
     });
   }
@@ -77,57 +83,58 @@ class InboundLogTable extends Component {
     const tempData = { ...datas };
     // if (window.confirm("are you sure you want to delete?")) {
     // this.setState({ loading: true });
+  
+    if (dbDatas[key]) {
+      await axios
+        .post("fb/archiveInventory", {
+          trackingNumber: dbDatas[key].trackingNumber,
+          carrier: dbDatas[key].carrier,
+          productID: dbDatas[key].productID,
+          isChecked: dbDatas[key].isChecked ? dbDatas[key].isChecked : false,
+          sku: dbDatas[key].sku,
+          brand: dbDatas[key].brand,
+          stage: dbDatas[key].stage,
+          quantity: dbDatas[key].quantity,
+          broken: dbDatas[key].broken,
+          total: dbDatas[key].total,
+          invoiceNum: dbDatas[key].invoiceNum,
+          scanner: dbDatas[key].scanner,
+          timeStamp: dbDatas[key].timeStamp,
+          warehouseLocation: dbDatas[key].warehouseLocation
+        })
+        .then(response => {
+          if (response.data.msg === "success") {
+            console.log("Archived Item");
+          } else {
+            console.log("Item not deleted");
+          }
+        })
+        .catch(error => console.log(error.message));
 
-    await axios
-      .post("fb/archiveInventory", {
-        trackingNumber: dbDatas[key].trackingNumber,
-        carrier: dbDatas[key].carrier,
-        productID: dbDatas[key].productID,
-        isChecked: dbDatas[key].isChecked ? dbDatas[key].isChecked : false,
-        sku: dbDatas[key].sku,
-        brand: dbDatas[key].brand,
-        stage: dbDatas[key].stage,
-        quantity: dbDatas[key].quantity,
-        broken: dbDatas[key].broken,
-        total: dbDatas[key].total,
-        invoiceNum: dbDatas[key].invoiceNum,
-        scanner: dbDatas[key].scanner,
-        timeStamp: dbDatas[key].timeStamp,
-        warehouseLocation: dbDatas[key].warehouseLocation
-      })
-      .then(response => {
-        if (response.data.msg === "success") {
-          console.log("Archived Item");
-        } else {
-          console.log("Item not deleted");
-        }
-      })
-      .catch(error => console.log(error.message));
-
-    await axios
-      .delete("fb/deleteinventory", {
-        data: {
-          db: "log",
-          id: key
-        }
-      })
-      .then(response => {
-        if (response.data.msg === "success") {
-          delete tempDBData[key];
-          tempData[index] = "";
-          this.setState({
-            dbDatas: tempDBData,
-            datas: tempData
-          });
-          console.log("Deleted Item");
-        } else {
-          console.log("Item not deleted");
-        }
-      })
-      .catch(error => console.log(error.message));
-    // } else {
-    //   return false;
-    // }
+      await axios
+        .delete("fb/deleteinventory", {
+          data: {
+            db: "log",
+            id: key
+          }
+        })
+        .then(response => {
+          if (response.data.msg === "success") {
+            delete tempDBData[key];
+            tempData[index] = "";
+            this.setState({
+              dbDatas: tempDBData,
+              datas: tempData
+            });
+            console.log("Deleted Item");
+          } else {
+            console.log("Item not deleted");
+          }
+        })
+        .catch(error => console.log(error.message));
+    } else {
+      return false;
+    }
   }
 
   totalChange(key) {
@@ -177,7 +184,10 @@ class InboundLogTable extends Component {
   filterLog(action = "none", label, db = "") {
     const { dbDatas } = this.state;
     if (action === "" || action === "none") {
-      const result = Object.keys(dbDatas).map(key => dbDatas[key]);
+      const result = Object.keys(dbDatas).map(key => {
+        dbDatas[key].key = key;
+        return dbDatas[key];
+      });
       return result;
     }
     if (action === "n/a") {
@@ -238,6 +248,7 @@ class InboundLogTable extends Component {
 
   mapTableList() {
     const { datas, image } = this.state;
+
     return Object.keys(datas).map((key, index) => {
       return (
         <InboundLogDetail
@@ -267,26 +278,48 @@ class InboundLogTable extends Component {
     });
   }
 
-  handleClick(e) {
-    const filter = e.currentTarget.getAttribute("name");
-    const { datas, reverse } = this.state;
-    if (reverse === filter) {
+  // handleClick(e) {
+  //   const filter = e.currentTarget.getAttribute("name");
+  //   const { datas, reverse } = this.state;
+  //   if (reverse === filter) {
+  //     this.setState({
+  //       datas: Object.keys(datas)
+  //         .map(key => datas[key])
+  //         .reverse()
+  //     });
+  //   } else {
+  //     this.setState({
+  //       datas: Object.keys(datas)
+  //         .map(key => datas[key])
+  //         .sort(propComparator(filter)),
+  //       reverse: filter
+  //     });
+  //   }
+  // }
+
+  handleSort = clickedColumn => () => {
+    const { column, datas, direction } = this.state;
+
+    if (column !== clickedColumn) {
       this.setState({
-        datas: Object.keys(datas)
-          .map(key => datas[key])
-          .reverse()
+        column: clickedColumn,
+        datas: _.sortBy(datas, [clickedColumn]),
+        direction: "ascending"
       });
-    } else {
-      this.setState({
-        datas: Object.keys(datas)
-          .map(key => datas[key])
-          .sort(propComparator(filter)),
-        reverse: filter
-      });
+
+      return;
     }
-  }
+
+    this.setState({
+      datas: Object.keys(datas)
+        .map(key => datas[key])
+        .reverse(),
+      direction: direction === "ascending" ? "descending" : "ascending"
+    });
+  };
 
   renderLogList() {
+    const { column, direction } = this.state;
     if (this.state.loading) {
       return (
         <ClipLoader
@@ -325,76 +358,76 @@ class InboundLogTable extends Component {
             />
           </FormGroup>
         </Form>
-        <Table celled collapsing textAlign="center">
+        <Table sortable celled collapsing textAlign="center">
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell
                 style={{ cursor: "pointer" }}
-                name="carrier"
-                onClick={this.handleClick}
+                sorted={column === "carrier" ? direction : null}
+                onClick={this.handleSort("carrier")}
               >
                 <strong>Carrier</strong>
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: "pointer" }}
-                name="trackingNumber"
-                onClick={this.handleClick}
+                sorted={column === "trackingNumber" ? direction : null}
+                onClick={this.handleSort("trackingNumber")}
               >
                 <strong>Tracking #</strong>
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: "pointer" }}
-                name="invoiceNum"
-                onClick={this.handleClick}
+                sorted={column === "invoiceNum" ? direction : null}
+                onClick={this.handleSort("invoiceNum")}
               >
                 <strong>Invoice #</strong>
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: "pointer" }}
-                name="brand"
-                onClick={this.handleClick}
+                sorted={column === "brand" ? direction : null}
+                onClick={this.handleSort("brand")}
               >
                 <strong>Brand</strong>
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: "pointer" }}
-                name="stage"
-                onClick={this.handleClick}
+                sorted={column === "stage" ? direction : null}
+                onClick={this.handleSort("stage")}
               >
                 <strong>Stage</strong>
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: "pointer" }}
-                name="quantity"
-                onClick={this.handleClick}
+                sorted={column === "quantity" ? direction : null}
+                onClick={this.handleSort("quantity")}
               >
                 <strong>Quantity</strong>
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: "pointer" }}
-                name="broken"
-                onClick={this.handleClick}
+                sorted={column === "broken" ? direction : null}
+                onClick={this.handleSort("broken")}
               >
                 <strong>Broken</strong>
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: "pointer" }}
-                name="total"
-                onClick={this.handleClick}
+                sorted={column === "total" ? direction : null}
+                onClick={this.handleSort("total")}
               >
                 <strong>Total</strong>
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: "pointer" }}
-                name="scanner"
-                onClick={this.handleClick}
+                sorted={column === "scanner" ? direction : null}
+                onClick={this.handleSort("scanner")}
               >
                 <strong>Scanner</strong>
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: "pointer" }}
-                name="warehouseLocation"
-                onClick={this.handleClick}
+                sorted={column === "warehouseLocation" ? direction : null}
+                onClick={this.handleSort("warehouseLocation")}
               >
                 <strong>Warehouse</strong>
               </Table.HeaderCell>
@@ -403,8 +436,8 @@ class InboundLogTable extends Component {
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: "pointer" }}
-                name="timeStamp"
-                onClick={this.handleClick}
+                sorted={column === "timeStamp" ? direction : null}
+                onClick={this.handleSort("timeStamp")}
               >
                 <strong>Date</strong>
               </Table.HeaderCell>
@@ -430,21 +463,21 @@ class InboundLogTable extends Component {
   }
 }
 
-const propComparator = propName => {
-  return (a, b) => {
-    let x = a[propName];
-    let y = b[propName];
-    if (!x) {
-      x = 0;
-    }
-    if (!y) {
-      y = 0;
-    }
-    if (isNaN(x) && isNaN(y)) {
-      return x.localeCompare(y);
-    }
-    return x - y;
-  };
-};
+// const propComparator = propName => {
+//   return (a, b) => {
+//     let x = a[propName];
+//     let y = b[propName];
+//     if (!x) {
+//       x = 0;
+//     }
+//     if (!y) {
+//       y = 0;
+//     }
+//     if (isNaN(x) && isNaN(y)) {
+//       return x.localeCompare(y);
+//     }
+//     return x - y;
+//   };
+// };
 
 export default InboundLogTable;

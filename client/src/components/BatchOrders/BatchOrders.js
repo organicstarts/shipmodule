@@ -1,5 +1,6 @@
 import React from "react";
-import { Segment, Button, Form, Label } from "semantic-ui-react";
+import { Segment, Button, Form, Label, Table } from "semantic-ui-react";
+import _ from "lodash";
 import { connect } from "react-redux";
 import { getBatch, setShipmentItems } from "../../actions/order";
 import { withRouter } from "react-router-dom";
@@ -16,9 +17,11 @@ class BatchOrders extends React.Component {
       picker: "",
       shipper: "",
       totalCount: 0,
-      loading: false
+      loading: false,
+      buttonLoad: false
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handlePreviousSubmit = this.handlePreviousSubmit.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -68,6 +71,11 @@ class BatchOrders extends React.Component {
     this.props.getBatch({ batchNumber, picker, shipper }, this.props.history);
   }
 
+  handlePreviousSubmit(batchNumber, picker, shipper) {
+    this.setState({ buttonLoad: true });
+    this.props.getBatch({ batchNumber, picker, shipper }, this.props.history);
+  }
+
   renderButton() {
     if (this.state.loading) {
       return (
@@ -90,13 +98,55 @@ class BatchOrders extends React.Component {
       </Button>
     );
   }
+  renderPrevious() {
+    return (
+      <Table celled compact>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell>Batch #</Table.HeaderCell>
+            <Table.HeaderCell>Shipper</Table.HeaderCell>
+            <Table.HeaderCell>Picker</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {_.map(
+            this.props.previousBatch,
+            ({ shipper, picker, batchNumber }, index) => (
+              <Table.Row textAlign="center" key={batchNumber}>
+                <Table.Cell collapsing>
+                  {this.props.previousBatch.length - index}
+                </Table.Cell>
+                <Table.Cell collapsing>
+                  <Button
+                    fluid
+                    size="large"
+                    color="olive"
+                    loading={this.state.buttonLoad}
+                    onClick={() =>
+                      this.handlePreviousSubmit(batchNumber, picker, shipper)
+                    }
+                  >
+                    Re-Generate Batch
+                  </Button>
+                </Table.Cell>
+                <Table.Cell>{batchNumber}</Table.Cell>
+                <Table.Cell>{shipper}</Table.Cell>
+                <Table.Cell>{picker}</Table.Cell>
+              </Table.Row>
+            )
+          ).reverse()}
+        </Table.Body>
+      </Table>
+    );
+  }
   render() {
     return (
       <Segment color="olive" raised>
         <Label as="a" color="olive" ribbon>
           Create Pick list + Packing slip
         </Label>
-
         <Segment padded="very" stacked>
           <Form size="large" onSubmit={this.handleSubmit}>
             <Form.Field>
@@ -131,14 +181,22 @@ class BatchOrders extends React.Component {
             <div style={{ textAlign: "center" }}> {this.renderButton()}</div>
           </Form>
         </Segment>
+        <Label as="a" color="yellow" ribbon>
+          Previous Searches
+        </Label>
+        <Segment padded="very" textAlign="center">
+          {" "}
+          {this.renderPrevious()}
+        </Segment>
       </Segment>
     );
   }
 }
 
-const mapStateToProps = ({ authState }) => {
+const mapStateToProps = ({ authState, batchState }) => {
   return {
-    displayName: authState.displayName
+    displayName: authState.displayName,
+    previousBatch: batchState.prevBatch
   };
 };
 

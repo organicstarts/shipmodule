@@ -71,8 +71,13 @@ export const iconQuotes = {
         quote: "With great power, comes great responsibilities.",
         icon: daniel
     },
-    johnny: {
-        name: "Johnny",
+    chandler: {
+        name: "Chandler",
+        quote: "With great power, comes great responsibilities.",
+        icon: daniel
+    },
+    joseph: {
+        name: "Joseph",
         quote: "With great power, comes great responsibilities.",
         icon: daniel
     },

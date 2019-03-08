@@ -50,7 +50,7 @@ class Log extends Component {
     }
     return (
       <Segment color="orange" padded="very">
-        <Button fluid size="large" color="orange" onClick={this.handleClick}>
+        <Button fluid size="large" color="orange" loading={this.state.loading} onClick={this.handleClick}>
           View Log
         </Button>
       </Segment>

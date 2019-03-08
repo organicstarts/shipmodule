@@ -82,16 +82,16 @@ class App extends Component {
     const { width, visible } = this.state;
     const styles = {
       containerStyle: {
-        paddingLeft: "9%",
+        paddingLeft: "10%",
         marginTop: "95px",
-        width: "100%",
+        width: "95%",
         position: "relative"
       },
       mobileStyle: {
         paddingLeft: width > 767 ? "3%" : "10.5%",
         paddingRight: 0,
         marginTop: "95px",
-        width: "100%",
+        width: "95%",
         position: "relative"
       }
     };

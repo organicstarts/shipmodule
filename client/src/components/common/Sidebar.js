@@ -79,10 +79,10 @@ class App extends Component {
                   </Grid.Column>
                 </Grid.Row>
 
-                <p className="text" style={{ paddingTop: "25px" }}>
+                <p className="text-sidebar" style={{ paddingTop: "25px" }}>
                   {this.props.displayName}
                 </p>
-                <p className="text">{this.props.email}</p>
+                <p className="text-sidebar">{this.props.email}</p>
                 <div className="photo">
                   <Image circular src={this.props.profileImg} />
                 </div>

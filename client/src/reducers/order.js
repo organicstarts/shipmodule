@@ -299,17 +299,17 @@ function batchReducer(state = INITIAL_STATE, action) {
         if (saveBatchInfo.length > 4) {
           saveBatchInfo.shift();
         }
-      }
-      if (
-        !saveBatchInfo.find(
-          data => action.payload.batchNumber === data.batchNumber
-        )
-      ) {
-        saveBatchInfo.push({
-          batchNumber: action.payload.batchNumber,
-          picker: action.payload.picker,
-          shipper: action.payload.shipper
-        });
+        if (
+          !saveBatchInfo.find(
+            data => action.payload.batchNumber === data.batchNumber
+          )
+        ) {
+          saveBatchInfo.push({
+            batchNumber: action.payload.batchNumber,
+            picker: action.payload.picker,
+            shipper: action.payload.shipper
+          });
+        }
       }
       return Object.assign({}, state, {
         batchNumber: action.payload.batchNumber,

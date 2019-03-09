@@ -295,8 +295,10 @@ function batchReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case GET_BATCH: {
       let saveBatchInfo = state.prevBatch;
-      if (saveBatchInfo.length > 4) {
-        saveBatchInfo.shift();
+      if (saveBatchInfo) {
+        if (saveBatchInfo.length > 4) {
+          saveBatchInfo.shift();
+        }
       }
       if (
         !saveBatchInfo.find(

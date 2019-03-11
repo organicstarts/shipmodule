@@ -141,6 +141,19 @@ class App extends Component {
               </Menu.Item>
               <Menu.Item
                 as={Link}
+                to="/fulfillment"
+                name="fulfillment"
+                active={activeItem === "fulfillment"}
+                onClick={this.handleItemClick}
+              >
+                <Icon
+                  style={{ float: "left", paddingRight: "25px" }}
+                  name="shipping fast"
+                />
+                OSW Fulfillment
+              </Menu.Item>
+              <Menu.Item
+                as={Link}
                 to="/inventory"
                 name="inventory"
                 active={activeItem === "inventory"}
@@ -181,7 +194,7 @@ class App extends Component {
               {this.compareEmail(this.props.email) && (
                 <Menu.Item
                   as={Link}
-                  to="/log"
+                  to="/logList"
                   name="log"
                   active={activeItem === "log"}
                   onClick={this.handleItemClick}
@@ -244,6 +257,9 @@ class App extends Component {
                 <Menu.Item as={Link} to="/fraud">
                   <Icon name="search" />
                 </Menu.Item>
+                <Menu.Item as={Link} to="/fulfillment">
+                  <Icon name="shipping fast" />
+                </Menu.Item>
                 <Menu.Item as={Link} to="/inventory">
                   <Icon name="warehouse" />
                 </Menu.Item>
@@ -254,7 +270,7 @@ class App extends Component {
                   <Icon name="user cancel" />
                 </Menu.Item>
                 {this.compareEmail(this.props.email) && (
-                  <Menu.Item as={Link} to="/log">
+                  <Menu.Item as={Link} to="/logList">
                     <Icon name="book" />
                   </Menu.Item>
                 )}

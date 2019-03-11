@@ -96,8 +96,6 @@ class App extends Component {
       }
     };
     const { containerStyle, mobileStyle } = styles;
-    console.log(visible);
-    console.log(visible ? containerStyle : mobileStyle);
     return (
       <div className="App">
         <Menu fixed="top" borderless className="noprint navbar">

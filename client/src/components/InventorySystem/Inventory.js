@@ -103,7 +103,7 @@ class Inventory extends Component {
 
     return (
       <Segment color="blue" padded="very">
-        <Grid columns={2}>
+        <Grid columns={2} stackable>
           {buttons.map(button => {
             if (button.show) {
               return (
@@ -122,7 +122,7 @@ class Inventory extends Component {
                   >
                     <Icon
                       size="massive"
-                      style={{ margin: "25px" }}
+                      style={{ margin: "25px auto" }}
                       name={button.icon}
                     />{" "}
                     <br />

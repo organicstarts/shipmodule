@@ -4,6 +4,8 @@ const fetch = require("node-fetch");
 import shipstation from "@bgauth/auth.json";
 const username = shipstation.shipstation.user;
 const password = shipstation.shipstation.key;
+const usernameInsight = shipstation.shipstation.iUser;
+const passwordInsight = shipstation.shipstation.iPass;
 let encodedString = Buffer.from(username + ":" + password).toString("base64");
 const header = {
   method: "GET",
@@ -64,9 +66,9 @@ router.get("/getshipmentorder", (req, res) => {
 ---------------------------------------------------------------------*/
 
 router.post("/getshipmentmetrics", (req, res) => {
-  const baseUrl = `https://ss5.shipstation.com/api/charts/shipmentmetrics?startDate=${req.body.startDate}&endDate=${
-    req.body.endDate
-  }`;
+  const baseUrl = `https://ss5.shipstation.com/api/charts/shipmentmetrics?startDate=${
+    req.body.startDate
+  }&endDate=${req.body.endDate}`;
 
   fetch(baseUrl, {
     method: "GET",
@@ -86,9 +88,9 @@ router.post("/getshipmentmetrics", (req, res) => {
 });
 
 router.post("/getordermetrics", (req, res) => {
-  const baseUrl = `https://ss5.shipstation.com/api/charts/ordermetrics?startDate=${req.body.startDate}&endDate=${
-    req.body.endDate
-  }`;
+  const baseUrl = `https://ss5.shipstation.com/api/charts/ordermetrics?startDate=${
+    req.body.startDate
+  }&endDate=${req.body.endDate}`;
 
   fetch(baseUrl, {
     method: "GET",
@@ -108,9 +110,9 @@ router.post("/getordermetrics", (req, res) => {
 });
 
 router.post("/getcustomermetrics", (req, res) => {
-  const baseUrl = `https://ss5.shipstation.com/api/charts/customermetrics?startDate=${req.body.startDate}&endDate=${
-    req.body.endDate
-  }`;
+  const baseUrl = `https://ss5.shipstation.com/api/charts/customermetrics?startDate=${
+    req.body.startDate
+  }&endDate=${req.body.endDate}`;
 
   fetch(baseUrl, {
     method: "GET",
@@ -130,9 +132,9 @@ router.post("/getcustomermetrics", (req, res) => {
 });
 
 router.post("/getproductmetrics", (req, res) => {
-  const baseUrl = `https://ss5.shipstation.com/api/charts/productmetrics?startDate=${req.body.startDate}&endDate=${
-    req.body.endDate
-  }`;
+  const baseUrl = `https://ss5.shipstation.com/api/charts/productmetrics?startDate=${
+    req.body.startDate
+  }&endDate=${req.body.endDate}`;
 
   fetch(baseUrl, {
     method: "GET",
@@ -151,7 +153,6 @@ router.post("/getproductmetrics", (req, res) => {
     });
 });
 
-
 router.post("/gettoken", (req, res) => {
   const baseUrl = "https://ss5.shipstation.com/api/auth/GetToken";
 
@@ -162,8 +163,8 @@ router.post("/gettoken", (req, res) => {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      username: "yvan@organicstart.com",
-      password: "boxing123"
+      username: usernameInsight,
+      password: passwordInsight
     })
   })
     .then(res => res.json())

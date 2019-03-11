@@ -10,6 +10,8 @@ import {
   steve,
   chris,
   jason, 
+  peter,
+  isaiah,
   yvan
 } from "../images/employeeIcons";
 
@@ -85,5 +87,16 @@ export const iconQuotes = {
         name: "yvan",
         quote: "Pow right in the kisser",
         icon: yvan
+    },
+    peter: {
+        name: "peter",
+        quote: "boss",
+        icon: peter
+    }
+    ,
+    isaiah: {
+        name: "isaiah",
+        quote: "...",
+        icon: isaiah
     }
 }

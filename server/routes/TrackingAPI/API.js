@@ -17,7 +17,9 @@ const header = {
                             GET REQUESTS                            
 ---------------------------------------------------------------------*/
 router.get("/canadapost", (req, res) => {
-  const baseUrl = `https://soa-gw.canadapost.ca/vis/track/pin/${req.query.tracking}/detail`;
+  const baseUrl = `https://soa-gw.canadapost.ca/vis/track/pin/${
+    req.query.tracking
+  }/detail`;
   let encodedString = Buffer.from(
     tracking.canadaPost.user + ":" + tracking.canadaPost.key
   ).toString("base64");
@@ -86,6 +88,25 @@ router.get("/bpost", (req, res) => {
     .then(res => res.text())
     .then(datas => {
       res.send(datas);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+router.get("/getallorders", (req, res) => {
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD",
+    "Content-Type": "application/json",
+    Accept: "application/json"
+  });
+  const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders.json?`;
+
+  fetch(baseUrl, header)
+    .then(res => res.json())
+    .then(data => {
+      res.send(data);
     })
     .catch(err => {
       console.log(err);

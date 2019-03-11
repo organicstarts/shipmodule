@@ -23,7 +23,8 @@ import {
   ToyLogging,
   OpenBrokenTable,
   CancelOrder,
-  Scanning
+  Scanning,
+  Fulfillment
 } from "./components/";
 
 const Router = () => (
@@ -52,6 +53,7 @@ const Router = () => (
       <Route path="/babycareLogging" component={BabyCareLogging} />
       <Route path="/toyLogging" component={ToyLogging} />
       <Route path="/cancel" component={CancelOrder} />
+      <Route path="/fulfillment" component={Fulfillment} />
     </Switch>
   </main>
 );

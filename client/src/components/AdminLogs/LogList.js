@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import LogDetail from "./LogDetail";
-import { Link } from "react-router-dom";
 import { Segment, Table, FormSelect, FormGroup, Form } from "semantic-ui-react";
+import { ClipLoader } from "react-spinners";
+import firebase from "../../config/firebaseconf";
 
 class LogList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: this.props.location.state.detail.logDatas,
+      data: [],
+      loading: true,
+      logDatas: {},
       filter1: { name: "", log: [] },
       filter2: { name: "", log: [] },
       filter3: { name: "", log: [] },
@@ -51,6 +54,23 @@ class LogList extends Component {
     };
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.compare = this.compare.bind(this);
+    this.firebaseRef = firebase.database().ref(`/action`);
+    this.firebaseRef
+      .on("value", snapshot => {
+        const payload = snapshot.val();
+        if (payload) {
+          this.setState({
+            logDatas: payload.log,
+            loading: false,
+            data: payload.log
+          });
+        }
+      })
+      .bind(this);
+  }
+
+  componentWillUnmount() {
+    this.firebaseRef.off();
   }
 
   handleSelectChange = (e, data) => {
@@ -87,7 +107,7 @@ class LogList extends Component {
   };
 
   filterLog(action) {
-    const { logDatas } = this.props.location.state.detail;
+    const { logDatas } = this.state;
     if (action === "none") {
       return [];
     }
@@ -101,22 +121,23 @@ class LogList extends Component {
     return result;
   }
 
-  renderLogList(logDatas) {
-    return Object.keys(logDatas)
+  renderLogList() {
+    const { data } = this.state;
+    return Object.keys(data)
       .map(key => {
         return (
           <LogDetail
             key={key}
-            action={logDatas[key].action}
+            action={data[key].action}
             batchorOrder={
-              logDatas[key].batch !== "N/A"
-                ? logDatas[key].batch
-                : logDatas[key].order
+              data[key].batch !== "N/A"
+                ? data[key].batch
+                : data[key].order
             }
-            user={logDatas[key].user}
-            date={logDatas[key].date}
-            picker={logDatas[key].picker}
-            shipper={logDatas[key].shipper}
+            user={data[key].user}
+            date={data[key].date}
+            picker={data[key].picker}
+            shipper={data[key].shipper}
           />
         );
       })
@@ -130,67 +151,75 @@ class LogList extends Component {
   render() {
     return (
       <Segment compact style={{ margin: "50px auto" }}>
-        <Link to="/" className="noprint">
-          Go Back
-        </Link>
-        <Form>
-          <FormGroup widths="equal" inline>
-            <label>Filter: </label>
-            <FormSelect
-              options={this.state.filter}
-              name="filter1"
-              onChange={this.handleSelectChange}
-            />
-            <FormSelect
-              options={this.state.filter}
-              name="filter2"
-              onChange={this.handleSelectChange}
-              disabled={
-                this.state.filter1.name !== "" &&
-                this.state.filter1.name !== "none"
-                  ? false
-                  : true
-              }
-            />
-            <FormSelect
-              options={this.state.filter}
-              name="filter3"
-              onChange={this.handleSelectChange}
-              disabled={
-                this.state.filter2.name !== "" &&
-                this.state.filter2.name !== "none"
-                  ? false
-                  : true
-              }
-            />
-          </FormGroup>
-        </Form>
-        <Table celled collapsing textAlign="center">
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>
-                <strong>Action</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Date</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>User</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Batch/Order</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Picker</strong>
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <strong>Shipper</strong>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
+        {this.state.loading ? (
+          <ClipLoader
+            sizeUnit={"px"}
+            size={54}
+            color={"#36D7B7"}
+            loading={this.state.loading}
+          />
+        ) : (
+          <div>
+            <Form>
+              <FormGroup widths="equal" inline>
+                <label>Filter: </label>
+                <FormSelect
+                  options={this.state.filter}
+                  name="filter1"
+                  onChange={this.handleSelectChange}
+                />
+                <FormSelect
+                  options={this.state.filter}
+                  name="filter2"
+                  onChange={this.handleSelectChange}
+                  disabled={
+                    this.state.filter1.name !== "" &&
+                    this.state.filter1.name !== "none"
+                      ? false
+                      : true
+                  }
+                />
+                <FormSelect
+                  options={this.state.filter}
+                  name="filter3"
+                  onChange={this.handleSelectChange}
+                  disabled={
+                    this.state.filter2.name !== "" &&
+                    this.state.filter2.name !== "none"
+                      ? false
+                      : true
+                  }
+                />
+              </FormGroup>
+            </Form>
+            <Table celled collapsing textAlign="center">
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>
+                    <strong>Action</strong>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    <strong>Date</strong>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    <strong>User</strong>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    <strong>Batch/Order</strong>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    <strong>Picker</strong>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    <strong>Shipper</strong>
+                  </Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
 
-          {this.renderLogList(this.state.data)}
-        </Table>
+              {this.renderLogList()}
+            </Table>
+          </div>
+        )}
       </Segment>
     );
   }

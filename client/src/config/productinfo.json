@@ -1107,5 +1107,29 @@
     "individual": 1,
     "sku": "HOL-APPMANG-PURE",
     "productID": 188
+  },
+  "HOL-HB-MINI": {
+    "brand": "Holle Mini Rusks",
+    "stage": "Honey and Butter",
+    "package": 5,
+    "individual": 1,
+    "sku": "HOL-HB-MINI",
+    "productID": 210
+  },
+  "HOL-APPEAR-FB": {
+    "brand": "Holle Fruit Bar",
+    "stage": "Apple Pear",
+    "package": 12,
+    "individual": 1,
+    "sku": "HOL-APPEAR-FB",
+    "productID": 141
+  },
+  "HOL-DINKEL-BISC": {
+    "brand": "Holle Biscuit",
+    "stage": "Dinkel",
+    "package": 12,
+    "individual": 1,
+    "sku": "HOL-DINKEL-BISC",
+    "productID": 139
   }
 }

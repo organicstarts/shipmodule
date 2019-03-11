@@ -20,6 +20,7 @@ import ToyLogging from "./InventorySystem/Report/ToyLogging";
 import OpenBrokenTable from "./InventorySystem/InventoryTable/OpenBrokenTable";
 import CancelOrder from "./CancelOrder/CancelOrder";
 import Scanning from "./InventorySystem/Scanning";
+import Fulfillment from "./FulfillmentOSW/Fullfillment";
 
 export {
   BatchOrders,
@@ -43,5 +44,6 @@ export {
   ToyLogging,
   OpenBrokenTable,
   CancelOrder,
-  Scanning
+  Scanning,
+  Fulfillment
 };

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getAllOrders } from "../../actions/order";
-import { ClipLoader } from "react-spinners";
+// import { ClipLoader } from "react-spinners";
 import { Button, Segment } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 import firebase from "../../config/firebaseconf";
@@ -77,48 +77,54 @@ class FraudOrders extends Component {
         }
       });
 
-    this.props.getAllOrders({ oneData, savedData }, this.props.history)
-      // .then(async data => {
-      //   await Promise.all(
-      //     data.map(async data => {
-      //       if (data.id)
-      //         await getShippingInfo(data.id).then(async x => {
-      //           data.shippingInfo = x;
-      //         });
-      //       await getOrderCount(data.customer_id).then(
-      //         y => (data.orderCount = y)
-      //       );
-      //     })
-      //   );
-      //   let tempArray = JSON.parse(JSON.stringify(data));
-      //   if (this.state.savedData.length > 0) {
-      //     this.state.savedData.map(save => tempArray.push(save));
-      //   }
-      //   this.setState({
-      //     fraudDatas: tempArray,
-      //     newData: data
-      //   });
-      // })
-      // .then(x => {
-      //   this.props.history.push({
-      //     pathname: "/fraud",
-      //     state: { detail: this.state }
-      //   });
-      // });
+    this.props.getAllOrders({ oneData, savedData }, this.props.history);
+    // .then(async data => {
+    //   await Promise.all(
+    //     data.map(async data => {
+    //       if (data.id)
+    //         await getShippingInfo(data.id).then(async x => {
+    //           data.shippingInfo = x;
+    //         });
+    //       await getOrderCount(data.customer_id).then(
+    //         y => (data.orderCount = y)
+    //       );
+    //     })
+    //   );
+    //   let tempArray = JSON.parse(JSON.stringify(data));
+    //   if (this.state.savedData.length > 0) {
+    //     this.state.savedData.map(save => tempArray.push(save));
+    //   }
+    //   this.setState({
+    //     fraudDatas: tempArray,
+    //     newData: data
+    //   });
+    // })
+    // .then(x => {
+    //   this.props.history.push({
+    //     pathname: "/fraud",
+    //     state: { detail: this.state }
+    //   });
+    // });
   }
   renderButton() {
-    if (this.state.loading) {
-      return (
-        <ClipLoader
-          sizeUnit={"px"}
-          size={34}
-          color={"#36D7B7"}
-          loading={this.state.loading}
-        />
-      );
-    }
+    // if (this.state.loading) {
+    //   return (
+    //     <ClipLoader
+    //       sizeUnit={"px"}
+    //       size={34}
+    //       color={"#36D7B7"}
+    //       loading={this.state.loading}
+    //     />
+    //   );
+    // }
     return (
-      <Button fluid size="large" color="red" onClick={this.handleClick}>
+      <Button
+        fluid
+        size="large"
+        loading={this.state.loading}
+        color="red"
+        onClick={this.handleClick}
+      >
         Search for Fraudulent Orders
       </Button>
     );
@@ -132,10 +138,9 @@ class FraudOrders extends Component {
   }
 }
 
-
 const mapStateToProps = ({ authState }) => {
   return {
-    displayName: authState.displayName,
+    displayName: authState.displayName
   };
 };
 

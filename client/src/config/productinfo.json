@@ -543,7 +543,7 @@
   "6-HP-DE-PRE-PRMX-BTL": {
     "brand": "Premix HiPP",
     "stage": "PRE",
-    "package": 5,
+    "package": 6,
     "individual": 1,
     "sku": "6-HP-DE-PRE-PRMX-BTL",
     "productID": 707
@@ -551,7 +551,7 @@
   "6-HP-UK-1-PRMX-BTL": {
     "brand": "Premix HiPP",
     "stage": "1",
-    "package": 5,
+    "package": 6,
     "individual": 1,
     "sku": "6-HP-UK-1-PRMX-BTL",
     "productID": 708
@@ -559,7 +559,7 @@
   "6-HP-HA-PRE-PRMX-BTL": {
     "brand": "Premix HiPP HA",
     "stage": "PRE",
-    "package": 5,
+    "package": 6,
     "individual": 1,
     "sku": "6-HP-HA-PRE-PRMX-BTL",
     "productID": 780

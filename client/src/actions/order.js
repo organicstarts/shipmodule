@@ -2,7 +2,8 @@ import {
   GET_BATCH,
   GET_ORDER_DETAIL,
   GET_ALL_ORDERS,
-  SET_SHIPMENT_ITEMS
+  SET_SHIPMENT_ITEMS,
+  GET_ALL_OSW_ORDERS
 } from "../constants/actionTypes";
 
 const getBatch = (stateInfo, history) => {
@@ -33,4 +34,16 @@ const getAllOrders = (stateInfo, history) => {
   };
 };
 
-export { getBatch, setShipmentItems, getOrderDetail, getAllOrders };
+const oswGetAllOrders = () => {
+  return {
+    type: GET_ALL_OSW_ORDERS
+  };
+};
+
+export {
+  getBatch,
+  setShipmentItems,
+  getOrderDetail,
+  getAllOrders,
+  oswGetAllOrders
+};

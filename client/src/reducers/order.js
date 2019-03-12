@@ -5,7 +5,8 @@ import {
   GET_ALL_ORDERS,
   GET_BATCH,
   GET_ORDER_DETAIL,
-  SET_SHIPMENT_ITEMS
+  SET_SHIPMENT_ITEMS,
+  ALL_OSW_ORDERS_LOADED
 } from "../constants/actionTypes";
 import _ from "lodash";
 import products from "../config/products.json";
@@ -252,7 +253,8 @@ const INITIAL_STATE = {
   fraudDatas: [],
   newDatas: [],
   loading: true,
-  prevBatch: []
+  prevBatch: [],
+  oswOrders: []
 };
 
 const applyBatch = (state, action) => {
@@ -288,6 +290,12 @@ const setShipmentItems = (state, action) => {
     shipmentItems: calculatedData,
     totalCount: totalCount,
     loading: false
+  });
+};
+
+const applyOswOrders = (state, action) => {
+  return Object.assign({}, state, {
+    oswOrders: action.payload
   });
 };
 
@@ -344,6 +352,9 @@ function batchReducer(state = INITIAL_STATE, action) {
     }
     case ALL_ORDERS_LOADED: {
       return applyFraud(state, action);
+    }
+    case ALL_OSW_ORDERS_LOADED: {
+      return applyOswOrders(state, action);
     }
     default:
       return state;

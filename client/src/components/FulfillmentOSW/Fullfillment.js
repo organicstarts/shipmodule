@@ -9,6 +9,7 @@ import {
   Progress,
   Label
 } from "semantic-ui-react";
+import { oswGetAllOrders } from "../../actions/order";
 
 class Fulfillment extends Component {
   constructor() {
@@ -29,6 +30,8 @@ class Fulfillment extends Component {
         });
       }, 3000);
     });
+
+    this.props.oswGetAllOrders();
   }
   render() {
     return (
@@ -103,5 +106,5 @@ function mapStateToProps({ authState }) {
 
 export default connect(
   mapStateToProps,
-  null
+  { oswGetAllOrders }
 )(Fulfillment);

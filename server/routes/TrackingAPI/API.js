@@ -101,12 +101,41 @@ router.get("/getallorders", (req, res) => {
     "Content-Type": "application/json",
     Accept: "application/json"
   });
-  const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders.json?`;
+  const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders.json?limit=80&created_at_min=2019-02-26T13:00:31-05:00`;
 
   fetch(baseUrl, header)
     .then(res => res.json())
     .then(data => {
-      res.send(data);
+      let retrieveData = [];
+      data.orders.map(data => {
+        let trackingObj = {};
+        if (data.note && data.financial_status === "paid") {
+          let carrier = data.note
+            .split("\n")
+            .filter(carrier => carrier.includes("Carrier"));
+          let trackingNum = data.note
+            .split("\n")
+            .filter(tracking => tracking.includes("Tracking Number"));
+
+          carrier.map((carrier, i) => {
+            carrier = carrier.split(": ")[1];
+            trackingNum[i] = trackingNum[i].split(": ")[1];
+            trackingObj[carrier] = trackingNum[i];
+          });
+        } else {
+          trackingObj = null;
+        }
+        retrieveData.push({
+          orderNum: data.name,
+          tracking: trackingObj,
+          id: data.id,
+          lineItems: data.line_items
+        });
+      });
+      return retrieveData;
+    })
+    .then(parsedData => {
+      res.send(parsedData);
     })
     .catch(err => {
       console.log(err);
@@ -196,6 +225,47 @@ router.get("/getorder", (req, res) => {
     .then(info => {
       res.send(info);
     })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+/*-------------------------------------------------------------------
+                            POST REQUESTS                            
+---------------------------------------------------------------------*/
+router.post("/fulfillment", (req, res) => {
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD",
+    "Content-Type": "application/json",
+    Accept: "application/json"
+  });
+  const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders/${
+    req.body.orderId
+  }/fulfillments.json`;
+
+  fetch(baseUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify({
+      fulfillment: {
+        location_id: req.body.locationId,
+        tracking_number: req.body.tracking,
+        tracking_company: req.body.trackingCompany,
+        line_items: [
+          {
+            id: req.body.lineItemId
+          }
+        ],
+        notify_customer: req.body.notifyCustomer
+      }
+    })
+  })
+    .then(result => result.json())
+    .then(resjson => res.send(resjson))
     .catch(err => {
       console.log(err);
     });

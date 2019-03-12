@@ -2,7 +2,8 @@ import { call, put } from "redux-saga/effects";
 import {
   BATCH_LOADED,
   FETCH_LOADED,
-  ALL_ORDERS_LOADED
+  ALL_ORDERS_LOADED,
+  ALL_OSW_ORDERS_LOADED
 } from "../constants/actionTypes";
 import axios from "axios";
 
@@ -31,6 +32,14 @@ function* handleGetAllOrders(action) {
     const payload = yield call(getAllOrders, action.payload.oneData);
     yield put({ type: ALL_ORDERS_LOADED, payload });
     action.payload.history.push("/fraudList");
+  } catch (e) {
+    yield put({ type: "API_ERRORED", payload: e });
+  }
+}
+function* handleGetAllOswOrders() {
+  try {
+    const payload = yield call(getAllOswOrders);
+    yield put({ type: ALL_OSW_ORDERS_LOADED, payload });
   } catch (e) {
     yield put({ type: "API_ERRORED", payload: e });
   }
@@ -80,6 +89,65 @@ const getOrder = async orderNumber => {
     .get(`/os/getorder?orderid=${orderNumber}`)
     .then(dataArray => {
       return dataArray.data;
+    })
+    .catch(error => console.log(error));
+};
+
+const getAllOswOrders = async () => {
+  return await axios
+    .get(`/osw/getallorders`)
+    .then(async res => {
+      let resWithRelabel = [];
+      await Promise.all(
+        res.data.map(async data => {
+          if (data.tracking !== null) {
+            await axios
+              .get(`osw/bpost?tracking=${data.tracking.Other}`)
+              .then(xmlData => {
+                let resXML = new DOMParser().parseFromString(
+                  xmlData.data,
+                  "application/xml"
+                );
+                if (resXML.getElementsByTagName("relabelBarcode")[0]) {
+                  data["relabel"] = resXML.getElementsByTagName(
+                    "relabelBarcode"
+                  )[0].textContent;
+                  resWithRelabel.push(data);
+                }
+              });
+          }
+        })
+      );
+      return resWithRelabel;
+    })
+    .then(fulfillData => {
+      let fulfilledData = [];
+      fulfillData.map(async data => {
+        await Promise.all(
+          data.lineItems.map(async item => {
+            if (
+              item.fulfillment_service === "mike" &&
+              data.relabel &&
+              !item.fulfillment_status
+            ) {
+              await axios
+                .post("osw/fulfillment", {
+                  orderId: data.id,
+                  locationId: 41340099,
+                  tracking: data.relabel,
+                  trackingCompany: "USPS",
+                  lineItemId: item.id,
+                  notifyCustomer: true
+                })
+                .then(res => {
+                  console.log("success?", res);
+                  fulfilledData.push(data);
+                });
+            }
+          })
+        );
+      });
+      return fulfilledData;
     })
     .catch(error => console.log(error));
 };
@@ -135,4 +203,9 @@ const getCoupon = async orderNumber => {
     .catch(error => console.log(error));
 };
 
-export { handleGetBatch, handleGetOrderDetail, handleGetAllOrders };
+export {
+  handleGetBatch,
+  handleGetOrderDetail,
+  handleGetAllOrders,
+  handleGetAllOswOrders
+};

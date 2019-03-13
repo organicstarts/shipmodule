@@ -78,7 +78,10 @@ const InventoryReportDetail = props => {
           </Table.Cell>
         )}
 
-        <Table.Cell style={styles.border}>
+        <Table.Cell
+          style={props.email ? styles.border : styles.borderLess}
+          disabled={props.email ? false : true}
+        >
           {props.handleInfinite !== "" ? (
             <Button
               onClick={() => props.handleInfinite(props.sku)}
@@ -139,6 +142,13 @@ const styles = {
     borderRight: "1px solid #ccc",
     borderCollapse: "separate",
     borderSpacing: "4px"
+  },
+  borderLess: {
+    borderBottom: "1px solid #ccc",
+    borderRight: "1px solid #ccc",
+    borderCollapse: "separate",
+    borderSpacing: "4px",
+    opacity: 0.2
   },
   borderLast: {
     borderBottom: "1px solid #ccc",

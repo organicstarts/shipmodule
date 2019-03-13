@@ -237,6 +237,7 @@ class OpenBrokenTable extends Component {
           index={index}
           key={key}
           sku={key}
+          email={true}
           brand={eastDatas[key].brand}
           stage={eastDatas[key].stage}
           eastTotal={eastDatas[key].total}
@@ -307,7 +308,7 @@ class OpenBrokenTable extends Component {
   render() {
     return (
       <Segment compact style={{ margin: "50px auto" }}>
-        <Link to="/" className="noprint">
+        <Link to="/inventory" className="noprint">
           Go Back
         </Link>
         {this.state.buttonLoading ? (

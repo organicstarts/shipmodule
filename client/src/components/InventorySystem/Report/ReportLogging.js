@@ -6,7 +6,7 @@ import moment from "moment";
 import axios from "axios";
 import upc from "../../../config/upc.json";
 import skuInfo from "../../../config/productinfo.json";
-import firebase from "../../../config/firebaseconf";
+// import firebase from "../../../config/firebaseconf";
 import "../inventory.css";
 
 class ReportLogging extends Component {
@@ -81,13 +81,14 @@ class ReportLogging extends Component {
         dbname: `${warehouse}Report`,
         sku: skuInfo[sku].sku,
         brand: skuInfo[sku].brand,
+        stage: skuInfo[sku].stage,
         total: skuInfo[sku].package * quantity,
         user: displayName,
         date: moment().format("dddd, MMMM DD YYYY hh:mma")
       })
       .then(async response => {
         if (response.data.msg === "success") {
-          await this.checkEastWestTotal(sku);
+          // await this.checkEastWestTotal(sku);
           console.log("logged");
         } else if (response.data.msg === "fail") {
           console.log("failed to log.");
@@ -99,80 +100,80 @@ class ReportLogging extends Component {
         });
       });
   }
-  disableBundle(datas, index = 0) {
-    return datas.forEach(data => {
-      if (data.amount >= index) {
-        axios.put("os/disableproduct", {
-          productID: data.productID,
-          availability: "disabled"
-        });
-      }
-    });
-  }
+  // disableBundle(datas, index = 0) {
+  //   return datas.forEach(data => {
+  //     if (data.amount >= index) {
+  //       axios.put("os/disableproduct", {
+  //         productID: data.productID,
+  //         availability: "disabled"
+  //       });
+  //     }
+  //   });
+  // }
 
-  enableBundle(datas, index = 100) {
-    return datas.forEach(data => {
-      if (data.amount <= index) {
-        axios.put("os/disableproduct", {
-          productID: data.productID,
-          availability: "available"
-        });
-      }
-    });
-  }
+  // enableBundle(datas, index = 100) {
+  //   return datas.forEach(data => {
+  //     if (data.amount <= index) {
+  //       axios.put("os/disableproduct", {
+  //         productID: data.productID,
+  //         availability: "available"
+  //       });
+  //     }
+  //   });
+  // }
 
-  async checkEastWestTotal(key) {
-    let total = 0;
-    const reportRef = firebase.database().ref("/inventory");
-    reportRef.on("value", async snapshot => {
-      const payload = snapshot.val();
-      if (payload) {
-        total =
-          payload.eastcoastReport[key].total +
-          payload.westcoastReport[key].total;
+  // async checkEastWestTotal(key) {
+  //   let total = 0;
+  //   const reportRef = firebase.database().ref("/inventory");
+  //   reportRef.on("value", async snapshot => {
+  //     const payload = snapshot.val();
+  //     if (payload) {
+  //       total =
+  //         payload.eastcoastReport[key].total +
+  //         payload.westcoastReport[key].total;
 
-        if (total > 300 && total < 400) {
-          await this.disableBundle(skuInfo[key].bundleID, 24);
-          await this.enableBundle(skuInfo[key].bundleID, 12);
-          await axios.put("os/disableproduct", {
-            productID: skuInfo[key].productID,
-            availability: "available"
-          });
-        } else if (total >= 200 && total <= 300) {
-          await this.disableBundle(skuInfo[key].bundleID, 12);
-          await this.enableBundle(skuInfo[key].bundleID, 8);
-          await axios.put("os/disableproduct", {
-            productID: skuInfo[key].productID,
-            availability: "available"
-          });
-        } else if (total > 150 && total <= 200) {
-          await this.disableBundle(skuInfo[key].bundleID, 3);
-          await axios.put("os/disableproduct", {
-            productID: skuInfo[key].productID,
-            availability: "available"
-          });
-        } else if (total > 50 && total <= 150) {
-          await this.disableBundle(skuInfo[key].bundleID);
-          await axios.put("os/disableproduct", {
-            productID: skuInfo[key].productID,
-            availability: "available"
-          });
-        } else if (total <= 50) {
-          await axios.put("os/disableproduct", {
-            productID: skuInfo[key].productID,
-            availability: "disabled"
-          });
-          await this.disableBundle(skuInfo[key].bundleID);
-        } else {
-          await axios.put("os/disableproduct", {
-            productID: skuInfo[key].productID,
-            availability: "available"
-          });
-          await this.enableBundle(skuInfo[key].bundleID);
-        }
-      }
-    });
-  }
+  //       if (total > 300 && total < 400) {
+  //         await this.disableBundle(skuInfo[key].bundleID, 24);
+  //         await this.enableBundle(skuInfo[key].bundleID, 12);
+  //         await axios.put("os/disableproduct", {
+  //           productID: skuInfo[key].productID,
+  //           availability: "available"
+  //         });
+  //       } else if (total >= 200 && total <= 300) {
+  //         await this.disableBundle(skuInfo[key].bundleID, 12);
+  //         await this.enableBundle(skuInfo[key].bundleID, 8);
+  //         await axios.put("os/disableproduct", {
+  //           productID: skuInfo[key].productID,
+  //           availability: "available"
+  //         });
+  //       } else if (total > 150 && total <= 200) {
+  //         await this.disableBundle(skuInfo[key].bundleID, 3);
+  //         await axios.put("os/disableproduct", {
+  //           productID: skuInfo[key].productID,
+  //           availability: "available"
+  //         });
+  //       } else if (total > 50 && total <= 150) {
+  //         await this.disableBundle(skuInfo[key].bundleID);
+  //         await axios.put("os/disableproduct", {
+  //           productID: skuInfo[key].productID,
+  //           availability: "available"
+  //         });
+  //       } else if (total <= 50) {
+  //         await axios.put("os/disableproduct", {
+  //           productID: skuInfo[key].productID,
+  //           availability: "disabled"
+  //         });
+  //         await this.disableBundle(skuInfo[key].bundleID);
+  //       } else {
+  //         await axios.put("os/disableproduct", {
+  //           productID: skuInfo[key].productID,
+  //           availability: "available"
+  //         });
+  //         await this.enableBundle(skuInfo[key].bundleID);
+  //       }
+  //     }
+  //   });
+  // }
   /*
 cycle input values per scan/user input
 tracking number > upc number > # of boxes > # of broken > photo of invoice > confirmation

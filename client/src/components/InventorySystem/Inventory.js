@@ -82,7 +82,7 @@ class Inventory extends Component {
         id: 4,
         name: "View Inventory",
         color: "orange",
-        show: this.compareEmail(this.props.email) ? true : false,
+        show:  true,
         icon: "dolly flatbed"
       },
       {

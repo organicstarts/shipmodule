@@ -36,9 +36,9 @@ function* handleGetAllOrders(action) {
     yield put({ type: "API_ERRORED", payload: e });
   }
 }
-function* handleGetAllOswOrders() {
+function* handleGetAllOswOrders(action) {
   try {
-    const payload = yield call(getAllOswOrders);
+    const payload = yield call(getAllOswOrders, action.payload);
     yield put({ type: ALL_OSW_ORDERS_LOADED, payload });
   } catch (e) {
     yield put({ type: "API_ERRORED", payload: e });
@@ -93,9 +93,9 @@ const getOrder = async orderNumber => {
     .catch(error => console.log(error));
 };
 
-const getAllOswOrders = async () => {
+const getAllOswOrders = async action => {
   return await axios
-    .get(`/osw/getallorders`)
+    .get(`/osw/getallorders?endTime=${action.endTime}`)
     .then(async res => {
       let resWithRelabel = [];
       await Promise.all(
@@ -120,10 +120,10 @@ const getAllOswOrders = async () => {
       );
       return resWithRelabel;
     })
-    .then(fulfillData => {
+    .then(async fulfillData => {
       let fulfilledData = [];
-      fulfillData.map(async data => {
-        await Promise.all(
+      await Promise.all(
+        fulfillData.map(async data => {
           data.lineItems.map(async item => {
             if (
               item.fulfillment_service === "mike" &&
@@ -144,9 +144,9 @@ const getAllOswOrders = async () => {
                   fulfilledData.push(data);
                 });
             }
-          })
-        );
-      });
+          });
+        })
+      );
       return fulfilledData;
     })
     .catch(error => console.log(error));

@@ -101,7 +101,9 @@ router.get("/getallorders", (req, res) => {
     "Content-Type": "application/json",
     Accept: "application/json"
   });
-  const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders.json?limit=80&created_at_min=2019-02-26T13:00:31-05:00`;
+  const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders.json?limit=250&created_at_max=${
+    req.query.endTime
+  }`;
 
   fetch(baseUrl, header)
     .then(res => res.json())
@@ -109,28 +111,30 @@ router.get("/getallorders", (req, res) => {
       let retrieveData = [];
       data.orders.map(data => {
         let trackingObj = {};
-        if (data.note && data.financial_status === "paid") {
-          let carrier = data.note
-            .split("\n")
-            .filter(carrier => carrier.includes("Carrier"));
-          let trackingNum = data.note
-            .split("\n")
-            .filter(tracking => tracking.includes("Tracking Number"));
+        if (!data.fullfillment_status) {
+          if (data.note && data.financial_status === "paid") {
+            let carrier = data.note
+              .split("\n")
+              .filter(carrier => carrier.includes("Carrier"));
+            let trackingNum = data.note
+              .split("\n")
+              .filter(tracking => tracking.includes("Tracking Number"));
 
-          carrier.map((carrier, i) => {
-            carrier = carrier.split(": ")[1];
-            trackingNum[i] = trackingNum[i].split(": ")[1];
-            trackingObj[carrier] = trackingNum[i];
+            carrier.map((carrier, i) => {
+              carrier = carrier.split(": ")[1];
+              trackingNum[i] = trackingNum[i].split(": ")[1];
+              trackingObj[carrier] = trackingNum[i];
+            });
+          } else {
+            trackingObj = null;
+          }
+          retrieveData.push({
+            orderNum: data.name,
+            tracking: trackingObj,
+            id: data.id,
+            lineItems: data.line_items
           });
-        } else {
-          trackingObj = null;
         }
-        retrieveData.push({
-          orderNum: data.name,
-          tracking: trackingObj,
-          id: data.id,
-          lineItems: data.line_items
-        });
       });
       return retrieveData;
     })

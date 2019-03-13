@@ -60,7 +60,7 @@ class BatchList extends Component {
                   })
                   .then(response => {
                     if (response.data.msg === "success") {
-                      console.log("inventory logged");
+                      console.log("OB inventory logged");
                     } else if (response.data.msg === "fail") {
                       console.log("failed to log.");
                     }
@@ -74,7 +74,7 @@ class BatchList extends Component {
                   })
                   .then(response => {
                     if (response.data.msg === "success") {
-                      console.log("inventory logged");
+                      console.log("inventory subtracted");
                     } else if (response.data.msg === "fail") {
                       console.log("failed to log.");
                     }

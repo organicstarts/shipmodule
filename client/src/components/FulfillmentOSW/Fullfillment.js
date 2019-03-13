@@ -6,33 +6,41 @@ import {
   Icon,
   Grid,
   Transition,
-  Progress,
   Label
 } from "semantic-ui-react";
 import { oswGetAllOrders } from "../../actions/order";
+import moment from "moment";
 
 class Fulfillment extends Component {
   constructor() {
     super();
     this.state = {
-      loading: false,
-      show: false,
       percent: 0
     };
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
-    this.setState({ loading: true, show: true }, () => {
-      setTimeout(() => {
-        this.setState({
-          percent: 100
-        });
-      }, 3000);
-    });
-
-    this.props.oswGetAllOrders();
+    this.setState({ loading: true });
+    const endTime = moment()
+      .subtract(3, "days")
+      .format("YYYY-MM-DDThh:mm:ssZ");
+    // const startTime = moment()
+    //   .subtract(13, "days")
+    //   .format("YYYY-MM-DDThh:mm:ssZ");
+    console.log(endTime)
+    this.props.oswGetAllOrders(endTime);
   }
+
+  showFulfilledOrders() {
+    const { oswOrders } = this.props;
+    if (oswOrders)
+      oswOrders.map(data => {
+        console.log("fk", data)
+        return <li>{data.orderNum}</li>;
+      });
+  }
+
   render() {
     return (
       <Segment raised>
@@ -72,21 +80,17 @@ class Fulfillment extends Component {
           <Button
             fluid
             size="large"
-            loading={this.state.loading}
+            loading={this.props.loading}
             color="orange"
             onClick={this.handleClick}
           >
             Scan Organic Start Wholesale Shipments
           </Button>
           <Transition.Group className="noprint" animation="fade" duration={500}>
-            {this.state.show && (
+            {this.props.show && (
               <Segment style={{ marginTop: "50px" }}>
-                <Progress
-                  style={{ margin: "auto 10px" }}
-                  percent={this.state.percent}
-                  indicating
-                  size="big"
-                />
+                Orders Fulfilled
+                <ul> {this.showFulfilledOrders()}</ul>
               </Segment>
             )}
           </Transition.Group>
@@ -96,11 +100,14 @@ class Fulfillment extends Component {
   }
 }
 
-function mapStateToProps({ authState }) {
+function mapStateToProps({ authState, batchState }) {
   return {
     email: authState.email,
     displayName: authState.displayName,
-    profileImg: authState.profileImg
+    profileImg: authState.profileImg,
+    show: batchState.showOsw,
+    oswOrders: batchState.oswOrders,
+    loading: batchState.oswLoading
   };
 }
 

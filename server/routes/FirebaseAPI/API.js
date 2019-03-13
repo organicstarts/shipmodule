@@ -243,6 +243,8 @@ router.put("/updateinventory", (req, res) => {
       ) {
         dataRef.child(req.body.sku).update({
           total: req.body.total,
+          brand: req.body.brand,
+          stage: req.body.stage,
           user: req.body.user,
           date: req.body.date
         });

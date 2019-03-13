@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import InventoryTableDetail from "./InventoryTableDetail";
 import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
@@ -111,6 +112,17 @@ class InventoryTable extends Component {
 
   componentWillUnmount() {
     this.firebaseRef.off();
+  }
+
+  compareEmail(email) {
+    switch (email) {
+      case "yvan@organicstart.com":
+      case "peter@organicstart.com":
+      case "isaiah@organicstart.com":
+        return true;
+      default:
+        return false;
+    }
   }
 
   handleChange = e => {
@@ -398,6 +410,7 @@ class InventoryTable extends Component {
       return (
         <InventoryTableDetail
           index={index}
+          email={this.compareEmail(this.props.email) ? true : false}
           key={key}
           sku={key}
           brand={eastDatas[key].brand}
@@ -489,7 +502,7 @@ class InventoryTable extends Component {
   render() {
     return (
       <Segment compact style={{ margin: "50px auto" }}>
-        <Link to="/" className="noprint">
+        <Link to="/inventory" className="noprint">
           Go Back
         </Link>
         {this.state.buttonLoading ? (
@@ -515,4 +528,13 @@ class InventoryTable extends Component {
   }
 }
 
-export default InventoryTable;
+const mapStateToProps = ({ authState }) => {
+  return {
+    email: authState.email
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(InventoryTable);

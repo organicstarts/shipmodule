@@ -207,12 +207,15 @@ class InboundLogging extends Component {
   }
 
   checkError() {
-    if (this.state.count > 0 && this.state.trackingNumber.length < 5) {
+    if (this.state.count === 1 && this.state.trackingNumber.length < 5) {
       alert("The Tracking number is not valid");
       this.setState({ count: 0, trackingNumber: "" });
-    } else if (this.state.count > 1 && this.state.upcNum.length < 13) {
+    } else if (this.state.count === 2 && this.state.upcNum.length < 13) {
       alert("The UPC number is not valid");
       this.setState({ count: 1, upcNum: "" });
+    } else if (this.state.count === 3 && this.state.quantity.length <= 0) {
+      alert("Did not input quantity");
+      this.setState({ count: 2, quantity: "" });
     }
   }
 

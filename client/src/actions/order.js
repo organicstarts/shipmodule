@@ -34,9 +34,10 @@ const getAllOrders = (stateInfo, history) => {
   };
 };
 
-const oswGetAllOrders = () => {
+const oswGetAllOrders = endTime => {
   return {
-    type: GET_ALL_OSW_ORDERS
+    type: GET_ALL_OSW_ORDERS,
+    payload: { endTime }
   };
 };
 

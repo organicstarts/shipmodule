@@ -166,10 +166,7 @@ class InboundLogTable extends Component {
       .put("fb/updateinventory", {
         dbname: warehouse,
         sku: dbDatas[key].sku,
-        obsku:
-          dbDatas[key].broken !== 0
-            ? `OB-${skuInfo[dbDatas[key].sku].sku}`
-            : null,
+        obsku: null,
         quantity: total,
         broken: broken
       })

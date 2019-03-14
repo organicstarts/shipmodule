@@ -35,7 +35,7 @@ const InboundLogDetail = props => {
             </Modal.Content>
           </Modal>
           <Icon
-            onClick={() => props.handleTotal(props.id)}
+            onClick={() => props.handleTotal(props.id, props.index)}
             style={styles.hover}
             bordered
             inverted
@@ -45,7 +45,7 @@ const InboundLogDetail = props => {
           />
           <Icon
             style={styles.hover}
-            onClick={() => props.handleTotal(props.id)}
+            onClick={() => props.handleTotal(props.id, props.index)}
             bordered
             inverted
             color={props.show ? "red" : "grey"}

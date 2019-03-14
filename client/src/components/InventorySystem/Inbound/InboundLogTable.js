@@ -83,7 +83,7 @@ class InboundLogTable extends Component {
     const tempData = { ...datas };
     // if (window.confirm("are you sure you want to delete?")) {
     // this.setState({ loading: true });
-  
+
     if (dbDatas[key]) {
       await axios
         .post("fb/archiveInventory", {
@@ -137,7 +137,7 @@ class InboundLogTable extends Component {
     }
   }
 
-  totalChange(key) {
+  totalChange(key, index) {
     const { dbDatas } = this.state;
     const bool = dbDatas[key].isChecked;
     const warehouse = dbDatas[key].warehouseLocation
@@ -177,6 +177,11 @@ class InboundLogTable extends Component {
         if (response.data.msg === "success") {
           let update = firebase.database().ref("/inventory/log");
           update.child(key).update({ isChecked: !bool });
+          let someProperty = { ...this.state.datas };
+          someProperty[index].isChecked = !bool;
+          this.setState({
+            datas: someProperty
+          });
         }
       });
   }

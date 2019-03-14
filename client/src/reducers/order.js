@@ -175,7 +175,8 @@ const calculatePackage = shipItems => {
   for (let item in shipItems) {
     if (
       productInfo[shipItems[item].sku] &&
-      !shipItems[item].sku.includes("OB-")
+      !shipItems[item].sku.includes("OB-") &&
+      !shipItems[item].sku.includes("HOL-")
     ) {
       const packagePer = productInfo[shipItems[item].sku].package;
       let fullBox = 0;

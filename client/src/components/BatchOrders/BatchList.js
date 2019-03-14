@@ -49,15 +49,18 @@ class BatchList extends Component {
         Promise.all(
           this.props.shipmentItems.map(async data => {
             if (skuInfo[data.sku] && !data.sku.includes("HOL")) {
-              console.log(data.sku);
+              console.log(
+                data.sku,
+                data.combineTotal ? 0 - data.combineTotal : 0 - data.quantity
+              );
               if (data.sku.includes("OB-")) {
                 await axios
                   .put("fb/updateinventory", {
                     dbname: `${warehouse}OB`,
                     sku: data.sku,
                     quantity: data.combineTotal
-                      ? -data.combineTotal
-                      : -data.quantity
+                      ? 0 - data.combineTotal
+                      : 0 - data.quantity
                   })
                   .then(response => {
                     if (response.data.msg === "success") {
@@ -72,8 +75,8 @@ class BatchList extends Component {
                     dbname: warehouse,
                     sku: data.sku,
                     quantity: data.combineTotal
-                      ? -data.combineTotal
-                      : -data.quantity
+                      ? 0 - data.combineTotal
+                      : 0 - data.quantity
                   })
                   .then(response => {
                     if (response.data.msg === "success") {

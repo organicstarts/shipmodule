@@ -41,7 +41,7 @@ class InventoryTable extends Component {
       if (
         dataInfo.sku.includes(key) &&
         dataInfo.sku.length > key.length &&
-        !dataInfo.sku.includes("OB-")
+        !dataInfo.sku.includes("OB-") && !dataInfo.sku.includes("TP-")
       ) {
         if (dataInfo.sku.includes("TK")) {
           let tempSku = dataInfo.sku.split(/TK-.\d*-/)[1];

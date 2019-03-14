@@ -51,12 +51,13 @@ class BatchList extends Component {
             if (skuInfo[data.sku] && !data.sku.includes("HOL")) {
               console.log(data.sku);
               if (data.sku.includes("OB-")) {
-                
                 await axios
                   .put("fb/updateinventory", {
                     dbname: `${warehouse}OB`,
                     sku: data.sku,
-                    quantity: -data.combineTotal || -data.quantity
+                    quantity: data.combineTotal
+                      ? -data.combineTotal
+                      : -data.quantity
                   })
                   .then(response => {
                     if (response.data.msg === "success") {
@@ -70,7 +71,9 @@ class BatchList extends Component {
                   .put("fb/updateinventory", {
                     dbname: warehouse,
                     sku: data.sku,
-                    quantity: -data.combineTotal || -data.quantity
+                    quantity: data.combineTotal
+                      ? -data.combineTotal
+                      : -data.quantity
                   })
                   .then(response => {
                     if (response.data.msg === "success") {

@@ -124,27 +124,29 @@ const getAllOswOrders = async action => {
       let fulfilledData = [];
       await Promise.all(
         fulfillData.map(async data => {
-          data.lineItems.map(async item => {
-            if (
-              item.fulfillment_service === "mike" &&
-              data.relabel &&
-              !item.fulfillment_status
-            ) {
-              await axios
-                .post("osw/fulfillment", {
-                  orderId: data.id,
-                  locationId: 41340099,
-                  tracking: data.relabel,
-                  trackingCompany: "USPS",
-                  lineItemId: item.id,
-                  notifyCustomer: true
-                })
-                .then(res => {
-                  console.log("success?", res);
-                  fulfilledData.push(data);
-                });
-            }
-          });
+          await Promise.all(
+            data.lineItems.map(async item => {
+              if (
+                item.fulfillment_service === "mike" &&
+                data.relabel &&
+                !item.fulfillment_status
+              ) {
+                await axios
+                  .post("osw/fulfillment", {
+                    orderId: data.id,
+                    locationId: 41340099,
+                    tracking: data.relabel,
+                    trackingCompany: "USPS",
+                    lineItemId: item.id,
+                    notifyCustomer: true
+                  })
+                  .then(res => {
+                    console.log("success?", res);
+                    fulfilledData.push(data);
+                  });
+              }
+            })
+          );
         })
       );
       return fulfilledData;

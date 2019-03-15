@@ -4,7 +4,7 @@ import InboundLogDetail from "./InboundLogDetail";
 import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import firebase from "../../../config/firebaseconf";
-import skuInfo from "../../../config/productinfo.json";
+// import skuInfo from "../../../config/productinfo.json";
 import { Segment, Table, Form, FormGroup } from "semantic-ui-react";
 import axios from "axios";
 

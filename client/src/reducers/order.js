@@ -7,7 +7,9 @@ import {
   GET_ORDER_DETAIL,
   SET_SHIPMENT_ITEMS,
   ALL_OSW_ORDERS_LOADED,
-  GET_ALL_OSW_ORDERS
+  GET_ALL_OSW_ORDERS,
+  OSW_ORDER_LOADED,
+  GET_OSW_ORDER
 } from "../constants/actionTypes";
 import _ from "lodash";
 import products from "../config/products.json";
@@ -362,7 +364,16 @@ function batchReducer(state = INITIAL_STATE, action) {
     case ALL_OSW_ORDERS_LOADED: {
       return applyOswOrders(state, action);
     }
+    case OSW_ORDER_LOADED: {
+      return applyOswOrders(state, action);
+    }
     case GET_ALL_OSW_ORDERS: {
+      return Object.assign({}, state, {
+        showOsw: false,
+        oswLoading: true
+      });
+    }
+    case GET_OSW_ORDER: {
       return Object.assign({}, state, {
         showOsw: false,
         oswLoading: true

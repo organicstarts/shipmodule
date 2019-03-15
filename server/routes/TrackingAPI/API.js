@@ -111,7 +111,7 @@ router.get("/getallorders", (req, res) => {
       let retrieveData = [];
       data.orders.map(data => {
         let trackingObj = {};
-        if (!data.fullfillment_status) {
+        if (data.fulfillment_status !== "fulfilled") {
           if (data.note && data.financial_status === "paid") {
             let carrier = data.note
               .split("\n")
@@ -129,6 +129,7 @@ router.get("/getallorders", (req, res) => {
             trackingObj = null;
           }
           retrieveData.push({
+            created_at: data.created_at,
             orderNum: data.name,
             tracking: trackingObj,
             id: data.id,
@@ -208,7 +209,8 @@ router.get("/getorder", (req, res) => {
                 : data.title,
               quantity: data.quantity,
               grams: data.grams,
-              fullfillmentStatus: data.fullfillment_status
+              fulfillmentStatus: data.fulfillment_status,
+              fulfillmentService: data.fulfillment_service
             };
           }),
           address: {

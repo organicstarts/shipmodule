@@ -6,38 +6,48 @@ import {
   Icon,
   Grid,
   Transition,
-  Label
+  Label,
+  Input
 } from "semantic-ui-react";
-import { oswGetAllOrders } from "../../actions/order";
+import { oswGetAllOrders, oswGetOrder } from "../../actions/order";
 import moment from "moment";
 
 class Fulfillment extends Component {
   constructor() {
     super();
     this.state = {
-      percent: 0
+      orderNumber: ""
     };
-    this.handleClick = this.handleClick.bind(this);
+    this.handleWholeClick = this.handleWholeClick.bind(this);
+    this.handleSingleClick = this.handleSingleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleClick() {
+  handleChange = e => this.setState({ [e.target.name]: e.target.value });
+
+  handleWholeClick() {
     this.setState({ loading: true });
     const endTime = moment()
-      .subtract(3, "days")
+      .subtract(2, "days")
       .format("YYYY-MM-DDThh:mm:ssZ");
     // const startTime = moment()
     //   .subtract(13, "days")
     //   .format("YYYY-MM-DDThh:mm:ssZ");
-    console.log(endTime)
+    console.log(endTime);
     this.props.oswGetAllOrders(endTime);
+  }
+
+  handleSingleClick() {
+    this.setState({ loading: true });
+
+    this.props.oswGetOrder(this.state.orderNumber);
   }
 
   showFulfilledOrders() {
     const { oswOrders } = this.props;
     if (oswOrders)
-      oswOrders.map(data => {
-        console.log("fk", data)
-        return <li>{data.orderNum}</li>;
+      return oswOrders.map(data => {
+        return <li key={data.orderNum}>{data.orderNum}</li>;
       });
   }
 
@@ -82,14 +92,33 @@ class Fulfillment extends Component {
             size="large"
             loading={this.props.loading}
             color="orange"
-            onClick={this.handleClick}
+            onClick={this.handleWholeClick}
           >
             Scan Organic Start Wholesale Shipments
+          </Button>
+          <p style={{ margin: "20px" }}>or</p>
+          <Input
+            fluid
+            label="Order Number"
+            placeholder="#12345"
+            name="orderNumber"
+            value={this.state.orderNumber}
+            onChange={this.handleChange}
+            required
+          />
+          <Button
+            fluid
+            size="large"
+            loading={this.props.loading}
+            color="teal"
+            onClick={this.handleSingleClick}
+          >
+            Fulfill Wholesale Order
           </Button>
           <Transition.Group className="noprint" animation="fade" duration={500}>
             {this.props.show && (
               <Segment style={{ marginTop: "50px" }}>
-                Orders Fulfilled
+                Orders Fulfilled:
                 <ul> {this.showFulfilledOrders()}</ul>
               </Segment>
             )}
@@ -113,5 +142,5 @@ function mapStateToProps({ authState, batchState }) {
 
 export default connect(
   mapStateToProps,
-  { oswGetAllOrders }
+  { oswGetAllOrders, oswGetOrder }
 )(Fulfillment);

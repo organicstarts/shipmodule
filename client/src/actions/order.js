@@ -3,7 +3,8 @@ import {
   GET_ORDER_DETAIL,
   GET_ALL_ORDERS,
   SET_SHIPMENT_ITEMS,
-  GET_ALL_OSW_ORDERS
+  GET_ALL_OSW_ORDERS,
+  GET_OSW_ORDER
 } from "../constants/actionTypes";
 
 const getBatch = (stateInfo, history) => {
@@ -41,10 +42,18 @@ const oswGetAllOrders = endTime => {
   };
 };
 
+const oswGetOrder = orderNumber => {
+  return {
+    type: GET_OSW_ORDER,
+    payload: { orderNumber }
+  };
+};
+
 export {
   getBatch,
   setShipmentItems,
   getOrderDetail,
   getAllOrders,
-  oswGetAllOrders
+  oswGetAllOrders,
+  oswGetOrder
 };

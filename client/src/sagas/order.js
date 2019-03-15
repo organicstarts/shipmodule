@@ -3,7 +3,8 @@ import {
   BATCH_LOADED,
   FETCH_LOADED,
   ALL_ORDERS_LOADED,
-  ALL_OSW_ORDERS_LOADED
+  ALL_OSW_ORDERS_LOADED,
+  OSW_ORDER_LOADED
 } from "../constants/actionTypes";
 import axios from "axios";
 
@@ -40,6 +41,15 @@ function* handleGetAllOswOrders(action) {
   try {
     const payload = yield call(getAllOswOrders, action.payload);
     yield put({ type: ALL_OSW_ORDERS_LOADED, payload });
+  } catch (e) {
+    yield put({ type: "API_ERRORED", payload: e });
+  }
+}
+
+function* handleGetOswOrder(action) {
+  try {
+    const payload = yield call(getOswOrder, action.payload);
+    yield put({ type: OSW_ORDER_LOADED, payload });
   } catch (e) {
     yield put({ type: "API_ERRORED", payload: e });
   }
@@ -93,6 +103,61 @@ const getOrder = async orderNumber => {
     .catch(error => console.log(error));
 };
 
+const getOswOrder = async action => {
+  return await axios
+    .get(`/osw/getorder?orderid=${action.orderNumber}&inHouse=true`)
+    .then(async res => {
+      let resWithRelabel = [];
+      await axios
+        .get(`osw/bpost?tracking=${res.data.tracking.Other}`)
+        .then(xmlData => {
+          let resXML = new DOMParser().parseFromString(
+            xmlData.data,
+            "application/xml"
+          );
+
+          if (resXML.getElementsByTagName("relabelBarcode")[0]) {
+            res.data["relabel"] = resXML.getElementsByTagName(
+              "relabelBarcode"
+            )[0].textContent;
+            resWithRelabel.push(res.data);
+          }
+        });
+      return resWithRelabel;
+    })
+    .then(async data => {
+      let fulfilledData = [];
+
+      if (data.length > 0) {
+        await Promise.all(
+          data[0].lineItems.map(async item => {
+            if (
+              item.fulfillment_service === "mike" &&
+              data.relabel &&
+              !item.fulfillment_status
+            ) {
+              await axios
+                .post("osw/fulfillment", {
+                  orderId: data[0].id,
+                  locationId: 41340099,
+                  tracking: data[0].relabel,
+                  trackingCompany: "USPS",
+                  lineItemId: item.id,
+                  notifyCustomer: true
+                })
+                .then(res => {
+                  console.log("success?", res);
+                  fulfilledData.push(data);
+                });
+            }
+          })
+        );
+      }
+      return fulfilledData;
+    })
+    .catch(error => console.log(error));
+};
+
 const getAllOswOrders = async action => {
   return await axios
     .get(`/osw/getallorders?endTime=${action.endTime}`)
@@ -121,6 +186,7 @@ const getAllOswOrders = async action => {
       return resWithRelabel;
     })
     .then(async fulfillData => {
+      console.log(fulfillData);
       let fulfilledData = [];
       await Promise.all(
         fulfillData.map(async data => {
@@ -209,5 +275,6 @@ export {
   handleGetBatch,
   handleGetOrderDetail,
   handleGetAllOrders,
-  handleGetAllOswOrders
+  handleGetAllOswOrders,
+  handleGetOswOrder
 };

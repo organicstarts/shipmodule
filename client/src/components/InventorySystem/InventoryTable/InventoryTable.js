@@ -518,6 +518,7 @@ class InventoryTable extends Component {
             className="noprint"
             color="green"
             onClick={this.calculateAllTotal}
+            disabled={true}
           >
             Calculate Total
           </Button>

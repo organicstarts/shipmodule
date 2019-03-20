@@ -226,6 +226,7 @@ router.put("/disableproduct", (req, res) => {
   const baseUrl = `https://organicstart.com/api/v2/products/${
     req.body.productID
   }`;
+  console.log(req.body.inventory_level, req.body.tracking)
   res.set({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"

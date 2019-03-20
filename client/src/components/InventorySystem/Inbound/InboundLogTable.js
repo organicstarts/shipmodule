@@ -5,7 +5,14 @@ import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import firebase from "../../../config/firebaseconf";
 // import skuInfo from "../../../config/productinfo.json";
-import { Segment, Table, Form, FormGroup } from "semantic-ui-react";
+import {
+  Segment,
+  Table,
+  Form,
+  FormGroup,
+  Icon,
+  Button
+} from "semantic-ui-react";
 import axios from "axios";
 
 class InboundLogTable extends Component {
@@ -19,11 +26,13 @@ class InboundLogTable extends Component {
       loading: true,
       filter: { value: "", log: [] },
       image: "",
-      reverse: ""
+      reverse: "",
+      deleteLoading: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     // this.handleClick = this.handleClick.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
 
     this.firebaseRef = firebase.database().ref(`/inventory/log`);
     this.firebaseRef.once("value", async snapshot => {
@@ -77,6 +86,26 @@ class InboundLogTable extends Component {
       });
   }
 
+  async handleDelete() {
+    const { datas, dbDatas } = this.state;
+    const tempDBData = { ...dbDatas };
+    const tempData = { ...datas };
+    this.setState({ deleteLoading: true });
+    await Promise.all(
+      datas.map(async (data, index) => {
+        await this.archiveInventory(data.key, index).then(() => {
+          delete tempDBData[data.key];
+          tempData[index] = "";
+          this.setState({
+            dbDatas: tempDBData,
+            datas: tempData
+          });
+        });
+      })
+    );
+    this.setState({ deleteLoading: false });
+  }
+
   async archiveInventory(key, index) {
     const { dbDatas, datas } = this.state;
     const tempDBData = { ...dbDatas };
@@ -102,31 +131,30 @@ class InboundLogTable extends Component {
           timeStamp: dbDatas[key].timeStamp,
           warehouseLocation: dbDatas[key].warehouseLocation
         })
-        .then(response => {
+        .then(async response => {
           if (response.data.msg === "success") {
             console.log("Archived Item");
-          } else {
-            console.log("Item not deleted");
-          }
-        })
-        .catch(error => console.log(error.message));
-
-      await axios
-        .delete("fb/deleteinventory", {
-          data: {
-            db: "log",
-            id: key
-          }
-        })
-        .then(response => {
-          if (response.data.msg === "success") {
-            delete tempDBData[key];
-            tempData[index] = "";
-            this.setState({
-              dbDatas: tempDBData,
-              datas: tempData
-            });
-            console.log("Deleted Item");
+            await axios
+              .delete("fb/deleteinventory", {
+                data: {
+                  db: "logtemp",
+                  id: key
+                }
+              })
+              .then(response => {
+                if (response.data.msg === "success") {
+                  delete tempDBData[key];
+                  tempData[index] = "";
+                  this.setState({
+                    dbDatas: tempDBData,
+                    datas: tempData
+                  });
+                  console.log("Deleted Item");
+                } else {
+                  console.log("Item not deleted");
+                }
+              })
+              .catch(error => console.log(error.message));
           } else {
             console.log("Item not deleted");
           }
@@ -358,8 +386,17 @@ class InboundLogTable extends Component {
               ]}
               onChange={this.handleSelectChange}
             />
+            <Button
+              color="red"
+              onClick={this.handleDelete}
+              loading={this.state.deleteLoading}
+            >
+              <Icon name="trash" />
+              Delete All
+            </Button>
           </FormGroup>
         </Form>
+
         <Table sortable celled collapsing textAlign="center">
           <Table.Header>
             <Table.Row>

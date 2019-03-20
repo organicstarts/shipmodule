@@ -4,13 +4,78 @@ import { connect } from "react-redux";
 import { Icon, Image, Menu, Transition, Header, Grid } from "semantic-ui-react";
 import MediaQuery from "react-responsive";
 import logo from "../../logo.png";
-import "../../index.css";
+import "./styles.css";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeItem: "home"
+      activeItem: "home",
+      items: [
+        {
+          show: true,
+          name: "home",
+          displayName: "Home",
+          route: "/",
+          icon: "home"
+        },
+        {
+          show: true,
+          name: "batch",
+          displayName: "Generate Batch",
+          route: "/batch",
+          icon: "list alternate"
+        },
+        {
+          show: true,
+          name: "fetch",
+          displayName: "Packing Slip",
+          route: "/fetch",
+          icon: "newspaper"
+        },
+        {
+          show: true,
+          name: "fraud",
+          displayName: "Fraud Search",
+          route: "/fraud",
+          icon: "search"
+        },
+        {
+          show: true,
+          name: "fulfillment",
+          displayName: "OSW Fulfillment",
+          route: "/fulfillment",
+          icon: "shipping fast"
+        },
+        {
+          show: true,
+          name: "inventory",
+          displayName: "Inventory",
+          route: "/inventory",
+          icon: "warehouse"
+        },
+        {
+          show: true,
+          name: "scanning",
+          displayName: "Scanning",
+          route: "/scanning",
+          icon: "barcode"
+        },
+        {
+          show: true,
+          name: "cancel",
+          displayName: "Cancel Order",
+          route: "/cancel",
+          icon: "user cancel"
+        },
+        {
+          show: this.compareEmail(this.props.email),
+          name: "log",
+          displayName: "Adming Log",
+          route: "/logList",
+          icon: "book"
+        }
+      ]
     };
   }
 
@@ -27,8 +92,47 @@ class App extends Component {
     }
   }
 
+  renderItems() {
+    const { items, activeItem } = this.state;
+
+    return items.map(item => {
+      if (item.show) {
+        return (
+          <Menu.Item
+            key={item.name}
+            as={Link}
+            to={item.route}
+            name={item.name}
+            active={activeItem === item.name}
+            onClick={this.handleItemClick}
+          >
+            <Icon
+              style={{ float: "left", paddingRight: "25px" }}
+              name={item.icon}
+            />
+            {item.displayName}
+          </Menu.Item>
+        );
+      }
+      return null;
+    });
+  }
+  renderMobileItems() {
+    const { items } = this.state;
+
+    return items.map(item => {
+      if (item.show) {
+        return (
+          <Menu.Item key={item.name} as={Link} to={item.route}>
+            <Icon name={item.icon} />
+          </Menu.Item>
+        );
+      }
+      return null;
+    });
+  }
+
   render() {
-    const { activeItem } = this.state;
     const { visible } = this.props;
     return (
       <div>
@@ -44,9 +148,8 @@ class App extends Component {
               vertical
               inverted
               pointing
-              size="small"
+              size="large"
               style={{
-                textAlign: "left",
                 zIndex: 31111,
                 paddingTop: "0",
                 marginTop: "0",
@@ -54,7 +157,7 @@ class App extends Component {
                 backgroundColor: "#303030"
               }}
             >
-              <Header className="sidebar-color">
+              <Header className="sidebar-header sidebar-color">
                 <Grid.Row columns={2}>
                   <Grid.Column width={4} style={{ marginLeft: "5px" }}>
                     <Menu.Item as={Link} to="/">
@@ -67,7 +170,7 @@ class App extends Component {
                       Brainiac
                     </Menu.Item>
                   </Grid.Column>
-                  <Grid.Column width={1} verticalAlign="middle">
+                  <Grid.Column width={1} style={{ marginLeft: "40px" }}>
                     <Menu.Item
                       as="a"
                       onClick={this.props.handleToggle}
@@ -79,133 +182,15 @@ class App extends Component {
                   </Grid.Column>
                 </Grid.Row>
 
-                <p className="text-sidebar" style={{ paddingTop: "25px" }}>
+                <p className="sidebar-text" style={{ paddingTop: "25px" }}>
                   {this.props.displayName}
                 </p>
-                <p className="text-sidebar">{this.props.email}</p>
+                <p className="sidebar-text">{this.props.email}</p>
                 <div className="photo">
                   <Image circular src={this.props.profileImg} />
                 </div>
               </Header>
-              <Menu.Item
-                as={Link}
-                to="/"
-                name="home"
-                active={activeItem === "home"}
-                onClick={this.handleItemClick}
-              >
-                <Icon
-                  style={{ float: "left", paddingRight: "25px" }}
-                  name="home"
-                />
-                Home
-              </Menu.Item>
-              <Menu.Item
-                as={Link}
-                to="/batch"
-                name="batch"
-                active={activeItem === "batch"}
-                onClick={this.handleItemClick}
-              >
-                <Icon
-                  style={{ float: "left", paddingRight: "25px" }}
-                  name="list alternate"
-                />
-                Generate Batch
-              </Menu.Item>
-              <Menu.Item
-                as={Link}
-                to="/fetch"
-                name="fetch"
-                active={activeItem === "fetch"}
-                onClick={this.handleItemClick}
-              >
-                <Icon
-                  style={{ float: "left", paddingRight: "25px" }}
-                  name="newspaper"
-                />
-                Packing Slip
-              </Menu.Item>
-              <Menu.Item
-                as={Link}
-                to="/fraud"
-                name="fraud"
-                active={activeItem === "fraud"}
-                onClick={this.handleItemClick}
-              >
-                <Icon
-                  style={{ float: "left", paddingRight: "25px" }}
-                  name="search"
-                />
-                Fraud Search
-              </Menu.Item>
-              <Menu.Item
-                as={Link}
-                to="/fulfillment"
-                name="fulfillment"
-                active={activeItem === "fulfillment"}
-                onClick={this.handleItemClick}
-              >
-                <Icon
-                  style={{ float: "left", paddingRight: "25px" }}
-                  name="shipping fast"
-                />
-                OSW Fulfillment
-              </Menu.Item>
-              <Menu.Item
-                as={Link}
-                to="/inventory"
-                name="inventory"
-                active={activeItem === "inventory"}
-                onClick={this.handleItemClick}
-              >
-                <Icon
-                  style={{ float: "left", paddingRight: "25px" }}
-                  name="warehouse"
-                />
-                Inventory
-              </Menu.Item>
-              <Menu.Item
-                as={Link}
-                to="/scanning"
-                name="scanning"
-                active={activeItem === "scanning"}
-                onClick={this.handleItemClick}
-              >
-                <Icon
-                  style={{ float: "left", paddingRight: "25px" }}
-                  name="barcode"
-                />
-                Scanning
-              </Menu.Item>
-              <Menu.Item
-                as={Link}
-                to="/cancel"
-                name="cancel"
-                active={activeItem === "cancel"}
-                onClick={this.handleItemClick}
-              >
-                <Icon
-                  style={{ float: "left", paddingRight: "25px" }}
-                  name="user cancel"
-                />
-                Cancel Order
-              </Menu.Item>
-              {this.compareEmail(this.props.email) && (
-                <Menu.Item
-                  as={Link}
-                  to="/logList"
-                  name="log"
-                  active={activeItem === "log"}
-                  onClick={this.handleItemClick}
-                >
-                  <Icon
-                    style={{ float: "left", paddingRight: "25px" }}
-                    name="book"
-                  />
-                  Admin Log
-                </Menu.Item>
-              )}
+              {this.renderItems()}
             </Menu>
           )}
         </Transition.Group>
@@ -231,8 +216,10 @@ class App extends Component {
                   maxWidth: "3.4rem"
                 }}
               >
-                {" "}
-                <Header className="sidebar-color mobile" style={{ padding: 0 }}>
+                <Header
+                  className="sidebar-header sidebar-color mobile"
+                  style={{ padding: 0 }}
+                >
                   <Menu.Item
                     as="a"
                     onClick={this.props.handleToggle}
@@ -245,35 +232,7 @@ class App extends Component {
                     <Image circular src={this.props.profileImg} />
                   </div>
                 </Header>
-                <Menu.Item as={Link} to="/">
-                  <Icon name="home" />
-                </Menu.Item>
-                <Menu.Item as={Link} to="/batch">
-                  <Icon name="list alternate outline" />
-                </Menu.Item>
-                <Menu.Item as={Link} to="/fetch">
-                  <Icon name="newspaper outline" />
-                </Menu.Item>
-                <Menu.Item as={Link} to="/fraud">
-                  <Icon name="search" />
-                </Menu.Item>
-                <Menu.Item as={Link} to="/fulfillment">
-                  <Icon name="shipping fast" />
-                </Menu.Item>
-                <Menu.Item as={Link} to="/inventory">
-                  <Icon name="warehouse" />
-                </Menu.Item>
-                <Menu.Item as={Link} to="/scanning">
-                  <Icon name="barcode" />
-                </Menu.Item>
-                <Menu.Item as={Link} to="/cancel">
-                  <Icon name="user cancel" />
-                </Menu.Item>
-                {this.compareEmail(this.props.email) && (
-                  <Menu.Item as={Link} to="/logList">
-                    <Icon name="book" />
-                  </Menu.Item>
-                )}
+                {this.renderMobileItems()}
               </Menu>
             )}
           </Transition.Group>

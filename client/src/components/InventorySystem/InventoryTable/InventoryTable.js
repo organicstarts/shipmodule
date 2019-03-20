@@ -41,7 +41,8 @@ class InventoryTable extends Component {
       if (
         dataInfo.sku.includes(key) &&
         dataInfo.sku.length > key.length &&
-        !dataInfo.sku.includes("OB-") && !dataInfo.sku.includes("TP-")
+        !dataInfo.sku.includes("OB-") &&
+        !dataInfo.sku.includes("TP-")
       ) {
         if (dataInfo.sku.includes("TK")) {
           let tempSku = dataInfo.sku.split(/TK-.\d*-/)[1];
@@ -239,9 +240,9 @@ class InventoryTable extends Component {
         axios.put("os/disableproduct", {
           productID: data.id,
           tracking: "simple",
-          inventory_level: total
+          inventory_level: Math.floor(total)
         });
-        data.total = total;
+        data.total = Math.floor(total);
       }
     });
   }
@@ -317,41 +318,43 @@ class InventoryTable extends Component {
         });
     }
   }
-  handleOutOfStockBundle(key) {
+  async handleOutOfStockBundle(key) {
     const { bgDatas, eastDatas, westDatas } = this.state;
     const tempBGData = { ...bgDatas };
     const total = this.calculateTotal(
       eastDatas[key].total,
       westDatas[key].total
     );
-    tempBGData[key].bundles.forEach(data => {
-      if (
-        data.tk.length > 0 &&
-        (bgDatas[data.tk[0]].total < 100 || bgDatas[data.tk[1]].total < 100)
-      ) {
-        axios.put("os/disableproduct", {
-          productID: data.id,
-          tracking: "simple",
-          inventory_level: 0
-        });
-      } else if (data.total !== 0) {
-        axios.put("os/disableproduct", {
-          productID: data.id,
-          tracking: "simple",
-          inventory_level: 0
-        });
-        data.tracking = "simple";
-        data.total = 0;
-      } else {
-        axios.put("os/disableproduct", {
-          productID: data.id,
-          tracking: "simple",
-          inventory_level: total / 2
-        });
-        data.tracking = "simple";
-        data.total = total / 2;
-      }
-    });
+    await Promise.all(
+      tempBGData[key].bundles.map(async data => {
+        if (
+          data.tk.length > 0 &&
+          (bgDatas[data.tk[0]].total < 100 || bgDatas[data.tk[1]].total < 100)
+        ) {
+          await axios.put("os/disableproduct", {
+            productID: data.id,
+            tracking: "simple",
+            inventory_level: 0
+          });
+        } else if (data.total !== 0) {
+          await axios.put("os/disableproduct", {
+            productID: data.id,
+            tracking: "simple",
+            inventory_level: 0
+          });
+          data.tracking = "simple";
+          data.total = 0;
+        } else {
+          await axios.put("os/disableproduct", {
+            productID: data.id,
+            tracking: "simple",
+            inventory_level: Math.floor(total / 2)
+          });
+          data.tracking = "simple";
+          data.total = Math.floor(total / 2);
+        }
+      })
+    );
     this.setState({
       bgDatas: tempBGData
     });

@@ -1,5 +1,5 @@
 import React from "react";
-import { Segment, Button, Form, Label, Table } from "semantic-ui-react";
+import { Segment, Button, Form, Header, Icon, Table } from "semantic-ui-react";
 import _ from "lodash";
 import { connect } from "react-redux";
 import { getBatch, setShipmentItems } from "../../actions/order";
@@ -143,11 +143,12 @@ class BatchOrders extends React.Component {
   }
   render() {
     return (
-      <Segment color="olive" raised>
-        <Label as="a" color="olive" ribbon>
-          Create Pick list + Packing slip
-        </Label>
-        <Segment padded="very" stacked>
+      <div>
+        <Header as="h1">
+          <Icon name="list" />
+          <Header.Content>Create Pick list + Packing slip</Header.Content>
+        </Header>
+        <Segment padded="very">
           <Form size="large" onSubmit={this.handleSubmit}>
             <Form.Field>
               <Form.Input
@@ -181,14 +182,14 @@ class BatchOrders extends React.Component {
             <div style={{ textAlign: "center" }}> {this.renderButton()}</div>
           </Form>
         </Segment>
-        <Label as="a" color="yellow" ribbon>
+        <Header as="h2" style={{paddingTop: "25px"}}>
+          <Icon name="redo" />
           Previous Searches
-        </Label>
+        </Header>
         <Segment padded="very" textAlign="center">
-          {" "}
           {this.renderPrevious()}
         </Segment>
-      </Segment>
+      </div>
     );
   }
 }

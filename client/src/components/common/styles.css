@@ -1,0 +1,68 @@
+.computer-menu {
+  text-align: left;
+  z-index: 31111;
+  padding-top: 0;
+  margin-top: 0;
+  box-shadow: 0.15px 1px 30px -9px #555 !important;
+  background-color: #303030 !important;
+}
+
+.mobile-menu {
+  z-index: 31111 !important;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  box-shadow: 0.15px 1px 30px -9px #555 !important;
+  background-color: #303030 !important;
+  max-width: 3.4rem !important;
+}
+
+.sidebar-text {
+  color: #fff;
+  font-size: 1rem;
+  line-height: 0.8rem;
+  font-family: Muli, Roboto, "Helvetica", Arial, sans-serif;
+}
+
+.sidebar-header {
+  padding-bottom: 5.4rem !important;
+  padding-top: 1rem !important;
+  margin-bottom: 4.3rem !important;
+  margin-top: -1rem !important;
+  position: relative;
+  z-index: 0;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+}
+
+.sidebar-color {
+  color: #fff;
+  background-color: #a2b515;
+}
+
+.sidebar-header.mobile {
+  padding-bottom: 2.4rem !important;
+}
+.photo {
+  top: 182px;
+  left: 50%;
+  width: 96px;
+  height: 96px;
+  padding: 8px;
+  position: absolute;
+  transform: translateX(-50%);
+  background: #303030;
+  box-sizing: content-box;
+  border-radius: 50%;
+}
+
+.photo.mobile {
+  top: 84px;
+  width: 30px;
+  height: 30px;
+}
+
+
+
+
+

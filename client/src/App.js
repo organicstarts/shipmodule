@@ -82,27 +82,33 @@ class App extends Component {
     const { width, visible } = this.state;
     const styles = {
       containerStyle: {
-        paddingLeft: "10%",
+        paddingLeft: width > 767 ? "calc(18rem + 30px)" : "0",
         marginTop: "95px",
-        width: "95%",
+        width: "100%",
         position: "relative"
       },
       mobileStyle: {
-        paddingLeft: width > 767 ? "3%" : "10.5%",
+        paddingLeft: width > 767 ? "calc(3.4rem + 30px)" : width > 373 ? "calc(3.4rem + 15px)" : "0",
         paddingRight: 0,
         marginTop: "95px",
-        width: "95%",
+        width: "100%",
         position: "relative"
       }
     };
     const { containerStyle, mobileStyle } = styles;
     return (
       <div className="App">
-        <Menu fixed="top" borderless className="noprint navbar">
-          <Menu.Item position="right">
-            <Button color="red" onClick={this.props.logout}>
-              Sign Out
-            </Button>
+        <Menu fixed="top" size="massive" borderless className="noprint navbar">
+          <Menu.Item
+            position="right"
+            style={{ marginTop: "15px", marginRight: "15px" }}
+          >
+            <Button
+              circular
+              color="red"
+              icon="power off"
+              onClick={this.props.logout}
+            />
           </Menu.Item>
         </Menu>
         <Sidebar

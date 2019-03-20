@@ -1,5 +1,5 @@
 import React from "react";
-import { Segment, Button, Form, Label } from "semantic-ui-react";
+import { Segment, Button, Form, Header, Icon } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
@@ -110,27 +110,26 @@ class CancelOrder extends React.Component {
   render() {
     return (
       <div>
-        <Segment color="red" raised>
-          <Label as="a" color="red" ribbon>
-            Cancel Order
-          </Label>
-          <Segment padded="very" stacked>
-            <Form size="large" onSubmit={this.handleSubmit}>
-              <Form.Field>
-                <Form.Input
-                  fluid
-                  label="Order Number"
-                  placeholder="123456"
-                  name="cancelNumber"
-                  value={this.state.cancelNumber}
-                  onChange={this.handleChange}
-                  required
-                />
-              </Form.Field>
+        <Header as="h1">
+          <Icon name="user cancel" />
+          <Header.Content>Cancel Retail Order</Header.Content>
+        </Header>
+        <Segment padded="very" stacked>
+          <Form size="large" onSubmit={this.handleSubmit}>
+            <Form.Field>
+              <Form.Input
+                fluid
+                label="Order Number"
+                placeholder="123456"
+                name="cancelNumber"
+                value={this.state.cancelNumber}
+                onChange={this.handleChange}
+                required
+              />
+            </Form.Field>
 
-              <div style={{ textAlign: "center" }}> {this.renderButton()}</div>
-            </Form>
-          </Segment>
+            <div style={{ textAlign: "center" }}> {this.renderButton()}</div>
+          </Form>
         </Segment>
 
         {this.state.show && (

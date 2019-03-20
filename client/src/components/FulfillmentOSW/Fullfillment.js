@@ -6,7 +6,7 @@ import {
   Icon,
   Grid,
   Transition,
-  Label,
+  Header,
   Input
 } from "semantic-ui-react";
 import { oswGetAllOrders, oswGetOrder } from "../../actions/order";
@@ -53,10 +53,11 @@ class Fulfillment extends Component {
 
   render() {
     return (
-      <Segment raised>
-        <Label as="a" color="orange" ribbon>
-          Fulfill Shopify Wholesale Orders
-        </Label>
+      <div>
+        <Header as="h1">
+          <Icon name="warehouse" />
+          <Header.Content>Fulfill Shopify Wholesale Orders</Header.Content>
+        </Header>
         <Segment color="orange" padded="very" textAlign="center">
           <Grid columns={3} stackable>
             <Grid.Column>
@@ -115,16 +116,17 @@ class Fulfillment extends Component {
           >
             Fulfill Wholesale Order
           </Button>
-          <Transition.Group className="noprint" animation="fade" duration={500}>
-            {this.props.show && (
-              <Segment style={{ marginTop: "50px" }}>
-                Orders Fulfilled:
-                <ul> {this.showFulfilledOrders()}</ul>
-              </Segment>
-            )}
-          </Transition.Group>
         </Segment>
-      </Segment>
+
+        <Transition.Group className="noprint" animation="fade" duration={500}>
+          {this.props.show && (
+            <Segment style={{ marginTop: "50px" }}>
+              Orders Fulfilled:
+              <ul> {this.showFulfilledOrders()}</ul>
+            </Segment>
+          )}
+        </Transition.Group>
+      </div>
     );
   }
 }

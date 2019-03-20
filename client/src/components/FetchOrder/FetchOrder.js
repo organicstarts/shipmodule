@@ -4,7 +4,7 @@ import { getOrderDetail } from "../../actions/order";
 import { ClipLoader } from "react-spinners";
 import { withRouter } from "react-router-dom";
 import people from "../../config/people";
-import { Segment, Button, Form, Label } from "semantic-ui-react";
+import { Segment, Button, Form, Header, Icon } from "semantic-ui-react";
 import axios from "axios";
 import moment from "moment";
 
@@ -75,10 +75,11 @@ class FetchOrder extends React.Component {
   }
   render() {
     return (
-      <Segment color="orange" raised>
-        <Label as="a" color="orange" ribbon>
-          Create Packing slip
-        </Label>
+      <div>
+        <Header as="h1">
+          <Icon name="newspaper" />
+          <Header.Content>Create Packing slip</Header.Content>
+        </Header>
         <Segment padded="very" stacked>
           <Form size="large" onSubmit={this.handleSubmit}>
             <Form.Field>
@@ -113,7 +114,7 @@ class FetchOrder extends React.Component {
             <div style={{ textAlign: "center" }}>{this.renderButton()}</div>
           </Form>
         </Segment>
-      </Segment>
+      </div>
     );
   }
 }

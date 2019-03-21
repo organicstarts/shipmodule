@@ -47,7 +47,9 @@ class App extends Component {
   setLastAction(lastAction) {
     localStorage.setItem(STORE_KEY, lastAction.toString());
   }
-
+  /*
+  check actions on HTML body to see if the user is still active
+  */
   initListener() {
     document.body.addEventListener("click", () => this.reset());
     document.body.addEventListener("mouseover", () => this.reset());

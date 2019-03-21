@@ -3,7 +3,6 @@ import ArchiveLogDetail from "./ArchiveLogDetail";
 import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import firebase from "../../../config/firebaseconf";
-import skuInfo from "../../../config/productinfo.json";
 import { Segment, Table, Form, FormGroup } from "semantic-ui-react";
 import axios from "axios";
 
@@ -110,24 +109,21 @@ class ArchiveLogTable extends Component {
       total = dbDatas[key].quantity;
       broken = dbDatas[key].broken;
     }
-    if (dbDatas[key].broken !== 0) {
-      axios.put("os/updateinventory", {
-        inventory_level: broken,
-        productID: dbDatas[`OB-${key}`].productID
-      });
-    }
-    axios.put("os/updateinventory", {
-      inventory_level: total,
-      productID: dbDatas[key].productID
-    });
+    // if (dbDatas[key].broken !== 0) {
+    //   axios.put("os/updateinventory", {
+    //     inventory_level: broken,
+    //     productID: dbDatas[`OB-${key}`].productID
+    //   });
+    // }
+    // axios.put("os/updateinventory", {
+    //   inventory_level: total,
+    //   productID: dbDatas[key].productID
+    // });
     axios
       .put("fb/updateinventory", {
         dbname: warehouse,
         sku: dbDatas[key].sku,
-        obsku:
-          dbDatas[key].broken !== 0
-            ? `OB-${skuInfo[dbDatas[key].sku].sku}`
-            : null,
+        obsku: null,
         quantity: total,
         broken: broken
       })

@@ -137,7 +137,7 @@ class InboundLogTable extends Component {
             await axios
               .delete("fb/deleteinventory", {
                 data: {
-                  db: "logtemp",
+                  db: "log",
                   id: key
                 }
               })
@@ -492,7 +492,7 @@ class InboundLogTable extends Component {
   render() {
     return (
       <Segment compact style={{ margin: "50px auto" }}>
-        <Link to="/" className="noprint">
+        <Link to="/inventory" className="noprint">
           Go Back
         </Link>{" "}
         <br />

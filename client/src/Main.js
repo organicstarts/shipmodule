@@ -32,7 +32,9 @@ class Main extends Component {
     this.renderHome = this.renderHome.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
-
+  /*
+  Get insight data from shipstation. default: 1 month
+  */
   componentDidMount() {
     let endTime = moment().format("M/D/YYYY");
     let startTime = moment()
@@ -45,10 +47,13 @@ class Main extends Component {
       this.props.getProductMetrics(this.props.token, startTime, endTime);
     }
   }
+
   logout() {
     this.props.logout();
   }
-
+  /*
+  Get insight data from shipstation based on day, week, month
+  */
   handleClick(e) {
     let startTime = "";
     let endTime = "";
@@ -82,6 +87,9 @@ class Main extends Component {
       this.props.getProductMetrics(this.props.token, startTime, endTime);
     }
   }
+  /*
+  Loop through insight data from getProductMetrics(), then display on table row
+  */
   getProducts() {
     if (this.props.top5) {
       return this.props.top5.map((data, i) => {
@@ -98,13 +106,19 @@ class Main extends Component {
               />
               {data.name}
             </Table.Cell>
-            <Table.Cell >{data.count}</Table.Cell>
+            <Table.Cell>{data.count}</Table.Cell>
           </Table.Row>
         );
       });
     }
     return false;
   }
+  /*
+  Load charts
+  [Company Performance shipped/orders]
+  [Shipping map] [[ordersTotal][shipTotal], [usps] [fedex], [fulfillment spd]] [Pie Chart shipments]
+  [top 5 product] [Customer datas new/returning]
+  */
   renderHome() {
     if (this.props.loading) {
       return (
@@ -333,9 +347,6 @@ class Main extends Component {
                       },
                       vAxis: {
                         title: "Customers"
-                      },
-                      series: {
-                        1: { curveType: "function" }
                       },
                       title: "Customer Datas",
                       animation: {

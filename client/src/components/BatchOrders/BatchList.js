@@ -331,60 +331,145 @@ class BatchList extends Component {
             Finished:_______________ Time Checked:_______________
           </p>
           <br />
-          <p>
-            Pick
-            Notes:________________________________________________________________________________________________________________
-            <br />
-            <br />
-            ____________________________________________________________________________________________________________________________
-            <br />
-            <br />
-            ____________________________________________________________________________________________________________________________
-            <br />
-            <br />
-            ____________________________________________________________________________________________________________________________
-            <br />
+          <p style={{ width: "100%", display: "table" }}>
+            <span style={{ display: "table-cell", width: "70px" }}>
+              Pick Notes:
+            </span>
+            <span
+              style={{
+                display: "table-cell",
+                borderBottom: "1px solid black"
+              }}
+            />
+          </p>
+          <p style={{ width: "100%", display: "table" }}>
+            <span
+              style={{
+                paddingTop: "25px",
+                display: "table-cell",
+                borderBottom: "1px solid black"
+              }}
+            />
+          </p>
+          <p style={{ width: "100%", display: "table" }}>
+            <span
+              style={{
+                paddingTop: "25px",
+                display: "table-cell",
+                borderBottom: "1px solid black"
+              }}
+            />
           </p>
           <p>
             Prepared By: <b>{this.props.picker}</b> &emsp;&emsp; Shipped By:{" "}
             <b>{this.props.shipper}</b>
             <br />
             <br />
-            Set Started:_______________ Set Finished:_______________ Ship
-            Started:_______________ Ship Finished:_______________
+            <p style={{ width: "100%", display: "table" }}>
+              <span style={{ display: "table-cell", width: "75px" }}>
+                Set Started:
+              </span>
+              <span
+                style={{
+                  display: "table-cell",
+                  borderBottom: "1px solid black",
+                  width: "100px"
+                }}
+              />
+              <span style={{ display: "table-cell", width: "80px" }}>
+                Set Finished:
+              </span>
+              <span
+                style={{
+                  display: "table-cell",
+                  borderBottom: "1px solid black",
+                  width: "100px"
+                }}
+              />
+              <span style={{ display: "table-cell", width: "80px" }}>
+                Ship Started:
+              </span>
+              <span
+                style={{
+                  display: "table-cell",
+                  borderBottom: "1px solid black",
+                  width: "100px"
+                }}
+              />
+              <span style={{ display: "table-cell", width: "85px" }}>
+                Ship Finished:
+              </span>
+              <span
+                style={{
+                  display: "table-cell",
+                  borderBottom: "1px solid black",
+                  width: "100px"
+                }}
+              />
+            </p>
           </p>
           <p>
             # of mistakes:_______________ <br /> <br />
-            Table
-            Notes:_______________________________________________________________________________________________________________
-            <br />
-            <br />
-            ____________________________________________________________________________________________________________________________
-            <br />
-            <br />
-            ____________________________________________________________________________________________________________________________
-            <br />
-            <br />
-            ____________________________________________________________________________________________________________________________
-            <br />
-            <br />
+            <p style={{ width: "100%", display: "table" }}>
+              <span style={{ display: "table-cell", width: "80px" }}>
+                Table Notes:
+              </span>{" "}
+              <span
+                style={{
+                  display: "table-cell",
+                  borderBottom: "1px solid black"
+                }}
+              />
+            </p>
+            <p style={{ width: "100%", display: "table" }}>
+              <span
+                style={{
+                  paddingTop: "25px",
+                  display: "table-cell",
+                  borderBottom: "1px solid black"
+                }}
+              />
+            </p>
+            <p style={{ width: "100%", display: "table" }}>
+              <span
+                style={{
+                  paddingTop: "25px",
+                  display: "table-cell",
+                  borderBottom: "1px solid black"
+                }}
+              />
+            </p>
           </p>
-          <p>
-            Supervisor
-            Notes:_________________________________________________________________________________________________________
-            <br />
-            <br />
-            ____________________________________________________________________________________________________________________________
-            <br />
-            <br />
-            ____________________________________________________________________________________________________________________________
-            <br />
-            <br />
-            ____________________________________________________________________________________________________________________________
-            <br />
-            <br />
+          <p style={{ width: "100%", display: "table" }}>
+            <span style={{ display: "table-cell", width: "110px" }}>
+              Supervisor Notes:
+            </span>{" "}
+            <span
+              style={{
+                display: "table-cell",
+                borderBottom: "1px solid black"
+              }}
+            />
           </p>
-          <p style={{ textAlign: "right" }}>
+          <p style={{ width: "100%", display: "table" }}>
+            <span
+              style={{
+                paddingTop: "25px",
+                display: "table-cell",
+                borderBottom: "1px solid black"
+              }}
+            />
+          </p>
+          <p style={{ width: "100%", display: "table" }}>
+            <span
+              style={{
+                paddingTop: "25px",
+                display: "table-cell",
+                borderBottom: "1px solid black"
+              }}
+            />
+          </p>
+          <p style={{ textAlign: "right", paddingTop: "15px" }}>
             Supervisor Name:______________________________________
           </p>
         </div>

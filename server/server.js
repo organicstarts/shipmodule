@@ -177,6 +177,49 @@ router.post("/writeupcinfo", (req, res) => {
 });
 
 /*-------------------------------------------------------------------
+                            EMAIL ITEM DEDUCTING                            
+---------------------------------------------------------------------*/
+router.post("/sendbatchitemsemail", (req, res) => {
+  const listItems = req.body.data.map(send => {
+    return `<li>${send.sku}: ${
+      send.combineTotal ? send.combineTotal : send.quantity
+    }</li>`;
+  });
+
+  const htmlEmail =
+    `<h3> Batch #${req.body.batch} Information </h3> <ul>` + listItems + `</ul>`;
+
+  let transporter = nodemailer.createTransport(
+    smtpTransport({
+      service: "gmail",
+      host: "smtp.gmail.email",
+      auth: {
+        user: cred.emailcred.user,
+        pass: cred.emailcred.key
+      }
+    })
+  );
+
+  let mailOptions = {
+    from: "yvan@organicstart.com",
+    to: "yvan@organicstart.com",
+    subject: "Item Deduct Alert",
+    html: htmlEmail
+  };
+
+  transporter.sendMail(mailOptions, err => {
+    if (err) {
+      res.json({
+        msg: "fail"
+      });
+    } else {
+      res.json({
+        msg: "success"
+      });
+    }
+  });
+});
+/*-------------------------------------------------------------------
                             EMAIL BATCH CHECKING                            
 ---------------------------------------------------------------------*/
 

@@ -215,7 +215,7 @@ router.put("/updateinventory", (req, res) => {
         if (tempTotal < 0) {
           tempTotal = 0;
         }
-        dataRef.child(req.body.sku).update({ total: tempTotal});
+        dataRef.child(req.body.sku).update({ total: tempTotal });
       } else if (
         (req.body.dbname === "eastcoast" || req.body.dbname === "westcoast") &&
         req.body.noEquation
@@ -249,6 +249,9 @@ router.put("/updateinventory", (req, res) => {
           date: req.body.date
         });
       }
+    })
+    .catch(error => {
+      res.json(error);
     });
   res.json({
     msg: "success"

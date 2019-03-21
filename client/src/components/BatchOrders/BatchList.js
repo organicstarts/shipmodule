@@ -30,7 +30,7 @@ class BatchList extends Component {
       .toLowerCase()
       .replace(/\s/g, "");
     this.dataRef = firebase.database().ref("/action/log");
-    this.dataRef.on("value", snapshot => {
+    this.dataRef.once("value", async snapshot => {
       const payload = snapshot.val();
       const result = Object.keys(payload)
         .map(key => payload[key])
@@ -46,7 +46,8 @@ class BatchList extends Component {
       });
 
       if (!batchInLog) {
-        Promise.all(
+        let items = [];
+        await Promise.all(
           this.props.shipmentItems.map(async data => {
             if (skuInfo[data.sku] && !data.sku.includes("HOL")) {
               if (data.sku.includes("OB-")) {
@@ -82,9 +83,25 @@ class BatchList extends Component {
                     }
                   });
               }
+              items.push(data);
             }
           })
         );
+        console.log(items);
+        axios
+          .post("/sendbatchitemsemail", {
+            batch: this.props.batchNumber,
+            data: items
+          })
+          .then(response => {
+            if (response.data.msg === "success") {
+              console.log("emailed");
+            } else if (response.data.msg === "fail") {
+              console.log("not emailed");
+            } else if (response.data.msg === "none") {
+              console.log("No unprinted batches");
+            }
+          });
       }
     });
   }
@@ -363,82 +380,80 @@ class BatchList extends Component {
           <p>
             Prepared By: <b>{this.props.picker}</b> &emsp;&emsp; Shipped By:{" "}
             <b>{this.props.shipper}</b>
-            <br />
-            <br />
-            <p style={{ width: "100%", display: "table" }}>
-              <span style={{ display: "table-cell", width: "75px" }}>
-                Set Started:
-              </span>
-              <span
-                style={{
-                  display: "table-cell",
-                  borderBottom: "1px solid black",
-                  width: "100px"
-                }}
-              />
-              <span style={{ display: "table-cell", width: "80px" }}>
-                Set Finished:
-              </span>
-              <span
-                style={{
-                  display: "table-cell",
-                  borderBottom: "1px solid black",
-                  width: "100px"
-                }}
-              />
-              <span style={{ display: "table-cell", width: "80px" }}>
-                Ship Started:
-              </span>
-              <span
-                style={{
-                  display: "table-cell",
-                  borderBottom: "1px solid black",
-                  width: "100px"
-                }}
-              />
-              <span style={{ display: "table-cell", width: "85px" }}>
-                Ship Finished:
-              </span>
-              <span
-                style={{
-                  display: "table-cell",
-                  borderBottom: "1px solid black",
-                  width: "100px"
-                }}
-              />
-            </p>
           </p>
-          <p>
-            # of mistakes:_______________ <br /> <br />
-            <p style={{ width: "100%", display: "table" }}>
-              <span style={{ display: "table-cell", width: "80px" }}>
-                Table Notes:
-              </span>{" "}
-              <span
-                style={{
-                  display: "table-cell",
-                  borderBottom: "1px solid black"
-                }}
-              />
-            </p>
-            <p style={{ width: "100%", display: "table" }}>
-              <span
-                style={{
-                  paddingTop: "25px",
-                  display: "table-cell",
-                  borderBottom: "1px solid black"
-                }}
-              />
-            </p>
-            <p style={{ width: "100%", display: "table" }}>
-              <span
-                style={{
-                  paddingTop: "25px",
-                  display: "table-cell",
-                  borderBottom: "1px solid black"
-                }}
-              />
-            </p>
+          <br />
+          <br />
+          <p style={{ width: "100%", display: "table" }}>
+            <span style={{ display: "table-cell", width: "75px" }}>
+              Set Started:
+            </span>
+            <span
+              style={{
+                display: "table-cell",
+                borderBottom: "1px solid black",
+                width: "100px"
+              }}
+            />
+            <span style={{ display: "table-cell", width: "80px" }}>
+              Set Finished:
+            </span>
+            <span
+              style={{
+                display: "table-cell",
+                borderBottom: "1px solid black",
+                width: "100px"
+              }}
+            />
+            <span style={{ display: "table-cell", width: "80px" }}>
+              Ship Started:
+            </span>
+            <span
+              style={{
+                display: "table-cell",
+                borderBottom: "1px solid black",
+                width: "100px"
+              }}
+            />
+            <span style={{ display: "table-cell", width: "85px" }}>
+              Ship Finished:
+            </span>
+            <span
+              style={{
+                display: "table-cell",
+                borderBottom: "1px solid black",
+                width: "100px"
+              }}
+            />
+          </p>
+          <p># of mistakes:_______________ </p> <br /> <br />
+          <p style={{ width: "100%", display: "table" }}>
+            <span style={{ display: "table-cell", width: "80px" }}>
+              Table Notes:
+            </span>{" "}
+            <span
+              style={{
+                display: "table-cell",
+                borderBottom: "1px solid black"
+              }}
+            />
+          </p>
+          <p style={{ width: "100%", display: "table" }}>
+            <span
+              style={{
+                paddingTop: "25px",
+                display: "table-cell",
+                borderBottom: "1px solid black"
+              }}
+            />
+          </p>
+          <p style={{ width: "100%", display: "table" }}>
+            <span
+              style={{
+                paddingTop: "25px",
+                display: "table-cell",
+                borderBottom: "1px solid black"
+              }}
+            />
           </p>
           <p style={{ width: "100%", display: "table" }}>
             <span style={{ display: "table-cell", width: "110px" }}>

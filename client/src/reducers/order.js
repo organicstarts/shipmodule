@@ -283,7 +283,7 @@ const applyFraud = (state, action) => {
   const data = action.payload;
   return Object.assign({}, state, {
     newDatas: data,
-    fraudDatas: state.savedFraud.concat(data),
+    fraudDatas: state.savedFraud.concat(data.reverse()),
     loading: false
   });
 };

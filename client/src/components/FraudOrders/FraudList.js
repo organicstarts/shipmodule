@@ -81,7 +81,7 @@ class FraudList extends Component {
           }
           return null;
         });
-
+        console.log(saved)
         axios
           .post("fb/writefraudtofile", {
             saved: saved

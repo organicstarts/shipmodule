@@ -62,6 +62,7 @@ router.get("/getshipping", (req, res) => {
     })
     .catch(err => {
       console.log(err);
+      res.send([])
     });
 });
 
@@ -78,6 +79,7 @@ router.get("/getordercount", (req, res) => {
     })
     .catch(err => {
       console.log(err);
+   
     });
 });
 

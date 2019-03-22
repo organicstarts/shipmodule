@@ -50,7 +50,7 @@ class InventoryTable extends Component {
 
           if (
             tempSku.charAt(0) === "H" &&
-            (tempSku.includes(`HP-DE`) || tempSku.includes(`HP-UK`))
+            (tempSku.includes(`HP-DE`) || tempSku.includes(`HP-UK`) || tempSku.includes(`HP-NL`))
           ) {
             skusplit[0] = split[0] + "-" + split[1] + "-" + split[2];
             skusplit[1] = split[3] + "-" + split[4] + "-" + split[5];
@@ -325,8 +325,10 @@ class InventoryTable extends Component {
       eastDatas[key].total,
       westDatas[key].total
     );
+    console.log(tempBGData[key]);
     await Promise.all(
       tempBGData[key].bundles.map(async data => {
+        console.log(data);
         if (
           data.tk.length > 0 &&
           (bgDatas[data.tk[0]].total < 100 || bgDatas[data.tk[1]].total < 100)

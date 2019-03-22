@@ -14,7 +14,6 @@ class FraudOrders extends Component {
     this.state = {
       loading: false,
       displayName: this.props.displayName,
-      fraudDatas: [],
       savedData: [],
       newData: [],
       oneData: 0
@@ -24,16 +23,16 @@ class FraudOrders extends Component {
     this.firebaseRef
       .orderByKey()
       .limitToLast(1)
-      .on("value", snapshot => {
+      .once("value", snapshot => {
         const payload = snapshot.val();
         if (payload) {
+          console.log(payload)
           const key = Object.keys(snapshot.val());
           this.setState({
             oneData: payload[key].id + 1
           });
         }
       })
-      .bind(this);
 
     this.fraudRef = firebase.database().ref("/fraud");
     this.fraudRef.orderByKey().on("value", snapshot => {

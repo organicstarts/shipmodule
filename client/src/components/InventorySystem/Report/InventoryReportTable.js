@@ -58,6 +58,8 @@ class InventoryLogTable extends Component {
     axios
       .put("fb/updateinventory", {
         dbname: this.props.location.state.warehouse,
+        brand: datas[key].brand,
+        stage: datas[key].stage,
         sku: key,
         total: datas[key].total,
         date: currentTime,

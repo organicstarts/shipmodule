@@ -16,7 +16,6 @@ import Scanning from "./components/InventorySystem/Scanning";
 import {
   Grid,
   Segment,
-  Container,
   Table,
   Image,
   Icon,
@@ -208,7 +207,7 @@ class Main extends Component {
                     loading={this.props.shippedLoading}
                   />
                 ) : (
-                  <Container>
+                  <div >
                     <Grid columns="equal">
                       <Grid.Row style={{ margin: "auto" }}>
                         <Grid.Column>
@@ -265,7 +264,7 @@ class Main extends Component {
                         }}
                       />
                     </Segment>
-                  </Container>
+                  </div>
                 )}
               </Grid.Column>
               <Grid.Column width={4}>
@@ -277,11 +276,11 @@ class Main extends Component {
                     loading={this.props.shippedLoading}
                   />
                 ) : (
-                  <Container>
+                  <div className="ui">
                     <Segment>
                       <Chart
                         width={"100%"}
-                        height={"600px"}
+                        height={"500px"}
                         chartType="PieChart"
                         loader={<div>Loading Chart</div>}
                         data={this.props.metricsByUser}
@@ -298,7 +297,7 @@ class Main extends Component {
                         }}
                       />
                     </Segment>
-                  </Container>
+                  </div>
                 )}
               </Grid.Column>
             </Grid.Row>

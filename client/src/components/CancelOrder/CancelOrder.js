@@ -11,6 +11,7 @@ class CancelOrder extends React.Component {
     super(props);
     this.state = {
       cancelNumber: "",
+      cancelOSWNumber: "",
       loading: false,
       show: false,
       msg: ""
@@ -29,14 +30,15 @@ class CancelOrder extends React.Component {
   setState for  batchDatas with shipshipstation response
   async get request Bigcommerce for coupon info and customer order count. append result to batchdatas
   */
-  handleSubmit() {
-    const { cancelNumber } = this.state;
+  handleSubmit(e) {
+    const cancel = this.state[e.target.name];
     this.setState({ loading: true, show: false });
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
+
     axios
       .post("fb/writetofile", {
         action: "Cancel Order",
-        orderNumber: cancelNumber,
+        orderNumber: cancel,
         user: this.props.displayName,
 
         currentTime
@@ -49,43 +51,80 @@ class CancelOrder extends React.Component {
         }
       });
 
-    axios
-      .put(`os/cancelorder`, {
-        ordernumber: cancelNumber,
-        message: "Brainiac Cancel",
-        noEmail: true
-      })
-      .then(response => {
-        if (response.data.msg === "success") {
-          axios
-            .post("ss/cancelorder", {
-              ordernumber: cancelNumber,
-              noEmail: true
-            })
-            .then(res => {
-              if (res.data.msg === "success") {
-                console.log("successfully cancelled order");
-                this.setState({
-                  loading: false,
-                  show: true,
-                  msg: "successfully cancelled order"
-                });
-              } else {
-                console.log("Order was never imported to shipstation");
-                this.setState({
-                  loading: false,
-                  show: true,
-                  msg:
-                    "Order was never imported to shipstation. Successfully cancelled order "
-                });
-              }
-            });
-        }
-      })
-      .catch(error => console.log(error));
+    if (e.target.name === "cancelNumber") {
+      axios
+        .put(`os/cancelorder`, {
+          ordernumber: cancel,
+          message: "Brainiac Cancel",
+          noEmail: true
+        })
+        .then(response => {
+          if (response.data.msg === "success") {
+            axios
+              .post("ss/cancelorder", {
+                ordernumber: cancel,
+                noEmail: true
+              })
+              .then(res => {
+                if (res.data.msg === "success") {
+                  console.log("successfully cancelled order");
+                  this.setState({
+                    loading: false,
+                    show: true,
+                    msg: "successfully cancelled order"
+                  });
+                } else {
+                  console.log("Order was never imported to shipstation");
+                  this.setState({
+                    loading: false,
+                    show: true,
+                    msg:
+                      "Order was never imported to shipstation. Successfully cancelled order "
+                  });
+                }
+              });
+          }
+        })
+        .catch(error => console.log(error));
+    } else {
+      axios
+        .post(`osw/cancelosworder`, {
+          orderNumber: cancel,
+          message: "Brainiac Cancel",
+          noEmail: true
+        })
+        .then(response => {
+          if (response.data.msg === "success") {
+            axios
+              .post("ss/cancelorder", {
+                ordernumber: cancel,
+                noEmail: true
+              })
+              .then(res => {
+                if (res.data.msg === "success") {
+                  console.log("successfully cancelled order");
+                  this.setState({
+                    loading: false,
+                    show: true,
+                    msg: "successfully cancelled order"
+                  });
+                } else {
+                  console.log("Order was never imported to shipstation");
+                  this.setState({
+                    loading: false,
+                    show: true,
+                    msg:
+                      "Order was never imported to shipstation. Successfully cancelled order "
+                  });
+                }
+              });
+          }
+        })
+        .catch(error => console.log(error));
+    }
   }
 
-  renderButton() {
+  renderButton(e) {
     if (this.state.loading) {
       return (
         <ClipLoader
@@ -98,7 +137,7 @@ class CancelOrder extends React.Component {
     }
     return (
       <Button
-        disabled={this.state.cancelNumber ? false : true}
+        disabled={this.state[e] ? false : true}
         size="large"
         color="red"
         type="submit"
@@ -115,11 +154,11 @@ class CancelOrder extends React.Component {
           <Header.Content>Cancel Retail Order</Header.Content>
         </Header>
         <Segment padded="very" stacked>
-          <Form size="large" onSubmit={this.handleSubmit}>
+          <Form size="large" name="cancelNumber" onSubmit={this.handleSubmit}>
             <Form.Field>
               <Form.Input
                 fluid
-                label="Order Number"
+                label="Retail Order Number"
                 placeholder="123456"
                 name="cancelNumber"
                 value={this.state.cancelNumber}
@@ -128,7 +167,38 @@ class CancelOrder extends React.Component {
               />
             </Form.Field>
 
-            <div style={{ textAlign: "center" }}> {this.renderButton()}</div>
+            <div style={{ textAlign: "center" }}>
+              {this.renderButton("cancelNumber")}
+            </div>
+          </Form>
+        </Segment>
+
+        <Header as="h1">
+          <Icon name="cancel" />
+          <Icon name="boxes" />
+          <Header.Content>Cancel Wholesale Order</Header.Content>
+        </Header>
+        <Segment padded="very" stacked>
+          <Form
+            size="large"
+            name="cancelOSWNumber"
+            onSubmit={this.handleSubmit}
+          >
+            <Form.Field>
+              <Form.Input
+                fluid
+                label="Wholesale Order Number"
+                placeholder="123456"
+                name="cancelOSWNumber"
+                value={this.state.cancelOSWNumber}
+                onChange={this.handleChange}
+                required
+              />
+            </Form.Field>
+
+            <div style={{ textAlign: "center" }}>
+              {this.renderButton("cancelOSWNumber")}
+            </div>
           </Form>
         </Segment>
 

@@ -20,26 +20,35 @@ const header = {
 /*-------------------------------------------------------------------
                             GET REQUESTS                            
 ---------------------------------------------------------------------*/
-router.get("/getbatch", (req, res) => {
-  const baseUrl = `https://ssapi.shipstation.com/shipments?sortDir=DESC&page=1&pageSize=500&includeShipmentItems=true`;
+router.get("/getbatch", async (req, res) => {
   res.set({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
   });
 
-  fetch(baseUrl, header)
-    .then(res => res.json())
-    .then(datas => {
-      return datas.shipments.filter(data => {
-        return data.batchNumber === req.query.batchNumber;
+  let resData = [];
+  let all = [];
+
+  for (let i = 1; i < 4; i++) {
+    resData = await getPageOrders(i);
+    all.push(resData);
+  }
+  let merge = [].concat.apply([], all);
+  res.send(merge);
+
+  function getPageOrders(page) {
+    const baseUrl = `https://ssapi.shipstation.com/shipments?sortDir=DESC&page=${page}&pageSize=500&includeShipmentItems=true`;
+    return fetch(baseUrl, header)
+      .then(res => res.json())
+      .then(datas => {
+        return datas.shipments.filter(data => {
+          return data.batchNumber === req.query.batchNumber;
+        });
+      })
+      .catch(error => {
+        res.json({ msg: error });
       });
-    })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(error => {
-      res.json({ msg: error });
-    });
+  }
 });
 
 router.get("/getshipmentorder", (req, res) => {

@@ -87,21 +87,21 @@ class BatchList extends Component {
             }
           })
         );
-        console.log(items);
-        axios
-          .post("/sendbatchitemsemail", {
-            batch: this.props.batchNumber,
-            data: items
-          })
-          .then(response => {
-            if (response.data.msg === "success") {
-              console.log("emailed");
-            } else if (response.data.msg === "fail") {
-              console.log("not emailed");
-            } else if (response.data.msg === "none") {
-              console.log("No unprinted batches");
-            }
-          });
+        // console.log(items);
+        // axios
+        //   .post("/sendbatchitemsemail", {
+        //     batch: this.props.batchNumber,
+        //     data: items
+        //   })
+        //   .then(response => {
+        //     if (response.data.msg === "success") {
+        //       console.log("emailed");
+        //     } else if (response.data.msg === "fail") {
+        //       console.log("not emailed");
+        //     } else if (response.data.msg === "none") {
+        //       console.log("No unprinted batches");
+        //     }
+        //   });
       }
     });
   }

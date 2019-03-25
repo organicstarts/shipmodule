@@ -90,7 +90,7 @@ class App extends Component {
         position: "relative"
       },
       mobileStyle: {
-        paddingLeft: width > 767 ? "calc(3.4rem + 30px)" : width > 373 ? "calc(3.4rem + 15px)" : "0",
+        paddingLeft: width > 767 ? "calc(3.4rem + 30px)" : width > 373 ? "3.4rem" : "0",
         paddingRight: 0,
         marginTop: "95px",
         width: "100%",

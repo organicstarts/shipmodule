@@ -121,6 +121,15 @@
     "productID": 97,
     "bundleID": [{ "productID": 346, "amount": 6 }]
   },
+  "HP-DE-5": {
+    "brand": "HiPP German",
+    "stage": "2+",
+    "package": 4,
+    "individual": 1,
+    "sku": "HP-DE-5",
+    "productID": 130,
+    "bundleID": [{ "productID": 346, "amount": 6 }]
+  },
   "HP-DE-2": {
     "brand": "HiPP German",
     "stage": "2",
@@ -635,6 +644,14 @@
     "individual": 1,
     "sku": "OB-HP-DE-1",
     "productID": 135
+  },
+  "OB-HP-DE-5": {
+    "brand": "Open/Broken HiPP German",
+    "stage": "2+",
+    "package": 4,
+    "individual": 1,
+    "sku": "OB-HP-DE-5",
+    "productID": 351
   },
   "OB-HP-DE-4": {
     "brand": "Open/Broken HiPP German",

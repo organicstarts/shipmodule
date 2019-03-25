@@ -277,4 +277,38 @@ router.post("/fulfillment", (req, res) => {
     });
 });
 
+router.post("/cancelosworder", (req, res) => {
+  const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders/${
+    req.body.ordernumber
+  }/cancel.json`;
+  fetch(baseUrl, header)
+    .then(res => res.json())
+    .then(data => {
+      if (req.body.noEmail || data.billing_address.email === req.body.email) {
+        fetch(baseUrl, {
+          method: "POST",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            Authorization: `Basic ${encodedString}`,
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          }
+          // ,
+          // body: JSON.stringify({
+          //   status_id: 5,
+          //   customer_message: req.body.message
+          // })
+        })
+          .then(e => {
+            res.json({ msg: "success" });
+          })
+          .catch(err => {
+            res.json({ msg: "fail" });
+          });
+      } else {
+        res.json({ msg: "invalid" });
+      }
+    });
+});
+
 module.exports = router;

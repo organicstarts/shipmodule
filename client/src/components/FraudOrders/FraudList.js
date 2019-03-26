@@ -75,7 +75,7 @@ class FraudList extends Component {
       function() {
         const { newDatas } = this.props;
         let saved = [];
-        newDatas.reverse().map(data => {
+        newDatas.map(data => {
           if (checkError(data)) {
             return saved.push(data);
           }

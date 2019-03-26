@@ -12,6 +12,7 @@ const header = {
     Authorization: `Basic ${encodedString}`,
     "Content-Type": "application/json",
     Accept: "application/json"
+    // secureOptions: "constants.SSL_OP_NO_TLSv1_2"
   }
 };
 
@@ -33,20 +34,35 @@ router.get("/getorder", (req, res) => {
     });
 });
 
-router.get("/getallorders", (req, res) => {
+router.get("/getallorders", async (req, res) => {
   //build api URL with user all order, if  order# exist set as min
-  const baseUrl = `https://organicstart.com/api/v2/orders?limit=200&sort=id:desc${
-    req.query.min > 0 ? `&min_id=${req.query.min}` : ""
-  }`;
 
-  fetch(baseUrl, header)
-    .then(res => res.json())
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  console.log(req.query.min);
+
+  let resData = [];
+  let all = [];
+
+  for (let i = 1; i < 5; i++) {
+    resData = await getPageOrders(i);
+    all.push(resData);
+    console.log(i);
+  }
+  let merge = [].concat.apply([], all);
+
+  res.send(merge);
+
+  function getPageOrders(page) {
+    const baseUrl = `https://organicstart.com/api/v2/orders?limit=250&sort=id:desc${
+      req.query.min > 0 ? `&min_id=${req.query.min}` : ""
+    }&page=${page}`;
+    return fetch(baseUrl, header)
+      .then(res => res.json())
+      .then(data => data)
+      .catch(error => {
+        console.log(error);
+        return [];
+      });
+  }
 });
 
 router.get("/getshipping", (req, res) => {
@@ -62,7 +78,7 @@ router.get("/getshipping", (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.send([])
+      res.send([]);
     });
 });
 
@@ -79,7 +95,6 @@ router.get("/getordercount", (req, res) => {
     })
     .catch(err => {
       console.log(err);
-   
     });
 });
 

@@ -311,7 +311,7 @@ class BatchList extends Component {
           </div>
           <div className="row align-items-center" style={{ padding: "0 15px" }}>
             <div className="col-1" style={{ textAlign: "center" }}>
-              &#10004;
+              &#10004;Picker/Checker
             </div>
             <div className="col-1" />
             <div className="col-2" style={{ textAlign: "center" }}>

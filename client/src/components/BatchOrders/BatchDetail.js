@@ -10,7 +10,8 @@ const BatchDetail = props => {
       }
     >
       <div className="row align-items-center">
-        <div className="col-1">
+        <div className="col-2">
+          <div className="checkbox" style={styles.checkboxStyle} />
           <div className="checkbox" style={styles.checkboxStyle} />
         </div>
         <div className="col-1">
@@ -21,7 +22,7 @@ const BatchDetail = props => {
             alt="product"
           />
         </div>
-        <div className="col-2" style={{ textAlign: "center" }}>
+        <div className="col-1" style={{ textAlign: "center" }}>
           {props.warehouse}
         </div>
         <div className="col-6">{`${props.text} ${props.options? (props.options) : ""}`}</div>
@@ -83,7 +84,8 @@ const styles = {
   checkboxStyle: {
     border: "1px solid #ccc",
     height: "30px",
-    width: "30px"
+    width: "30px",
+    float: "left"
   },
   color1: {
     marginTop: "15px",

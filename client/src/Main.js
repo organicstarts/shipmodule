@@ -79,6 +79,7 @@ class Main extends Component {
       default:
         return false;
     }
+    console.log(startTime)
     if (this.props.token) {
       this.props.getShipmentMetrics(this.props.token, startTime, endTime);
       this.props.getOrderMetrics(this.props.token, startTime, endTime);
@@ -290,7 +291,7 @@ class Main extends Component {
                             height: "80%"
                           },
                           pieSliceText: "value",
-                          colors: ["#306596", "#cc4731"],
+                          colors: ["#cc4731", "#306596"],
                           legend: "top",
                           title: "East Coast v. West Coast Shipments",
                           pieStartAngle: 45

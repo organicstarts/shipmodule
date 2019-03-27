@@ -8,10 +8,11 @@ import firebase from "../../../config/firebaseconf";
 import {
   Segment,
   Table,
-  Form,
-  FormGroup,
+  Input,
+  Select,
   Icon,
-  Button
+  Button,
+  Grid
 } from "semantic-ui-react";
 import axios from "axios";
 
@@ -363,40 +364,45 @@ class InboundLogTable extends Component {
 
     return (
       <Segment>
-        <Form>
-          <FormGroup widths="fifteen" inline>
-            <Form.Input
-              name="invoiceNum"
-              label="Invoice # Filter"
-              value={this.state.filter.value}
-              onChange={this.handleInputChange}
-            />
-            <Form.Select
-              label="Carrier"
-              placeholder="Select One"
-              name="carrier"
-              options={[
-                { text: "None", value: "" },
-                { text: "Bpost", value: "Bpost" },
-                { text: "DHL Economy", value: "DHL Economy" },
-                { text: "DHL Express", value: "DHL Express" },
-                { text: "Lux", value: "Lux" },
-                { text: "Post NL", value: "Post NL" },
-                { text: "Other", value: "Other" }
-              ]}
-              onChange={this.handleSelectChange}
-            />
-            <Button
-              color="red"
-              onClick={this.handleDelete}
-              loading={this.state.deleteLoading}
-            >
-              <Icon name="trash" />
-              Delete All
-            </Button>
-          </FormGroup>
-        </Form>
-
+        <Grid columns={3} padded stackable>
+          <Grid.Row>
+            <Grid.Column width={3}>
+              <Input
+                name="invoiceNum"
+                label="Invoice # Filter"
+                value={this.state.filter.value}
+                onChange={this.handleInputChange}
+              />
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <Select
+                label="Carrier"
+                placeholder="Select One"
+                name="carrier"
+                options={[
+                  { text: "None", value: "" },
+                  { text: "Bpost", value: "Bpost" },
+                  { text: "DHL Economy", value: "DHL Economy" },
+                  { text: "DHL Express", value: "DHL Express" },
+                  { text: "Lux", value: "Lux" },
+                  { text: "Post NL", value: "Post NL" },
+                  { text: "Other", value: "Other" }
+                ]}
+                onChange={this.handleSelectChange}
+              />
+            </Grid.Column>
+            <Grid.Column width={4}>
+              <Button
+                color="red"
+                onClick={this.handleDelete}
+                loading={this.state.deleteLoading}
+              >
+                <Icon name="trash" />
+                Delete All
+              </Button>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
         <Table sortable celled collapsing textAlign="center">
           <Table.Header>
             <Table.Row>

@@ -573,6 +573,14 @@
     "sku": "6-HP-UK-2-PRMX-BTL",
     "productID": 799
   },
+  "6-HP-UK-3-PRMX-BTL": {
+    "brand": "Premix HiPP",
+    "stage": "3",
+    "package": 6,
+    "individual": 1,
+    "sku": "6-HP-UK-3-PRMX-BTL",
+    "productID": 811
+  },
   "6-HP-HA-PRE-PRMX-BTL": {
     "brand": "Premix HiPP HA",
     "stage": "PRE",

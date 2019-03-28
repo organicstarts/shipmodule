@@ -12,7 +12,8 @@ import {
   jason, 
   peter,
   isaiah,
-  yvan
+  yvan,
+  chandler
 } from "../images/employeeIcons";
 
 
@@ -75,8 +76,8 @@ export const iconQuotes = {
     },
     chandler: {
         name: "Chandler",
-        quote: "With great power, comes great responsibilities.",
-        icon: daniel
+        quote: "The world is not enough!",
+        icon: chandler
     },
     joseph: {
         name: "Joseph",

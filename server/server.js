@@ -187,7 +187,9 @@ router.post("/sendbatchitemsemail", (req, res) => {
   });
 
   const htmlEmail =
-    `<h3> Batch #${req.body.batch} Information </h3> <ul>` + listItems + `</ul>`;
+    `<h3> Batch #${req.body.batch} Information </h3> <ul>` +
+    listItems +
+    `</ul>`;
 
   let transporter = nodemailer.createTransport(
     smtpTransport({
@@ -309,7 +311,7 @@ app.use(router);
 
 // any routes not picked up by the server api will be handled by the react router
 app.use("/*", staticFiles);
-
+process.env.UV_THREADPOOL_SIZE = 128;
 app.set("port", process.env.PORT || 3001);
 
 app.listen(app.get("port"), () => {

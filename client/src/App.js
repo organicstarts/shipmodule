@@ -16,8 +16,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: window.outerWidth > 767 ? true : false,
-      width: window.outerWidth
+      visible:
+        (window.outerWidth || window.screen.availWidth) > 767 ? true : false,
+      width: window.outerWidth || window.screen.availWidth
     };
     this.check();
     this.initListener();
@@ -35,7 +36,7 @@ class App extends Component {
 
   update = () => {
     this.setState({
-      width: window.outerWidth,
+      width: window.outerWidth || window.screen.availWidth,
       visible: this.state.width > 767 ? true : false
     });
   };
@@ -90,7 +91,8 @@ class App extends Component {
         position: "relative"
       },
       mobileStyle: {
-        paddingLeft: width > 767 ? "calc(3.4rem + 30px)" : width > 373 ? "3.4rem" : "0",
+        paddingLeft:
+          width > 767 ? "calc(3.4rem + 30px)" : width > 373 ? "3.4rem" : "0",
         paddingRight: 0,
         marginTop: "95px",
         width: "100%",

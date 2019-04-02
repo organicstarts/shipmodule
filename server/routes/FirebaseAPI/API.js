@@ -199,13 +199,13 @@ router.put("/updateinventory", (req, res) => {
   let dataRef = admin.database().ref(`/inventory/${req.body.dbname}`);
   dataRef
     .once("value", snap => snap.val())
-    .then(x => {
+    .then(async x => {
       if (
         (req.body.dbname === "eastcoastOB" ||
           req.body.dbname === "westcoastOB") &&
         req.body.noEquation
       ) {
-        dataRef.child(req.body.sku).update({ total: req.body.total });
+        await dataRef.child(req.body.sku).update({ total: req.body.total });
       } else if (
         (req.body.dbname === "eastcoastOB" ||
           req.body.dbname === "westcoastOB") &&
@@ -215,12 +215,12 @@ router.put("/updateinventory", (req, res) => {
         if (tempTotal < 0) {
           tempTotal = 0;
         }
-        dataRef.child(req.body.sku).update({ total: tempTotal });
+        await dataRef.child(req.body.sku).update({ total: tempTotal });
       } else if (
         (req.body.dbname === "eastcoast" || req.body.dbname === "westcoast") &&
         req.body.noEquation
       ) {
-        dataRef.child(req.body.sku).update({ total: req.body.total });
+        await dataRef.child(req.body.sku).update({ total: req.body.total });
       } else if (
         (req.body.dbname === "eastcoast" || req.body.dbname === "westcoast") &&
         !req.body.noEquation
@@ -230,18 +230,18 @@ router.put("/updateinventory", (req, res) => {
           if (tempTotal < 0) {
             tempTotal = 0;
           }
-          dataRef.child(req.body.obsku).update({ total: tempTotal });
+          await dataRef.child(req.body.obsku).update({ total: tempTotal });
         }
         let tempTotal = x.val()[req.body.sku].total + req.body.quantity;
         if (tempTotal < 0) {
           tempTotal = 0;
         }
-        dataRef.child(req.body.sku).update({ total: tempTotal });
+        await dataRef.child(req.body.sku).update({ total: tempTotal });
       } else if (
         req.body.dbname === "eastcoastReport" ||
         req.body.dbname === "westcoastReport"
       ) {
-        dataRef.child(req.body.sku).update({
+        await dataRef.child(req.body.sku).update({
           total: req.body.total,
           brand: req.body.brand,
           stage: req.body.stage ? req.body.stage : "",

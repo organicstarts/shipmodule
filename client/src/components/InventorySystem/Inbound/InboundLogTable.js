@@ -97,14 +97,14 @@ class InboundLogTable extends Component {
         await this.archiveInventory(data.key, index).then(() => {
           delete tempDBData[data.key];
           tempData[index] = "";
-          this.setState({
-            dbDatas: tempDBData,
-            datas: tempData
-          });
         });
       })
     );
-    this.setState({ deleteLoading: false });
+    this.setState({
+      dbDatas: tempDBData,
+      datas: tempData,
+      deleteLoading: false
+    });
   }
 
   async archiveInventory(key, index) {

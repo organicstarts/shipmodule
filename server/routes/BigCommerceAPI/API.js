@@ -65,13 +65,13 @@ router.get("/getallorders", async (req, res) => {
   }
 });
 
-router.get("/getshipping", (req, res) => {
+router.get("/getshipping", async (req, res) => {
   //build api URL with user orderid to get shipping info
   const baseUrl = `https://organicstart.com/api/v2/orders/${
     req.query.orderid
   }/shippingaddresses`;
 
-  fetch(baseUrl, header)
+  await fetch(baseUrl, header)
     .then(res => res.json())
     .then(data => {
       res.send(data);
@@ -82,13 +82,13 @@ router.get("/getshipping", (req, res) => {
     });
 });
 
-router.get("/getordercount", (req, res) => {
+router.get("/getordercount", async (req, res) => {
   //build api URL with user customerid to get history on purchase count
   const baseUrl = `https://organicstart.com/api/v2/orders?customer_id=${
     req.query.customerid
   }&limit=5`;
 
-  fetch(baseUrl, header)
+  await fetch(baseUrl, header)
     .then(res => res.json())
     .then(data => {
       res.send(data);

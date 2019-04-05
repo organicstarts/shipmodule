@@ -77,11 +77,12 @@ class FraudList extends Component {
         let saved = [];
         newDatas.map(data => {
           if (checkError(data)) {
+            data.timeStamp = moment().format("dddd, MMMM DD YYYY hh:mma");
             return saved.push(data);
           }
           return null;
         });
-        console.log(saved)
+        console.log(saved);
         axios
           .post("fb/writefraudtofile", {
             saved: saved
@@ -136,6 +137,8 @@ class FraudList extends Component {
             checked={
               this.state.checked[index] ? this.state.checked[index] : false
             }
+            createdAt={data.date_created? data.date_created: data.createdAt}
+            timeStamp={data.timeStamp ? data.timeStamp : ""}
           />
         );
       })

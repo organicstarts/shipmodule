@@ -166,20 +166,29 @@ const getAllOswOrders = async action => {
       await Promise.all(
         res.data.map(async data => {
           if (data.tracking !== null) {
-            await axios
-              .get(`osw/bpost?tracking=${data.tracking.Other}`)
-              .then(xmlData => {
-                let resXML = new DOMParser().parseFromString(
-                  xmlData.data,
-                  "application/xml"
-                );
-                if (resXML.getElementsByTagName("relabelBarcode")[0]) {
-                  data["relabel"] = resXML.getElementsByTagName(
-                    "relabelBarcode"
-                  )[0].textContent;
-                  resWithRelabel.push(data);
-                }
-              });
+            if (data.tracking.Other) {
+              await axios
+                .get(`osw/bpost?tracking=${data.tracking.Other}`)
+                .then(xmlData => {
+                  let resXML = new DOMParser().parseFromString(
+                    xmlData.data,
+                    "application/xml"
+                  );
+                  if (resXML.getElementsByTagName("relabelBarcode")[0]) {
+                    data["relabel"] = resXML.getElementsByTagName(
+                      "relabelBarcode"
+                    )[0].textContent;
+                    resWithRelabel.push(data);
+                  }
+                });
+            }
+            if (
+              (data.tracking.FedEx || data.tracking.USPS) &&
+              data.shippingMethod.includes("EXPRESS")
+            ) {
+              console.log(data)
+              resWithRelabel.push(data);
+            }
           }
         })
       );
@@ -195,7 +204,8 @@ const getAllOswOrders = async action => {
               if (
                 item.fulfillment_service === "mike" &&
                 data.relabel &&
-                !item.fulfillment_status
+                !item.fulfillment_status &&
+                data.shippingMethod.includes("FREE")
               ) {
                 await axios
                   .post("osw/fulfillment", {
@@ -203,6 +213,34 @@ const getAllOswOrders = async action => {
                     locationId: 41340099,
                     tracking: data.relabel,
                     trackingCompany: "USPS",
+                    lineItemId: item.id,
+                    notifyCustomer: true
+                  })
+                  .then(res => {
+                    console.log("success?", res);
+                    fulfilledData.push(data);
+                  });
+              }
+              if (
+                item.fulfillment_service === "mike" &&
+                !data.relabel &&
+                !item.fulfillment_status &&
+                data.shippingMethod.includes("EXPRESS")
+              ) {
+                let carrierArr = Object.keys(data.tracking);
+                let carrier = "";
+                if (carrierArr.length > 1) {
+                  carrier = carrierArr.filter(data => data.includes("FedEx"));
+                } else {
+                  carrier = carrierArr.filter(data => data.includes("USPS"));
+                }
+
+                await axios
+                  .post("osw/fulfillment", {
+                    orderId: data.id,
+                    locationId: 41340099,
+                    tracking: data.tracking[carrier],
+                    trackingCompany: carrier,
                     lineItemId: item.id,
                     notifyCustomer: true
                   })
@@ -227,6 +265,7 @@ const getAllOrders = async minId => {
       return dataArray.data;
     })
     .then(async datas => {
+      console.log(datas)
       return await Promise.all(
         datas.map(async data => {
           if (data.id)

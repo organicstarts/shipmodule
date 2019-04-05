@@ -77,6 +77,8 @@ const renderDetails = props => {
       >
         <h2 className="ui h2">Order #: {props.orderNumber}</h2>
         <h3 className="ui">Status: {props.status}</h3>
+        <h3 className="ui">Order Placed: {props.createdAt}</h3>
+        <h3 className="ui">Fraud Search Time Stamp: {props.timeStamp}</h3>
         <label>Fraud Order Checked:</label>
         <Checkbox
           style={{ marginLeft: "5px" }}

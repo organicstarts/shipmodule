@@ -142,9 +142,10 @@ router.post("/writefraudtofile", (req, res) => {
             country: req.body.saved[i].billing_address.country,
             phone: req.body.saved[i].billing_address.phone
           },
-          shippingInfo: req.body.saved[i].shippingInfo
+          shippingInfo: req.body.saved[i].shippingInfo,
+          timeStamp: req.body.saved[i].timeStamp,
+          createdAt: req.body.saved[i].date_created
         };
-
         dataRef.push(saveUser);
       }
     })

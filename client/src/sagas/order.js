@@ -182,12 +182,14 @@ const getAllOswOrders = async action => {
                   }
                 });
             }
-            if (
-              (data.tracking.FedEx || data.tracking.USPS) &&
-              data.shippingMethod.includes("EXPRESS")
-            ) {
-              console.log(data)
-              resWithRelabel.push(data);
+            if (data.shippingMethod !== null) {
+              if (
+                (data.tracking.FedEx || data.tracking.USPS) &&
+                data.shippingMethod.includes("EXPRESS")
+              ) {
+                console.log(data);
+                resWithRelabel.push(data);
+              }
             }
           }
         })
@@ -265,7 +267,7 @@ const getAllOrders = async minId => {
       return dataArray.data;
     })
     .then(async datas => {
-      console.log(datas)
+      console.log(datas);
       return await Promise.all(
         datas.map(async data => {
           if (data.id)

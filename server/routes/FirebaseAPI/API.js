@@ -67,7 +67,7 @@ router.post("/archiveinventory", async (req, res) => {
         warehouseLocation: req.body.warehouseLocation,
         timeStamp: req.body.timeStamp
       };
-      await dataRef.child("archive").push(logInventory);
+      dataRef.child("archive").push(logInventory);
     })
     .then(x => {
       res.json({

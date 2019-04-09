@@ -28,7 +28,7 @@ class Fulfillment extends Component {
   handleWholeClick() {
     this.setState({ loading: true });
     const endTime = moment()
-      .subtract(2, "days")
+      .subtract(1, "days")
       .format("YYYY-MM-DDThh:mm:ssZ");
     // const startTime = moment()
     //   .subtract(13, "days")

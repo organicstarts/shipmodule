@@ -198,10 +198,12 @@ router.get("/getorder", (req, res) => {
             //   ? datas.orders[0].note.split("Tracking Number: ")[1].split("\n")[0]
             //   : datas.orders[0].note,
             trackingObj,
+          id: datas.orders[0].id,
           createdAt: datas.orders[0].created_at,
           updatedAt: datas.orders[0].updated_at,
           lineItems: datas.orders[0].line_items.map(data => {
             return {
+              id: data.id,
               boxes: !isNaN(data.title.charAt(0))
                 ? data.title.split(" ")[0]
                 : null,

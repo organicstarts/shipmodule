@@ -1172,5 +1172,21 @@
     "individual": 1,
     "sku": "HOL-DINKEL-BISC",
     "productID": 139
+  },
+  "LULU-1": {
+    "brand": "Loulouka",
+    "stage": "1",
+    "package": 6,
+    "individual": 1,
+    "sku": "LULU-1",
+    "productID": 999
+  },
+  "LULU-2": {
+    "brand": "Loulouka",
+    "stage": "2",
+    "package": 6,
+    "individual": 1,
+    "sku": "LULU-1",
+    "productID": 999
   }
 }

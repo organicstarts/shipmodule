@@ -46,7 +46,7 @@ router.post("/writeinventorytofile", (req, res) => {
 /*
 save inbound products to inventory archive
  */
-router.post("/archiveinventory", (req, res) => {
+router.post("/archiveinventory", async (req, res) => {
   let dataRef = admin.database().ref("/inventory");
 
   dataRef
@@ -67,7 +67,7 @@ router.post("/archiveinventory", (req, res) => {
         warehouseLocation: req.body.warehouseLocation,
         timeStamp: req.body.timeStamp
       };
-      dataRef.child("archive").push(logInventory);
+      await dataRef.child("archive").push(logInventory);
     })
     .then(x => {
       res.json({

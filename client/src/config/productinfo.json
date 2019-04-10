@@ -1190,9 +1190,9 @@
   "LULU-2": {
     "brand": "Loulouka",
     "stage": "2",
-    "package": 6,
+    "package": 3,
     "individual": 1,
-    "sku": "LULU-1",
+    "sku": "LULU-2",
     "productID": 836,
     "bundleID": [
       { "productID": 842, "amount": 3 },

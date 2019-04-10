@@ -1179,7 +1179,13 @@
     "package": 6,
     "individual": 1,
     "sku": "LULU-1",
-    "productID": 999
+    "productID": 835,
+    "bundleID": [
+      { "productID": 838, "amount": 6 },
+      { "productID": 839, "amount": 12 },
+      { "productID": 840, "amount": 18 },
+      { "productID": 841, "amount": 24 }
+    ]
   },
   "LULU-2": {
     "brand": "Loulouka",
@@ -1187,6 +1193,20 @@
     "package": 6,
     "individual": 1,
     "sku": "LULU-1",
-    "productID": 999
+    "productID": 836,
+    "bundleID": [
+      { "productID": 842, "amount": 3 },
+      { "productID": 843, "amount": 6 },
+      { "productID": 844, "amount": 12 },
+      { "productID": 845, "amount": 18 }
+    ]
+  },
+  "LULU-3": {
+    "brand": "Loulouka",
+    "stage": "3",
+    "package": 6,
+    "individual": 1,
+    "sku": "LULU-3",
+    "productID": 837
   }
 }

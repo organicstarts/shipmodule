@@ -170,7 +170,7 @@ const getOswOrder = async action => {
               let carrier = carrierArr
                 .filter(data => data.includes("FedEx"))
                 .toString();
-              if (!carrierArr) {
+              if (!carrier) {
                 carrier = carrierArr
                   .filter(data => data.includes("USPS"))
                   .toString();
@@ -273,7 +273,7 @@ const getAllOswOrders = async action => {
               let carrier = carrierArr
                 .filter(data => data.includes("FedEx"))
                 .toString();
-              if (!carrierArr) {
+              if (!carrier) {
                 carrier = carrierArr
                   .filter(data => data.includes("USPS"))
                   .toString();

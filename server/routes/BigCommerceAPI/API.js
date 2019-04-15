@@ -78,7 +78,7 @@ router.get("/getshipping", async (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.send([]);
+      res.send(null);
     });
 });
 

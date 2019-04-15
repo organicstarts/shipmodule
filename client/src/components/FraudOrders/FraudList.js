@@ -126,9 +126,9 @@ class FraudList extends Component {
               "$1-$2-$3"
             )}
             shipping={data.shippingInfo}
-            shippingCity={data.shippingInfo[0].city}
-            shippingState={data.shippingInfo[0].state}
-            shippingZip={data.shippingInfo[0].zip}
+            shippingCity={data.shippingInfo ? data.shippingInfo[0].city : ""}
+            shippingState={data.shippingInfo ? data.shippingInfo[0].state : ""}
+            shippingZip={data.shippingInfo ? data.shippingInfo[0].zip : ""}
             show={this.state.toggle[index]}
             index={index}
             handleClick={this.toggleMenu.bind(this)}
@@ -137,7 +137,7 @@ class FraudList extends Component {
             checked={
               this.state.checked[index] ? this.state.checked[index] : false
             }
-            createdAt={data.date_created? data.date_created: data.createdAt}
+            createdAt={data.date_created ? data.date_created : data.createdAt}
             timeStamp={data.timeStamp ? data.timeStamp : ""}
           />
         );
@@ -198,25 +198,27 @@ const checkError = data => {
     if (!emailArray.includes(emailEnding.toLowerCase())) {
       errors.push("email");
     }
-    if (
-      data.shippingInfo[0].city
-        .toLowerCase()
-        .replace(/^[.\s]+|[.\s]+$/g, "") !==
-      data.billing_address.city.toLowerCase().replace(/^[.\s]+|[.\s]+$/g, "")
-    ) {
-      errors.push("cities");
-    }
-    if (data.shippingInfo[0].state !== data.billing_address.state) {
-      errors.push("states");
-    }
-    if (
-      data.shippingInfo[0].zip.substring(0, 5) !==
-      data.billing_address.zip.substring(0, 5)
-    ) {
-      errors.push("postalcodes");
-    }
-    if (data.shippingInfo[0].country !== data.billing_address.country) {
-      errors.push("countries");
+    if (data.shippingInfo) {
+      if (
+        data.shippingInfo[0].city
+          .toLowerCase()
+          .replace(/^[.\s]+|[.\s]+$/g, "") !==
+        data.billing_address.city.toLowerCase().replace(/^[.\s]+|[.\s]+$/g, "")
+      ) {
+        errors.push("cities");
+      }
+      if (data.shippingInfo[0].state !== data.billing_address.state) {
+        errors.push("states");
+      }
+      if (
+        data.shippingInfo[0].zip.substring(0, 5) !==
+        data.billing_address.zip.substring(0, 5)
+      ) {
+        errors.push("postalcodes");
+      }
+      if (data.shippingInfo[0].country !== data.billing_address.country) {
+        errors.push("countries");
+      }
     }
     if (errors.length > 0) return errors;
     return null;

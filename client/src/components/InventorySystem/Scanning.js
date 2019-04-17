@@ -24,7 +24,7 @@ class Scanning extends Component {
         path = "/inboundLogging";
         break;
       case 2:
-        path = "/obReportLogging";
+        path = "/batchproductcheck";
         break;
       case 3:
         path = "/babycareLogging";
@@ -34,6 +34,9 @@ class Scanning extends Component {
         break;
       case 5:
         path = "/returnLogging";
+        break;
+      case 6:
+        path = "/obReportLogging";
         break;
       default:
         path = "/";
@@ -57,11 +60,12 @@ class Scanning extends Component {
       { id: 1, icon: "zip", name: "Inbound Scan", color: "blue", show: true },
       {
         id: 2,
-        icon: "broken chain",
-        name: "Open Broken Scan",
-        color: "orange",
+        icon: "calendar check outline",
+        name: "Batch Item Check",
+        color: "purple",
         show: true
       },
+
       {
         id: 3,
         icon: "fly",
@@ -70,15 +74,20 @@ class Scanning extends Component {
         show: true
       },
       { id: 4, icon: "tag", name: "Toy Scan", color: "red", show: true },
-      { id: 5, icon: "tv", name: "Return Scan", color: "green", show: true }
+      // { id: 5, icon: "tv", name: "Return Scan", color: "green", show: true },
+      {
+        id: 6,
+        icon: "broken chain",
+        name: "Open Broken Scan",
+        color: "orange",
+        show: true
+      }
     ];
 
     return (
       <div>
         <MediaQuery maxWidth={374}>
-          <Header color="olive">
-            Inventory Scanning
-          </Header>
+          <Header color="olive">Inventory Scanning</Header>
           <Grid columns={2}>
             {buttons.map(button => {
               if (button.show) {

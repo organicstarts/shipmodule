@@ -17,6 +17,7 @@ import ReturnLogging from "./InventorySystem/Report/ReturnLogging";
 import OBReportLogging from "./InventorySystem/Report/OBReportLogging";
 import BabyCareLogging from "./InventorySystem/Report/BabyCareLogging";
 import ToyLogging from "./InventorySystem/Report/ToyLogging";
+import BatchProductCheck from "./InventorySystem/Report/BatchProductCheck";
 import OpenBrokenTable from "./InventorySystem/InventoryTable/OpenBrokenTable";
 import CancelOrder from "./CancelOrder/CancelOrder";
 import Scanning from "./InventorySystem/Scanning";
@@ -38,6 +39,7 @@ export {
   InventoryReportTable,
   ArchiveLogTable,
   ReportLogging,
+  BatchProductCheck,
   ReturnLogging,
   OBReportLogging,
   BabyCareLogging,

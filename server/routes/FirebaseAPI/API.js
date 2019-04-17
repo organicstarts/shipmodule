@@ -161,6 +161,37 @@ router.post("/writefraudtofile", (req, res) => {
     });
 });
 
+router.post("/batchinfo", (req, res) => {
+  let dataRef = admin.database().ref("/batchinfo");
+  let payload = [{ batch: req.body.batch, products: req.body.products }];
+  dataRef
+    .once("value", snap => {
+      if (snap.numChildren() > 2) {
+        const val = snap.val();
+        const result = Object.keys(val)
+          .map(key => val[key])
+          .reverse();
+        payload = payload.concat(result);
+        dataRef.remove();
+      }
+    })
+    .then(x => {
+      if (payload.length <= 1) {
+        dataRef.push(payload).then(x => {
+          res.status(200).send({ msg: "success" });
+        });
+      } else {
+        for (let i = 0; i < 2; i++) {
+          dataRef.push(payload[i]);
+        }
+        res.status(200).send({ msg: "success" });
+      }
+    })
+    .catch(e => {
+      res.status(400).send({ msg: "fail" });
+    });
+});
+
 /*-------------------------------------------------------------------
                             PUT REQUESTS                            
 ---------------------------------------------------------------------*/

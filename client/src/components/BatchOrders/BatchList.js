@@ -87,6 +87,28 @@ class BatchList extends Component {
             }
           })
         );
+       
+        // let babyProducts = [];
+        // this.props.shipmentItems.map(data => {
+        //   if (data.warehouseLocation.match(/^[A-Za-z]{1}/g)) {
+        //     babyProducts.push(data);
+        //   }
+        // });
+
+        // axios
+        //   .post("fb/batchinfo", {
+        //     batch: this.props.batchNumber,
+        //     products: babyProducts
+        //   })
+        //   .then(response => {
+        //     if (response.data.msg === "success") {
+        //       console.log("inventory logged");
+        //     } else if (response.data.msg === "fail") {
+        //       console.log("failed to log.");
+        //     }
+        //   });
+
+        
         // console.log(items);
         // axios
         //   .post("/sendbatchitemsemail", {
@@ -519,7 +541,7 @@ const calculateTime = (startDate, endDate) => {
 const calculateBox = dimension => {
   if (dimension) {
     const boxSize = dimension.height * dimension.width * dimension.length;
-    return boxes[boxSize].name;
+    if (boxes[boxSize]) return boxes[boxSize].name;
   }
   return "";
 };

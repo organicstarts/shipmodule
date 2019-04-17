@@ -24,7 +24,8 @@ import {
   OpenBrokenTable,
   CancelOrder,
   Scanning,
-  Fulfillment
+  Fulfillment,
+  BatchProductCheck
 } from "./components/";
 
 const Router = () => (
@@ -48,6 +49,7 @@ const Router = () => (
       <Route path="/inventoryTable" component={InventoryTable} />
       <Route path="/inventoryReport" component={InventoryReportTable} />
       <Route path="/reportLogging" component={ReportLogging} />
+      <Route path="/batchproductcheck" component={BatchProductCheck} />
       <Route path="/returnLogging" component={ReturnLogging} />
       <Route path="/obReportLogging" component={OBReportLogging} />
       <Route path="/babycareLogging" component={BabyCareLogging} />

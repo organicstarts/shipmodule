@@ -1,5 +1,5 @@
 import "module-alias/register";
-import cred from "@bgauth/auth.json";
+const cred = require("@bgauth/auth.json");
 import serviceAccount from "@bgauth/serviceAccountKey.json";
 import bodyParser from "body-parser";
 import express from "express";

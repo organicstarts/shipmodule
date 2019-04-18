@@ -166,22 +166,23 @@ router.post("/batchinfo", (req, res) => {
   let payload = [{ batch: req.body.batch, products: req.body.products }];
   dataRef
     .once("value", snap => {
-      if (snap.numChildren() > 2) {
+      if (snap.numChildren() > 50) {
         const val = snap.val();
         const result = Object.keys(val)
           .map(key => val[key])
           .reverse();
-        payload = payload.concat(result);
+
+        result.map(data => payload.push(data));
         dataRef.remove();
       }
     })
     .then(x => {
       if (payload.length <= 1) {
-        dataRef.push(payload).then(x => {
+        dataRef.push(payload[0]).then(x => {
           res.status(200).send({ msg: "success" });
         });
       } else {
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 25; i++) {
           dataRef.push(payload[i]);
         }
         res.status(200).send({ msg: "success" });

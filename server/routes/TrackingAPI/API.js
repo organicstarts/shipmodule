@@ -103,7 +103,7 @@ router.get("/getallorders", (req, res) => {
   });
   const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders.json?limit=250&created_at_max=${
     req.query.endTime
-  }`;
+  }&fulfillment_status=unshipped`;
 
   fetch(baseUrl, header)
     .then(res => res.json())
@@ -111,7 +111,7 @@ router.get("/getallorders", (req, res) => {
       let retrieveData = [];
       data.orders.map(data => {
         let trackingObj = {};
-        if (data.fulfillment_status !== "fulfilled") {
+        if (data.fulfillment_status !== "fulfilled" && data.shipping_lines[0]) {
           if (data.note && data.financial_status === "paid") {
             let carrier = data.note
               .split("\n")

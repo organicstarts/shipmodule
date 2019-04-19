@@ -134,8 +134,20 @@ function getAllproducts(page, limit) {
 
   return fetch(baseUrl, header)
     .then(res => res.json())
-    .then(data => {
-      return data;
+    .then(datas => {
+      const result = [];
+      datas.map(data => {
+        result.push({
+          name: data.name,
+          calculated_price: data.calculated_price,
+          inventory_level: data.inventory_level,
+          custom_url: data.custom_url,
+          categories: data.categories,
+          primary_image: data.primary_image,
+          is_visible: data.is_visible
+        });
+      });
+      return result;
     });
 }
 

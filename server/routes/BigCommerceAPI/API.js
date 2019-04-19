@@ -138,6 +138,7 @@ function getAllproducts(page, limit) {
       const result = [];
       datas.map(data => {
         result.push({
+          id: data.id,
           name: data.name,
           calculated_price: data.calculated_price,
           inventory_level: data.inventory_level,

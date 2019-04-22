@@ -973,6 +973,14 @@
     "sku": "HOL-HIRSE-MLK",
     "productID": 171
   },
+  "HOL-HIRSE": {
+    "brand": "Holle Cereal",
+    "stage": "Hirse",
+    "package": 6,
+    "individual": 1,
+    "sku": "HOL-HIRSE",
+    "productID": 88
+  },
   "HOL-PEARAPR-PURE": {
     "brand": "Holle Puree",
     "stage": "Pear Apricot",

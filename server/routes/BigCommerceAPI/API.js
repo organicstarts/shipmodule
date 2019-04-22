@@ -145,7 +145,9 @@ function getAllproducts(page, limit) {
           custom_url: data.custom_url,
           categories: data.categories,
           primary_image: data.primary_image,
-          is_visible: data.is_visible
+          is_visible: data.is_visible,
+          sku: data.sku,
+          inventory_tracking: data.inventory_tracking
         });
       });
       return result;

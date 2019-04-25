@@ -2,6 +2,7 @@ import "module-alias/register";
 const router = require("express").Router();
 const fetch = require("node-fetch");
 import bigCommerce from "@bgauth/auth.json";
+const moment = require("moment");
 const username = bigCommerce.bigcommerce.user;
 const password = bigCommerce.bigcommerce.key;
 let encodedString = Buffer.from(username + ":" + password).toString("base64");
@@ -289,6 +290,8 @@ router.put("/cancelorder", (req, res) => {
     req.body.ordernumber
   }`;
 
+  let date = moment().format("YYYY-MM-DDThh:mm:ssZ");
+  let cancelMsg = req.body.message + date;
   fetch(baseUrl, header)
     .then(res => res.json())
     .then(data => {
@@ -303,7 +306,7 @@ router.put("/cancelorder", (req, res) => {
           },
           body: JSON.stringify({
             status_id: 5,
-            customer_message: req.body.message
+            customer_message: cancelMsg
           })
         })
           .then(e => {

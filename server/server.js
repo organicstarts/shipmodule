@@ -187,7 +187,9 @@ router.post("/sendbatchitemsemail", (req, res) => {
   });
 
   const htmlEmail =
-    `<h3> Batch #${req.body.batch} Information </h3> <ul>` +
+    `<h3> Batch #${req.body.batch} Information ${
+      req.body.warehouse
+    }</h3> <ul>` +
     listItems +
     `</ul>`;
 

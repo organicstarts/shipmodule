@@ -291,7 +291,7 @@ router.put("/cancelorder", (req, res) => {
   }`;
 
   let date = moment().format("YYYY-MM-DDThh:mm:ssZ");
-  let cancelMsg = req.body.message + date;
+  let cancelMsg = req.body.message + " - " + date;
   fetch(baseUrl, header)
     .then(res => res.json())
     .then(data => {

@@ -2,6 +2,12 @@ import React from "react";
 import { Table, Button, Input } from "semantic-ui-react";
 import "../inventory.css";
 
+const getWarningColor = total => {
+  if (total < 100) return "red";
+  if (total < 200) return "orange";
+  if (total < 300) return "yellow";
+};
+
 const InventoryReportDetail = props => {
   return (
     <Table.Body>
@@ -24,7 +30,12 @@ const InventoryReportDetail = props => {
             />
           </Table.Cell>
         ) : (
-          <Table.Cell style={styles.border}>{props.eastTotal}</Table.Cell>
+          <Table.Cell
+            style={styles.border}
+            className={getWarningColor(props.eastTotal)}
+          >
+            <strong> {props.eastTotal}</strong>
+          </Table.Cell>
         )}
 
         {props.showInput ? (
@@ -40,7 +51,12 @@ const InventoryReportDetail = props => {
             />
           </Table.Cell>
         ) : (
-          <Table.Cell style={styles.border}>{props.westTotal}</Table.Cell>
+          <Table.Cell
+            style={styles.border}
+            className={getWarningColor(props.westTotal)}
+          >
+            <strong>{props.westTotal}</strong>
+          </Table.Cell>
         )}
 
         {props.showInput ? (

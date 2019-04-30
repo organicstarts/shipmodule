@@ -50,7 +50,9 @@ class InventoryTable extends Component {
 
           if (
             tempSku.charAt(0) === "H" &&
-            (tempSku.includes(`HP-DE`) || tempSku.includes(`HP-UK`) || tempSku.includes(`HP-NL`))
+            (tempSku.includes(`HP-DE`) ||
+              tempSku.includes(`HP-UK`) ||
+              tempSku.includes(`HP-NL`))
           ) {
             skusplit[0] = split[0] + "-" + split[1] + "-" + split[2];
             skusplit[1] = split[3] + "-" + split[4] + "-" + split[5];
@@ -528,6 +530,39 @@ class InventoryTable extends Component {
             Calculate Total
           </Button>
         )}
+        <p>
+          {`Quantity Levels Legend: `}
+          <span
+            className="red"
+            style={{
+              height: "10px",
+              width: "10px",
+              borderRadius: "15%",
+              display: "inline-block"
+            }}
+          />
+          {` = 100 < | `}
+          <span
+            className="orange"
+            style={{
+              height: "10px",
+              width: "10px",
+              borderRadius: "15%",
+              display: "inline-block"
+            }}
+          />
+          {` = 200 < | `}
+          <span
+            className="yellow"
+            style={{
+              height: "10px",
+              width: "10px",
+              borderRadius: "15%",
+              display: "inline-block"
+            }}
+          />
+          {` = 300 < `}
+        </p>
         <div>{this.renderLogList()}</div>
       </Segment>
     );

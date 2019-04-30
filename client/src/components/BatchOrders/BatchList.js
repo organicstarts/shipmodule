@@ -46,7 +46,7 @@ class BatchList extends Component {
       });
 
       if (!batchInLog) {
-        let items = [];
+        // let items = [];
         await Promise.all(
           this.props.shipmentItems.map(async data => {
             if (skuInfo[data.sku] && !data.sku.includes("HOL")) {
@@ -83,9 +83,9 @@ class BatchList extends Component {
                     }
                   });
               }
-              if (data.sku === "HP-UK-2") {
-                items.push(data);
-              }
+              // if (data.sku === "HP-UK-2") {
+              //   items.push(data);
+              // }
             }
           })
         );
@@ -110,22 +110,22 @@ class BatchList extends Component {
         //     }
         //   });
 
-        console.log(items);
-        axios
-          .post("/sendbatchitemsemail", {
-            batch: this.props.batchNumber,
-            data: items,
-            warehouse: warehouse
-          })
-          .then(response => {
-            if (response.data.msg === "success") {
-              console.log("emailed");
-            } else if (response.data.msg === "fail") {
-              console.log("not emailed");
-            } else if (response.data.msg === "none") {
-              console.log("No unprinted batches");
-            }
-          });
+        // console.log(items);
+        // axios
+        //   .post("/sendbatchitemsemail", {
+        //     batch: this.props.batchNumber,
+        //     data: items,
+        //     warehouse: warehouse
+        //   })
+        //   .then(response => {
+        //     if (response.data.msg === "success") {
+        //       console.log("emailed");
+        //     } else if (response.data.msg === "fail") {
+        //       console.log("not emailed");
+        //     } else if (response.data.msg === "none") {
+        //       console.log("No unprinted batches");
+        //     }
+        //   });
       }
     });
   }

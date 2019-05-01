@@ -90,25 +90,25 @@ class BatchList extends Component {
           })
         );
 
-        // let babyProducts = [];
-        // this.props.shipmentItems.map(data => {
-        //   if (data.warehouseLocation.match(/^[A-Za-z]{1}/g)) {
-        //     babyProducts.push(data);
-        //   }
-        // });
+        let babyProducts = [];
+        this.props.shipmentItems.map(data => {
+          if (data.warehouseLocation.match(/^[A-Za-z]{1}/g)) {
+            babyProducts.push(data);
+          }
+        });
 
-        // axios
-        //   .post("fb/batchinfo", {
-        //     batch: this.props.batchNumber,
-        //     products: babyProducts
-        //   })
-        //   .then(response => {
-        //     if (response.data.msg === "success") {
-        //       console.log("inventory logged");
-        //     } else if (response.data.msg === "fail") {
-        //       console.log("failed to log.");
-        //     }
-        //   });
+        axios
+          .post("fb/batchinfo", {
+            batch: this.props.batchNumber,
+            products: babyProducts
+          })
+          .then(response => {
+            if (response.data.msg === "success") {
+              console.log("inventory logged");
+            } else if (response.data.msg === "fail") {
+              console.log("failed to log.");
+            }
+          });
 
         // console.log(items);
         // axios

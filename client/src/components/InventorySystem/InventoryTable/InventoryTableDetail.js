@@ -98,6 +98,11 @@ const InventoryReportDetail = props => {
           style={props.email ? styles.border : styles.borderLess}
           disabled={props.email ? false : true}
         >
+          {/* <Button
+            onClick={() => props.handlePushTotalToBigCommerce(props.sku)}
+            color="teal"
+            icon="upload"
+          /> */}
           {props.handleInfinite !== "" ? (
             <Button
               onClick={() => props.handleInfinite(props.sku)}
@@ -157,7 +162,8 @@ const styles = {
     borderBottom: "1px solid #ccc",
     borderRight: "1px solid #ccc",
     borderCollapse: "separate",
-    borderSpacing: "4px"
+    borderSpacing: "4px",
+    color: "black"
   },
   borderLess: {
     borderBottom: "1px solid #ccc",

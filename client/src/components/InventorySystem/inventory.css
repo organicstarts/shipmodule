@@ -23,11 +23,11 @@
 }
 
 .red {
-  background-color: rgba(255, 0, 0, 0.5);
+  background-color: rgba(255, 0, 0, .5);
 }
 .yellow {
-  background-color: rgba(255, 251, 0, 0.705);;
+  background-color: rgba(255, 251, 0, 0.5);;
 }
 .orange {
-  background-color: rgba(255, 145, 0, 0.8);;
+  background-color: rgba(255, 145, 0, 0.5);;
 }

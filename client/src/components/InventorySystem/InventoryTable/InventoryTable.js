@@ -7,12 +7,19 @@ import firebase from "../../../config/firebaseconf";
 import axios from "axios";
 import { Segment, Table, Button } from "semantic-ui-react";
 
+const compare = (a, b) => {
+  const skuA = Object.keys(a);
+  const skuB = Object.keys(b);
+  return a[skuA].orderOfImportance - b[skuB].orderOfImportance;
+};
+
 class InventoryTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
       toggle: {},
       eastDatas: {},
+      productArray: [],
       westDatas: {},
       bgDatas: {},
       loading: true,
@@ -24,6 +31,7 @@ class InventoryTable extends Component {
     this.toggleInput = this.toggleInput.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.totalChange = this.totalChange.bind(this);
+    // this.pushTotalToBigCommerce = this.pushTotalToBigCommerce.bind(this);
     this.calculateAllTotal = this.calculateAllTotal.bind(this);
   }
 
@@ -83,6 +91,11 @@ class InventoryTable extends Component {
       if (payload.eastcoast) {
         this.setState({
           eastDatas: payload.eastcoast,
+          productArray: Object.keys(payload.eastcoast)
+            .map(key => {
+              return { [key]: payload.eastcoast[key] };
+            })
+            .sort(compare),
           westDatas: payload.westcoast,
           toggle: Object.keys(payload.eastcoast).map(element => false)
         });
@@ -156,13 +169,38 @@ class InventoryTable extends Component {
       [dataName]: data
     });
   };
+
+  // async pushTotalToBigCommerce(key) {
+  //   const { eastDatas, westDatas, bgDatas } = this.state;
+  //   const tempBGData = { ...bgDatas };
+  //   const total = this.calculateTotal(
+  //     eastDatas[key].total,
+  //     westDatas[key].total
+  //   );
+  //   axios
+  //     .put("os/updateinventory", {
+  //       noEquation: true,
+  //       inventory_level: total,
+  //       productID: bgDatas[key].id
+  //     })
+  //     .then(response => {
+  //       if (response.data.msg === "success") {
+  //         console.log("logged");
+  //       } else if (response.data.msg === "fail") {
+  //         console.log("failed to log.");
+  //       }
+  //     });
+  //   if (total > 100) {
+  //     await this.enableBundle(tempBGData[key].bundles, total / 2);
+  //   } else {
+  //     await this.disableBundle(tempBGData[key].bundles);
+  //   }
+  //   tempBGData[key].total = total;
+  //   this.setState({ bgDatas: tempBGData });
+  // }
+
   async totalChange(key, db) {
-    const { eastDatas, westDatas, bgDatas } = this.state;
-    const tempBGData = { ...bgDatas };
-    const total = this.calculateTotal(
-      eastDatas[key].total,
-      westDatas[key].total
-    );
+    const { eastDatas, westDatas } = this.state;
 
     axios
       .put("fb/updateinventory", {
@@ -192,26 +230,6 @@ class InventoryTable extends Component {
           console.log("failed to log.");
         }
       });
-    axios
-      .put("os/updateinventory", {
-        noEquation: true,
-        inventory_level: total,
-        productID: bgDatas[key].id
-      })
-      .then(response => {
-        if (response.data.msg === "success") {
-          console.log("logged");
-        } else if (response.data.msg === "fail") {
-          console.log("failed to log.");
-        }
-      });
-    if (total > 100) {
-      await this.enableBundle(tempBGData[key].bundles, total / 2);
-    } else {
-      await this.disableBundle(tempBGData[key].bundles);
-    }
-    tempBGData[key].total = total;
-    this.setState({ bgDatas: tempBGData });
   }
 
   disableBundle(datas) {
@@ -327,7 +345,7 @@ class InventoryTable extends Component {
       eastDatas[key].total,
       westDatas[key].total
     );
-    console.log(tempBGData[key]);
+
     await Promise.all(
       tempBGData[key].bundles.map(async data => {
         console.log(data);
@@ -411,9 +429,10 @@ class InventoryTable extends Component {
   }
 
   mapTableList() {
-    const { eastDatas, westDatas, bgDatas, toggle } = this.state;
+    const { eastDatas, westDatas, productArray, bgDatas, toggle } = this.state;
 
-    return Object.keys(eastDatas).map((key, index) => {
+    return productArray.map((data, index) => {
+      const key = Object.keys(data)[0];
       return (
         <InventoryTableDetail
           index={index}
@@ -452,6 +471,7 @@ class InventoryTable extends Component {
                 : 0
               : 0
           }
+          // handlePushTotalToBigCommerce={this.pushTotalToBigCommerce}
           handleInfinite={this.handleInfinite}
           handleOutOfStockSingle={this.handleOutOfStockSingle}
           handleOutOfStockBundle={this.handleOutOfStockBundle}

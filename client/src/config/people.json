@@ -43,24 +43,24 @@
   },
   {
     "key": "7",
-    "text": "Romario",
-    "value": "romario",
+    "text": "Big Jason",
+    "value": "bigjason",
     "warehouse": "East coast",
-    "email": "romario@organicstart.com"
+    "email": "bigjason@organicstart.com"
   },
   {
     "key": "9",
-    "text": "Chris",
-    "value": "chris",
+    "text": "Peter",
+    "value": "peter",
     "warehouse": "East coast",
     "email": "chris@organicstart.com"
   },
   {
     "key": "10",
-    "text": "Jason",
-    "value": "jason",
+    "text": "Skinny Jason",
+    "value": "skinnyjason",
     "warehouse": "East coast",
-    "email": "jason@organicstart.com"
+    "email": "skinnyjason@organicstart.com"
   },
   {
     "key": "11",

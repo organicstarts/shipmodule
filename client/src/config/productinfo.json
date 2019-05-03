@@ -1216,5 +1216,12 @@
     "individual": 1,
     "sku": "LULU-3",
     "productID": 837
+  },
+  "HIPP-KINDRKEKAPP-BISC": {
+    "brand": "HiPP Biscuit",
+    "stage": "Kinderkoek - Apple",
+    "package": 6,
+    "sku": "HIPP-KINDRKEKAPP-BISC",
+    "productID": 374
   }
 }

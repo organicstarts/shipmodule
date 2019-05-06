@@ -4,7 +4,6 @@ import {
   daniel,
   luis,
   richard,
-  romario,
   training,
   jonathan,
   steve,
@@ -37,11 +36,7 @@ export const iconQuotes = {
     quote: "It matters not how long we live but how.",
     icon: richard
   },
-  romario: {
-    name: "Romario",
-    quote: "Working Hard or Hardly Working",
-    icon: romario
-  },
+
   training: {
     name: "Training",
     quote: "Sorry! I'm learning. :)",

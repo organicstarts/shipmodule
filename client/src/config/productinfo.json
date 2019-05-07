@@ -1181,6 +1181,14 @@
     "sku": "HOL-DINKEL-BISC",
     "productID": 139
   },
+  "HOL-CARMANGBNPR-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Carrot Mango Banana Pear",
+    "package": 12,
+    "individual": 1,
+    "sku": "HOL-CARMANGBNPR-PURE",
+    "productID": 182
+  },
   "LULU-1": {
     "brand": "Loulouka",
     "stage": "1",

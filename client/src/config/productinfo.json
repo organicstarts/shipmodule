@@ -1231,5 +1231,12 @@
     "package": 6,
     "sku": "HIPP-KINDRKEKAPP-BISC",
     "productID": 374
+  },
+  "HIPP-KOEK-BISC-UF": {
+    "brand": "HiPP Biscuit",
+    "stage": "Babykoek - UnFlavored",
+    "package": 6,
+    "sku": "HIPP-KOEK-BISC-UF",
+    "productID": 373
   }
 }

@@ -5,7 +5,7 @@ import { ClipLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import firebase from "../../../config/firebaseconf";
 import axios from "axios";
-import { Segment, Table, Button } from "semantic-ui-react";
+import { Segment, Table, Button, Input } from "semantic-ui-react";
 
 const compare = (a, b) => {
   const skuA = Object.keys(a);
@@ -23,7 +23,8 @@ class InventoryTable extends Component {
       westDatas: {},
       bgDatas: {},
       loading: true,
-      editable: false
+      editable: false,
+      mikePercentage: 0
     };
     this.handleOutOfStockSingle = this.handleOutOfStockSingle.bind(this);
     this.handleOutOfStockBundle = this.handleOutOfStockBundle.bind(this);
@@ -33,6 +34,8 @@ class InventoryTable extends Component {
     this.totalChange = this.totalChange.bind(this);
     // this.pushTotalToBigCommerce = this.pushTotalToBigCommerce.bind(this);
     this.calculateAllTotal = this.calculateAllTotal.bind(this);
+    this.changePercentage = this.changePercentage.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   toggleInput(index) {
@@ -97,7 +100,8 @@ class InventoryTable extends Component {
             })
             .sort(compare),
           westDatas: payload.westcoast,
-          toggle: Object.keys(payload.eastcoast).map(element => false)
+          toggle: Object.keys(payload.eastcoast).map(element => false),
+          mikePercentage: payload.percent
         });
 
         await axios.get("os/getcategories").then(async datas => {
@@ -198,6 +202,16 @@ class InventoryTable extends Component {
   //   tempBGData[key].total = total;
   //   this.setState({ bgDatas: tempBGData });
   // }
+  calculateTotalAmount(total) {
+    if (this.props.email === "mike@organicstart.com") {
+      return Math.floor(total + total * this.state.mikePercentage);
+    }
+    return total;
+  }
+  handleInputChange = e => this.setState({ [e.target.name]: e.target.value });
+  changePercentage() {
+    this.firebaseRef.update({ percent: parseFloat(this.state.mikePercentage) });
+  }
 
   async totalChange(key, db) {
     const { eastDatas, westDatas } = this.state;
@@ -441,8 +455,8 @@ class InventoryTable extends Component {
           sku={key}
           brand={eastDatas[key].brand}
           stage={eastDatas[key].stage}
-          eastTotal={eastDatas[key].total}
-          westTotal={westDatas[key].total}
+          eastTotal={this.calculateTotalAmount(eastDatas[key].total)}
+          westTotal={this.calculateTotalAmount(westDatas[key].total)}
           bgTotal={bgDatas[key] ? bgDatas[key].total : "N/A"}
           bgTracking={bgDatas[key] ? bgDatas[key].tracking : ""}
           scanner={eastDatas[key].scanner}
@@ -550,6 +564,26 @@ class InventoryTable extends Component {
             Calculate Total
           </Button>
         )}
+
+        {this.compareEmail(this.props.email) && (
+          <div style={{ float: "right" }}>
+            <Input
+              name="mikePercentage"
+              value={this.state.mikePercentage}
+              onChange={this.handleInputChange}
+              floated="left"
+            />
+            <Button
+              onClick={this.changePercentage}
+              className="noprint"
+              color="olive"
+              compact
+            >
+              Set Percentage
+            </Button>
+          </div>
+        )}
+
         <p>
           {`Quantity Levels Legend: `}
           <span

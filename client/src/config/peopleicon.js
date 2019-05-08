@@ -7,7 +7,7 @@ import {
   training,
   jonathan,
   steve,
-  bigjason,
+  big,
   skinnyjason,
   peter,
   isaiah,
@@ -52,10 +52,10 @@ export const iconQuotes = {
     quote: "There is good in everyday.",
     icon: steve
   },
-  bigjason: {
+  big: {
     name: "Jason",
     quote: "FOR THE YOUTH!",
-    icon: bigjason
+    icon: big
   },
   skinnyjason: {
     name: "Jason",

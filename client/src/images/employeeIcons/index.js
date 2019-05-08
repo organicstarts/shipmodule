@@ -10,6 +10,6 @@ export const richard = require('./richard.jpg');
 export const steve = require('./steve.jpg');
 export const training = require('./training.jpg')
 export const skinnyjason = require('./skinnyjason.jpeg')
-export const bigjason = require('./bigjason.png')
+export const big = require('./bigjason.png')
 export const yvan = require('./yvan.png')
 export const chandler = require('./chandler.png')

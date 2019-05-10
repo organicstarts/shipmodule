@@ -1259,5 +1259,12 @@
     "package": 12,
     "sku": "HOL-CARCAT-PURE",
     "productID": 0
+  },
+  "HOL-PEARBANKIW-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Pear Banana Kiwi",
+    "package": 12,
+    "sku": "HOL-PEARBANKIW-PURE",
+    "productID": 178
   }
 }

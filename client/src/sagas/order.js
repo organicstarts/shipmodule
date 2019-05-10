@@ -75,19 +75,29 @@ const getBatchDetails = async data => {
   return await Promise.all(
     data.map(async data => {
       if (data.orderNumber) {
-        await getOrder(data.orderNumber).then(async x => {
-          if (x) {
-            data.bigCommerce = x;
-            await getOrderCount(x.customer_id).then(y => (data.orderCount = y));
-          } else {
-            data.bigCommerce = null;
-            data.orderCount = null;
-          }
-        });
-        await getCoupon(data.orderNumber).then(
-          coupon => (data.couponInfo = coupon)
-        );
-
+        if (data.advancedOptions.storeId === 135943) {
+          await getOrder(data.orderNumber).then(async x => {
+            if (x) {
+              data.bigCommerce = x;
+              await getOrderCount(x.customer_id).then(
+                y => (data.orderCount = y)
+              );
+            } else {
+              data.bigCommerce = null;
+              data.orderCount = null;
+            }
+          });
+          await getCoupon(data.orderNumber).then(
+            coupon => (data.couponInfo = coupon)
+          );
+        } else {
+          await axios
+            .get(`ss/getsingleorder?orderId=${data.orderId}`)
+            .then(x => {
+              data.couponInfo = x.data.coupon;
+              data.shippingAmount = x.data.shippingAmount;
+            });
+        }
         return data;
       }
     })
@@ -270,15 +280,15 @@ const getAllOswOrders = async action => {
                 data.shippingMethod.includes("EXPRESS")
               ) {
                 let carrierArr = Object.keys(data.tracking);
-              let carrier = carrierArr
-                .filter(data => data.includes("FedEx"))
-                .toString();
-              if (!carrier) {
-                carrier = carrierArr
-                  .filter(data => data.includes("USPS"))
+                let carrier = carrierArr
+                  .filter(data => data.includes("FedEx"))
                   .toString();
-              }
-              console.log("hi", carrier);
+                if (!carrier) {
+                  carrier = carrierArr
+                    .filter(data => data.includes("USPS"))
+                    .toString();
+                }
+                console.log("hi", carrier);
 
                 await axios
                   .post("osw/fulfillment", {

@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../../images/logo.jpg";
+import oswlogo from "../../images/oswlogo.png";
 import "./slipdetail.css";
 
 const SlipDetail = props => {
@@ -7,7 +8,11 @@ const SlipDetail = props => {
     <div className="packing-slip">
       <div className="row header pad-top">
         <div className="col-4 text-center">
-          <img src={logo} className="img-fluid" alt="logo" />
+          <img
+            src={props.logo === "bg" ? logo : oswlogo}
+            className="img-fluid"
+            alt="logo"
+          />
           <br />
           <i>"Healthy Starts from Day One."</i>
         </div>
@@ -104,7 +109,7 @@ const SlipDetail = props => {
               <strong>Subtotal</strong>
             </th>
             <th style={{ padding: ".78571429em .78571429em 0 .78571429em" }}>
-              ${calculateTotal(props.shipmentInfo)}
+              ${calculateTotal(props.shipmentInfo, null, null, props.coupon)}
             </th>
           </tr>
           {props.message ? (
@@ -191,7 +196,7 @@ const SlipDetail = props => {
             <td className="align-middle">
               <h5 style={{ margin: "0" }}>
                 Translated instructions, ingredients & nutrition labels at
-                OrganicStart.com.
+                Support.OrganicStart.com.
               </h5>
             </td>
           </tr>
@@ -259,16 +264,14 @@ const renderCoupon = coupons => {
   if (coupons) {
     let name = "";
     return coupons.map(coupon => {
-      switch (coupon.code) {
-        case "gift":
-          name = "*** FREE GIFT ***";
-          break;
-        case "new":
-          name = "FREE BOOKLET";
-          break;
-        default:
-          name = "Discount";
-          break;
+      if (coupon.code === "gift") {
+        name = "*** FREE GIFT ***";
+      } else if (coupon.code === "new") {
+        name = "FREE BOOKLET";
+      } else if (coupon.code.includes("Coupon")) {
+        name = coupon.code;
+      } else {
+        name = "Discount";
       }
       return (
         <tr key={coupon.coupon_id}>

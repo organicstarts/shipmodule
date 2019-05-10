@@ -51,6 +51,36 @@ router.get("/getbatch", async (req, res) => {
   }
 });
 
+router.get("/getsingleorder", (req, res) => {
+  const baseUrl = `https://ssapi.shipstation.com/orders/${req.query.orderId}`;
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
+  });
+  //WORK ON THIS TOMORROW
+  fetch(baseUrl, header)
+    .then(res => res.json())
+    .then(data => {
+      let couponFilter = data.items.filter(item =>
+        item.lineItemKey.includes("discount")
+      );
+
+      if (couponFilter[0]) {
+        couponFilter[0].discount = Math.abs(couponFilter[0].unitPrice);
+        couponFilter[0].code = couponFilter[0].name;
+      }
+
+      let sendRes = {
+        coupon: couponFilter[0] ? couponFilter : [],
+        shippingAmount: data.shippingAmount
+      };
+      res.send(sendRes);
+    })
+    .catch(error => {
+      res.json({ msg: error });
+    });
+});
+
 router.get("/getshipmentorder", (req, res) => {
   const baseUrl = `https://ssapi.shipstation.com/shipments?orderNumber=${
     req.query.orderNumber

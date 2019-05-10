@@ -1238,5 +1238,12 @@
     "package": 6,
     "sku": "HIPP-KOEK-BISC-UF",
     "productID": 373
+  },
+  "HOL-FENNEL-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Fennel Frog",
+    "package": 12,
+    "sku": "HOL-FENNEL-PURE",
+    "productID": 857
   }
 }

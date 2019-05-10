@@ -92,7 +92,10 @@ class BatchList extends Component {
 
         let babyProducts = [];
         this.props.shipmentItems.map(data => {
-          if (data.warehouseLocation.match(/^[A-Za-z]{1}/g)) {
+          if (
+            data.warehouseLocation &&
+            data.warehouseLocation.match(/^[A-Za-z]{1}/g)
+          ) {
             babyProducts.push(data);
           }
         });
@@ -247,6 +250,7 @@ class BatchList extends Component {
       return (
         <SlipDetail
           key={data.orderId}
+          logo={data.advancedOptions.storeId === 135943 ? "bg" : "osw"}
           customerId={data.bigCommerce ? data.bigCommerce.customer_id : null}
           message={data.bigCommerce ? data.bigCommerce.customer_message : ""}
           carrier={data.carrierCode}
@@ -269,13 +273,21 @@ class BatchList extends Component {
           credit={data.bigCommerce ? data.bigCommerce.store_credit_amount : 0}
           orderID={data.orderNumber}
           created={
-            data.bigCommerce ? formatDate(data.bigCommerce.date_created) : null
+            data.bigCommerce
+              ? formatDate(data.bigCommerce.date_created)
+              : formatDate(data.createDate)
           }
           shipDate={
-            data.bigCommerce ? formatDate(data.bigCommerce.date_shipped) : null
+            data.bigCommerce
+              ? formatDate(data.bigCommerce.date_shipped)
+              : formatDate(data.shipDate)
           }
           coupon={data.couponInfo}
-          shipmentCost={data.bigCommerce.shipping_cost_inc_tax}
+          shipmentCost={
+            data.bigCommerce
+              ? data.bigCommerce.shipping_cost_inc_tax
+              : data.shippingAmount
+          }
           shipDuration={
             data.bigCommerce
               ? calculateTime(

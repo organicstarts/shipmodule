@@ -1245,5 +1245,19 @@
     "package": 12,
     "sku": "HOL-FENNEL-PURE",
     "productID": 857
+  },
+  "HOL-REDBEE-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Red Bee",
+    "package": 12,
+    "sku": "HOL-REDBEE-PURE",
+    "productID": 0
+  },
+  "HOL-CARCAT-PURE": {
+    "brand": "Holle Puree",
+    "stage": "Carrot Cat",
+    "package": 12,
+    "sku": "HOL-CARCAT-PURE",
+    "productID": 0
   }
 }

@@ -57,7 +57,7 @@ router.get("/getsingleorder", (req, res) => {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
   });
-  //WORK ON THIS TOMORROW
+
   fetch(baseUrl, header)
     .then(res => res.json())
     .then(data => {
@@ -72,7 +72,7 @@ router.get("/getsingleorder", (req, res) => {
 
       let sendRes = {
         coupon: couponFilter[0] ? couponFilter : [],
-        shippingAmount: data.shippingAmount
+        shippingAmount: data.shippingAmount ? data.shippingAmount : 0
       };
       res.send(sendRes);
     })

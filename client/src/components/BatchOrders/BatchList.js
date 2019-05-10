@@ -287,6 +287,8 @@ class BatchList extends Component {
             data.bigCommerce
               ? data.bigCommerce.shipping_cost_inc_tax
               : data.shippingAmount
+              ? data.shippingAmount
+              : 0
           }
           shipDuration={
             data.bigCommerce

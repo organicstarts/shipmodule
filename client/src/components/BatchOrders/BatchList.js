@@ -282,7 +282,7 @@ class BatchList extends Component {
               ? formatDate(data.bigCommerce.date_shipped)
               : formatDate(data.shipDate)
           }
-          coupon={data.couponInfo}
+          coupon={data.couponInfo ? data.couponInfo : []}
           shipmentCost={
             data.bigCommerce
               ? data.bigCommerce.shipping_cost_inc_tax

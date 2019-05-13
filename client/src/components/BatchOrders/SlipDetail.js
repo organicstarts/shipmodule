@@ -261,7 +261,7 @@ const calculateTotal = (items, shipping = 0, discount = 0, coupon = 0) => {
 };
 
 const renderCoupon = coupons => {
-  if (coupons) {
+  if (coupons && coupons.code) {
     let name = "";
     return coupons.map(coupon => {
       if (coupon.code === "gift") {

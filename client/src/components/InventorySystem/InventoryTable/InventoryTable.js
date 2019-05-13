@@ -33,7 +33,7 @@ class InventoryTable extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.totalChange = this.totalChange.bind(this);
     // this.pushTotalToBigCommerce = this.pushTotalToBigCommerce.bind(this);
-    this.calculateAllTotal = this.calculateAllTotal.bind(this);
+    // this.calculateAllTotal = this.calculateAllTotal.bind(this);
     this.changePercentage = this.changePercentage.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -43,7 +43,12 @@ class InventoryTable extends Component {
     newToggleStatus[index] = !this.state.toggle[index];
     this.setState({ toggle: newToggleStatus });
   }
-
+  /*
+    pass two params. all datas fetched from bigcommerce and sku "key" taken from firebase
+    loop through datas and check if each data includes(key)
+    if TK split to individual sku ex: TK-12-hc-1-hc-2 => hc-1, hc-2
+    return bundle = array[object]
+  */
   getBundles(datas, key) {
     let bundle = [];
     let bundleObj = {};
@@ -53,7 +58,9 @@ class InventoryTable extends Component {
         dataInfo.sku.includes(key) &&
         dataInfo.sku.length > key.length &&
         !dataInfo.sku.includes("OB-") &&
-        !dataInfo.sku.includes("TP-")
+        !dataInfo.sku.includes("TP-") &&
+        !dataInfo.sku.includes("EB-") &&
+        !dataInfo.sku.includes("QE-")
       ) {
         if (dataInfo.sku.includes("TK")) {
           let tempSku = dataInfo.sku.split(/TK-.\d*-/)[1];
@@ -86,6 +93,10 @@ class InventoryTable extends Component {
     return bundle;
   }
 
+  /*
+    Get Firebase Inventory data -> get datas from Bigcommerce
+    loop through firebase data -> for each sku "key" loop through bigcommerce data to get bundle
+  */
   componentDidMount() {
     const bgData = {};
     this.firebaseRef = firebase.database().ref(`/inventory`);
@@ -144,7 +155,9 @@ class InventoryTable extends Component {
         return false;
     }
   }
-
+  /*
+    handle input changes from InventoryDetails for eastcoast and westcoast input values
+  */
   handleChange = e => {
     let data;
     let dataName;
@@ -202,6 +215,11 @@ class InventoryTable extends Component {
   //   tempBGData[key].total = total;
   //   this.setState({ bgDatas: tempBGData });
   // }
+
+  /*
+    calculate total amount to show only for Mike's inventory table display.
+    changPercentage + handleInputChange handler for mike percentage view.
+  */
   calculateTotalAmount(total) {
     if (this.props.email === "mike@organicstart.com") {
       return Math.floor(total + total * this.state.mikePercentage);
@@ -213,6 +231,9 @@ class InventoryTable extends Component {
     this.firebaseRef.update({ percent: parseFloat(this.state.mikePercentage) });
   }
 
+  /*
+    submit total value changes to firebase
+  */
   async totalChange(key, db) {
     const { eastDatas, westDatas } = this.state;
 
@@ -336,7 +357,7 @@ class InventoryTable extends Component {
         .then(async () => {
           tempBGData[key].tracking = "simple";
           tempBGData[key].total = total;
-          await this.disableBundle(tempBGData[key].bundles);
+          // await this.disableBundle(tempBGData[key].bundles);
           this.setState({ bgDatas: tempBGData });
         });
     } else {
@@ -399,48 +420,48 @@ class InventoryTable extends Component {
     return east + west;
   }
 
-  calculateAllTotal() {
-    const { bgDatas, eastDatas, westDatas } = this.state;
-    this.setState({ buttonLoading: true });
-    const tempBGData = { ...bgDatas };
-    Promise.all(
-      Object.keys(bgDatas).map(async key => {
-        let total = this.calculateTotal(
-          eastDatas[key].total,
-          westDatas[key].total
-        );
-        if (total > 0) {
-          await axios
-            .put("os/disableproduct", {
-              tracking: "simple",
-              inventory_level: total,
-              productID: bgDatas[key].id
-            })
-            .then(async () => {
-              tempBGData[key].tracking = "simple";
-              tempBGData[key].total = total;
-              if (total > 100) {
-                await this.enableBundle(tempBGData[key].bundles, total / 2);
-              }
-            });
-        } else {
-          await axios
-            .put("os/disableproduct", {
-              tracking: "simple",
-              inventory_level: total,
-              productID: bgDatas[key].id
-            })
-            .then(async () => {
-              tempBGData[key].tracking = "simple";
-              tempBGData[key].total = total;
-              if (total < 100) {
-                await this.disableBundle(tempBGData[key].bundles);
-              }
-            });
-        }
-      })
-    ).then(() => this.setState({ bgDatas: tempBGData, buttonLoading: false }));
-  }
+  // calculateAllTotal() {
+  //   const { bgDatas, eastDatas, westDatas } = this.state;
+  //   this.setState({ buttonLoading: true });
+  //   const tempBGData = { ...bgDatas };
+  //   Promise.all(
+  //     Object.keys(bgDatas).map(async key => {
+  //       let total = this.calculateTotal(
+  //         eastDatas[key].total,
+  //         westDatas[key].total
+  //       );
+  //       if (total > 0) {
+  //         await axios
+  //           .put("os/disableproduct", {
+  //             tracking: "simple",
+  //             inventory_level: total,
+  //             productID: bgDatas[key].id
+  //           })
+  //           .then(async () => {
+  //             tempBGData[key].tracking = "simple";
+  //             tempBGData[key].total = total;
+  //             if (total > 100) {
+  //               await this.enableBundle(tempBGData[key].bundles, total / 2);
+  //             }
+  //           });
+  //       } else {
+  //         await axios
+  //           .put("os/disableproduct", {
+  //             tracking: "simple",
+  //             inventory_level: total,
+  //             productID: bgDatas[key].id
+  //           })
+  //           .then(async () => {
+  //             tempBGData[key].tracking = "simple";
+  //             tempBGData[key].total = total;
+  //             if (total < 100) {
+  //               await this.disableBundle(tempBGData[key].bundles);
+  //             }
+  //           });
+  //       }
+  //     })
+  //   ).then(() => this.setState({ bgDatas: tempBGData, buttonLoading: false }));
+  // }
 
   mapTableList() {
     const { eastDatas, westDatas, productArray, bgDatas, toggle } = this.state;
@@ -546,7 +567,7 @@ class InventoryTable extends Component {
         <Link to="/inventory" className="noprint">
           Go Back
         </Link>
-        {this.state.buttonLoading ? (
+        {/* {this.state.buttonLoading ? (
           <ClipLoader
             sizeUnit={"px"}
             size={54}
@@ -563,7 +584,7 @@ class InventoryTable extends Component {
           >
             Calculate Total
           </Button>
-        )}
+        )} */}
 
         {this.compareEmail(this.props.email) && (
           <div style={{ float: "right" }}>

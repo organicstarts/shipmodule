@@ -49,9 +49,9 @@ const sortShipments = (data, warehouse) => {
       //   let y = item.sku.split(/-DE(.*)/)[1];
       //   item.sku = x + y;
       // }
-    } else if (item.sku.includes("TK")) {
+    } else if (item.sku && item.sku.includes("TK")) {
       let x = parseInt(item.sku.split(/-/)[1]);
-      let tempSku = item.sku.split(/TK-.\d-/)[1];
+      let tempSku = item.sku.split(/TK-(.\d|\d)-/)[2];
       let split = tempSku.split(/-/);
       let skusplit1 = "";
       let skusplit2 = "";
@@ -273,7 +273,7 @@ const applyBatch = (state, action) => {
 };
 
 const applyFetch = (state, action) => {
-  const data = action.payload[0];
+  const data = action.payload[0] ? action.payload[0] : [];
   return Object.assign({}, state, {
     fetchDatas: data,
     loading: false

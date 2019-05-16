@@ -14,7 +14,14 @@ class FetchOrder extends React.Component {
     this.state = {
       orderNumber: "",
       picker: "",
-      shipper: ""
+      shipper: "",
+      store: [
+        { key: 0, text: "Retail", value: 135943 },
+        { key: 1, text: "Wholesale", value: 195529 },
+        { key: 2, text: "Little World Organics", value: 201185 },
+        { key: 3, text: "Manual Orders", value: 135942 }
+      ],
+      storeId: 0
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,7 +32,7 @@ class FetchOrder extends React.Component {
   handleSelectChange = (e, data) => this.setState({ [data.name]: data.value });
 
   handleSubmit() {
-    const { orderNumber, picker, shipper } = this.state;
+    const { orderNumber, picker, shipper, storeId } = this.state;
     this.setState({ loading: true });
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
     axios
@@ -46,7 +53,7 @@ class FetchOrder extends React.Component {
       });
 
     this.props.getOrderDetail(
-      { orderNumber, picker, shipper },
+      { orderNumber, picker, shipper, storeId },
       this.props.history
     );
   }
@@ -107,6 +114,14 @@ class FetchOrder extends React.Component {
                 placeholder="Select One"
                 name="shipper"
                 options={people}
+                onChange={this.handleSelectChange}
+                required
+              />
+              <Form.Select
+                label="Store"
+                placeholder="Select One"
+                name="storeId"
+                options={this.state.store}
                 onChange={this.handleSelectChange}
                 required
               />

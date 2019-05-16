@@ -20,7 +20,7 @@ function* handleGetBatch(action) {
 
 function* handleGetOrderDetail(action) {
   try {
-    const payload = yield call(getShipmentOrder, action.payload.orderNumber);
+    const payload = yield call(getShipmentOrder, action.payload);
     yield put({ type: FETCH_LOADED, payload });
     action.payload.history.push("/fetchDetail");
   } catch (e) {
@@ -63,10 +63,15 @@ const getBatch = batchNumber => {
     });
 };
 
-const getShipmentOrder = orderNumber => {
+const getShipmentOrder = payload => {
   return axios
-    .get(`ss/getshipmentorder?orderNumber=${orderNumber}`)
+    .get(
+      `ss/getshipmentorder?orderNumber=${payload.orderNumber}&storeId=${
+        payload.storeId
+      }`
+    )
     .then(async data => {
+      console.log("hi", data);
       return await getBatchDetails(data.data);
     });
 };

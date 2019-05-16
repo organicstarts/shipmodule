@@ -84,7 +84,7 @@ router.get("/getsingleorder", (req, res) => {
 router.get("/getshipmentorder", (req, res) => {
   const baseUrl = `https://ssapi.shipstation.com/shipments?orderNumber=${
     req.query.orderNumber
-  }&includeShipmentItems=true`;
+  }&includeShipmentItems=true&storeId=${req.query.storeId}`;
   res.set({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"

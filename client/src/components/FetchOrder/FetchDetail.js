@@ -3,11 +3,13 @@ import moment from "moment";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.jpg";
+import oswlogo from "../../images/oswlogo.png";
 import "./fetchdetail.css";
 import boxes from "../../config/boxes";
 import packages from "../../config/packages";
 import { iconQuotes } from "../../config/peopleicon";
 import { ClipLoader } from "react-spinners";
+import { Segment } from "semantic-ui-react";
 import axios from "axios";
 
 class FetchDetail extends Component {
@@ -44,7 +46,7 @@ class FetchDetail extends Component {
   }
   render() {
     const { fetchDatas, picker, shipper, loading } = this.props;
-    console.log(fetchDatas);
+    const bg = fetchDatas.bigCommerce;
     if (loading) {
       return (
         <ClipLoader
@@ -55,6 +57,14 @@ class FetchDetail extends Component {
         />
       );
     }
+    if (fetchDatas.length < 1) {
+      return (
+        <Segment style={{ marginTop: "50px" }}>
+          <Link to="/fetch">Go Back</Link>
+          <h1>Order number not found!</h1>
+        </Segment>
+      );
+    }
     return (
       <div>
         <div className="packing-slip">
@@ -63,7 +73,7 @@ class FetchDetail extends Component {
           </Link>
           <div className="row header pad-top">
             <div className="col-4 text-center">
-              <img src={logo} className="img-fluid" alt="logo" />
+              <img src={fetchDatas.advancedOptions.storeId === 135943? logo: oswlogo} className="img-fluid" alt="logo" />
               <br />
               <i>"Healthy Starts from Day One."</i>
             </div>
@@ -98,7 +108,7 @@ class FetchDetail extends Component {
               <h1 className="shipping-name">
                 {fetchDatas.shipTo.name.toUpperCase()}
               </h1>
-              Customer <strong>{fetchDatas.bigCommerce.customer_id}</strong>
+              Customer <strong>{bg ? bg.customer_id : ""}</strong>
               <br />
               {fetchDatas.customerEmail}
               <br />
@@ -128,16 +138,21 @@ class FetchDetail extends Component {
               Batch <strong>#{fetchDatas.batchNumber}</strong>
               <br />
               Order placed on the{" "}
-              <strong>{formatDate(fetchDatas.bigCommerce.date_created)}</strong>
+              <strong>
+                {bg
+                  ? formatDate(bg.date_created)
+                  : formatDate(fetchDatas.createDate)}
+              </strong>
               <br />
               Shipped on the{" "}
-              <strong>{formatDate(fetchDatas.bigCommerce.date_shipped)}</strong>
+              <strong>
+                {bg
+                  ? formatDate(bg.date_shipped)
+                  : formatDate(fetchDatas.shipDate)}
+              </strong>
               <br />
               <small>
-                {calculateTime(
-                  fetchDatas.bigCommerce.date_created,
-                  fetchDatas.bigCommerce.date_shipped
-                )}
+                {bg ? calculateTime(bg.date_created, bg.date_shipped) : ""}
               </small>
             </div>
           </div>
@@ -175,7 +190,9 @@ class FetchDetail extends Component {
             </thead>
             <tbody>
               {renderOrder(fetchDatas.shipmentItems)}
-              {renderCoupon(fetchDatas.couponInfo)}
+              {fetchDatas.couponInfo
+                ? renderCoupon(fetchDatas.couponInfo)
+                : renderCoupon([])}
             </tbody>
             <tfoot>
               <tr>
@@ -209,9 +226,11 @@ class FetchDetail extends Component {
                 </th>
                 <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
                   $
-                  {parseFloat(
-                    fetchDatas.bigCommerce.shipping_cost_inc_tax
-                  ).toFixed(2)}
+                  {bg
+                    ? parseFloat(bg.shipping_cost_inc_tax).toFixed(2)
+                    : fetchDatas.shippingAmount
+                    ? parseFloat(fetchDatas.shippingAmount).toFixed(2)
+                    : 0.00}
                 </th>
               </tr>
               <tr>
@@ -228,9 +247,7 @@ class FetchDetail extends Component {
                 </th>
                 <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
                   $-
-                  {parseFloat(
-                    fetchDatas.bigCommerce.store_credit_amount
-                  ).toFixed(2)}
+                  {bg ? parseFloat(bg.store_credit_amount).toFixed(2) : 0.00}
                 </th>
               </tr>
               <tr>
@@ -245,15 +262,18 @@ class FetchDetail extends Component {
                   $
                   {calculateTotal(
                     fetchDatas.shipmentItems,
-                    parseFloat(fetchDatas.bigCommerce.shipping_cost_inc_tax),
-                    fetchDatas.bigCommerce.store_credit_amount,
-                    fetchDatas.couponInfo
+                    bg
+                      ? parseFloat(bg.shipping_cost_inc_tax)
+                      : fetch.shippingAmount
+                      ? parseFloat(fetchDatas.shippingAmount).toFixed(2)
+                      : 0,
+                    bg ? bg.store_credit_amount : 0.00,
+                    fetchDatas.couponInfo ? fetchDatas.couponInfo : 0
                   )}
                 </th>
               </tr>
             </tfoot>
           </table>
-
           <table
             className="ui two column table text-center"
             style={{

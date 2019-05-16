@@ -11,6 +11,8 @@ import { iconQuotes } from "../../config/peopleicon";
 import { ClipLoader } from "react-spinners";
 import { Segment } from "semantic-ui-react";
 import axios from "axios";
+import firebase from "../../config/firebaseconf";
+import skuInfo from "../../config/productinfo.json";
 
 class FetchDetail extends Component {
   constructor() {
@@ -19,10 +21,77 @@ class FetchDetail extends Component {
   }
   componentDidMount() {
     window.addEventListener("afterprint", this.logprint);
+    const warehouse = this.props.warehouseLocation
+      .toLowerCase()
+      .replace(/\s/g, "");
+    this.dataRef = firebase.database().ref("/action/log");
+    this.dataRef.once("value", async snapshot => {
+      const payload = snapshot.val();
+      const result = Object.keys(payload)
+        .map(key => payload[key])
+        .reverse();
+      let batchInLog = false;
+
+      result.slice(1, 20).map(data => {
+        if (data.order === this.props.orderNumber) {
+          batchInLog = true;
+          return "";
+        }
+        return "";
+      });
+
+      if (!batchInLog) {
+        // let items = [];
+        await Promise.all(
+          this.props.fetchDatas.shipmentItems.map(async data => {
+            if (skuInfo[data.sku] && !data.sku.includes("HOL")) {
+              console.log(data);
+              if (data.sku.includes("OB-")) {
+                await axios
+                  .put("fb/updateinventory", {
+                    dbname: `${warehouse}OB`,
+                    sku: data.sku,
+                    quantity: data.combineTotal
+                      ? 0 - data.combineTotal
+                      : 0 - data.quantity
+                  })
+                  .then(response => {
+                    if (response.data.msg === "success") {
+                      console.log("OB inventory logged");
+                    } else if (response.data.msg === "fail") {
+                      console.log("failed to log.");
+                    }
+                  });
+              } else {
+                await axios
+                  .put("fb/updateinventory", {
+                    dbname: warehouse,
+                    sku: data.sku,
+                    quantity: data.combineTotal
+                      ? 0 - data.combineTotal
+                      : 0 - data.quantity
+                  })
+                  .then(response => {
+                    if (response.data.msg === "success") {
+                      console.log("inventory subtracted");
+                    } else if (response.data.msg === "fail") {
+                      console.log("failed to log.");
+                    }
+                  });
+              }
+              // if (data.sku === "HP-UK-2") {
+              //   items.push(data);
+              // }
+            }
+          })
+        );
+      }
+    });
   }
 
   componentWillUnmount() {
     window.removeEventListener("afterprint", this.logprint);
+    this.dataRef.off();
   }
 
   logprint() {
@@ -73,7 +142,13 @@ class FetchDetail extends Component {
           </Link>
           <div className="row header pad-top">
             <div className="col-4 text-center">
-              <img src={fetchDatas.advancedOptions.storeId === 135943? logo: oswlogo} className="img-fluid" alt="logo" />
+              <img
+                src={
+                  fetchDatas.advancedOptions.storeId === 135943 ? logo : oswlogo
+                }
+                className="img-fluid"
+                alt="logo"
+              />
               <br />
               <i>"Healthy Starts from Day One."</i>
             </div>
@@ -230,7 +305,7 @@ class FetchDetail extends Component {
                     ? parseFloat(bg.shipping_cost_inc_tax).toFixed(2)
                     : fetchDatas.shippingAmount
                     ? parseFloat(fetchDatas.shippingAmount).toFixed(2)
-                    : 0.00}
+                    : 0.0}
                 </th>
               </tr>
               <tr>
@@ -247,7 +322,7 @@ class FetchDetail extends Component {
                 </th>
                 <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
                   $-
-                  {bg ? parseFloat(bg.store_credit_amount).toFixed(2) : 0.00}
+                  {bg ? parseFloat(bg.store_credit_amount).toFixed(2) : 0.0}
                 </th>
               </tr>
               <tr>
@@ -267,7 +342,7 @@ class FetchDetail extends Component {
                       : fetch.shippingAmount
                       ? parseFloat(fetchDatas.shippingAmount).toFixed(2)
                       : 0,
-                    bg ? bg.store_credit_amount : 0.00,
+                    bg ? bg.store_credit_amount : 0.0,
                     fetchDatas.couponInfo ? fetchDatas.couponInfo : 0
                   )}
                 </th>

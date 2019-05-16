@@ -144,7 +144,9 @@ class FetchDetail extends Component {
             <div className="col-4 text-center">
               <img
                 src={
-                  fetchDatas.advancedOptions.storeId === 135943 ? logo : oswlogo
+                  fetchDatas.advancedOptions.storeId === (135943 || 135942)
+                    ? logo
+                    : oswlogo
                 }
                 className="img-fluid"
                 alt="logo"

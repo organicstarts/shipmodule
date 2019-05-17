@@ -37,7 +37,7 @@ const sortShipments = (data, warehouse) => {
       item.sku &&
       !isNaN(item.sku.charAt(0)) &&
       item.sku.includes("-") &&
-      !item.sku.includes("PRMX") &&
+      // !item.sku.includes("PRMX") &&
       item.sku.match(/\d-\d/) === null
     ) {
       let x = parseInt(item.sku.split(/-(.*)/)[0]);
@@ -120,6 +120,10 @@ const sortShipments = (data, warehouse) => {
     name = products[0][group[key][0].sku];
     if (name) {
       group[key][0].aliasName = name;
+    } else if (key.includes("PRMX") && group[key][0].combineTotal) {
+      group[key][0].aliasName = group[key][0].name.split(
+        /Pieces of |Pack of /
+      )[1];
     } else {
       group[key][0].aliasName = group[key][0].name;
     }
@@ -135,7 +139,9 @@ const sortShipments = (data, warehouse) => {
     add total of key(sku) to the total item count if it exist
     */
     count += group[key][0].combineTotal
-      ? group[key][0].combineTotal
+      ? key.includes("PRMX")
+        ? group[key][0].combineTotal / 6
+        : group[key][0].combineTotal
       : group[key][0].quantity;
     if (group[key][0].warehouseLocation) {
       if (group[key][0].warehouseLocation.includes(",")) {
@@ -178,8 +184,8 @@ const calculatePackage = shipItems => {
     if (
       productInfo[shipItems[item].sku] &&
       !shipItems[item].sku.includes("OB-") &&
-      !shipItems[item].sku.includes("HOL-") &&
-      !shipItems[item].sku.includes("PRMX")
+      !shipItems[item].sku.includes("HOL-")
+      // &&!shipItems[item].sku.includes("PRMX")
     ) {
       const packagePer = productInfo[shipItems[item].sku].package;
       let fullBox = 0;

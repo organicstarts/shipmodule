@@ -175,9 +175,13 @@ class InboundLogging extends Component {
             sku: skuInfo[sku].sku,
             brand: skuInfo[sku].brand,
             stage: skuInfo[sku].stage,
-            quantity: parseInt(quantity * skuInfo[sku].package - broken),
+            quantity: skuInfo[sku].sku.includes("PRMX")
+              ? parseInt(quantity * skuInfo[sku].individual - broken)
+              : parseInt(quantity * skuInfo[sku].package - broken),
             broken: broken ? parseInt(broken) : 0,
-            total: skuInfo[sku].package * quantity,
+            total: skuInfo[sku].sku.includes("PRMX")
+              ? skuInfo[sku].individual * quantity
+              : skuInfo[sku].package * quantity,
             invoiceNum: invoiceNum,
             scanner: displayName,
             timeStamp: moment().format("dddd, MMMM DD YYYY hh:mma"),

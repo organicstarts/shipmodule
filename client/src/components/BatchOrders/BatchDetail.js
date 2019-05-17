@@ -25,7 +25,9 @@ const BatchDetail = props => {
         <div className="col-1" style={{ textAlign: "center" }}>
           {props.warehouse}
         </div>
-        <div className="col-6">{`${props.text} ${props.options? (props.options) : ""}`}</div>
+        <div className="col-6">{`${props.text} ${
+          props.options ? props.options : ""
+        }`}</div>
         <div className="col-1" style={{ textAlign: "center" }} />
         {!props.fullBox && !props.loose ? (
           <div className="col-1" style={{ textAlign: "center" }}>
@@ -38,8 +40,10 @@ const BatchDetail = props => {
       {props.fullBox ? (
         <div className="row alt" style={styles.color1}>
           <div className="col-4" />
-          <div className="col-7">FULL BOXES</div>
-          <div className="col-1" style={{ textAlign: "center"  }}>
+          <div className="col-7">
+            {props.sku.includes("PRMX") ? "6 PACKS" : "FULL BOXES"}
+          </div>
+          <div className="col-1" style={{ textAlign: "center" }}>
             {props.fullBox}
           </div>
         </div>
@@ -57,7 +61,7 @@ const BatchDetail = props => {
       ) : (
         ""
       )}
-      {props.fullBox || props.loose ? (
+      {(props.fullBox || props.loose) && !props.sku.includes("PRMX") ? (
         <div>
           <div className="row alt" style={styles.total}>
             <div className="col-4" />

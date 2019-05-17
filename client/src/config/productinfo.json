@@ -549,44 +549,44 @@
     "sku": "KAB-3",
     "productID": 794
   },
-  "6-HP-DE-PRE-PRMX-BTL": {
+  "HP-DE-PRE-PRMX-BTL": {
     "brand": "Premix HiPP",
     "stage": "PRE",
-    "package": 1,
+    "package": 6,
     "individual": 1,
-    "sku": "6-HP-DE-PRE-PRMX-BTL",
+    "sku": "HP-DE-PRE-PRMX-BTL",
     "productID": 707
   },
-  "6-HP-UK-1-PRMX-BTL": {
+  "HP-UK-1-PRMX-BTL": {
     "brand": "Premix HiPP UK",
     "stage": "1",
-    "package": 1,
+    "package": 6,
     "individual": 1,
-    "sku": "6-HP-UK-1-PRMX-BTL",
+    "sku": "HP-UK-1-PRMX-BTL",
     "productID": 708
   },
-  "6-HP-UK-2-PRMX-BTL": {
+  "HP-UK-2-PRMX-BTL": {
     "brand": "Premix HiPP UK",
     "stage": "2",
-    "package": 1,
+    "package": 6,
     "individual": 1,
-    "sku": "6-HP-UK-2-PRMX-BTL",
+    "sku": "HP-UK-2-PRMX-BTL",
     "productID": 799
   },
-  "6-HP-UK-3-PRMX-BTL": {
+  "HP-UK-3-PRMX-BTL": {
     "brand": "Premix HiPP UK",
     "stage": "3",
-    "package": 1,
+    "package": 6,
     "individual": 1,
-    "sku": "6-HP-UK-3-PRMX-BTL",
+    "sku": "HP-UK-3-PRMX-BTL",
     "productID": 811
   },
-  "6-HP-HA-PRE-PRMX-BTL": {
+  "HP-HA-PRE-PRMX-BTL": {
     "brand": "Premix HiPP HA",
     "stage": "PRE",
-    "package": 1,
+    "package": 6,
     "individual": 1,
-    "sku": "6-HP-HA-PRE-PRMX-BTL",
+    "sku": "HP-HA-PRE-PRMX-BTL",
     "productID": 780
   },
   "OB-HP-NL-1": {

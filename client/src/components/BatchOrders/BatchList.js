@@ -72,7 +72,9 @@ class BatchList extends Component {
                     dbname: warehouse,
                     sku: data.sku,
                     quantity: data.combineTotal
-                      ? 0 - data.combineTotal
+                      ? data.sku.includes("PRMX")
+                        ? 0 - data.combineTotal / 6
+                        : 0 - data.combineTotal
                       : 0 - data.quantity
                   })
                   .then(response => {

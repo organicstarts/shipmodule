@@ -71,7 +71,7 @@ class App extends Component {
         {
           show: this.compareEmail(this.props.email),
           name: "log",
-          displayName: "Adming Log",
+          displayName: "Admin Log",
           route: "/logList",
           icon: "book"
         }

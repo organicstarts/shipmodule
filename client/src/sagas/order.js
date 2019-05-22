@@ -165,12 +165,13 @@ const getOswOrder = async action => {
                   orderId: data[0].id,
                   locationId: 41340099,
                   tracking: data[0].relabel,
-                  trackingCompany: "USPS",
+                  trackingCompany:
+                    item.countryCode === "CA" ? "Canada Post" : "USPS",
                   lineItemId: item.id,
                   notifyCustomer: true
                 })
                 .then(res => {
-                  console.log("success?", res);
+                  console.log(`success? ${item.countryCode}`, res);
                   fulfilledData.push(data);
                 });
             }
@@ -190,7 +191,6 @@ const getOswOrder = async action => {
                   .filter(data => data.includes("USPS"))
                   .toString();
               }
-              console.log("hi", carrier);
               await axios
                 .post("osw/fulfillment", {
                   orderId: data[0].id,

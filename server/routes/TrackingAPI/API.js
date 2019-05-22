@@ -134,7 +134,8 @@ router.get("/getallorders", (req, res) => {
             tracking: trackingObj,
             id: data.id,
             lineItems: data.line_items,
-            shippingMethod: data.shipping_lines[0].code
+            shippingMethod: data.shipping_lines[0].code,
+            countryCode: shipping_address.country_code
           });
         }
       });

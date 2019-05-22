@@ -135,7 +135,7 @@ router.get("/getallorders", (req, res) => {
             id: data.id,
             lineItems: data.line_items,
             shippingMethod: data.shipping_lines[0].code,
-            countryCode: shipping_address.country_code
+            countryCode: data.shipping_address.country_code
           });
         }
       });

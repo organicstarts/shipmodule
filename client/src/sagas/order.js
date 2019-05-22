@@ -166,12 +166,12 @@ const getOswOrder = async action => {
                   locationId: 41340099,
                   tracking: data[0].relabel,
                   trackingCompany:
-                    item.countryCode === "CA" ? "Canada Post" : "USPS",
+                    data[0].countryCode === "CA" ? "Canada Post" : "USPS",
                   lineItemId: item.id,
                   notifyCustomer: true
                 })
                 .then(res => {
-                  console.log(`success? ${item.countryCode}`, res);
+                  console.log(`success?`, res);
                   fulfilledData.push(data);
                 });
             }
@@ -269,12 +269,13 @@ const getAllOswOrders = async action => {
                     orderId: data.id,
                     locationId: 41340099,
                     tracking: data.relabel,
-                    trackingCompany: "USPS",
+                    trackingCompany:
+                      data.countryCode === "CA" ? "Canada Post" : "USPS",
                     lineItemId: item.id,
                     notifyCustomer: true
                   })
                   .then(res => {
-                    console.log("success?", res);
+                    console.log(`success? ${data.countryCode}`, res);
                     fulfilledData.push(data);
                   });
               }

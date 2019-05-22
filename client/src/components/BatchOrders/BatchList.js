@@ -73,7 +73,7 @@ class BatchList extends Component {
                     sku: data.sku,
                     quantity: data.combineTotal
                       ? data.sku.includes("PRMX")
-                        ? 0 - data.combineTotal / 6
+                        ? 0 - parseInt(data.combineTotal / 6)
                         : 0 - data.combineTotal
                       : 0 - data.quantity
                   })

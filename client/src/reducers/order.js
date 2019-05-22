@@ -140,7 +140,7 @@ const sortShipments = (data, warehouse) => {
     */
     count += group[key][0].combineTotal
       ? key.includes("PRMX")
-        ? group[key][0].combineTotal / 6
+        ? parseInt(group[key][0].combineTotal / 6)
         : group[key][0].combineTotal
       : group[key][0].quantity;
     if (group[key][0].warehouseLocation) {

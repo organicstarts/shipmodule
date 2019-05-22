@@ -34,6 +34,81 @@ const staticFiles = express.static(path.join(__dirname, "../../client/build"));
 app.use(staticFiles);
 
 /*-------------------------------------------------------------------
+                            CHECK INVENTORY LEVEL                            
+---------------------------------------------------------------------*/
+// function checkInventoryLevel() {
+//   let dataRef = admin.database().ref("/inventory");
+//   dataRef.once("value", snapshot => {
+//     const payload = snapshot.val();
+
+//     const listItems = Object.keys(payload.eastcoast)
+//       .map(data => {
+//         let inventoryString =
+//           payload.eastcoast[data].total < 100 ||
+//           payload.westcoast[data].total < 100
+//             ? `<li> ${payload.eastcoast[data].brand} ${
+//                 payload.eastcoast[data].stage
+//               }: `
+//             : "";
+//         if (payload.eastcoast[data].total < 100) {
+//           inventoryString = inventoryString.concat(
+//             "EAST = <strong>",
+//             payload.eastcoast[data].total,
+//             "</strong> "
+//           );
+//         }
+//         if (payload.westcoast[data].total < 100) {
+//           inventoryString = inventoryString.concat(
+//             "WEST = <strong>",
+//             payload.westcoast[data].total,
+//             "</strong> "
+//           );
+//         }
+//         inventoryString =
+//           payload.eastcoast[data].total < 100 ||
+//           payload.westcoast[data].total < 100
+//             ? inventoryString.concat("</li><br />")
+//             : null;
+//         return inventoryString;
+//       })
+//       .filter(item => {
+//         return typeof item === "string";
+//       })
+//       .join(' ');
+
+//     const htmlEmail =
+//       `<h3> Low Inventory Information</h3> <ul>` + listItems + `</ul>`;
+
+//     let transporter = nodemailer.createTransport(
+//       smtpTransport({
+//         service: "gmail",
+//         host: "smtp.gmail.email",
+//         auth: {
+//           user: cred.emailcred.user,
+//           pass: cred.emailcred.key
+//         }
+//       })
+//     );
+
+//     let mailOptions = {
+//       from: "yvan@organicstart.com",
+//       to: "yvan@organicstart.com",
+//       subject: "Low Inventory Alert",
+//       html: htmlEmail
+//     };
+
+//     transporter.sendMail(mailOptions);
+//   });
+//   // dataRef.off();
+// }
+
+// function run() {
+//   setInterval(checkInventoryLevel, 86400000);
+// }
+
+// run();
+
+/*-------------------------------------------------------------------
                             AUTH CUSTOM TOKEN                            
 ---------------------------------------------------------------------*/
 router.post("/customToken", (req, res) => {

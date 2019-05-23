@@ -3,6 +3,75 @@ const admin = require("firebase-admin");
 const router = require("express").Router();
 
 /*-------------------------------------------------------------------
+                            GET REQUESTS                            
+---------------------------------------------------------------------*/
+const calcTotalPercent = (eTotal, wTotal) => {
+  const total = eTotal + wTotal;
+  if (total > 1000) return 100;
+  if (total > 750) return 75;
+  if (total > 500) return 50;
+  if (total > 250) return 25;
+  if (total > 100) return 10;
+  if (total < 100) return 0;
+};
+router.get("/getinventory", (req, res) => {
+  let dataRef = admin.database().ref("/inventory");
+  dataRef.once("value", snap => {
+    const payload = snap.val();
+    let map = {
+      "Loulouka": [],
+      "Holle Cow": [],
+      "Holle Goat": [],
+      Lebenswert: [],
+      "HiPP German": [],
+      "HiPP Dutch": [],
+      "HiPP UK": [],
+      "HiPP German HA": [],
+      Topfer: [],
+      NANNYCare: []
+    };
+    if (payload.eastcoast) {
+      const data = payload.eastcoast;
+      Object.keys(payload.eastcoast).map(key => {
+        if (Object.keys(map).includes(data[key].brand)) {
+          if (data[key].brand in map) {
+            map[data[key].brand].push({
+              stage: data[key].stage,
+              total: calcTotalPercent(
+                data[key].total,
+                payload.westcoast[key].total
+              )
+            });
+          } else {
+            map[data[key]] = [
+              {
+                stage: [data[key].stage],
+                total: calcTotalPercent(
+                  data[key].total,
+                  payload.westcoast[key].total
+                )
+              }
+            ];
+          }
+        }
+      });
+      let divArray = [];
+      Object.keys(map).map(key => {
+        divArray.push(`<div class="prog d-none">divider</div>`);
+        divArray.push(`<div class="prog d-none">title:${key}</div>`);
+        map[key].map(data =>{
+          divArray.push(
+            `<div class="prog d-none">Stage ${data.stage}:${data.total}:00-00-0000</div>`
+          );
+        })
+      });
+      res.send(divArray)
+    
+    }
+  });
+});
+
+/*-------------------------------------------------------------------
                             POST REQUESTS                            
 ---------------------------------------------------------------------*/
 /*

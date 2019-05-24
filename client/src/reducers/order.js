@@ -190,6 +190,7 @@ const calculatePackage = shipItems => {
       const packagePer = productInfo[shipItems[item].sku].package;
       let fullBox = 0;
       let loose = 0;
+
       if (
         (shipItems[item].combineTotal
           ? shipItems[item].combineTotal
@@ -197,11 +198,19 @@ const calculatePackage = shipItems => {
           packagePer >=
         1
       ) {
-        fullBox = Math.floor(
-          (shipItems[item].combineTotal
-            ? shipItems[item].combineTotal
-            : shipItems[item].quantity) / packagePer
-        );
+        fullBox = shipItems[item].sku.includes("PRMX")
+          ? Math.floor(
+              (shipItems[item].combineTotal
+                ? shipItems[item].combineTotal
+                : shipItems[item].quantity) /
+                packagePer +
+                (shipItems[item].combineTotal % packagePer)
+            )
+          : Math.floor(
+              (shipItems[item].combineTotal
+                ? shipItems[item].combineTotal
+                : shipItems[item].quantity) / packagePer
+            );
         shipItems[item].fullBox = fullBox;
 
         if (
@@ -209,7 +218,8 @@ const calculatePackage = shipItems => {
             ? shipItems[item].combineTotal
             : shipItems[item].quantity) /
             packagePer !==
-          fullBox
+            fullBox &&
+          !shipItems[item].sku.includes("PRMX")
         ) {
           loose =
             (shipItems[item].combineTotal

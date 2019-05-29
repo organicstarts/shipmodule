@@ -49,7 +49,7 @@ class BatchList extends Component {
         // let items = [];
         await Promise.all(
           this.props.shipmentItems.map(async data => {
-            if (skuInfo[data.sku] && !data.sku.includes("HOL")) {
+            if (skuInfo[data.sku] && !data.sku.includes("PURE")) {
               if (data.sku.includes("OB-")) {
                 await axios
                   .put("fb/updateinventory", {

@@ -44,7 +44,7 @@ class FetchDetail extends Component {
         // let items = [];
         await Promise.all(
           this.props.fetchDatas.shipmentItems.map(async data => {
-            if (skuInfo[data.sku] && !data.sku.includes("HOL")) {
+            if (skuInfo[data.sku] && !data.sku.includes("PURE")) {
               console.log(data);
               if (data.sku.includes("OB-")) {
                 await axios
@@ -68,7 +68,9 @@ class FetchDetail extends Component {
                     dbname: warehouse,
                     sku: data.sku,
                     quantity: data.combineTotal
-                      ? 0 - data.combineTotal
+                      ? data.sku.includes("PRMX")
+                        ? 0 - parseInt(data.combineTotal / 6)
+                        : 0 - data.combineTotal
                       : 0 - data.quantity
                   })
                   .then(response => {
@@ -460,7 +462,7 @@ const calculateTime = (startDate, endDate) => {
 const calculateBox = dimension => {
   if (dimension) {
     const boxSize = dimension.height * dimension.width * dimension.length;
-    return boxes[boxSize].name;
+    if (boxes[boxSize]) return boxes[boxSize].name;
   }
   return "";
 };

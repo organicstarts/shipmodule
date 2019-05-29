@@ -290,6 +290,7 @@ class InboundLogTable extends Component {
           productID={datas[key].productID}
           carrier={datas[key].carrier}
           trackingNumber={datas[key].trackingNumber}
+          oldTracking={datas[key].oldTracking ? datas[key].oldTracking : ""}
           brand={datas[key].brand}
           stage={datas[key].stage}
           invoiceNum={datas[key].invoiceNum}

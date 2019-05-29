@@ -22,7 +22,11 @@ const InboundLogDetail = props => {
           <Modal
             trigger={
               <Icon
-                onClick={() => props.loadImage(props.trackingNumber)}
+                onClick={() =>
+                  props.loadImage(
+                    props.oldTracking ? props.oldTracking : props.trackingNumber
+                  )
+                }
                 style={styles.hover}
                 bordered
                 name="file alternate"

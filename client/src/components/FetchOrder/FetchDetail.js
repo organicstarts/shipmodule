@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.jpg";
 import oswlogo from "../../images/oswlogo.png";
+import lwologo from "../../images/lwo-logo.png";
 import "./fetchdetail.css";
 import boxes from "../../config/boxes";
 import packages from "../../config/packages";
@@ -134,6 +135,177 @@ class FetchDetail extends Component {
           <Link to="/fetch">Go Back</Link>
           <h1>Order number not found!</h1>
         </Segment>
+      );
+    }
+    if (fetchDatas.advancedOptions.storeId === 201185) {
+      return (
+        <div>
+          <div className="packing-slip">
+            <Link to="/" className="noprint">
+              Go Back
+            </Link>
+
+            <div className="row text-center">
+              <img
+                src={lwologo}
+                style={{ maxHeight: "150px", margin: "0 auto" }}
+                alt="logo"
+              />
+            </div>
+
+            <div className="ui shipping-info" />
+            <div className="row details">
+              <div className="col-7">
+                <h1 className="shipping-name">
+                  {fetchDatas.shipTo.name.toUpperCase()}
+                </h1>
+                {fetchDatas.customerEmail}
+                <br />
+                {fetchDatas.shipTo.company
+                  ? [
+                      fetchDatas.shipTo.company,
+                      <br key={fetchDatas.orderNumber} />
+                    ]
+                  : ""}
+                {fetchDatas.shipTo.street1}
+                <br />
+                {fetchDatas.shipTo.street2
+                  ? [
+                      fetchDatas.shipTo.street2,
+                      <br key={fetchDatas.orderNumber} />
+                    ]
+                  : ""}
+                {fetchDatas.shipTo.city}, {fetchDatas.shipTo.state}{" "}
+                {fetchDatas.shipTo.postalCode}
+                <br />
+              </div>
+              <div className="col-5">
+                <strong>{getTotal(fetchDatas.shipmentItems)}</strong> Items
+                <br />
+                Order <strong>#{fetchDatas.orderNumber}</strong>
+                <br />
+                Ordered
+                <strong>
+                  {" "}
+                  {formatDate(
+                    fetchDatas.createDate,
+                    fetchDatas.advancedOptions.storeId
+                  )}
+                </strong>
+                <br />
+                Shipped{" "}
+                <strong>
+                  {" "}
+                  {formatDate(
+                    fetchDatas.shipDate,
+                    fetchDatas.advancedOptions.storeId
+                  )}
+                </strong>
+                <br />
+                <small>
+                  {bg ? calculateTime(bg.date_created, bg.date_shipped) : ""}
+                </small>
+              </div>
+            </div>
+            <div
+              className="ui divider"
+              style={{
+                margin: "0.15in auto",
+                borderColor: "#999",
+                borderTop: "1px solid transparent"
+              }}
+            />
+            <table
+              className="ui very basic table"
+              style={{
+                borderColor: "#999",
+                borderLeft: "none",
+                borderRight: "none"
+              }}
+            >
+              <thead>
+                <tr>
+                  <th className="border-top">
+                    <strong>Product</strong>
+                  </th>
+                  <th className="text-center border-top">
+                    <strong>Price</strong>
+                  </th>
+                  <th className="text-center border-top">
+                    <strong>#</strong>
+                  </th>
+                  <th className="border-top">
+                    <strong>Total</strong>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {renderOrder(fetchDatas.shipmentItems)}
+                {fetchDatas.couponInfo
+                  ? renderCoupon(fetchDatas.couponInfo)
+                  : renderCoupon([])}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th
+                    className="text-right"
+                    colSpan="3"
+                    style={{
+                      textAlign: "right",
+                      padding: ".78571429em .78571429em 0 0"
+                    }}
+                  >
+                    <strong>Subtotal</strong>
+                  </th>
+                  <th
+                    style={{ padding: ".78571429em .78571429em 0 .78571429em" }}
+                  >
+                    ${calculateTotal(fetchDatas.shipmentItems)}
+                  </th>
+                </tr>
+                <tr>
+                  <th
+                    className="text-right"
+                    colSpan="3"
+                    style={{
+                      textAlign: "right",
+                      padding: "0 .78571429em",
+                      borderTop: "none"
+                    }}
+                  >
+                    <strong>Shipping</strong>
+                  </th>
+                  <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
+                    $
+                    {fetchDatas.shippingAmount
+                      ? parseFloat(fetchDatas.shippingAmount).toFixed(2)
+                      : 0.0}
+                  </th>
+                </tr>
+                <tr>
+                  <th
+                    className="text-right"
+                    colSpan="3"
+                    style={{ textAlign: "right", borderTop: "none" }}
+                  >
+                    <strong>Total</strong>
+                  </th>
+                  <th style={{ borderTop: "none" }}>
+                    $
+                    {calculateTotal(
+                      fetchDatas.shipmentItems,
+                      fetch.shippingAmount
+                        ? parseFloat(fetchDatas.shippingAmount).toFixed(2)
+                        : 0,
+                      0.0,
+                      fetchDatas.couponInfo ? fetchDatas.couponInfo : 0
+                    )}
+                  </th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
       );
     }
     return (
@@ -343,9 +515,9 @@ class FetchDetail extends Component {
                     fetchDatas.shipmentItems,
                     bg
                       ? parseFloat(bg.shipping_cost_inc_tax)
-                      : fetch.shippingAmount
+                      : fetchDatas.shippingAmount
                       ? parseFloat(fetchDatas.shippingAmount).toFixed(2)
-                      : 0,
+                      : 0.0,
                     bg ? bg.store_credit_amount : 0.0,
                     fetchDatas.couponInfo ? fetchDatas.couponInfo : 0
                   )}
@@ -472,9 +644,11 @@ const getTotal = items => {
   return x;
 };
 
-const formatDate = string => {
+const formatDate = (string, storeId = null) => {
   const date = moment.utc(string);
-  return date.format("Do MMMM YYYY");
+  return storeId === 201185
+    ? date.format(" MM/DD/YYYY")
+    : date.format("Do MMMM YYYY");
 };
 
 const calculateTotal = (items, shipping = 0, discount = 0, coupon = 0) => {

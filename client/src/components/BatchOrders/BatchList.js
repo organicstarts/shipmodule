@@ -252,7 +252,13 @@ class BatchList extends Component {
       return (
         <SlipDetail
           key={data.orderId}
-          logo={data.advancedOptions.storeId === 135943 ? "bg" : "osw"}
+          logo={
+            data.advancedOptions.storeId === 201185
+              ? "lwo"
+              : data.advancedOptions.storeId === (135943 || 135942)
+              ? "bg"
+              : "osw"
+          }
           customerId={data.bigCommerce ? data.bigCommerce.customer_id : null}
           message={data.bigCommerce ? data.bigCommerce.customer_message : ""}
           carrier={data.carrierCode}
@@ -277,12 +283,12 @@ class BatchList extends Component {
           created={
             data.bigCommerce
               ? formatDate(data.bigCommerce.date_created)
-              : formatDate(data.createDate)
+              : formatDate(data.createDate, data.advancedOptions.storeId)
           }
           shipDate={
             data.bigCommerce
               ? formatDate(data.bigCommerce.date_shipped)
-              : formatDate(data.shipDate)
+              : formatDate(data.shipDate, data.advancedOptions.storeId)
           }
           coupon={data.couponInfo ? data.couponInfo : []}
           shipmentCost={
@@ -569,9 +575,11 @@ const getTotal = items => {
   return x;
 };
 
-const formatDate = string => {
+const formatDate = (string, storeId) => {
   const date = moment.utc(string);
-  return date.format("Do MMMM YYYY");
+  return storeId === 201185
+    ? date.format("MM/DD/YYYY")
+    : date.format("MMMM DD YYYY");
 };
 
 const formatDateTime = string => {

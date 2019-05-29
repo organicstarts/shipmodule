@@ -1,9 +1,155 @@
 import React from "react";
 import logo from "../../images/logo.jpg";
 import oswlogo from "../../images/oswlogo.png";
+import lwologo from "../../images/lwo-logo.png";
 import "./slipdetail.css";
 
 const SlipDetail = props => {
+  if (props.logo === "lwo") {
+    return (
+      <div>
+        <div className="packing-slip">
+          <div className="row text-center">
+            <img
+              src={lwologo}
+              style={{ maxHeight: "150px", margin: "0 auto" }}
+              alt="logo"
+            />
+          </div>
+
+          <div className="ui shipping-info" />
+          <div className="row details">
+            <div className="col-7">
+              <h1 className="shipping-name">
+                {props.name.toUpperCase()}
+              </h1>
+              {props.email}
+              <br />
+              {props.company
+                ? [props.company, <br key={props.orderID} />]
+                : ""}
+              {props.street1}
+              <br />
+              {props.street2
+                ? [props.street2, <br key={props.orderID} />]
+                : ""}
+              {props.city}, {props.state}{" "}
+              {props.postalCode}
+              <br />
+            </div>
+            <div className="col-5">
+              <strong>{props.total}</strong> Items
+              <br />
+              Order <strong>#{props.orderID}</strong>
+              <br />
+              Ordered
+              <strong> {props.created}</strong>
+              <br />
+              Shipped <strong> {props.shipDate}</strong>
+              <br />
+            </div>
+          </div>
+          <div
+            className="ui divider"
+            style={{
+              margin: "0.15in auto",
+              borderColor: "#999",
+              borderTop: "1px solid transparent"
+            }}
+          />
+          <table
+            className="ui very basic table"
+            style={{
+              borderColor: "#999",
+              borderLeft: "none",
+              borderRight: "none"
+            }}
+          >
+            <thead>
+              <tr>
+                <th className="border-top">
+                  <strong>Product</strong>
+                </th>
+                <th className="text-center border-top">
+                  <strong>Price</strong>
+                </th>
+                <th className="text-center border-top">
+                  <strong>#</strong>
+                </th>
+                <th className="border-top">
+                  <strong>Total</strong>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {renderOrder(props.shipmentInfo)}
+              {props.couponInfo
+                ? renderCoupon(props.couponInfo)
+                : renderCoupon([])}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th
+                  className="text-right"
+                  colSpan="3"
+                  style={{
+                    textAlign: "right",
+                    padding: ".78571429em .78571429em 0 0"
+                  }}
+                >
+                  <strong>Subtotal</strong>
+                </th>
+                <th
+                  style={{ padding: ".78571429em .78571429em 0 .78571429em" }}
+                >
+                  ${calculateTotal(props.shipmentInfo)}
+                </th>
+              </tr>
+              <tr>
+                <th
+                  className="text-right"
+                  colSpan="3"
+                  style={{
+                    textAlign: "right",
+                    padding: "0 .78571429em",
+                    borderTop: "none"
+                  }}
+                >
+                  <strong>Shipping</strong>
+                </th>
+                <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
+                  $
+                  {props.shippingAmount
+                    ? parseFloat(props.shippingAmount).toFixed(2)
+                    : 0.0}
+                </th>
+              </tr>
+              <tr>
+                <th
+                  className="text-right"
+                  colSpan="3"
+                  style={{ textAlign: "right", borderTop: "none" }}
+                >
+                  <strong>Total</strong>
+                </th>
+                <th style={{ borderTop: "none" }}>
+                  $
+                  {calculateTotal(
+                    props.shipmentInfo,
+                    props.shippingAmount
+                      ? parseFloat(props.shippingAmount).toFixed(2)
+                      : 0,
+                    0.0,
+                    props.couponInfo ? props.couponInfo : 0
+                  )}
+                </th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="packing-slip">
       <div className="row header pad-top">

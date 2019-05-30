@@ -58,7 +58,7 @@ const sortShipments = (data, warehouse) => {
 
       if (
         tempSku.charAt(0) === "H" &&
-        (tempSku.includes(`HP-DE`) || tempSku.includes(`HP-UK`))
+        (tempSku.includes(`HP-DE`) || tempSku.includes(`HP-UK`) || tempSku.includes(`HP-NL`))
       ) {
         skusplit1 = split[0] + "-" + split[1] + "-" + split[2];
         skusplit2 = split[3] + "-" + split[4] + "-" + split[5];

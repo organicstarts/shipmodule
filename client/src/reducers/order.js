@@ -282,7 +282,8 @@ const INITIAL_STATE = {
   prevBatch: [],
   oswOrders: [],
   oswLoading: false,
-  showOsw: false
+  showOsw: false,
+  note: false
 };
 
 const applyBatch = (state, action) => {
@@ -362,7 +363,8 @@ function batchReducer(state = INITIAL_STATE, action) {
         orderNumber: action.payload.orderNumber,
         picker: action.payload.picker,
         shipper: action.payload.shipper,
-        loading: true
+        loading: true,
+        note: action.payload.note
       });
     }
     case BATCH_LOADED: {

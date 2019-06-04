@@ -117,7 +117,7 @@ class FetchDetail extends Component {
       });
   }
   render() {
-    const { fetchDatas, picker, shipper, loading } = this.props;
+    const { fetchDatas, picker, shipper, loading, note } = this.props;
     const bg = fetchDatas.bigCommerce;
     if (loading) {
       return (
@@ -463,6 +463,32 @@ class FetchDetail extends Component {
                   ${calculateTotal(fetchDatas.shipmentItems)}
                 </th>
               </tr>
+              {fetchDatas.bigCommerce.customer_message ? (
+                <tr>
+                  <th
+                    colSpan="3"
+                    style={{ padding: "0 .78571429em", borderTop: "none" }}
+                  >
+                    <strong>Customer Message:</strong>
+                    <br />
+                    {fetchDatas.bigCommerce.customer_message}
+                  </th>
+                </tr>
+              ) : null}
+              {note ? (
+                <tr>
+                  <th
+                    colSpan="2"
+                    style={{ padding: "0 5.78571429em 0 .78571429em", borderTop: "none" }}
+                  >
+                    <strong>Note To Buyer:</strong>
+                    <br />
+                    Due to warehouse inventory differences, this order is being
+                    split. The remainder of your order will arrive in a separate
+                    package from USPS. We apologize for any inconveniences.
+                  </th>
+                </tr>
+              ) : null}
               <tr>
                 <th
                   className="text-right"
@@ -725,7 +751,8 @@ function mapStateToProps({ authState, batchState }) {
     fetchDatas: batchState.fetchDatas,
     orderNumber: batchState.orderNumber,
     shipmentItems: batchState.shipmentItems,
-    loading: batchState.loading
+    loading: batchState.loading,
+    note: batchState.note
   };
 }
 

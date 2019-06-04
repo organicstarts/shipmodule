@@ -20,10 +20,10 @@ const setShipmentItems = warehouse => ({
 });
 
 const getOrderDetail = (stateInfo, history) => {
-  const { picker, shipper, orderNumber, storeId } = stateInfo;
+  const { picker, shipper, orderNumber, storeId, note } = stateInfo;
   return {
     type: GET_ORDER_DETAIL,
-    payload: { orderNumber, shipper, picker, storeId, history }
+    payload: { orderNumber, shipper, picker, storeId, note, history }
   };
 };
 

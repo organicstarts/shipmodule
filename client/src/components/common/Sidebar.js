@@ -74,6 +74,13 @@ class App extends Component {
           displayName: "Admin Log",
           route: "/logList",
           icon: "book"
+        },
+        {
+          show: this.compareEmail(this.props.email),
+          name: "invoice",
+          displayName: "Invoice Check",
+          route: "/invoice",
+          icon: "list"
         }
       ]
     };

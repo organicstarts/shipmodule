@@ -81,6 +81,36 @@ router.get("/getsingleorder", (req, res) => {
     });
 });
 
+router.get("/getsingleosworder", (req, res) => {
+  const baseUrl = `https://ssapi.shipstation.com/orders?orderNumber=${
+    req.query.orderNumber
+  }&storeId=195529`;
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
+  });
+
+  fetch(baseUrl, header)
+    .then(res => res.json())
+    .then(data => {
+      let filterItems = data.orders.filter(
+        x => x.orderNumber === req.query.orderNumber
+      );
+      return {
+        orderNumber: filterItems[0].orderNumber,
+        quantity: filterItems[0].items[0].quantity,
+        title: filterItems[0].items[0].name,
+        pcs: filterItems[0].items[0].name.split(/(.Pieces|.Boxes|.Tins)/)[0]
+      };
+    })
+    .then(info => {
+      res.send(info);
+    })
+    .catch(error => {
+      res.json({ msg: error });
+    });
+});
+
 router.get("/getshipmentorder", (req, res) => {
   const baseUrl = `https://ssapi.shipstation.com/shipments?orderNumber=${
     req.query.orderNumber

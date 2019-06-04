@@ -56,9 +56,14 @@ const sortShipments = (data, warehouse) => {
       let skusplit1 = "";
       let skusplit2 = "";
 
-      if (
+      if (tempSku.charAt(0) === "H" && tempSku.includes(`HP-DE-HA`)) {
+        skusplit1 = split[0] + "-" + split[1] + "-" + split[2] + "-" + split[3];
+        skusplit2 = split[4] + "-" + split[5] + "-" + split[6] + "-" + split[7];
+      } else if (
         tempSku.charAt(0) === "H" &&
-        (tempSku.includes(`HP-DE`) || tempSku.includes(`HP-UK`) || tempSku.includes(`HP-NL`))
+        (tempSku.includes(`HP-DE`) ||
+          tempSku.includes(`HP-UK`) ||
+          tempSku.includes(`HP-NL`))
       ) {
         skusplit1 = split[0] + "-" + split[1] + "-" + split[2];
         skusplit2 = split[3] + "-" + split[4] + "-" + split[5];

@@ -25,7 +25,8 @@ import {
   CancelOrder,
   Scanning,
   Fulfillment,
-  BatchProductCheck
+  BatchProductCheck,
+  InvoiceCheck
 } from "./components/";
 
 const Router = () => (
@@ -56,6 +57,7 @@ const Router = () => (
       <Route path="/toyLogging" component={ToyLogging} />
       <Route path="/cancel" component={CancelOrder} />
       <Route path="/fulfillment" component={Fulfillment} />
+      <Route path="/invoice" component={InvoiceCheck} />
     </Switch>
   </main>
 );

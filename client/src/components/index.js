@@ -22,6 +22,7 @@ import OpenBrokenTable from "./InventorySystem/InventoryTable/OpenBrokenTable";
 import CancelOrder from "./CancelOrder/CancelOrder";
 import Scanning from "./InventorySystem/Scanning";
 import Fulfillment from "./FulfillmentOSW/Fullfillment";
+import InvoiceCheck from "./OSWinvoice/InvoiceCheck";
 
 export {
   BatchOrders,
@@ -47,5 +48,6 @@ export {
   OpenBrokenTable,
   CancelOrder,
   Scanning,
-  Fulfillment
+  Fulfillment,
+  InvoiceCheck
 };

@@ -11,6 +11,7 @@
     "moment": "^2.22.2",
     "prop-types": "^15.7.2",
     "react": "^16.5.2",
+    "react-csv-reader": "^1.2.2",
     "react-dom": "^16.5.2",
     "react-google-charts": "^3.0.10",
     "react-minimal-pie-chart": "^3.5.0",

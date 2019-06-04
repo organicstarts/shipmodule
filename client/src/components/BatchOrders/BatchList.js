@@ -322,7 +322,7 @@ class BatchList extends Component {
     }
 
     return (
-      <div>
+      <div className="light-print">
         <div style={styles.pickList}>
           <Link to="/batch" className="noprint">
             Go Back

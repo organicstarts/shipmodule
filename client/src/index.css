@@ -46,7 +46,7 @@ code {
 }
 
 @media print {
-  body {
+  .light-print {
     -webkit-print-color-adjust: exact;
     opacity: 0.40;
   }

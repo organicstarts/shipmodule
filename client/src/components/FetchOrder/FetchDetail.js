@@ -139,7 +139,7 @@ class FetchDetail extends Component {
     }
     if (fetchDatas.advancedOptions.storeId === 201185) {
       return (
-        <div>
+        <div className="light-print">
           <div className="packing-slip">
             <Link to="/" className="noprint">
               Go Back

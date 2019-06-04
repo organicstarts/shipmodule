@@ -46,6 +46,9 @@ code {
 }
 
 @media print {
+  body {
+    -webkit-print-color-adjust: exact;
+  }
   .light-print {
     -webkit-print-color-adjust: exact;
     opacity: 0.40;

@@ -3,7 +3,6 @@ import CSVReader from "react-csv-reader";
 import { Segment, Table, Progress, Icon, Header } from "semantic-ui-react";
 import axios from "axios";
 
-
 class InvoiceCheck extends Component {
   constructor() {
     super();
@@ -11,7 +10,9 @@ class InvoiceCheck extends Component {
       report: [],
       show: false,
       loading: false,
-      percent: 0
+      percent: 0,
+      invoiceTotal: 0,
+      calculatedTotal: 0
     };
     this.fileHandler = this.fileHandler.bind(this);
   }
@@ -53,8 +54,15 @@ class InvoiceCheck extends Component {
   fileHandler = async data => {
     this.setState({ loading: true, show: false, percent: 0 });
     let reportHtml = [];
+    let tempTotal = data[data.length - 3][4].split("€  ")[1];
+    let total = parseFloat(tempTotal.replace(/,/g, ""));
+    let individualTotal = 0;
     for (let i = 4; i < data.length - 5; i += 2) {
       if (data[i][2] !== "") {
+        individualTotal =
+          individualTotal +
+          parseFloat(data[i][4].split("€  ")[1].replace(/,/g, "")) +
+          parseFloat(data[i + 1][4].split("€  ")[1].replace(/,/g, ""));
         reportHtml.push(
           <Table.Row key={i}>
             <Table.Cell>{data[i][0]}</Table.Cell>
@@ -76,7 +84,9 @@ class InvoiceCheck extends Component {
       show: true,
       report: reportHtml,
       percent: 100,
-      loading: false
+      loading: false,
+      invoiceTotal: total,
+      calculatedTotal: individualTotal
     });
   };
 
@@ -131,7 +141,29 @@ class InvoiceCheck extends Component {
                   </Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
-              <Table.Body>{this.renderTableRow()}</Table.Body>
+              <Table.Body>
+                {this.renderTableRow()}
+
+                <Table.Row>
+                  <Table.HeaderCell>
+                    <Header floated="right">
+                      <strong>TOTAL:</strong>
+                      {"  € "}
+                      {this.state.invoiceTotal}
+                    </Header>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    <Header floated="right">
+                      <strong>CALCULATED TOTAL:</strong>
+                      {"  € "}
+                      {this.state.calculatedTotal}
+                    </Header>
+                  </Table.HeaderCell>
+                  <sub>
+                    *calculated total includes shipping, not displayed on table
+                  </sub>
+                </Table.Row>
+              </Table.Body>
             </Table>
           ) : (
             ""

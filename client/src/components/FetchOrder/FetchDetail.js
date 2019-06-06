@@ -412,28 +412,11 @@ class FetchDetail extends Component {
               <tbody>
                 {renderFCOrder(fetchDatas.shipmentItems)}
                 {getMemberStatus(fetchDatas.shipmentItems) === "Platinum" ||
-                "Diamond"
+                getMemberStatus(fetchDatas.shipmentItems) === "Diamond"
                   ? renderCoupon([{ code: "gift" }])
                   : renderCoupon([])}
               </tbody>
               <tfoot>
-                {/* <tr>
-                  <th
-                    className="text-right"
-                    colSpan="3"
-                    style={{
-                      textAlign: "right",
-                      padding: ".78571429em .78571429em 0 0"
-                    }}
-                  >
-                    <strong>Subtotal</strong>
-                  </th>
-                  <th
-                    style={{ padding: ".78571429em .78571429em 0 .78571429em" }}
-                  >
-                    ${calculateTotal(fetchDatas.shipmentItems)}
-                  </th>
-                </tr> */}
                 {bg ? (
                   bg.customer_message ? (
                     <tr>
@@ -466,44 +449,7 @@ class FetchDetail extends Component {
                     </th>
                   </tr>
                 ) : null}
-                {/* <tr>
-                  <th
-                    className="text-right"
-                    colSpan="3"
-                    style={{
-                      textAlign: "right",
-                      padding: "0 .78571429em",
-                      borderTop: "none"
-                    }}
-                  >
-                    <strong>Shipping</strong>
-                  </th>
-                  <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
-                    $
-                    {bg
-                      ? parseFloat(bg.shipping_cost_inc_tax).toFixed(2)
-                      : fetchDatas.shippingAmount
-                      ? parseFloat(fetchDatas.shippingAmount).toFixed(2)
-                      : 0.0}
-                  </th>
-                </tr>
-                <tr>
-                  <th
-                    className="text-right"
-                    colSpan="3"
-                    style={{
-                      textAlign: "right",
-                      padding: "0 .78571429em",
-                      borderTop: "none"
-                    }}
-                  >
-                    <strong>Credit / Certificate</strong>
-                  </th>
-                  <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
-                    $-
-                    {bg ? parseFloat(bg.store_credit_amount).toFixed(2) : 0.0}
-                  </th>
-                </tr> */}
+
                 <tr>
                   <th
                     className="text-right"

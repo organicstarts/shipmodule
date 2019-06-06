@@ -28,7 +28,8 @@ class FetchOrder extends React.Component {
         { key: 0, text: "Retail", value: 135943 },
         { key: 1, text: "Wholesale", value: 195529 },
         { key: 2, text: "Little World Organics", value: 201185 },
-        { key: 3, text: "Manual Orders", value: 135942 }
+        { key: 3, text: "Manual Orders", value: 135942 },
+        { key: 4, text: "Formula Club", value: 190134 }
       ],
       storeId: 0
     };

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import logo from "../../images/logo.jpg";
 import oswlogo from "../../images/oswlogo.png";
 import lwologo from "../../images/lwo-logo.png";
+import fclogo from "../../images/tfc-logo-black.svg";
 import "./fetchdetail.css";
 import boxes from "../../config/boxes";
 import packages from "../../config/packages";
@@ -308,6 +309,278 @@ class FetchDetail extends Component {
         </div>
       );
     }
+    if (fetchDatas.advancedOptions.storeId === 190134) {
+      return (
+        <div>
+          <div className="packing-slip">
+            <Link to="/" className="noprint">
+              Go Back
+            </Link>
+            <div className="row header pad-top">
+              <div className="col-12 text-center">
+                <img
+                  src={fclogo}
+                  style={{ margin: "0 auto", maxHeight: "200px" }}
+                  alt="logo"
+                />
+              </div>
+            </div>
+            <div className="ui divider shipping-info" />
+            <div className="row details">
+              <div className="col-7">
+                <h1 className="shipping-name">
+                  {fetchDatas.shipTo.name.toUpperCase()}
+                </h1>
+                <strong>
+                  {getMemberStatus(fetchDatas.shipmentItems)} Member
+                </strong>
+                <br />
+                {fetchDatas.customerEmail}
+                <br />
+                {fetchDatas.shipTo.company
+                  ? [
+                      fetchDatas.shipTo.company,
+                      <br key={fetchDatas.orderNumber} />
+                    ]
+                  : ""}
+                {fetchDatas.shipTo.street1}
+                <br />
+                {fetchDatas.shipTo.street2
+                  ? [
+                      fetchDatas.shipTo.street2,
+                      <br key={fetchDatas.orderNumber} />
+                    ]
+                  : ""}
+                {fetchDatas.shipTo.city}, {fetchDatas.shipTo.state}{" "}
+                {fetchDatas.shipTo.postalCode}
+                <br />
+              </div>
+              <div className="col-5">
+                <strong>{getTotal(fetchDatas.shipmentItems)}</strong> Total
+                {fetchDatas.shipmentItems > 1 ? " Items" : " Item"}
+                <br />
+                Order <strong>#{fetchDatas.orderNumber}</strong>
+                <br />
+                Order placed on the{" "}
+                <strong>
+                  {bg
+                    ? formatDate(bg.date_created)
+                    : formatDate(fetchDatas.createDate)}
+                </strong>
+                <br />
+                Fulfilled on the{" "}
+                <strong>
+                  {bg
+                    ? formatDate(bg.date_shipped)
+                    : formatDate(fetchDatas.shipDate)}
+                </strong>
+                <br />
+              </div>
+            </div>
+            <div
+              className="ui divider"
+              style={{
+                margin: "0.15in auto",
+                borderColor: "#999",
+                borderTop: "1px solid transparent"
+              }}
+            />
+            <table
+              className="ui very basic table"
+              style={{
+                borderColor: "#999",
+                borderLeft: "none",
+                borderRight: "none"
+              }}
+            >
+              <thead>
+                <tr>
+                  <th className="border-top">
+                    <strong>Product</strong>
+                  </th>
+                  <th className="text-center border-top">
+                    <strong>Price</strong>
+                  </th>
+                  <th className="text-center border-top">
+                    <strong>#</strong>
+                  </th>
+                  <th className="border-top">
+                    <strong>Total</strong>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {renderFCOrder(fetchDatas.shipmentItems)}
+                {getMemberStatus(fetchDatas.shipmentItems) === "Platinum" ||
+                "Diamond"
+                  ? renderCoupon([{ code: "gift" }])
+                  : renderCoupon([])}
+              </tbody>
+              <tfoot>
+                {/* <tr>
+                  <th
+                    className="text-right"
+                    colSpan="3"
+                    style={{
+                      textAlign: "right",
+                      padding: ".78571429em .78571429em 0 0"
+                    }}
+                  >
+                    <strong>Subtotal</strong>
+                  </th>
+                  <th
+                    style={{ padding: ".78571429em .78571429em 0 .78571429em" }}
+                  >
+                    ${calculateTotal(fetchDatas.shipmentItems)}
+                  </th>
+                </tr> */}
+                {bg ? (
+                  bg.customer_message ? (
+                    <tr>
+                      <th
+                        colSpan="3"
+                        style={{ padding: "0 .78571429em", borderTop: "none" }}
+                      >
+                        <strong>Customer Message:</strong>
+                        <br />
+                        {bg.customer_message}
+                      </th>
+                    </tr>
+                  ) : null
+                ) : null}
+                {note ? (
+                  <tr>
+                    <th
+                      colSpan="2"
+                      style={{
+                        padding: "0 5.78571429em 0 .78571429em",
+                        borderTop: "none"
+                      }}
+                    >
+                      <strong>Note To Buyer:</strong>
+                      <br />
+                      Due to warehouse inventory differences, this order is
+                      being split. The remainder of your order will arrive in a
+                      separate package from USPS. We apologize for any
+                      inconveniences.
+                    </th>
+                  </tr>
+                ) : null}
+                {/* <tr>
+                  <th
+                    className="text-right"
+                    colSpan="3"
+                    style={{
+                      textAlign: "right",
+                      padding: "0 .78571429em",
+                      borderTop: "none"
+                    }}
+                  >
+                    <strong>Shipping</strong>
+                  </th>
+                  <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
+                    $
+                    {bg
+                      ? parseFloat(bg.shipping_cost_inc_tax).toFixed(2)
+                      : fetchDatas.shippingAmount
+                      ? parseFloat(fetchDatas.shippingAmount).toFixed(2)
+                      : 0.0}
+                  </th>
+                </tr>
+                <tr>
+                  <th
+                    className="text-right"
+                    colSpan="3"
+                    style={{
+                      textAlign: "right",
+                      padding: "0 .78571429em",
+                      borderTop: "none"
+                    }}
+                  >
+                    <strong>Credit / Certificate</strong>
+                  </th>
+                  <th style={{ padding: "0 .78571429em", borderTop: "none" }}>
+                    $-
+                    {bg ? parseFloat(bg.store_credit_amount).toFixed(2) : 0.0}
+                  </th>
+                </tr> */}
+                <tr>
+                  <th
+                    className="text-right"
+                    colSpan="3"
+                    style={{ textAlign: "right", borderTop: "none" }}
+                  >
+                    <strong>Total</strong>
+                  </th>
+                  <th style={{ borderTop: "none" }}>
+                    $
+                    {calculateTotal(
+                      fetchDatas.shipmentItems,
+                      bg
+                        ? parseFloat(bg.shipping_cost_inc_tax)
+                        : fetchDatas.shippingAmount
+                        ? parseFloat(fetchDatas.shippingAmount).toFixed(2)
+                        : 0.0,
+                      bg ? bg.store_credit_amount : 0.0,
+                      fetchDatas.couponInfo ? fetchDatas.couponInfo : 0
+                    )}
+                  </th>
+                </tr>
+              </tfoot>
+            </table>
+            <table
+              className="ui two column table text-center"
+              style={{
+                textAlign: "center",
+                margin: "0.15in auto",
+                borderColor: "#999",
+                borderLeft: "none",
+                borderRight: "none"
+              }}
+            >
+              <tbody>
+                <tr>
+                  <td className="align-middle" style={{ fontSize: "18px" }}>
+                    <strong>We're here to help.</strong> Email us <u>24/7</u> at
+                    info@theformulaclub.com.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table
+              className="ui column table text-center"
+              style={{
+                textAlign: "center",
+                margin: "0.15in auto",
+                borderColor: "#999",
+                border: "none",
+                borderLeft: "none",
+                borderRight: "none"
+              }}
+            >
+              <tbody>
+                <tr>
+                  <td
+                    style={{
+                      fontFamily: "Times New Roman, serif",
+                      fontSize: "22px"
+                    }}
+                  >
+                    <i>
+                      {`Prepared with love by ${
+                        iconQuotes[picker].name
+                      } and packaged with the utmost care by ${
+                        iconQuotes[shipper].name
+                      }.`}
+                    </i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
     return (
       <div>
         <div className="packing-slip">
@@ -463,7 +736,7 @@ class FetchDetail extends Component {
                   ${calculateTotal(fetchDatas.shipmentItems)}
                 </th>
               </tr>
-              {fetchDatas.bigCommerce.customer_message ? (
+              {bg.customer_message ? (
                 <tr>
                   <th
                     colSpan="3"
@@ -471,7 +744,7 @@ class FetchDetail extends Component {
                   >
                     <strong>Customer Message:</strong>
                     <br />
-                    {fetchDatas.bigCommerce.customer_message}
+                    {bg.customer_message}
                   </th>
                 </tr>
               ) : null}
@@ -479,7 +752,10 @@ class FetchDetail extends Component {
                 <tr>
                   <th
                     colSpan="2"
-                    style={{ padding: "0 5.78571429em 0 .78571429em", borderTop: "none" }}
+                    style={{
+                      padding: "0 5.78571429em 0 .78571429em",
+                      borderTop: "none"
+                    }}
                   >
                     <strong>Note To Buyer:</strong>
                     <br />
@@ -725,6 +1001,33 @@ const renderCoupon = coupons => {
     });
   }
   return null;
+};
+
+const getMemberStatus = items => {
+  let status = items[0].name.split(/- \d \(/)[1].split(/ Pricing\)/);
+  return status;
+};
+
+const renderFCOrder = items => {
+  return items.map(item => {
+    let quantity = parseInt(item.name.split(/Days\) - /)[1].split(/ \(/)[0]);
+    let name = item.name.split(/Auto/)[0];
+    return (
+      <tr key={item.orderItemId}>
+        <td>
+          {name}
+          <br />
+          <strong>Subscription: </strong>
+          {` ${quantity} boxes every ${item.options[0].value} days.`}
+        </td>
+        <td className="text-center">
+          ${(item.unitPrice / quantity).toFixed(2) - 0.01}
+        </td>
+        <td className="text-center">{quantity}</td>
+        <td>${(item.unitPrice * item.quantity).toFixed(2)}</td>
+      </tr>
+    );
+  });
 };
 
 const renderOrder = items => {

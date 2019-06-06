@@ -22,11 +22,10 @@ code {
 }
 
 .navbar {
-  background-color: rgba(255,255,255,0) !important;
+  background-color: rgba(255, 255, 255, 0) !important;
   box-shadow: 0 !important;
   border: 0 !important;
-  -webkit-box-shadow: 0 0 0 0 !important
-
+  -webkit-box-shadow: 0 0 0 0 !important;
 }
 
 .box {
@@ -48,10 +47,11 @@ code {
 @media print {
   body {
     -webkit-print-color-adjust: exact;
+    background-color: transparent;
   }
   .light-print {
     -webkit-print-color-adjust: exact;
-    opacity: 0.40;
+    opacity: 0.4;
   }
   .print-remove-margin {
     margin: 0 auto !important;

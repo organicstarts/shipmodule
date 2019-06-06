@@ -337,7 +337,8 @@ class FetchDetail extends Component {
                 <br />
                 {fetchDatas.customerEmail}
                 <br />
-                {fetchDatas.shipTo.company
+                {fetchDatas.shipTo.company &&
+                fetchDatas.shipTo.company !== "NONE"
                   ? [
                       fetchDatas.shipTo.company,
                       <br key={fetchDatas.orderNumber} />
@@ -398,9 +399,7 @@ class FetchDetail extends Component {
                   <th className="border-top">
                     <strong>Product</strong>
                   </th>
-                  <th className="text-center border-top">
-                    <strong>Price</strong>
-                  </th>
+
                   <th className="text-center border-top">
                     <strong>#</strong>
                   </th>
@@ -413,7 +412,7 @@ class FetchDetail extends Component {
                 {renderFCOrder(fetchDatas.shipmentItems)}
                 {getMemberStatus(fetchDatas.shipmentItems) === "Platinum" ||
                 getMemberStatus(fetchDatas.shipmentItems) === "Diamond"
-                  ? renderCoupon([{ code: "gift" }])
+                  ? renderCoupon([{ code: "gift", coupon_id: 1 }], true)
                   : renderCoupon([])}
               </tbody>
               <tfoot>
@@ -453,7 +452,7 @@ class FetchDetail extends Component {
                 <tr>
                   <th
                     className="text-right"
-                    colSpan="3"
+                    colSpan="2"
                     style={{ textAlign: "right", borderTop: "none" }}
                   >
                     <strong>Total</strong>
@@ -911,7 +910,7 @@ const calculateTotal = (items, shipping = 0, discount = 0, coupon = 0) => {
   return (subTotal + shipping - discount - totalCoupon).toFixed(2);
 };
 
-const renderCoupon = coupons => {
+const renderCoupon = (coupons, storeId = false) => {
   if (coupons) {
     let name = "";
     return coupons.map(coupon => {
@@ -929,12 +928,14 @@ const renderCoupon = coupons => {
       return (
         <tr key={coupon.coupon_id}>
           <td>{name}</td>
-          <td className="text-center">
-            $
-            {coupon.discount
-              ? `-${parseFloat(coupon.discount).toFixed(2)}`
-              : "0.00"}
-          </td>
+          {!storeId ? (
+            <td className="text-center">
+              $
+              {coupon.discount
+                ? `-${parseFloat(coupon.discount).toFixed(2)}`
+                : "0.00"}
+            </td>
+          ) : null}
           <td className="text-center">1</td>
           <td>
             $
@@ -950,7 +951,7 @@ const renderCoupon = coupons => {
 };
 
 const getMemberStatus = items => {
-  let status = items[0].name.split(/- \d \(/)[1].split(/ Pricing\)/);
+  let status = items[0].name.split(/- \d \(/)[1].split(/ Pricing\)/)[0];
   return status;
 };
 
@@ -966,9 +967,9 @@ const renderFCOrder = items => {
           <strong>Subscription: </strong>
           {` ${quantity} boxes every ${item.options[0].value} days.`}
         </td>
-        <td className="text-center">
+        {/* <td className="text-center">
           ${(item.unitPrice / quantity).toFixed(2) - 0.01}
-        </td>
+        </td> */}
         <td className="text-center">{quantity}</td>
         <td>${(item.unitPrice * item.quantity).toFixed(2)}</td>
       </tr>

@@ -681,17 +681,19 @@ class FetchDetail extends Component {
                   ${calculateTotal(fetchDatas.shipmentItems)}
                 </th>
               </tr>
-              {bg.customer_message ? (
-                <tr>
-                  <th
-                    colSpan="3"
-                    style={{ padding: "0 .78571429em", borderTop: "none" }}
-                  >
-                    <strong>Customer Message:</strong>
-                    <br />
-                    {bg.customer_message}
-                  </th>
-                </tr>
+              {bg ? (
+                bg.customer_message ? (
+                  <tr>
+                    <th
+                      colSpan="3"
+                      style={{ padding: "0 .78571429em", borderTop: "none" }}
+                    >
+                      <strong>Customer Message:</strong>
+                      <br />
+                      {bg.customer_message}
+                    </th>
+                  </tr>
+                ) : null
               ) : null}
               {note ? (
                 <tr>
@@ -907,7 +909,7 @@ const calculateTotal = (items, shipping = 0, discount = 0, coupon = 0) => {
   for (let sub in items) {
     subTotal += items[sub].unitPrice * items[sub].quantity;
   }
-  return (subTotal + shipping - discount - totalCoupon).toFixed(2);
+  return (subTotal + parseFloat(shipping) - discount - totalCoupon).toFixed(2);
 };
 
 const renderCoupon = (coupons, storeId = false) => {
@@ -951,7 +953,12 @@ const renderCoupon = (coupons, storeId = false) => {
 };
 
 const getMemberStatus = items => {
-  let status = items[0].name.split(/- \d \(/)[1].split(/ Pricing\)/)[0];
+  let status = "";
+  if (items[0].name.includes("Pricing")) {
+    status = items[0].name.split(/- \d \(/)[1].split(/ Pricing\)/)[0];
+  } else {
+    status = items[0].name.split(/- \d \(/)[1].split(/\)/)[0];
+  }
   return status;
 };
 

@@ -11,7 +11,7 @@ import boxes from "../../config/boxes";
 import packages from "../../config/packages";
 import { iconQuotes } from "../../config/peopleicon";
 import { ClipLoader } from "react-spinners";
-import { Segment } from "semantic-ui-react";
+import { Segment, Table } from "semantic-ui-react";
 import axios from "axios";
 import firebase from "../../config/firebaseconf";
 import skuInfo from "../../config/productinfo.json";
@@ -20,6 +20,9 @@ class FetchDetail extends Component {
   constructor() {
     super();
     this.logprint = this.logprint.bind(this);
+    this.state = {
+      deductedItems: []
+    };
   }
   componentDidMount() {
     window.addEventListener("afterprint", this.logprint);
@@ -47,7 +50,7 @@ class FetchDetail extends Component {
         await Promise.all(
           this.props.fetchDatas.shipmentItems.map(async data => {
             if (skuInfo[data.sku] && !data.sku.includes("PURE")) {
-              console.log(data);
+              let deductedItems = [];
               if (data.sku.includes("OB-")) {
                 await axios
                   .put("fb/updateinventory", {
@@ -59,6 +62,12 @@ class FetchDetail extends Component {
                   })
                   .then(response => {
                     if (response.data.msg === "success") {
+                      deductedItems.push({
+                        sku: data.sku,
+                        quantity: data.combineTotal
+                          ? data.combineTotal
+                          : data.quantity
+                      });
                       console.log("OB inventory logged");
                     } else if (response.data.msg === "fail") {
                       console.log("failed to log.");
@@ -77,6 +86,12 @@ class FetchDetail extends Component {
                   })
                   .then(response => {
                     if (response.data.msg === "success") {
+                      deductedItems.push({
+                        sku: data.sku,
+                        quantity: data.combineTotal
+                          ? data.combineTotal
+                          : data.quantity
+                      });
                       console.log("inventory subtracted");
                     } else if (response.data.msg === "fail") {
                       console.log("failed to log.");
@@ -86,6 +101,7 @@ class FetchDetail extends Component {
               // if (data.sku === "HP-UK-2") {
               //   items.push(data);
               // }
+              this.setState({ deductedItems: deductedItems });
             }
           })
         );
@@ -97,20 +113,30 @@ class FetchDetail extends Component {
     window.removeEventListener("afterprint", this.logprint);
     this.dataRef.off();
   }
-
+  renderItems() {
+    return this.state.deductedItems.map(data => {
+      return (
+        <Table.Row key={data.sku}>
+          <Table.Cell>{data.sku}</Table.Cell>
+          <Table.Cell>{data.quantity}</Table.Cell>
+        </Table.Row>
+      );
+    });
+  }
   logprint() {
     let currentTime = moment().format("dddd, MMMM DD YYYY hh:mma");
     axios
       .post("fb/writetofile", {
         action: "Print",
         orderNumber: this.props.orderNumber,
-        user: this.props.user,
+        user: this.props.displayName,
         picker: this.props.picker,
         shipper: this.props.shipper,
         currentTime
       })
       .then(response => {
         if (response.data.msg === "success") {
+          this.setState({ deductedItems: [] });
           console.log("logged");
         } else if (response.data.msg === "fail") {
           console.log("failed to log.");
@@ -119,6 +145,7 @@ class FetchDetail extends Component {
   }
   render() {
     const { fetchDatas, picker, shipper, loading, note } = this.props;
+    const { deductedItems } = this.state;
     const bg = fetchDatas.bigCommerce;
     if (loading) {
       return (
@@ -140,12 +167,26 @@ class FetchDetail extends Component {
     }
     if (fetchDatas.advancedOptions.storeId === 201185) {
       return (
-        <div className="light-print">
+        <div>
           <div className="packing-slip">
             <Link to="/" className="noprint">
               Go Back
             </Link>
-
+            {deductedItems.length ? (
+              <div>
+                <Table className="noprint">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>SKU</Table.HeaderCell>
+                      <Table.HeaderCell>Total</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>{this.renderItems()}</Table.Body>
+                </Table>
+              </div>
+            ) : (
+              ""
+            )}
             <div className="row text-center">
               <img
                 src={lwologo}
@@ -316,6 +357,21 @@ class FetchDetail extends Component {
             <Link to="/" className="noprint">
               Go Back
             </Link>
+            {deductedItems.length ? (
+              <div>
+                <Table className="noprint">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>SKU</Table.HeaderCell>
+                      <Table.HeaderCell>Total</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>{this.renderItems()}</Table.Body>
+                </Table>
+              </div>
+            ) : (
+              ""
+            )}
             <div className="row header pad-top">
               <div className="col-12 text-center">
                 <img
@@ -532,6 +588,21 @@ class FetchDetail extends Component {
           <Link to="/" className="noprint">
             Go Back
           </Link>
+          {deductedItems.length ? (
+            <div>
+              <Table className="noprint">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>SKU</Table.HeaderCell>
+                    <Table.HeaderCell>Total</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>{this.renderItems()}</Table.Body>
+              </Table>
+            </div>
+          ) : (
+            ""
+          )}
           <div className="row header pad-top">
             <div className="col-4 text-center">
               <img

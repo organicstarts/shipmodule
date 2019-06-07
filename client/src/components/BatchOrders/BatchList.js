@@ -10,7 +10,7 @@ import boxes from "../../config/boxes";
 import packages from "../../config/packages";
 import skuInfo from "../../config/productinfo.json";
 import { iconQuotes } from "../../config/peopleicon";
-import { Segment } from "semantic-ui-react";
+import { Segment, Table } from "semantic-ui-react";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
 
@@ -18,7 +18,8 @@ class BatchList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      disable: false
+      disable: false,
+      deductedItems: []
     };
     this.logprint = this.logprint.bind(this);
     // this.handleClick = this.handleClick.bind(this);
@@ -46,7 +47,7 @@ class BatchList extends Component {
       });
 
       if (!batchInLog) {
-        // let items = [];
+        let deductedItems = [];
         await Promise.all(
           this.props.shipmentItems.map(async data => {
             if (skuInfo[data.sku] && !data.sku.includes("PURE")) {
@@ -61,6 +62,12 @@ class BatchList extends Component {
                   })
                   .then(response => {
                     if (response.data.msg === "success") {
+                      deductedItems.push({
+                        sku: data.sku,
+                        quantity: data.combineTotal
+                          ? data.combineTotal
+                          : data.quantity
+                      });
                       console.log("OB inventory logged");
                     } else if (response.data.msg === "fail") {
                       console.log("failed to log.");
@@ -79,6 +86,12 @@ class BatchList extends Component {
                   })
                   .then(response => {
                     if (response.data.msg === "success") {
+                      deductedItems.push({
+                        sku: data.sku,
+                        quantity: data.combineTotal
+                          ? data.combineTotal
+                          : data.quantity
+                      });
                       console.log("inventory subtracted");
                     } else if (response.data.msg === "fail") {
                       console.log("failed to log.");
@@ -91,7 +104,7 @@ class BatchList extends Component {
             }
           })
         );
-
+        this.setState({ deductedItems: deductedItems });
         let babyProducts = [];
         this.props.shipmentItems.map(data => {
           if (
@@ -180,6 +193,7 @@ class BatchList extends Component {
       })
       .then(response => {
         if (response.data.msg === "success") {
+          this.setState({ deductedItems: [] });
           console.log("logged");
         } else if (response.data.msg === "fail") {
           console.log("failed to log.");
@@ -232,6 +246,17 @@ class BatchList extends Component {
       );
     });
   };
+
+  renderItems() {
+    return this.state.deductedItems.map(data => {
+      return (
+        <Table.Row key={data.sku}>
+          <Table.Cell>{data.sku}</Table.Cell>
+          <Table.Cell>{data.quantity}</Table.Cell>
+        </Table.Row>
+      );
+    });
+  }
 
   renderSlipList = () => {
     const { batchDatas, picker, shipper, loading } = this.props;
@@ -336,6 +361,21 @@ class BatchList extends Component {
           >
             Subtract from Database
           </Button> */}
+          {this.state.deductedItems.length ? (
+            <div>
+              <Table className="noprint">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>SKU</Table.HeaderCell>
+                    <Table.HeaderCell>Total</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>{this.renderItems()}</Table.Body>
+              </Table>
+            </div>
+          ) : (
+            ""
+          )}
           <div className="row">
             <h1 className="col-6" style={styles.margin}>
               Product Pick List

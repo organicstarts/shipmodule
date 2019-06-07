@@ -296,6 +296,8 @@ const applyBatch = (state, action) => {
 
 const applyFetch = (state, action) => {
   const data = action.payload[0] ? action.payload[0] : [];
+  let items = sortShipments(data.shipmentItems, "eastcoast");
+  data.shipmentItems = items.sortable;
   return Object.assign({}, state, {
     fetchDatas: data,
     loading: false

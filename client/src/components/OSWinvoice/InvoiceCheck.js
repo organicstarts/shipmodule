@@ -16,7 +16,7 @@ class InvoiceCheck extends Component {
     };
     this.fileHandler = this.fileHandler.bind(this);
   }
-  async calculateOrderNumber(item) {
+  async calculateOrderNumber(item, itemCompare) {
     let arrItem = [];
     let count = 0;
     for (let i = 5; i < item.length; i++) {
@@ -27,10 +27,40 @@ class InvoiceCheck extends Component {
           .then(data => arrItem.push(data.data));
       }
     }
+    for (let i = 5; i < itemCompare.length; i++) {
+      if (itemCompare[i] !== "") {
+        count = count += 1;
+      }
+    }
 
     return arrItem.map(data => {
       let reg1 = /(PRE|\d)\/\d/;
       let reg2 = /(\d.\/\d. pieces)/;
+      if (data.orderNumber.includes("17049")) {
+        console.log(data, item, itemCompare, count);
+        console.log(reg1.test(itemCompare[0]));
+        console.log(!reg2.test(itemCompare[0]));
+      }
+      if (item[0].includes("Shipping")) {
+        if (
+          data.quantity === itemCompare[2] / count &&
+          (reg1.test(itemCompare[0]) && !reg2.test(itemCompare[0]))
+            ? itemCompare[0].includes(data.pcs * 2)
+            : itemCompare[0].includes(data.pcs)
+        ) {
+          return (
+            <span key={data.orderNumber} style={{ backgroundColor: "green" }}>
+              {data.orderNumber},{" "}
+            </span>
+          );
+        } else {
+          return (
+            <span key={data.orderNumber} style={{ backgroundColor: "red" }}>
+              {data.orderNumber},{" "}
+            </span>
+          );
+        }
+      }
       if (
         data.quantity === item[2] / count &&
         (reg1.test(item[0]) && !reg2.test(item[0]))
@@ -59,19 +89,37 @@ class InvoiceCheck extends Component {
     let individualTotal = 0;
     for (let i = 4; i < data.length - 5; i += 2) {
       if (data[i][2] !== "") {
-        individualTotal =
-          individualTotal +
-          parseFloat(data[i][4].split("€  ")[1].replace(/,/g, "")) +
-          parseFloat(data[i + 1][4].split("€  ")[1].replace(/,/g, ""));
+        individualTotal = data[i][2].includes("-")
+          ? individualTotal -
+            parseFloat(data[i][4].split("€  ")[1].replace(/,|\(|\)/g, "")) -
+            parseFloat(data[i + 1][4].split("€  ")[1].replace(/,|\(|\)/g, ""))
+          : individualTotal +
+            parseFloat(data[i][4].split("€  ")[1].replace(/,|\(|\)/g, "")) +
+            parseFloat(data[i + 1][4].split("€  ")[1].replace(/,|\(|\)/g, ""));
         reportHtml.push(
           <Table.Row key={i}>
-            <Table.Cell>{data[i][0]}</Table.Cell>
-            <Table.Cell>{data[i][1]}</Table.Cell>
-            <Table.Cell>{data[i][2]}</Table.Cell>
-            <Table.Cell>{data[i][3]}</Table.Cell>
-            <Table.Cell>{data[i][4]}</Table.Cell>
             <Table.Cell>
-              {await this.calculateOrderNumber(data[i])}
+              {data[i][0]} <br /> {data[i + 1][0]}
+            </Table.Cell>
+            <Table.Cell>
+              {data[i][1]}
+              <br /> {data[i + 1][1]}
+            </Table.Cell>
+            <Table.Cell>
+              {data[i][2]}
+              <br /> {data[i + 1][2]}
+            </Table.Cell>
+            <Table.Cell>
+              {data[i][3]}
+              <br /> {data[i + 1][3]}
+            </Table.Cell>
+            <Table.Cell>
+              {data[i][4]}
+              <br /> {data[i + 1][4]}
+            </Table.Cell>
+            <Table.Cell>
+              {await this.calculateOrderNumber(data[i], data[i + 1])} <br />
+              {await this.calculateOrderNumber(data[i + 1], data[i])}
               {/* <span style={{ backgroundColor: "red" }}>{data[i][5]}</span>{" "}
               {data[i][6]} {data[i][7]} {data[i][8]} {data[i][9]} */}
             </Table.Cell>
@@ -159,9 +207,6 @@ class InvoiceCheck extends Component {
                       {this.state.calculatedTotal}
                     </Header>
                   </Table.HeaderCell>
-                  <sub>
-                    *calculated total includes shipping, not displayed on table
-                  </sub>
                 </Table.Row>
               </Table.Body>
             </Table>

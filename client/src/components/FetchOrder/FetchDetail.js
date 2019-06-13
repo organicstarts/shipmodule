@@ -466,10 +466,10 @@ class FetchDetail extends Component {
               </thead>
               <tbody>
                 {renderFCOrder(fetchDatas.shipmentItems)}
-                {getMemberStatus(fetchDatas.shipmentItems) === "Platinum" ||
+                {/* {getMemberStatus(fetchDatas.shipmentItems) === "Platinum" ||
                 getMemberStatus(fetchDatas.shipmentItems) === "Diamond"
                   ? renderCoupon([{ code: "gift", coupon_id: 1 }], true)
-                  : renderCoupon([])}
+                  : renderCoupon([])} */}
               </tbody>
               <tfoot>
                 {bg ? (

@@ -11,8 +11,8 @@ const calcTotalPercent = (eTotal, wTotal) => {
   if (total > 750) return 75;
   if (total > 500) return 50;
   if (total > 250) return 25;
-  if (total > 100) return 10;
-  if (total < 100) return 0;
+  if (total > 150) return 10;
+  if (total < 150) return 0;
 };
 router.get("/getinventory", (req, res) => {
   let dataRef = admin.database().ref("/inventory");

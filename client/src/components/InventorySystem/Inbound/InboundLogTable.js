@@ -28,13 +28,16 @@ class InboundLogTable extends Component {
       filter: { value: "", log: [] },
       image: "",
       reverse: "",
-      deleteLoading: false
+      deleteLoading: false,
+      toggle: {}
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     // this.handleClick = this.handleClick.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.toggleInput = this.toggleInput.bind(this);
 
+    this.handleChange = this.handleChange.bind(this);
     this.firebaseRef = firebase.database().ref(`/inventory/log`);
     this.firebaseRef.once("value", async snapshot => {
       const payload = snapshot.val();
@@ -46,13 +49,54 @@ class InboundLogTable extends Component {
           },
           () => {
             this.setState({
-              datas: this.filterLog(this.state.filter.value)
+              datas: this.filterLog(this.state.filter.value),
+              toggle: Object.keys(payload).map(element => false)
             });
           }
         );
       }
     });
   }
+
+  toggleInput(index) {
+    const newToggleStatus = [...this.state.toggle];
+    newToggleStatus[index] = !this.state.toggle[index];
+    this.setState({ toggle: newToggleStatus });
+  }
+
+  handleChange = e => {
+    let data;
+    data = { ...this.state.datas };
+    let value = e.target.value;
+    data[e.target.placeholder][e.target.name] = value;
+    data[e.target.placeholder].total =
+      parseInt(data[e.target.placeholder].quantity) +
+      parseInt(
+        data[e.target.placeholder].broken
+          ? data[e.target.placeholder].broken
+          : 0
+      );
+    this.setState({
+      datas: data
+    });
+  };
+  updateChange = (key, index) => {
+    let data = { ...this.state.datas };
+    let update = firebase.database().ref("/inventory/log");
+    update
+      .child(key)
+      .update({
+        carrier: data[index].carrier,
+        trackingNumber: data[index].trackingNumber,
+        invoiceNum: data[index].invoiceNum,
+        brand: data[index].brand,
+        stage: data[index].stage,
+        quantity: parseInt(data[index].quantity ? data[index].quantity : 0),
+        broken: parseInt(data[index].broken ? data[index].broken : 0),
+        total: parseInt(data[index].total)
+      })
+      .then(() => this.toggleInput(index));
+  };
 
   // let storageRef = firebase.storage().ref();
 
@@ -278,7 +322,7 @@ class InboundLogTable extends Component {
   };
 
   mapTableList() {
-    const { datas, image } = this.state;
+    const { datas, image, toggle } = this.state;
 
     return Object.keys(datas).map((key, index) => {
       return (
@@ -305,6 +349,10 @@ class InboundLogTable extends Component {
           handleTotal={this.totalChange.bind(this)}
           show={datas[key].isChecked}
           archiveInventory={this.archiveInventory.bind(this)}
+          toggleInput={this.toggleInput}
+          showInput={toggle[index]}
+          handleChange={this.handleChange}
+          handleSubmitButton={this.updateChange.bind(this)}
         />
       );
     });

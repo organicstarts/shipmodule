@@ -71,8 +71,8 @@ const getShipmentOrder = payload => {
       }`
     )
     .then(async data => {
-      console.log("hi", data);
-      return await getBatchDetails(data.data);
+      let filter = data.data.filter(x => x.orderNumber === payload.orderNumber);
+      return await getBatchDetails(filter);
     });
 };
 

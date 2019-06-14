@@ -100,7 +100,7 @@ router.get("/getsingleosworder", (req, res) => {
         orderNumber: filterItems[0].orderNumber,
         quantity: filterItems[0].items[0].quantity,
         title: filterItems[0].items[0].name,
-        pcs: filterItems[0].items[0].name.split(/(.Pieces|.Boxes|.Tins)/)[0]
+        pcs: filterItems[0].items[0].name.split(/(.Pieces|.Boxes|.Tins|.pieces|.boxes|.tins)/)[0]
       };
     })
     .then(info => {

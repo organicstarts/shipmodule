@@ -713,6 +713,19 @@ class FetchDetail extends Component {
             }}
           >
             <thead>
+              {bg ? (
+                bg.customer_message ? (
+                  <p
+                    style={{
+                      borderBottom: "1px black solid",
+                      width: "130%",
+                      paddingBottom: "14px"
+                    }}
+                  >
+                    <strong>Customer Message:</strong> {bg.customer_message}
+                  </p>
+                ) : null
+              ) : null}
               <tr>
                 <th className="border-top">
                   <strong>Product</strong>
@@ -752,20 +765,7 @@ class FetchDetail extends Component {
                   ${calculateTotal(fetchDatas.shipmentItems)}
                 </th>
               </tr>
-              {bg ? (
-                bg.customer_message ? (
-                  <tr>
-                    <th
-                      colSpan="3"
-                      style={{ padding: "0 .78571429em", borderTop: "none" }}
-                    >
-                      <strong>Customer Message:</strong>
-                      <br />
-                      {bg.customer_message}
-                    </th>
-                  </tr>
-                ) : null
-              ) : null}
+
               {note ? (
                 <tr>
                   <th
@@ -890,14 +890,14 @@ class FetchDetail extends Component {
                   <img
                     src={iconQuotes[picker].icon}
                     style={{
-                      float: "left",
+                      // float: "left",
                       maxWidth: "0.75in",
                       height: "auto"
                     }}
                     alt="icon"
                   />
                 </td>
-                <td style={{ textAlign: "center" }}>
+                <td style={{ textAlign: "left" }}>
                   <h3 className="ui header">
                     Prepared by {iconQuotes[picker].name}
                   </h3>
@@ -909,16 +909,16 @@ class FetchDetail extends Component {
                   <img
                     src={iconQuotes[shipper].icon}
                     style={{
-                      float: "left",
+                      // float: "left",
                       maxWidth: "0.75in",
                       height: "auto"
                     }}
                     alt="icon"
                   />
                 </td>
-                <td style={{ textAlign: "center" }}>
+                <td style={{ textAlign: "left" }}>
                   <h3 className="ui header">
-                    Prepared by {iconQuotes[shipper].name}
+                    Shipped by {iconQuotes[shipper].name}
                   </h3>
                   <div className="sub header" style={{ color: "#000" }}>
                     "{iconQuotes[shipper].quote}"

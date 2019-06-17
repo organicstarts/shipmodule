@@ -20,21 +20,14 @@ const SlipDetail = props => {
           <div className="ui shipping-info" />
           <div className="row details">
             <div className="col-7">
-              <h1 className="shipping-name">
-                {props.name.toUpperCase()}
-              </h1>
+              <h1 className="shipping-name">{props.name.toUpperCase()}</h1>
               {props.email}
               <br />
-              {props.company
-                ? [props.company, <br key={props.orderID} />]
-                : ""}
+              {props.company ? [props.company, <br key={props.orderID} />] : ""}
               {props.street1}
               <br />
-              {props.street2
-                ? [props.street2, <br key={props.orderID} />]
-                : ""}
-              {props.city}, {props.state}{" "}
-              {props.postalCode}
+              {props.street2 ? [props.street2, <br key={props.orderID} />] : ""}
+              {props.city}, {props.state} {props.postalCode}
               <br />
             </div>
             <div className="col-5">
@@ -223,6 +216,17 @@ const SlipDetail = props => {
         style={{ borderColor: "#999", borderLeft: "none", borderRight: "none" }}
       >
         <thead>
+          {props.message ? (
+            <p
+              style={{
+                borderBottom: "1px black solid",
+                width: "130%",
+                paddingBottom: "14px"
+              }}
+            >
+              <strong>Customer Message:</strong> {props.message}
+            </p>
+          ) : null}
           <tr>
             <th className="border-top">
               <strong>Product</strong>
@@ -258,15 +262,7 @@ const SlipDetail = props => {
               ${calculateTotal(props.shipmentInfo, null, null, props.coupon)}
             </th>
           </tr>
-          {props.message ? (
-            <tr>
-              <th colSpan="3" style={{ padding: "0 .78571429em" }}>
-                <strong>Customer Message:</strong>
-                <br />
-                {props.message}
-              </th>
-            </tr>
-          ) : null}
+
           <tr>
             <th
               className="text-right"
@@ -364,11 +360,11 @@ const SlipDetail = props => {
             <td>
               <img
                 src={props.picker.icon}
-                style={{ float: "left", maxWidth: "0.75in", height: "auto" }}
+                style={{ maxWidth: "0.75in", height: "auto" }}
                 alt="icon"
               />
             </td>
-            <td style={{ textAlign: "center" }}>
+            <td style={{ textAlign: "left" }}>
               <h3 className="ui header">Prepared by {props.picker.name}</h3>
               <div className="sub header" style={{ color: "#000" }}>
                 "{props.picker.quote}"
@@ -377,11 +373,11 @@ const SlipDetail = props => {
             <td>
               <img
                 src={props.shipper.icon}
-                style={{ float: "left", maxWidth: "0.75in", height: "auto" }}
+                style={{ maxWidth: "0.75in", height: "auto" }}
                 alt="icon"
               />
             </td>
-            <td style={{ textAlign: "center" }}>
+            <td style={{ textAlign: "left" }}>
               <h3 className="ui header">Shipped by {props.shipper.name}</h3>
               <div className="sub header" style={{ color: "#000" }}>
                 "{props.shipper.quote}"

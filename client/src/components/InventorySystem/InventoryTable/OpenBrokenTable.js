@@ -6,12 +6,19 @@ import firebase from "../../../config/firebaseconf";
 import axios from "axios";
 import { Segment, Table, Button } from "semantic-ui-react";
 
+const compare = (a, b) => {
+  const skuA = Object.keys(a);
+  const skuB = Object.keys(b);
+  return a[skuA].orderOfImportance - b[skuB].orderOfImportance;
+};
+
 class OpenBrokenTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
       toggle: {},
       eastDatas: {},
+      productArray: [],
       westDatas: {},
       bgDatas: {},
       loading: true,
@@ -40,6 +47,11 @@ class OpenBrokenTable extends Component {
         this.setState({
           eastDatas: payload.eastcoastOB,
           westDatas: payload.westcoastOB,
+          productArray: Object.keys(payload.eastcoastOB)
+            .map(key => {
+              return { [key]: payload.eastcoastOB[key] };
+            })
+            .sort(compare),
           toggle: Object.keys(payload.eastcoastOB).map(element => false)
         });
 
@@ -229,9 +241,10 @@ class OpenBrokenTable extends Component {
   }
 
   mapTableList() {
-    const { eastDatas, westDatas, bgDatas, toggle } = this.state;
+    const { eastDatas, westDatas, bgDatas, productArray, toggle } = this.state;
 
-    return Object.keys(eastDatas).map((key, index) => {
+    return productArray.map((data, index) => {
+      const key = Object.keys(data)[0]
       return (
         <InventoryTableDetail
           index={index}

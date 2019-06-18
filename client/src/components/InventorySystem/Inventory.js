@@ -15,6 +15,7 @@ class Inventory extends Component {
       case "yvan@organicstart.com":
       case "peter@organicstart.com":
       case "isaiah@organicstart.com":
+      case "julian@organicstart.com":
         return true;
       default:
         return false;

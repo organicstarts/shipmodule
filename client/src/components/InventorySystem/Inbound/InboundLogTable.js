@@ -231,10 +231,10 @@ class InboundLogTable extends Component {
     //     productID: dbDatas[`OB-${key}`].productID
     //   });
     // }
-    // axios.put("os/updateinventory", {
-    //   inventory_level: total,
-    //   productID: dbDatas[key].productID
-    // });
+    axios.put("os/updateinventory", {
+      inventory_level: total,
+      productID: dbDatas[key].productID
+    });
     axios
       .put("fb/updateinventory", {
         dbname: warehouse,

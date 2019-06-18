@@ -2,7 +2,7 @@ import "module-alias/register";
 const router = require("express").Router();
 const fetch = require("node-fetch");
 import bigCommerce from "@bgauth/auth.json";
-import pInfo from "@bgauth/productInfo";
+// import pInfo from "@bgauth/productInfo";
 const moment = require("moment");
 const username = bigCommerce.bigcommerce.user;
 const password = bigCommerce.bigcommerce.key;
@@ -197,31 +197,31 @@ router.get("/getinventorylevel", (req, res) => {
 /*-------------------------------------------------------------------
                             POST REQUESTS                            
 ---------------------------------------------------------------------*/
-router.post("/deductbundletosingle", (req, res) => {
-  //build api URL with user ordernumber to see if order had coupons used
-  const baseUrl = `https://brainiac.organicstart.com/os/updateinventory`;
-  res.set({
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
-  });
-  Promise.all(
-    req.body.line_items.map(async data => {
-      await fetch(baseUrl, {
-        method: "PUT",
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          Authorization: `Basic ${encodedString}`,
-          "Content-Type": "application/json",
-          Accept: "application/json"
-        },
-        body: JSON.stringify({
-          inventory_level: 0 - data.quantity,
-          productID: pInfo[data.sku].productID
-        })
-      });
-    })
-  ).then(x => res.json({ msg: "success" })).catch(x => res.json({msg: "fail"}))
-});
+// router.post("/deductbundletosingle", (req, res) => {
+//   //build api URL with user ordernumber to see if order had coupons used
+//   const baseUrl = `https://brainiac.organicstart.com/os/updateinventory`;
+//   res.set({
+//     "Access-Control-Allow-Origin": "*",
+//     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
+//   });
+//   Promise.all(
+//     req.body.line_items.map(async data => {
+//       await fetch(baseUrl, {
+//         method: "PUT",
+//         headers: {
+//           "Access-Control-Allow-Origin": "*",
+//           Authorization: `Basic ${encodedString}`,
+//           "Content-Type": "application/json",
+//           Accept: "application/json"
+//         },
+//         body: JSON.stringify({
+//           inventory_level: 0 - data.quantity,
+//           productID: pInfo[data.sku].productID
+//         })
+//       });
+//     })
+//   ).then(x => res.json({ msg: "success" })).catch(x => res.json({msg: "fail"}))
+// });
 
 /*-------------------------------------------------------------------
                             PUT REQUESTS                            

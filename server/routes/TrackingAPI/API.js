@@ -111,27 +111,31 @@ router.get("/getallorders", (req, res) => {
       let retrieveData = [];
       data.orders.map(data => {
         let trackingObj = {};
-        if (data.fulfillment_status !== "fulfilled" && data.shipping_lines[0]) {
-          if (data.note && data.financial_status === "paid") {
-            let carrier = data.note
-              .split("\n")
-              .filter(carrier => carrier.includes("Carrier"));
-            let trackingNum = data.note
-              .split("\n")
-              .filter(tracking => tracking.includes("Tracking Number"));
+        if (
+          (data.fulfillment_status === "partial" ||
+            data.fulfillment_status === "fulfilled") &&
+          data.shipping_lines[0]
+        ) {
+          // if (data.note && data.financial_status === "paid") {
+          //   let carrier = data.note
+          //     .split("\n")
+          //     .filter(carrier => carrier.includes("Carrier"));
+          //   let trackingNum = data.note
+          //     .split("\n")
+          //     .filter(tracking => tracking.includes("Tracking Number"));
 
-            carrier.map((carrier, i) => {
-              carrier = carrier.split(": ")[1];
-              trackingNum[i] = trackingNum[i].split(": ")[1];
-              trackingObj[carrier] = trackingNum[i];
-            });
-          } else {
-            trackingObj = null;
-          }
+          //   carrier.map((carrier, i) => {
+          //     carrier = carrier.split(": ")[1];
+          //     trackingNum[i] = trackingNum[i].split(": ")[1];
+          //     trackingObj[carrier] = trackingNum[i];
+          //   });
+          // } else {
+          //   trackingObj = null;
+          // }
           retrieveData.push({
             created_at: data.created_at,
             orderNum: data.name,
-            tracking: trackingObj,
+            tracking: data.fulfillments[0].tracking_number,
             id: data.id,
             lineItems: data.line_items,
             shippingMethod: data.shipping_lines[0].code,

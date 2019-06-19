@@ -223,7 +223,7 @@ const getAllOswOrders = async action => {
           if (data.tracking !== null) {
             if (data.tracking.Other) {
               await axios
-                .get(`osw/bpost?tracking=${data.tracking.Other}`)
+                .get(`osw/bpost?tracking=${data.tracking}`)
                 .then(xmlData => {
                   let resXML = new DOMParser().parseFromString(
                     xmlData.data,
@@ -259,7 +259,7 @@ const getAllOswOrders = async action => {
           await Promise.all(
             data.lineItems.map(async item => {
               if (
-                item.fulfillment_service === "mike" &&
+                // item.fulfillment_service === "mike" &&
                 data.relabel &&
                 !item.fulfillment_status &&
                 data.shippingMethod.includes("FREE")
@@ -280,7 +280,7 @@ const getAllOswOrders = async action => {
                   });
               }
               if (
-                item.fulfillment_service === "mike" &&
+                // item.fulfillment_service === "mike" &&
                 !data.relabel &&
                 !item.fulfillment_status &&
                 data.shippingMethod.includes("EXPRESS")

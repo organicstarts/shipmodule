@@ -33,7 +33,7 @@ class InventoryTable extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.totalChange = this.totalChange.bind(this);
     // this.pushTotalToBigCommerce = this.pushTotalToBigCommerce.bind(this);
-    // this.calculateAllTotal = this.calculateAllTotal.bind(this);
+    this.calculateAllTotal = this.calculateAllTotal.bind(this);
     this.changePercentage = this.changePercentage.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -294,7 +294,7 @@ class InventoryTable extends Component {
       } else {
         axios.put("os/disableproduct", {
           productID: data.id,
-          tracking: "simple",
+          tracking: "none",
           inventory_level: Math.floor(total)
         });
         data.total = Math.floor(total);
@@ -383,7 +383,6 @@ class InventoryTable extends Component {
 
     await Promise.all(
       tempBGData[key].bundles.map(async data => {
-        console.log(data);
         if (
           data.tk.length > 0 &&
           (bgDatas[data.tk[0]].total < 100 || bgDatas[data.tk[1]].total < 100)
@@ -404,10 +403,10 @@ class InventoryTable extends Component {
         } else {
           await axios.put("os/disableproduct", {
             productID: data.id,
-            tracking: "simple",
+            tracking: "none",
             inventory_level: Math.floor(total / 2)
           });
-          data.tracking = "simple";
+          data.tracking = "none";
           data.total = Math.floor(total / 2);
         }
       })
@@ -420,48 +419,46 @@ class InventoryTable extends Component {
     return east + west;
   }
 
-  // calculateAllTotal() {
-  //   const { bgDatas, eastDatas, westDatas } = this.state;
-  //   this.setState({ buttonLoading: true });
-  //   const tempBGData = { ...bgDatas };
-  //   Promise.all(
-  //     Object.keys(bgDatas).map(async key => {
-  //       let total = this.calculateTotal(
-  //         eastDatas[key].total,
-  //         westDatas[key].total
-  //       );
-  //       if (total > 0) {
-  //         await axios
-  //           .put("os/disableproduct", {
-  //             tracking: "simple",
-  //             inventory_level: total,
-  //             productID: bgDatas[key].id
-  //           })
-  //           .then(async () => {
-  //             tempBGData[key].tracking = "simple";
-  //             tempBGData[key].total = total;
-  //             if (total > 100) {
-  //               await this.enableBundle(tempBGData[key].bundles, total / 2);
-  //             }
-  //           });
-  //       } else {
-  //         await axios
-  //           .put("os/disableproduct", {
-  //             tracking: "simple",
-  //             inventory_level: total,
-  //             productID: bgDatas[key].id
-  //           })
-  //           .then(async () => {
-  //             tempBGData[key].tracking = "simple";
-  //             tempBGData[key].total = total;
-  //             if (total < 100) {
-  //               await this.disableBundle(tempBGData[key].bundles);
-  //             }
-  //           });
-  //       }
-  //     })
-  //   ).then(() => this.setState({ bgDatas: tempBGData, buttonLoading: false }));
-  // }
+  calculateAllTotal() {
+    const { bgDatas, eastDatas, westDatas } = this.state;
+    this.setState({ buttonLoading: true });
+    const tempBGData = { ...bgDatas };
+    Promise.all(
+      Object.keys(bgDatas).map(async key => {
+        let total =
+          this.calculateTotal(eastDatas[key].total, westDatas[key].total) - 200;
+        if (total > 0) {
+          await axios
+            .put("os/disableproduct", {
+              tracking: "simple",
+              inventory_level: total,
+              productID: bgDatas[key].id
+            })
+            .then(async () => {
+              tempBGData[key].tracking = "simple";
+              tempBGData[key].total = total;
+              // if (total > 100) {
+              //   await this.enableBundle(tempBGData[key].bundles, total / 2);
+              // }
+            });
+        } else {
+          await axios
+            .put("os/disableproduct", {
+              tracking: "simple",
+              inventory_level: total < 0 ? 0 : total,
+              productID: bgDatas[key].id
+            })
+            .then(async () => {
+              tempBGData[key].tracking = "simple";
+              tempBGData[key].total = total;
+              // if (total < 100) {
+              //   await this.disableBundle(tempBGData[key].bundles);
+              // }
+            });
+        }
+      })
+    ).then(() => this.setState({ bgDatas: tempBGData, buttonLoading: false }));
+  }
 
   mapTableList() {
     const { eastDatas, westDatas, productArray, bgDatas, toggle } = this.state;
@@ -567,7 +564,7 @@ class InventoryTable extends Component {
         <Link to="/inventory" className="noprint">
           Go Back
         </Link>
-        {/* {this.state.buttonLoading ? (
+        {this.state.buttonLoading ? (
           <ClipLoader
             sizeUnit={"px"}
             size={54}
@@ -580,11 +577,11 @@ class InventoryTable extends Component {
             className="noprint"
             color="green"
             onClick={this.calculateAllTotal}
-            disabled={true}
+            disabled={false}
           >
             Calculate Total
           </Button>
-        )} */}
+        )}
 
         {this.compareEmail(this.props.email) && (
           <div style={{ float: "right" }}>

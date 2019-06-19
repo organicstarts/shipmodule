@@ -2,7 +2,7 @@ import "module-alias/register";
 const router = require("express").Router();
 const fetch = require("node-fetch");
 import bigCommerce from "@bgauth/auth.json";
-import pInfo from "@bgauth/productInfo.json";
+import pInfo from "@bgauth/productinfo.json";
 const moment = require("moment");
 const username = bigCommerce.bigcommerce.user;
 const password = bigCommerce.bigcommerce.key;

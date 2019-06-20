@@ -117,7 +117,10 @@ router.get("/getallorders", (req, res) => {
             data.fulfillment_status === "fulfilled") &&
           data.shipping_lines[0]
         ) {
-    
+          let trackingData = data.fulfillments.filter(
+            data => data.tracking_number.charAt(0) === "3"
+          );
+
           // if (data.note && data.financial_status === "paid") {
           //   let carrier = data.note
           //     .split("\n")
@@ -134,16 +137,18 @@ router.get("/getallorders", (req, res) => {
           // } else {
           //   trackingObj = null;
           // }
-          retrieveData.push({
-            created_at: data.created_at,
-            orderNum: data.name,
-            fulfillmentId: data.fulfillments[0].id,
-            tracking: data.fulfillments[0].tracking_number,
-            id: data.id,
-            lineItems: data.line_items,
-            shippingMethod: data.shipping_lines[0].code,
-            countryCode: data.shipping_address.country_code
-          });
+          if (trackingData.length > 0) {
+            retrieveData.push({
+              created_at: data.created_at,
+              orderNum: data.name,
+              fulfillmentId: trackingData[0].id,
+              tracking: trackingData[0].tracking_number,
+              id: data.id,
+              lineItems: data.line_items,
+              shippingMethod: data.shipping_lines[0].code,
+              countryCode: data.shipping_address.country_code
+            });
+          }
         }
       });
       return retrieveData;

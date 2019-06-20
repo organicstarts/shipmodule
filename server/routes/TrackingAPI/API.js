@@ -103,19 +103,21 @@ router.get("/getallorders", (req, res) => {
   });
   const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders.json?limit=250&created_at_max=${
     req.query.endTime
-  }&fulfillment_status=unshipped`;
+  }`;
 
   fetch(baseUrl, header)
     .then(res => res.json())
     .then(data => {
       let retrieveData = [];
       data.orders.map(data => {
-        let trackingObj = {};
+        // let trackingObj = {};
+        // console.log(data.fulfillment_status)
         if (
           (data.fulfillment_status === "partial" ||
             data.fulfillment_status === "fulfilled") &&
           data.shipping_lines[0]
         ) {
+    
           // if (data.note && data.financial_status === "paid") {
           //   let carrier = data.note
           //     .split("\n")
@@ -135,6 +137,7 @@ router.get("/getallorders", (req, res) => {
           retrieveData.push({
             created_at: data.created_at,
             orderNum: data.name,
+            fulfillmentId: data.fulfillments[0].id,
             tracking: data.fulfillments[0].tracking_number,
             id: data.id,
             lineItems: data.line_items,
@@ -247,7 +250,7 @@ router.get("/getorder", (req, res) => {
 /*-------------------------------------------------------------------
                             POST REQUESTS                            
 ---------------------------------------------------------------------*/
-router.post("/fulfillment", (req, res) => {
+router.put("/fulfillment", (req, res) => {
   res.set({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD",
@@ -256,16 +259,17 @@ router.post("/fulfillment", (req, res) => {
   });
   const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders/${
     req.body.orderId
-  }/fulfillments.json`;
+  }/fulfillments/${req.body.fulfillmentId}.json`;
 
   fetch(baseUrl, {
-    method: "POST",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json"
     },
     body: JSON.stringify({
       fulfillment: {
+        id: req.body.fulfillmentId,
         location_id: req.body.locationId,
         tracking_number: req.body.tracking,
         tracking_company: req.body.trackingCompany,

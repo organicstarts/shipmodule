@@ -3,9 +3,9 @@ import { Table, Button, Input } from "semantic-ui-react";
 import "../inventory.css";
 
 const getWarningColor = total => {
-  if (total < 150) return "red";
-  if (total < 250) return "orange";
-  if (total < 350) return "yellow";
+  if (total < 250) return "red";
+  if (total < 350) return "orange";
+  if (total < 450) return "yellow";
 };
 
 const InventoryReportDetail = props => {

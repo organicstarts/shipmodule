@@ -158,12 +158,12 @@ const getOswOrder = async action => {
             if (
               item.fulfillmentService === "mike" &&
               data[0].relabel &&
-              !item.fulfillmentStatus
+              item.fulfillmentStatus
             ) {
               await axios
                 .post("osw/fulfillment", {
                   orderId: data[0].id,
-                  locationId: 41340099,
+                  locationId: 30977539,
                   tracking: data[0].relabel,
                   trackingCompany:
                     data[0].countryCode === "CA" ? "Canada Post" : "USPS",
@@ -179,7 +179,7 @@ const getOswOrder = async action => {
             if (
               item.fulfillmentService === "mike" &&
               !data[0].relabel &&
-              !item.fulfillmentStatus &&
+              item.fulfillmentStatus &&
               data[0].shippingMethod.includes("EXPRESS")
             ) {
               let carrierArr = Object.keys(data[0].tracking);
@@ -194,7 +194,7 @@ const getOswOrder = async action => {
               await axios
                 .post("osw/fulfillment", {
                   orderId: data[0].id,
-                  locationId: 41340099,
+                  locationId: 30977539,
                   tracking: data[0].tracking[carrier],
                   trackingCompany: carrier,
                   lineItemId: item.id,
@@ -220,32 +220,32 @@ const getAllOswOrders = async action => {
       let resWithRelabel = [];
       await Promise.all(
         res.data.map(async data => {
-          if (data.tracking !== null) {
-            if (data.tracking.Other) {
-              await axios
-                .get(`osw/bpost?tracking=${data.tracking}`)
-                .then(xmlData => {
-                  let resXML = new DOMParser().parseFromString(
-                    xmlData.data,
-                    "application/xml"
-                  );
-                  if (resXML.getElementsByTagName("relabelBarcode")[0]) {
-                    data["relabel"] = resXML.getElementsByTagName(
-                      "relabelBarcode"
-                    )[0].textContent;
-                    resWithRelabel.push(data);
-                  }
-                });
-            }
-            if (data.shippingMethod !== null) {
-              if (
-                (data.tracking.FedEx || data.tracking.USPS) &&
-                data.shippingMethod.includes("EXPRESS")
-              ) {
-                console.log(data);
-                resWithRelabel.push(data);
-              }
-            }
+          if (data.tracking !== null && data.tracking.charAt(0) === "3") {
+            console.log(data.tracking);
+            await axios
+              .get(`osw/bpost?tracking=${data.tracking}`)
+              .then(xmlData => {
+                let resXML = new DOMParser().parseFromString(
+                  xmlData.data,
+                  "application/xml"
+                );
+                if (resXML.getElementsByTagName("relabelBarcode")[0]) {
+                  data["relabel"] = resXML.getElementsByTagName(
+                    "relabelBarcode"
+                  )[0].textContent;
+                  resWithRelabel.push(data);
+                }
+              });
+
+            // if (data.shippingMethod !== null) {
+            //   if (
+            //     (data.tracking.FedEx || data.tracking.USPS) &&
+            //     data.shippingMethod.includes("EXPRESS")
+            //   ) {
+            //     console.log(data);
+            //     resWithRelabel.push(data);
+            //   }
+            // }
           }
         })
       );
@@ -261,13 +261,15 @@ const getAllOswOrders = async action => {
               if (
                 // item.fulfillment_service === "mike" &&
                 data.relabel &&
-                !item.fulfillment_status &&
+                item.fulfillment_status &&
+                item.fulfillment_service === "manual" &&
                 data.shippingMethod.includes("FREE")
               ) {
                 await axios
-                  .post("osw/fulfillment", {
+                  .put("osw/fulfillment", {
                     orderId: data.id,
-                    locationId: 41340099,
+                    fulfillmentId: data.fulfillmentId,
+                    locationId: 30977539,
                     tracking: data.relabel,
                     trackingCompany:
                       data.countryCode === "CA" ? "Canada Post" : "USPS",
@@ -279,37 +281,38 @@ const getAllOswOrders = async action => {
                     fulfilledData.push(data);
                   });
               }
-              if (
-                // item.fulfillment_service === "mike" &&
-                !data.relabel &&
-                !item.fulfillment_status &&
-                data.shippingMethod.includes("EXPRESS")
-              ) {
-                let carrierArr = Object.keys(data.tracking);
-                let carrier = carrierArr
-                  .filter(data => data.includes("FedEx"))
-                  .toString();
-                if (!carrier) {
-                  carrier = carrierArr
-                    .filter(data => data.includes("USPS"))
-                    .toString();
-                }
-                console.log("hi", carrier);
+              // if (
+              //   // item.fulfillment_service === "mike" &&
+              //   !data.relabel &&
+              //   item.fulfillment_status &&
+              //   item.fulfillment_service === "manual" &&
+              //   data.shippingMethod.includes("EXPRESS")
+              // ) {
+              //   let carrierArr = Object.keys(data.tracking);
+              //   let carrier = carrierArr
+              //     .filter(data => data.includes("FedEx"))
+              //     .toString();
+              //   if (!carrier) {
+              //     carrier = carrierArr
+              //       .filter(data => data.includes("USPS"))
+              //       .toString();
+              //   }
+              //   console.log("hi", carrier);
 
-                await axios
-                  .post("osw/fulfillment", {
-                    orderId: data.id,
-                    locationId: 41340099,
-                    tracking: data.tracking[carrier],
-                    trackingCompany: carrier,
-                    lineItemId: item.id,
-                    notifyCustomer: true
-                  })
-                  .then(res => {
-                    console.log("success?", res);
-                    fulfilledData.push(data);
-                  });
-              }
+              //   await axios
+              //     .post("osw/fulfillment", {
+              //       orderId: data.id,
+              //       locationId: 30977539,
+              //       tracking: data.tracking[carrier],
+              //       trackingCompany: carrier,
+              //       lineItemId: item.id,
+              //       notifyCustomer: true
+              //     })
+              //     .then(res => {
+              //       console.log("success?", res);
+              //       fulfilledData.push(data);
+              //     });
+              // }
             })
           );
         })

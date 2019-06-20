@@ -613,7 +613,7 @@ class InventoryTable extends Component {
               display: "inline-block"
             }}
           />
-          {` = 150 < | `}
+          {` = 250 < | `}
           <span
             className="orange"
             style={{
@@ -623,7 +623,7 @@ class InventoryTable extends Component {
               display: "inline-block"
             }}
           />
-          {` = 250 < | `}
+          {` = 350 < | `}
           <span
             className="yellow"
             style={{
@@ -633,7 +633,7 @@ class InventoryTable extends Component {
               display: "inline-block"
             }}
           />
-          {` = 350 < `}
+          {` = 450 < `}
         </p>
         <div>{this.renderLogList()}</div>
       </Segment>

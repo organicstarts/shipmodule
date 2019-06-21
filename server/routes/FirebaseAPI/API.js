@@ -1,74 +1,86 @@
 import "module-alias/register";
+import pInfo from "@bgauth/productinfo.json";
 const admin = require("firebase-admin");
 const router = require("express").Router();
-
+const fetch = require("node-fetch");
+const header = {
+  method: "GET",
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json",
+    Accept: "application/json"
+    // secureOptions: "constants.SSL_OP_NO_TLSv1_2"
+  }
+};
 /*-------------------------------------------------------------------
                             GET REQUESTS                            
 ---------------------------------------------------------------------*/
-const calcTotalPercent = (eTotal, wTotal) => {
-  const total = eTotal + wTotal;
+const compareSort = (a, b) => {
+  return a.stage - b.stage;
+};
+
+const calcTotalPercent = (total, tracking) => {
+  if (tracking === "none") return 100;
   if (total > 1000) return 100;
   if (total > 750) return 75;
   if (total > 500) return 50;
   if (total > 250) return 25;
-  if (total > 150) return 10;
-  if (total < 150) return 0;
+  if (total > 1) return 10;
+  if (total === 0) return 0;
 };
 router.get("/getinventory", (req, res) => {
-  let dataRef = admin.database().ref("/inventory");
-  dataRef.once("value", snap => {
-    const payload = snap.val();
-    let map = {
-      "Loulouka": [],
-      "Holle Cow": [],
-      "Holle Goat": [],
-      Lebenswert: [],
-      "HiPP German": [],
-      "HiPP Dutch": [],
-      "HiPP UK": [],
-      "HiPP German HA": [],
-      Topfer: [],
-      NANNYCare: []
-    };
-    if (payload.eastcoast) {
-      const data = payload.eastcoast;
-      Object.keys(payload.eastcoast).map(key => {
-        if (Object.keys(map).includes(data[key].brand)) {
-          if (data[key].brand in map) {
-            map[data[key].brand].push({
-              stage: data[key].stage,
-              total: calcTotalPercent(
-                data[key].total,
-                payload.westcoast[key].total
-              )
-            });
-          } else {
-            map[data[key]] = [
-              {
-                stage: [data[key].stage],
+  const baseUrl = "http://localhost:3001/os/getcategories";
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"
+  });
+  let map = {
+    Loulouka: [],
+    "Holle Cow": [],
+    "Holle Goat": [],
+    Lebenswert: [],
+    "HiPP German": [],
+    "HiPP Dutch": [],
+    "HiPP UK": [],
+    "HiPP German HA": [],
+    Topfer: [],
+    NANNYCare: []
+  };
+
+  fetch(baseUrl, header)
+    .then(res => res.json())
+    .then(result => {
+      for (let product in result) {
+        result[product].map(data => {
+          let key = data.sku;
+          if (pInfo[key]) {
+            if (pInfo[key].brand in map) {
+              map[pInfo[key].brand].push({
+                stage: pInfo[key].stage,
                 total: calcTotalPercent(
-                  data[key].total,
-                  payload.westcoast[key].total
+                  data.inventory_level,
+                  data.inventory_tracking
                 )
-              }
-            ];
+              });
+            }
           }
-        }
-      });
+        });
+      }
       let divArray = [];
       Object.keys(map).map(key => {
         divArray.push(`<div class="prog d-none">divider</div>`);
         divArray.push(`<div class="prog d-none">title:${key}</div>`);
-        map[key].map(data =>{
+        map[key].sort(compareSort);
+        map[key].map(data => {
           divArray.push(
-            `<div class="prog d-none">Stage ${data.stage}:${data.total}:00-00-0000</div>`
+            `<div class="prog d-none">Stage ${data.stage}:${
+              data.total
+            }:00-00-0000</div>`
           );
-        })
+        });
       });
-      res.send(divArray)
-    
-    }
-  });
+      res.send(divArray);
+    });
 });
 
 /*-------------------------------------------------------------------

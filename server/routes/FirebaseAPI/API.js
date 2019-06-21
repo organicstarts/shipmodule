@@ -29,7 +29,7 @@ const calcTotalPercent = (total, tracking) => {
   if (total === 0) return 0;
 };
 router.get("/getinventory", (req, res) => {
-  const baseUrl = "http://localhost:3001/os/getcategories";
+  const baseUrl = "https://brainiac.organicstart.com/os/getcategories";
   res.set({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD"

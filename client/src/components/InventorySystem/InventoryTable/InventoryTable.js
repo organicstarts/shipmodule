@@ -330,8 +330,8 @@ class InventoryTable extends Component {
           inventory_level: total
         })
         .then(async () => {
-          tempBGData[key].tracking = "simple";
-          tempBGData[key].total = total;
+          // tempBGData[key].tracking = "simple";
+          // tempBGData[key].total = total;
           // await this.enableBundle(
           //   tempBGData[key].bundles,
           //   tempBGData[key].total
@@ -376,10 +376,10 @@ class InventoryTable extends Component {
   async handleOutOfStockBundle(key) {
     const { bgDatas, eastDatas, westDatas } = this.state;
     const tempBGData = { ...bgDatas };
-    const total = this.calculateTotal(
-      eastDatas[key].total,
-      westDatas[key].total
-    );
+    // const total = this.calculateTotal(
+    //   eastDatas[key].total,
+    //   westDatas[key].total
+    // );
 
     await Promise.all(
       tempBGData[key].bundles.map(async data => {
@@ -392,7 +392,9 @@ class InventoryTable extends Component {
             tracking: "simple",
             inventory_level: 0
           });
-        } else if (data.total !== 0) {
+          data.tracking = "simple";
+          data.total = 0;
+        } else if (data.tracking === "none") {
           await axios.put("os/disableproduct", {
             productID: data.id,
             tracking: "simple",
@@ -404,10 +406,10 @@ class InventoryTable extends Component {
           await axios.put("os/disableproduct", {
             productID: data.id,
             tracking: "none",
-            inventory_level: Math.floor(total / 2)
+            inventory_level: 999
           });
           data.tracking = "none";
-          data.total = Math.floor(total / 2);
+          data.total = 999;
         }
       })
     );

@@ -482,7 +482,14 @@ class InventoryTable extends Component {
           scanner={eastDatas[key].scanner}
           timeStamp={eastDatas[key].timeStamp}
           inputRef={input => (this.textInput = input)}
-          link={bgDatas[key] ? bgDatas[key].custom_url : ""}
+          link={
+            bgDatas[key]
+              ? bgDatas[key].custom_url.substr(
+                  0,
+                  bgDatas[key].custom_url.lastIndexOf("/")
+                )
+              : ""
+          }
           // availability={bgDatas[key] ? bgDatas[key].availability : ""}
           disable={
             bgDatas[key]

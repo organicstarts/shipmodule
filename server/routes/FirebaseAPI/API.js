@@ -68,18 +68,31 @@ router.get("/getinventory", (req, res) => {
       }
       let divArray = [];
       Object.keys(map).map(key => {
-        divArray.push(`<div class="prog d-none">divider</div>`);
-        divArray.push(`<div class="prog d-none">title:${key}</div>`);
+        divArray.push(`<div class="ui divider"></div>`);
+        divArray.push(`<h3>${key}</h3>`);
         map[key].sort(compareSort);
         map[key].map(data => {
           divArray.push(
-            `<div class="prog d-none">Stage ${data.stage}:${
-              data.total
-            }:00-00-0000</div>`
+            `<div class="label"><strong>Stage ${data.stage}</strong></div>
+            <div class="ui ${
+              data.tota > 74
+                ? "green"
+                : data.total > 49
+                ? "yellow"
+                : data.total > 24
+                ? "orange"
+                : "red"
+            } indicating progress mt-0" data-percent="${data.total}">
+              <div class="bar" style="width:${
+                data.total
+              }%!important;min-width:0!important;"></div>
+            </div>`
           );
         });
       });
-      res.send(divArray);
+
+      
+      res.send(divArray.join(""));
     });
 });
 

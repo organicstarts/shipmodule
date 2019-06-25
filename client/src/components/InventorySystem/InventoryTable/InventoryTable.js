@@ -586,7 +586,9 @@ class InventoryTable extends Component {
             className="noprint"
             color="green"
             onClick={this.calculateAllTotal}
-            disabled={false}
+            disabled={
+              this.props.email === "yvan@organicstart.com" ? false : true
+            }
           >
             Calculate Total
           </Button>

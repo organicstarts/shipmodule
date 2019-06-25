@@ -222,40 +222,42 @@ router.post("/deductbundletosingle", (req, res) => {
       })
         .then(response => response.json())
         .then(item => {
-          Promise.all(
-            pInfo[data.sku].bundleID.map(id => {
-              if (item.total < 250) {
-                fetch(baseUrl2, {
-                  method: "PUT",
-                  headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    Authorization: `Basic ${encodedString}`,
-                    "Content-Type": "application/json",
-                    Accept: "application/json"
-                  },
-                  body: JSON.stringify({
-                    productID: id.productID,
-                    tracking: "simple",
-                    inventory_level: 0
-                  })
-                });
-              } else {
-                fetch(baseUrl2, {
-                  method: "PUT",
-                  headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    Authorization: `Basic ${encodedString}`,
-                    "Content-Type": "application/json",
-                    Accept: "application/json"
-                  },
-                  body: JSON.stringify({
-                    productID: id.productID,
-                    tracking: "none"
-                  })
-                });
-              }
-            })
-          );
+          if (pInfo[data.sku].bundleID) {
+            Promise.all(
+              pInfo[data.sku].bundleID.map(id => {
+                if (item.total < 250) {
+                  fetch(baseUrl2, {
+                    method: "PUT",
+                    headers: {
+                      "Access-Control-Allow-Origin": "*",
+                      Authorization: `Basic ${encodedString}`,
+                      "Content-Type": "application/json",
+                      Accept: "application/json"
+                    },
+                    body: JSON.stringify({
+                      productID: id.productID,
+                      tracking: "simple",
+                      inventory_level: 0
+                    })
+                  });
+                } else {
+                  fetch(baseUrl2, {
+                    method: "PUT",
+                    headers: {
+                      "Access-Control-Allow-Origin": "*",
+                      Authorization: `Basic ${encodedString}`,
+                      "Content-Type": "application/json",
+                      Accept: "application/json"
+                    },
+                    body: JSON.stringify({
+                      productID: id.productID,
+                      tracking: "none"
+                    })
+                  });
+                }
+              })
+            );
+          }
         });
     })
   )

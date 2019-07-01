@@ -170,6 +170,10 @@ class InventoryTable extends Component {
         data = this.state.westDatas;
         dataName = "westDatas";
         break;
+      case "bigcommerce":
+        data = this.state.bgDatas;
+        dataName = "bgDatas";
+        break;
       default:
         data = "";
         break;
@@ -235,7 +239,7 @@ class InventoryTable extends Component {
     submit total value changes to firebase
   */
   async totalChange(key, db) {
-    const { eastDatas, westDatas } = this.state;
+    const { eastDatas, westDatas, bgDatas } = this.state;
 
     axios
       .put("fb/updateinventory", {
@@ -257,6 +261,19 @@ class InventoryTable extends Component {
         dbname: "westcoast",
         sku: key,
         total: westDatas[key].total
+      })
+      .then(response => {
+        if (response.data.msg === "success") {
+          console.log("logged");
+        } else if (response.data.msg === "fail") {
+          console.log("failed to log.");
+        }
+      });
+    axios
+      .put("os/updateinventory", {
+        noEquation: true,
+        inventory_level: bgDatas[key].total,
+        productID: bgDatas[key].id
       })
       .then(response => {
         if (response.data.msg === "success") {
@@ -330,12 +347,12 @@ class InventoryTable extends Component {
           inventory_level: total
         })
         .then(async () => {
-          // tempBGData[key].tracking = "simple";
-          // tempBGData[key].total = total;
-          // await this.enableBundle(
-          //   tempBGData[key].bundles,
-          //   tempBGData[key].total
-          // );
+          tempBGData[key].tracking = "none";
+          tempBGData[key].total = total;
+          await this.enableBundle(
+            tempBGData[key].bundles,
+            tempBGData[key].total
+          );
           this.setState({ bgDatas: tempBGData });
         });
     }

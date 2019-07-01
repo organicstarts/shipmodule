@@ -69,7 +69,7 @@ const InventoryReportDetail = props => {
               placeholder={props.sku}
               onChange={props.handleChange}
               type="text"
-              disabled
+              // disabled
             />
             {/* <Button
               style={{ marginTop: "5%" }}

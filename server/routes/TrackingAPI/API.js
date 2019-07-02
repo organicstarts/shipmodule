@@ -189,32 +189,22 @@ router.get("/getorder", (req, res) => {
         datas.orders[0].order_number === parseInt(req.query.orderid)
       ) {
         let trackingObj = {};
+        if (datas.orders[0].note) {
+          let carrier = datas.orders[0].note
+            .split("\n")
+            .filter(carrier => carrier.includes("Carrier"));
+          let trackingNum = datas.orders[0].note
+            .split("\n")
+            .filter(tracking => tracking.includes("Tracking Number"));
 
-        let tracking = datas.orders[0].fulfillments.filter(data => {
-          if (
-            data.tracking_number.charAt(0) === "3" ||
-            data.tracking_number.charAt(0) === "E"
-          ) {
-            return data;
-          }
-        });
-        trackingObj.Other = tracking[0].tracking_number;
-        // if (datas.orders[0].note) {
-        //   let carrier = datas.orders[0].note
-        //     .split("\n")
-        //     .filter(carrier => carrier.includes("Carrier"));
-        //   let trackingNum = datas.orders[0].note
-        //     .split("\n")
-        //     .filter(tracking => tracking.includes("Tracking Number"));
-
-        //   carrier.map((carrier, i) => {
-        //     carrier = carrier.split(": ")[1];
-        //     trackingNum[i] = trackingNum[i].split(": ")[1];
-        //     trackingObj[carrier] = trackingNum[i];
-        //   });
-        // } else {
-        //   trackingObj = null;
-        // }
+          carrier.map((carrier, i) => {
+            carrier = carrier.split(": ")[1];
+            trackingNum[i] = trackingNum[i].split(": ")[1];
+            trackingObj[carrier] = trackingNum[i];
+          });
+        } else {
+          trackingObj = null;
+        }
         return {
           tracking:
             // datas.orders[0].note
@@ -263,8 +253,41 @@ router.get("/getorder", (req, res) => {
 });
 
 /*-------------------------------------------------------------------
-                            POST REQUESTS                            
+                            PUT REQUESTS                            
 ---------------------------------------------------------------------*/
+router.put("/savenote", (req, res) => {
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, HEAD",
+    "Content-Type": "application/json",
+    Accept: "application/json"
+  });
+  const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders/${
+    req.body.orderId
+  }.json`;
+
+  fetch(baseUrl, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify({
+      order: {
+        id: req.body.orderId,
+        note: `Carrier: Other\nTracking Number: ${req.body.bpostTracking}\n`
+      }
+    })
+  })
+    .then(result => result.json())
+    .then(resjson => res.send(resjson))
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+
+
 router.put("/fulfillment", (req, res) => {
   res.set({
     "Access-Control-Allow-Origin": "*",

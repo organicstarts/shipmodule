@@ -189,22 +189,32 @@ router.get("/getorder", (req, res) => {
         datas.orders[0].order_number === parseInt(req.query.orderid)
       ) {
         let trackingObj = {};
-        if (datas.orders[0].note) {
-          let carrier = datas.orders[0].note
-            .split("\n")
-            .filter(carrier => carrier.includes("Carrier"));
-          let trackingNum = datas.orders[0].note
-            .split("\n")
-            .filter(tracking => tracking.includes("Tracking Number"));
 
-          carrier.map((carrier, i) => {
-            carrier = carrier.split(": ")[1];
-            trackingNum[i] = trackingNum[i].split(": ")[1];
-            trackingObj[carrier] = trackingNum[i];
-          });
-        } else {
-          trackingObj = null;
-        }
+        let tracking = datas.orders[0].fulfillments.filter(data => {
+          if (
+            data.tracking_number.charAt(0) === "3" ||
+            data.tracking_number.charAt(0) === "E"
+          ) {
+            return data;
+          }
+        });
+        trackingObj[tracking[0].tracking_company] = tracking[0].tracking_number;
+        // if (datas.orders[0].note) {
+        //   let carrier = datas.orders[0].note
+        //     .split("\n")
+        //     .filter(carrier => carrier.includes("Carrier"));
+        //   let trackingNum = datas.orders[0].note
+        //     .split("\n")
+        //     .filter(tracking => tracking.includes("Tracking Number"));
+
+        //   carrier.map((carrier, i) => {
+        //     carrier = carrier.split(": ")[1];
+        //     trackingNum[i] = trackingNum[i].split(": ")[1];
+        //     trackingObj[carrier] = trackingNum[i];
+        //   });
+        // } else {
+        //   trackingObj = null;
+        // }
         return {
           tracking:
             // datas.orders[0].note

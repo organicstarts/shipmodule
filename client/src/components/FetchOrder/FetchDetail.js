@@ -1039,7 +1039,7 @@ const getMemberStatus = items => {
 const renderFCOrder = items => {
   return items.map(item => {
     let quantity = "";
-    if (item.name.includes("Auto renew")) {
+    if (item.name.includes("Auto renew - ")) {
       quantity = parseInt(item.name.split(/renew - /)[1].split(/ \(/)[0]);
     } else {
       quantity = parseInt(item.name.split(/Days\) - /)[1].split(/ \(/)[0]);

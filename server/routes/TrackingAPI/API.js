@@ -198,7 +198,7 @@ router.get("/getorder", (req, res) => {
             return data;
           }
         });
-        trackingObj[tracking[0].tracking_company] = tracking[0].tracking_number;
+        trackingObj.Other = tracking[0].tracking_number;
         // if (datas.orders[0].note) {
         //   let carrier = datas.orders[0].note
         //     .split("\n")

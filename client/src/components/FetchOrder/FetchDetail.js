@@ -1024,9 +1024,12 @@ const renderCoupon = (coupons, storeId = false) => {
 };
 
 const getMemberStatus = items => {
+  let reg = /- \d \(/;
   let status = "";
   if (items[0].name.includes("Pricing")) {
     status = items[0].name.split(/- \d \(/)[1].split(/ Pricing\)/)[0];
+  } else if (reg.test(items[0].name)) {
+    status = items[0].name.split(/- \d \(/)[1].split(/\)/)[0];
   } else {
     status = items[0].name.split(/- \d \(/)[1].split(/\)/)[0];
   }
@@ -1035,7 +1038,12 @@ const getMemberStatus = items => {
 
 const renderFCOrder = items => {
   return items.map(item => {
-    let quantity = parseInt(item.name.split(/Days\) - /)[1].split(/ \(/)[0]);
+    let quantity = "";
+    if (item.name.includes("Auto renew")) {
+      quantity = parseInt(item.name.split(/renew - /)[1].split(/ \(/)[0]);
+    } else {
+      quantity = parseInt(item.name.split(/Days\) - /)[1].split(/ \(/)[0]);
+    }
     let name = item.name.split(/Auto/)[0];
     return (
       <tr key={item.orderItemId}>

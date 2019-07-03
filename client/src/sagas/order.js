@@ -236,14 +236,16 @@ const getAllOswOrders = async action => {
                   resWithRelabel.push(data);
                 }
               });
-            await axios
-              .put("osw/savenote", {
-                orderId: data.id,
-                bpostTracking: data.tracking
-              })
-              .then(res => {
-                console.log("saved note");
-              });
+            if (!data.note) {
+              await axios
+                .put("osw/savenote", {
+                  orderId: data.id,
+                  bpostTracking: data.tracking
+                })
+                .then(res => {
+                  console.log("saved note");
+                });
+            }
             // if (data.shippingMethod !== null) {
             //   if (
             //     (data.tracking.FedEx || data.tracking.USPS) &&

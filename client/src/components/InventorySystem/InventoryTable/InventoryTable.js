@@ -402,7 +402,7 @@ class InventoryTable extends Component {
       tempBGData[key].bundles.map(async data => {
         if (
           data.tk.length > 0 &&
-          (bgDatas[data.tk[0]].total < 100 || bgDatas[data.tk[1]].total < 100)
+          (bgDatas[data.tk[0]].total < 250 || bgDatas[data.tk[1]].total < 250)
         ) {
           await axios.put("os/disableproduct", {
             productID: data.id,

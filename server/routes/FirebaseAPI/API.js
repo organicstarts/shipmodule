@@ -91,7 +91,6 @@ router.get("/getinventory", (req, res) => {
         });
       });
 
-      
       res.send(divArray.join(""));
     });
 });
@@ -318,6 +317,20 @@ router.put("/updatefraudtofile", (req, res) => {
       });
     });
 });
+
+/*
+update firebase eastcoast/westcoast inventory transaction concurrency fix 
+*/
+// router.put("/updatetransaction", (req, res) => {
+//   console.log(req.body);
+//   let dataRef = admin
+//     .database()
+//     .ref(`/inventory/${req.body.dbname}/${req.body.sku}`)
+//     .once("value", snap => snap.val())
+//     .then(x => {
+//       x.ref("total").transaction( data => console.log(data))
+//     })
+// });
 
 /*
 update firebase eastcoast/westcoast inventory

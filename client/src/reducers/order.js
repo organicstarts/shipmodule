@@ -423,7 +423,8 @@ function batchReducer(state = INITIAL_STATE, action) {
       return Object.assign({}, state, {
         loading: true,
         restockWarehouse: action.payload.warehouse,
-        restockDatas: []
+        restockDatas: [],
+        orderNumber: action.payload.orderNumber
       });
     }
     case GET_RESTOCK_DETAIL_LOADED: {

@@ -170,6 +170,16 @@ class RestockDetail extends Component {
           </Table>
         </div>
       );
+    if (!deductedItems.length && restockDatas.length) {
+      return (
+        <Segment style={{ marginTop: "50px" }}>
+          <Link to="/restock">Go Back</Link>
+          <h1>
+            This Order number was already deducted in the inventory before!
+          </h1>
+        </Segment>
+      );
+    }
     return (
       <ClipLoader
         sizeUnit={"px"}
@@ -184,6 +194,7 @@ class RestockDetail extends Component {
 function mapStateToProps({ authState, batchState }) {
   return {
     displayName: authState.displayName,
+    orderNumber: batchState.orderNumber,
     warehouseLocation: authState.warehouseLocation,
     restockDatas: batchState.restockDatas,
     shipmentItems: batchState.shipmentItems,

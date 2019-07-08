@@ -411,6 +411,17 @@ class InventoryTable extends Component {
           });
           data.tracking = "simple";
           data.total = 0;
+        } else if (
+          data.tk.length > 0 &&
+          (bgDatas[data.tk[0]].total > 250 || bgDatas[data.tk[1]].total > 250)
+        ) {
+          await axios.put("os/disableproduct", {
+            productID: data.id,
+            tracking: "none",
+            inventory_level: 999
+          });
+          data.tracking = "simple";
+          data.total = 0;
         } else if (data.tracking === "none") {
           await axios.put("os/disableproduct", {
             productID: data.id,

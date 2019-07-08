@@ -34,7 +34,13 @@ const InboundLogDetail = props => {
             />
           </Table.Cell>
         ) : (
-          <Table.Cell style={styles.border}>{props.trackingNumber}</Table.Cell>
+          <Table.Cell
+            style={
+              props.duplicate ? { backgroundColor: "orange" } : styles.border
+            }
+          >
+            {props.trackingNumber}
+          </Table.Cell>
         )}
         {props.showInput ? (
           <Table.Cell style={styles.border}>

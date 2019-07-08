@@ -32,6 +32,7 @@ class InboundLogTable extends Component {
       toggle: {}
     };
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.checkDuplicates = this.checkDuplicates.bind(this);
     // this.handleClick = this.handleClick.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -130,7 +131,23 @@ class InboundLogTable extends Component {
         console.log("file not found!");
       });
   }
+  checkDuplicates() {
+    const { datas } = this.state;
+    const tempData = [...datas];
 
+    this.setState({ deleteLoading: true });
+    datas.map((dataX, index) => {
+      datas.map((dataY, indexY) => {
+        if (
+          dataX.trackingNumber.match(dataY.trackingNumber) &&
+          index !== indexY
+        ) {
+          tempData[index].trackingDuplicate = true;
+        }
+      });
+    });
+    this.setState({ deleteLoading: false, datas: tempData });
+  }
   async handleDelete() {
     const { datas, dbDatas } = this.state;
     const tempDBData = { ...dbDatas };
@@ -353,6 +370,7 @@ class InboundLogTable extends Component {
           showInput={toggle[index]}
           handleChange={this.handleChange}
           handleSubmitButton={this.updateChange.bind(this)}
+          duplicate={datas[key].trackingDuplicate}
         />
       );
     });
@@ -440,7 +458,7 @@ class InboundLogTable extends Component {
                 onChange={this.handleSelectChange}
               />
             </Grid.Column>
-            <Grid.Column width={4}>
+            <Grid.Column width={2}>
               <Button
                 color="red"
                 onClick={this.handleDelete}
@@ -448,6 +466,16 @@ class InboundLogTable extends Component {
               >
                 <Icon name="trash" />
                 Delete All
+              </Button>
+            </Grid.Column>
+            <Grid.Column width={4}>
+              <Button
+                color="green"
+                onClick={this.checkDuplicates}
+                loading={this.state.deleteLoading}
+              >
+                <Icon name="list" />
+                Check Tracking Duplicates
               </Button>
             </Grid.Column>
           </Grid.Row>

@@ -35,6 +35,13 @@ class App extends Component {
         },
         {
           show: true,
+          name: "restock",
+          displayName: "Re-Stock Inventory",
+          route: "/restock",
+          icon: "plus"
+        },
+        {
+          show: true,
           name: "fraud",
           displayName: "Fraud Search",
           route: "/fraud",

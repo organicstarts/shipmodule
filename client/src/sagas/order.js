@@ -4,7 +4,8 @@ import {
   FETCH_LOADED,
   ALL_ORDERS_LOADED,
   ALL_OSW_ORDERS_LOADED,
-  OSW_ORDER_LOADED
+  OSW_ORDER_LOADED,
+  GET_RESTOCK_DETAIL_LOADED
 } from "../constants/actionTypes";
 import axios from "axios";
 
@@ -23,6 +24,16 @@ function* handleGetOrderDetail(action) {
     const payload = yield call(getShipmentOrder, action.payload);
     yield put({ type: FETCH_LOADED, payload });
     action.payload.history.push("/fetchDetail");
+  } catch (e) {
+    yield put({ type: "API_ERRORED", payload: e });
+  }
+}
+
+function* handleGetRestockDetail(action) {
+  try {
+    const payload = yield call(getShipmentOrder, action.payload);
+    yield put({ type: GET_RESTOCK_DETAIL_LOADED, payload });
+    action.payload.history.push("/restockDetail");
   } catch (e) {
     yield put({ type: "API_ERRORED", payload: e });
   }
@@ -388,5 +399,6 @@ export {
   handleGetOrderDetail,
   handleGetAllOrders,
   handleGetAllOswOrders,
-  handleGetOswOrder
+  handleGetOswOrder,
+  handleGetRestockDetail
 };

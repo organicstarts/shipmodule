@@ -73,8 +73,8 @@ class Scanning extends Component {
         color: "yellow",
         show: true
       },
-      { id: 4, icon: "tag", name: "Toy Scan", color: "red", show: true },
-      // { id: 5, icon: "tv", name: "Return Scan", color: "green", show: true },
+      // { id: 4, icon: "tag", name: "Toy Scan", color: "red", show: true },
+      { id: 5, icon: "undo", name: "Return Scan", color: "green", show: true },
       {
         id: 6,
         icon: "broken chain",

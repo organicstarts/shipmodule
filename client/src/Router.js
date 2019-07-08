@@ -26,7 +26,9 @@ import {
   Scanning,
   Fulfillment,
   BatchProductCheck,
-  InvoiceCheck
+  InvoiceCheck,
+  Restock,
+  RestockDetail
 } from "./components/";
 
 const Router = () => (
@@ -58,6 +60,8 @@ const Router = () => (
       <Route path="/cancel" component={CancelOrder} />
       <Route path="/fulfillment" component={Fulfillment} />
       <Route path="/invoice" component={InvoiceCheck} />
+      <Route path="/restock" component={Restock} />
+      <Route path="/restockDetail" component={RestockDetail} />
     </Switch>
   </main>
 );

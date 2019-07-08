@@ -36,11 +36,7 @@ class InvoiceCheck extends Component {
     return arrItem.map(data => {
       let reg1 = /(PRE|pre|OS|\d)\/(\d|PRE|OS|pre)/;
       let reg2 = /(\d.\/\d. pieces)/;
-      if (data.orderNumber.includes("17392")) {
-        console.log(data, item, itemCompare, count);
-        console.log(reg1.test(itemCompare[0]));
-        console.log(!reg2.test(itemCompare[0]));
-      }
+
       if (item[0].includes("Shipping")) {
         if (
           data.quantity === itemCompare[2] / count &&
@@ -49,13 +45,19 @@ class InvoiceCheck extends Component {
             : itemCompare[0].includes(data.pcs))
         ) {
           return (
-            <span key={data.orderNumber} style={{ backgroundColor: "green" }}>
+            <span
+              key={data.orderNumber + Math.random()}
+              style={{ backgroundColor: "green" }}
+            >
               {data.orderNumber},{" "}
             </span>
           );
         } else {
           return (
-            <span key={data.orderNumber} style={{ backgroundColor: "red" }}>
+            <span
+              key={data.orderNumber + Math.random()}
+              style={{ backgroundColor: "red" }}
+            >
               {data.orderNumber},{" "}
             </span>
           );
@@ -68,13 +70,19 @@ class InvoiceCheck extends Component {
           : item[0].includes(data.pcs))
       ) {
         return (
-          <span key={data.orderNumber} style={{ backgroundColor: "green" }}>
+          <span
+            key={data.orderNumber + Math.random()}
+            style={{ backgroundColor: "green" }}
+          >
             {data.orderNumber},{" "}
           </span>
         );
       } else {
         return (
-          <span key={data.orderNumber} style={{ backgroundColor: "red" }}>
+          <span
+            key={data.orderNumber + Math.random()}
+            style={{ backgroundColor: "red" }}
+          >
             {data.orderNumber},{" "}
           </span>
         );

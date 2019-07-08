@@ -23,6 +23,8 @@ import CancelOrder from "./CancelOrder/CancelOrder";
 import Scanning from "./InventorySystem/Scanning";
 import Fulfillment from "./FulfillmentOSW/Fullfillment";
 import InvoiceCheck from "./OSWinvoice/InvoiceCheck";
+import Restock from "./Restock/Restock";
+import RestockDetail from "./Restock/RestockDetail";
 
 export {
   BatchOrders,
@@ -49,5 +51,7 @@ export {
   CancelOrder,
   Scanning,
   Fulfillment,
-  InvoiceCheck
+  InvoiceCheck,
+  Restock,
+  RestockDetail
 };

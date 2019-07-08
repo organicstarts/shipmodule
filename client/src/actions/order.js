@@ -4,7 +4,8 @@ import {
   GET_ALL_ORDERS,
   SET_SHIPMENT_ITEMS,
   GET_ALL_OSW_ORDERS,
-  GET_OSW_ORDER
+  GET_OSW_ORDER,
+  GET_RESTOCK_DETAIL
 } from "../constants/actionTypes";
 
 const getBatch = (stateInfo, history) => {
@@ -24,6 +25,14 @@ const getOrderDetail = (stateInfo, history) => {
   return {
     type: GET_ORDER_DETAIL,
     payload: { orderNumber, shipper, picker, storeId, note, history }
+  };
+};
+
+const getRestockDetail = (stateInfo, history) => {
+  const { orderNumber, storeId } = stateInfo;
+  return {
+    type: GET_RESTOCK_DETAIL,
+    payload: { orderNumber, storeId, history }
   };
 };
 
@@ -55,5 +64,6 @@ export {
   getOrderDetail,
   getAllOrders,
   oswGetAllOrders,
-  oswGetOrder
+  oswGetOrder,
+  getRestockDetail
 };

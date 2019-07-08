@@ -9,7 +9,9 @@ import {
   ALL_OSW_ORDERS_LOADED,
   GET_ALL_OSW_ORDERS,
   OSW_ORDER_LOADED,
-  GET_OSW_ORDER
+  GET_OSW_ORDER,
+  GET_RESTOCK_DETAIL_LOADED,
+  GET_RESTOCK_DETAIL
 } from "../constants/actionTypes";
 import _ from "lodash";
 import products from "../config/products.json";
@@ -281,6 +283,8 @@ const INITIAL_STATE = {
   loading: true,
   prevBatch: [],
   oswOrders: [],
+  restockDatas: [],
+  restockWarehouse: "",
   oswLoading: false,
   showOsw: false,
   note: false
@@ -300,6 +304,16 @@ const applyFetch = (state, action) => {
   data.shipmentItems = items.sortable;
   return Object.assign({}, state, {
     fetchDatas: data,
+    loading: false
+  });
+};
+
+const applyRestock = (state, action) => {
+  const data = action.payload[0] ? action.payload[0] : [];
+  let items = sortShipments(data.shipmentItems, "eastcoast");
+  const shipItems = items.sortable;
+  return Object.assign({}, state, {
+    restockDatas: shipItems,
     loading: false
   });
 };
@@ -404,6 +418,16 @@ function batchReducer(state = INITIAL_STATE, action) {
         showOsw: false,
         oswLoading: true
       });
+    }
+    case GET_RESTOCK_DETAIL: {
+      return Object.assign({}, state, {
+        loading: true,
+        restockWarehouse: action.payload.warehouse,
+        restockDatas: []
+      });
+    }
+    case GET_RESTOCK_DETAIL_LOADED: {
+      return applyRestock(state, action);
     }
     default:
       return state;

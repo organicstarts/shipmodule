@@ -240,21 +240,22 @@ router.post("/deductbundletosingle", (req, res) => {
                       inventory_level: 0
                     })
                   });
-                } else {
-                  fetch(baseUrl2, {
-                    method: "PUT",
-                    headers: {
-                      "Access-Control-Allow-Origin": "*",
-                      Authorization: `Basic ${encodedString}`,
-                      "Content-Type": "application/json",
-                      Accept: "application/json"
-                    },
-                    body: JSON.stringify({
-                      productID: id.productID,
-                      tracking: "none"
-                    })
-                  });
                 }
+                // } else {
+                //   fetch(baseUrl2, {
+                //     method: "PUT",
+                //     headers: {
+                //       "Access-Control-Allow-Origin": "*",
+                //       Authorization: `Basic ${encodedString}`,
+                //       "Content-Type": "application/json",
+                //       Accept: "application/json"
+                //     },
+                //     body: JSON.stringify({
+                //       productID: id.productID,
+                //       tracking: "none"
+                //     })
+                //   });
+                // }
               })
             );
           }

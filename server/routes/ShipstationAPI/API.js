@@ -242,7 +242,6 @@ router.post("/gettoken", (req, res) => {
   })
     .then(res => res.json())
     .then(data => {
-      console.log(data);
       res.send(data.token);
     })
     .catch(error => {

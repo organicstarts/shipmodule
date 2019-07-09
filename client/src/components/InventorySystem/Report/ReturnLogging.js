@@ -14,7 +14,7 @@ class ReturnLogging extends Component {
     this.state = {
       isTyped: false,
       upcNum: "",
-      quantity: "",
+      quantity: 0,
       count: 0
     };
     this.handleChange = this.handleChange.bind(this);
@@ -52,7 +52,7 @@ class ReturnLogging extends Component {
         this.setState({ upcNum: "", isTyped: false });
         break;
       case 1:
-        this.setState({ quantity: "", isTyped: false });
+        this.setState({ quantity: 0, isTyped: false });
         break;
       default:
         break;
@@ -93,7 +93,7 @@ class ReturnLogging extends Component {
         this.setState({
           count: 0,
           upcNum: "",
-          quantity: ""
+          quantity: 0
         });
       });
   }

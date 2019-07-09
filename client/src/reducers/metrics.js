@@ -21,6 +21,7 @@ const setShipmentMetrics = (state, action) => {
   let byUser = [["Warehouse", "Shipped count"]];
   let byFillTime = [["Age", "Open Orders"]];
   let eastCount = 0;
+  let westCount = 0;
   action.payload.byUser.map(data => {
     if (
       data.name.includes("Julian Padro") ||
@@ -28,16 +29,18 @@ const setShipmentMetrics = (state, action) => {
       data.name.includes("Richard Fernandez")
     ) {
       return (eastCount += data.count);
-    } else if (
+    }
+    if (
       data.name.includes("Stephen Tagarelli") ||
       data.name.includes("Jonathan Castro")
     ) {
-      return byUser.push(["OS West", data.count]);
+      return (westCount += data.count);
     } else {
       return null;
     }
   });
   byUser.push(["OS East", eastCount]);
+  byUser.push(["OS West", westCount]);
 
   action.payload.byFillTime.map(data => {
     return byFillTime.push([data.name + " Days", data.count]);

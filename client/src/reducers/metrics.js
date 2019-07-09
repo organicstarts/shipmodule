@@ -22,11 +22,16 @@ const setShipmentMetrics = (state, action) => {
   let byFillTime = [["Age", "Open Orders"]];
   let eastCount = 0;
   action.payload.byUser.map(data => {
-    if (data.name.includes("Julian Padro")) {
+    if (
+      data.name.includes("Julian Padro") ||
+      data.name.includes("Jason Rouvas") ||
+      data.name.includes("Richard Fernandez")
+    ) {
       return (eastCount += data.count);
-    } else if (data.name.includes("Jonathan Castro")) {
-      return (eastCount += data.count);
-    } else if (data.name.includes("Stephen Tagarelli")) {
+    } else if (
+      data.name.includes("Stephen Tagarelli") ||
+      data.name.includes("Jonathan Castro")
+    ) {
       return byUser.push(["OS West", data.count]);
     } else {
       return null;

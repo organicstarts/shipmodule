@@ -39,12 +39,12 @@ class Main extends Component {
     let startTime = moment()
       .subtract(1, "months")
       .format("M/D/YYYY");
-    // if (this.props.token) {
-    //   this.props.getShipmentMetrics(this.props.token, startTime, endTime);
-    //   this.props.getOrderMetrics(this.props.token, startTime, endTime);
-    //   this.props.getCustomerMetrics(this.props.token, startTime, endTime);
-    //   this.props.getProductMetrics(this.props.token, startTime, endTime);
-    // }
+    if (this.props.token) {
+      this.props.getShipmentMetrics(this.props.token, startTime, endTime);
+      this.props.getOrderMetrics(this.props.token, startTime, endTime);
+      this.props.getCustomerMetrics(this.props.token, startTime, endTime);
+      this.props.getProductMetrics(this.props.token, startTime, endTime);
+    }
   }
 
   logout() {
@@ -133,7 +133,7 @@ class Main extends Component {
     return (
       <div>
         <Grid columns={3} stackable>
-          {/* <MediaQuery minDeviceWidth={374}>
+          <MediaQuery minDeviceWidth={374}>
             <div>
               <Button color="olive" onClick={this.handleClick} name="day">
                 Day
@@ -359,7 +359,7 @@ class Main extends Component {
                 </Segment>
               </Grid.Column>
             </Grid.Row>
-          </MediaQuery> */}
+          </MediaQuery>
 
           <Grid.Row>
             <MediaQuery maxDeviceWidth={374}>

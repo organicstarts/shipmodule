@@ -27,7 +27,7 @@ class Auth extends Component {
 
   componentDidMount() {
     this.props.checkLoginState();
-    // this.props.getToken();
+    this.props.getToken();
   }
 
   onChange = input => {

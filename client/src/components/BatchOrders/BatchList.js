@@ -53,12 +53,12 @@ class BatchList extends Component {
             if (skuInfo[data.sku] && !data.sku.includes("PURE")) {
               if (data.sku.includes("OB-")) {
                 await axios
-                  .put("fb/updateinventory", {
+                  .put("fb/updatetransaction", {
                     dbname: `${warehouse}OB`,
                     sku: data.sku,
                     quantity: data.combineTotal
-                      ? 0 - data.combineTotal
-                      : 0 - data.quantity
+                      ? parseInt(data.combineTotal)
+                      : parseInt(data.quantity)
                   })
                   .then(response => {
                     if (response.data.msg === "success") {
@@ -75,14 +75,14 @@ class BatchList extends Component {
                   });
               } else {
                 await axios
-                  .put("fb/updateinventory", {
+                  .put("fb/updatetransaction", {
                     dbname: warehouse,
                     sku: data.sku,
                     quantity: data.combineTotal
                       ? data.sku.includes("PRMX")
-                        ? 0 - parseInt(data.combineTotal / 6)
-                        : 0 - data.combineTotal
-                      : 0 - data.quantity
+                        ? parseInt(data.combineTotal / 6)
+                        : parseInt(data.combineTotal)
+                      : parseInt(data.quantity)
                   })
                   .then(response => {
                     if (response.data.msg === "success") {

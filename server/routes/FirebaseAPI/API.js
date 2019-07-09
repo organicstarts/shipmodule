@@ -321,16 +321,22 @@ router.put("/updatefraudtofile", (req, res) => {
 /*
 update firebase eastcoast/westcoast inventory transaction concurrency fix 
 */
-// router.put("/updatetransaction", (req, res) => {
-//   console.log(req.body);
-//   let dataRef = admin
-//     .database()
-//     .ref(`/inventory/${req.body.dbname}/${req.body.sku}`)
-//     .once("value", snap => snap.val())
-//     .then(x => {
-//       x.ref("total").transaction( data => console.log(data))
-//     })
-// });
+router.put("/updatetransaction", (req, res) => {
+  let dataRef = admin
+    .database()
+    .ref(`/inventory/${req.body.dbname}/${req.body.sku}/total`);
+
+  dataRef
+    .transaction(function(snap) {
+      return snap - req.body.quantity;
+    })
+    .then(x => {
+      res.json({
+        msg: "success"
+      });
+    })
+    .catch(e => res.json({ msg: "fail" }));
+});
 
 /*
 update firebase eastcoast/westcoast inventory

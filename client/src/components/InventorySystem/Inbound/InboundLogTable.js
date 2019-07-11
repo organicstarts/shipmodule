@@ -138,10 +138,7 @@ class InboundLogTable extends Component {
     this.setState({ deleteLoading: true });
     datas.map((dataX, index) => {
       datas.map((dataY, indexY) => {
-        if (
-          dataX.trackingNumber.match(dataY.trackingNumber) &&
-          index !== indexY
-        ) {
+        if (dataX.trackingNumber === dataY.trackingNumber && index !== indexY) {
           tempData[index].trackingDuplicate = true;
         }
       });

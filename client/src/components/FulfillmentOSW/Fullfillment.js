@@ -7,7 +7,9 @@ import {
   Grid,
   Transition,
   Header,
-  Input
+  Input,
+  Select,
+  Label
 } from "semantic-ui-react";
 import { oswGetAllOrders, oswGetOrder } from "../../actions/order";
 import moment from "moment";
@@ -16,19 +18,31 @@ class Fulfillment extends Component {
   constructor() {
     super();
     this.state = {
-      orderNumber: ""
+      orderNumber: "",
+      days: [
+        { key: 0, text: 0, value: 0 },
+        { key: 1, text: 1, value: 1 },
+        { key: 2, text: 2, value: 2 },
+        { key: 3, text: 3, value: 3 },
+        { key: 4, text: 4, value: 4 },
+        { key: 5, text: 5, value: 5 },
+        { key: 6, text: 6, value: 6 },
+        { key: 7, text: 7, value: 7 }
+      ],
+      day: 0
     };
     this.handleWholeClick = this.handleWholeClick.bind(this);
     this.handleSingleClick = this.handleSingleClick.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange = e => this.setState({ [e.target.name]: e.target.value });
-
+  handleSelectChange = (e, data) => this.setState({ [data.name]: data.value });
   handleWholeClick() {
     this.setState({ loading: true });
     const endTime = moment()
-      .subtract(1, "days")
+      .subtract(this.state.day, "days")
       .format("YYYY-MM-DDThh:mm:ssZ");
     // const startTime = moment()
     //   .subtract(13, "days")
@@ -88,6 +102,16 @@ class Fulfillment extends Component {
               />
             </Grid.Column>
           </Grid>
+
+          <Select
+            fluid
+            placeholder="Select Offset Date By Day"
+            name="day"
+            options={this.state.days}
+            onChange={this.handleSelectChange}
+            required
+          />
+
           <Button
             fluid
             size="large"

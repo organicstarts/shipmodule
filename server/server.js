@@ -165,7 +165,7 @@ router.post("/customToken", (req, res) => {
 /*-------------------------------------------------------------------
                             WRITE TO FILE                            
 ---------------------------------------------------------------------*/
-
+// DOES NOT WORK ON BUILD/PRODUCTION AS BUILD IS STATIC SO CANNOT WRITE/READ UPDATED CONFIG FILES
 router.post("/writeupc", (req, res) => {
   let rawData = fs.readFileSync(
     path.join(__dirname, "../../client/src/config/upc.json") ||

@@ -16,6 +16,7 @@ const header = {
 /*-------------------------------------------------------------------
                             GET REQUESTS                            
 ---------------------------------------------------------------------*/
+//Take canada tracking number and send res result from canada post
 router.get("/canadapost", (req, res) => {
   const baseUrl = `https://soa-gw.canadapost.ca/vis/track/pin/${
     req.query.tracking
@@ -39,6 +40,7 @@ router.get("/canadapost", (req, res) => {
     });
 });
 
+//Take USPS EA number and send res tracking results
 router.get("/usps", (req, res) => {
   res.set({
     "Access-Control-Allow-Origin": "*",
@@ -66,6 +68,7 @@ router.get("/usps", (req, res) => {
     });
 });
 
+//Take Bpost 300.... tracking and res tracking result
 router.get("/bpost", (req, res) => {
   res.set({
     "Access-Control-Allow-Origin": "*",
@@ -94,6 +97,7 @@ router.get("/bpost", (req, res) => {
     });
 });
 
+//Get all orders based on max data + limit 250 orders per search from shopify wholesale. res tracking num, shipping, order item, fulfillment status
 router.get("/getallorders", (req, res) => {
   res.set({
     "Access-Control-Allow-Origin": "*",
@@ -162,6 +166,7 @@ router.get("/getallorders", (req, res) => {
     });
 });
 
+//Get single order from shopify from shopify wholesale. res tracking num, shipping, order item, fulfillment status
 router.get("/getorder", (req, res) => {
   //build api URL with user order number
   res.set({
@@ -256,6 +261,7 @@ router.get("/getorder", (req, res) => {
 /*-------------------------------------------------------------------
                             PUT REQUESTS                            
 ---------------------------------------------------------------------*/
+//Save bpost fulfilled tracking num to NOTES in customer order detail. for use in track-your-order page
 router.put("/savenote", (req, res) => {
   res.set({
     "Access-Control-Allow-Origin": "*",
@@ -287,6 +293,7 @@ router.put("/savenote", (req, res) => {
     });
 });
 
+//fulfill orders. if EA number exists. replace bpost number with EA number and notify customer
 router.put("/fulfillment", (req, res) => {
   res.set({
     "Access-Control-Allow-Origin": "*",
@@ -326,6 +333,7 @@ router.put("/fulfillment", (req, res) => {
     });
 });
 
+//cancel OSW order
 router.post("/cancelosworder", (req, res) => {
   const baseUrl = `https://${username}:${password}@organic-start-wholesale.myshopify.com/admin/orders/${
     req.body.ordernumber

@@ -269,7 +269,7 @@ router.post("/deductbundletosingle", (req, res) => {
 /*-------------------------------------------------------------------
                             PUT REQUESTS                            
 ---------------------------------------------------------------------*/
-
+//update inventory number per product
 router.put("/updateinventory", (req, res) => {
   const baseUrl = `https://organicstart.com/api/v2/products/${
     req.body.productID
@@ -328,7 +328,7 @@ router.put("/updateinventory", (req, res) => {
       });
   }
 });
-
+//enable/disable product on bigcommerce
 router.put("/disableproduct", (req, res) => {
   const baseUrl = `https://organicstart.com/api/v2/products/${
     req.body.productID

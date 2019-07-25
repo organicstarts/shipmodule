@@ -15,6 +15,7 @@ const header = {
 /*-------------------------------------------------------------------
                             GET REQUESTS                            
 ---------------------------------------------------------------------*/
+//get inventory level from bigcommerce used by support.organicstart inventory level page
 const compareSort = (a, b) => {
   return a.stage - b.stage;
 };

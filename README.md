@@ -2,6 +2,7 @@
 
 WIP - Inhouse Shipping + Fraud Check application
 
+
 ## License
 
 Copyright (C) Organic Start Incorporated - All Rights Reserved.
@@ -19,6 +20,21 @@ Written by Isaiah Marc Sanchez <isaiah.marc.sanchez@gmail.com> and Yvan Pangilin
 ## Official Documentation
 
 ### Installation
+clone git repository
+npm install
+create config file in client>src>config
+    auth.json
+       { {
+           [NAMEOFKEY]: {
+               [USER]: "",
+               [KEY/PIN/PASSWORD]: "",
+           }
+        },...
+        }
+    serviceAccountKey.json
+        {
+            [FIREBASE API KEY]
+        }
 
 ### Building
 

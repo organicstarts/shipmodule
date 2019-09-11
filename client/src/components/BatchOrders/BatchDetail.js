@@ -1,4 +1,7 @@
 import React from "react";
+import { brandon } from "../../images/employeeIcons";
+
+import BrandChecker from "./BrandCheck";
 
 const BatchDetail = props => {
   return (
@@ -25,7 +28,7 @@ const BatchDetail = props => {
         <div className="col-1" style={{ textAlign: "center" }}>
           {props.warehouse}
         </div>
-        <div className="col-6">{`${props.text} ${
+        <div className="col-6">{BrandChecker(props.sku)}{`${props.text} ${
           props.options ? props.options : ""
         }`}</div>
         <div className="col-1" style={{ textAlign: "center" }} />

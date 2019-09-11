@@ -25,88 +25,88 @@ class FetchDetail extends Component {
     };
   }
   componentDidMount() {
-    window.addEventListener("afterprint", this.logprint);
-    const warehouse = this.props.warehouseLocation
-      .toLowerCase()
-      .replace(/\s/g, "");
-    this.dataRef = firebase.database().ref("/action/log");
-    this.dataRef.once("value", async snapshot => {
-      const payload = snapshot.val();
-      const result = Object.keys(payload)
-        .map(key => payload[key])
-        .reverse();
-      let batchInLog = false;
+    // window.addEventListener("afterprint", this.logprint);
+    // const warehouse = this.props.warehouseLocation
+    //   .toLowerCase()
+    //   .replace(/\s/g, "");
+    // this.dataRef = firebase.database().ref("/action/log");
+    // this.dataRef.once("value", async snapshot => {
+    //   const payload = snapshot.val();
+    //   const result = Object.keys(payload)
+    //     .map(key => payload[key])
+    //     .reverse();
+    //   let batchInLog = false;
 
-      result.slice(1, 20).map(data => {
-        if (data.order === this.props.orderNumber) {
-          batchInLog = true;
-          return "";
-        }
-        return "";
-      });
+    //   result.slice(1, 20).map(data => {
+    //     if (data.order === this.props.orderNumber) {
+    //       batchInLog = true;
+    //       return "";
+    //     }
+    //     return "";
+    //   });
 
-      if (!batchInLog) {
-        // let items = [];
-        await Promise.all(
-          this.props.fetchDatas.shipmentItems.map(async data => {
-            if (skuInfo[data.sku] && !data.sku.includes("PURE")) {
-              let deductedItems = [];
-              if (data.sku.includes("OB-")) {
-                await axios
-                  .put("fb/updateinventory", {
-                    dbname: `${warehouse}OB`,
-                    sku: data.sku,
-                    quantity: data.combineTotal
-                      ? 0 - data.combineTotal
-                      : 0 - data.quantity
-                  })
-                  .then(response => {
-                    if (response.data.msg === "success") {
-                      deductedItems.push({
-                        sku: data.sku,
-                        quantity: data.combineTotal
-                          ? data.combineTotal
-                          : data.quantity
-                      });
-                      console.log("OB inventory logged");
-                    } else if (response.data.msg === "fail") {
-                      console.log("failed to log.");
-                    }
-                  });
-              } else {
-                await axios
-                  .put("fb/updateinventory", {
-                    dbname: warehouse,
-                    sku: data.sku,
-                    quantity: data.combineTotal
-                      ? data.sku.includes("PRMX")
-                        ? 0 - parseInt(data.combineTotal / 6)
-                        : 0 - data.combineTotal
-                      : 0 - data.quantity
-                  })
-                  .then(response => {
-                    if (response.data.msg === "success") {
-                      deductedItems.push({
-                        sku: data.sku,
-                        quantity: data.combineTotal
-                          ? data.combineTotal
-                          : data.quantity
-                      });
-                      console.log("inventory subtracted");
-                    } else if (response.data.msg === "fail") {
-                      console.log("failed to log.");
-                    }
-                  });
-              }
-              // if (data.sku === "HP-UK-2") {
-              //   items.push(data);
-              // }
-              this.setState({ deductedItems: deductedItems });
-            }
-          })
-        );
-      }
-    });
+    //   if (!batchInLog) {
+    //     // let items = [];
+    //     await Promise.all(
+    //       this.props.fetchDatas.shipmentItems.map(async data => {
+    //         if (skuInfo[data.sku] && !data.sku.includes("PURE")) {
+    //           let deductedItems = [];
+    //           if (data.sku.includes("OB-")) {
+    //             await axios
+    //               .put("fb/updateinventory", {
+    //                 dbname: `${warehouse}OB`,
+    //                 sku: data.sku,
+    //                 quantity: data.combineTotal
+    //                   ? 0 - data.combineTotal
+    //                   : 0 - data.quantity
+    //               })
+    //               .then(response => {
+    //                 if (response.data.msg === "success") {
+    //                   deductedItems.push({
+    //                     sku: data.sku,
+    //                     quantity: data.combineTotal
+    //                       ? data.combineTotal
+    //                       : data.quantity
+    //                   });
+    //                   console.log("OB inventory logged");
+    //                 } else if (response.data.msg === "fail") {
+    //                   console.log("failed to log.");
+    //                 }
+    //               });
+    //           } else {
+    //             await axios
+    //               .put("fb/updateinventory", {
+    //                 dbname: warehouse,
+    //                 sku: data.sku,
+    //                 quantity: data.combineTotal
+    //                   ? data.sku.includes("PRMX")
+    //                     ? 0 - parseInt(data.combineTotal / 6)
+    //                     : 0 - data.combineTotal
+    //                   : 0 - data.quantity
+    //               })
+    //               .then(response => {
+    //                 if (response.data.msg === "success") {
+    //                   deductedItems.push({
+    //                     sku: data.sku,
+    //                     quantity: data.combineTotal
+    //                       ? data.combineTotal
+    //                       : data.quantity
+    //                   });
+    //                   console.log("inventory subtracted");
+    //                 } else if (response.data.msg === "fail") {
+    //                   console.log("failed to log.");
+    //                 }
+    //               });
+    //           }
+    //           // if (data.sku === "HP-UK-2") {
+    //           //   items.push(data);
+    //           // }
+    //           this.setState({ deductedItems: deductedItems });
+    //         }
+    //       })
+    //     );
+    //   }
+    // });
   }
 
   componentWillUnmount() {

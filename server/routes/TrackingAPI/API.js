@@ -316,7 +316,10 @@ router.put("/fulfillment", (req, res) => {
         id: req.body.fulfillmentId,
         location_id: req.body.locationId,
         tracking_number: req.body.tracking,
-        tracking_company: req.body.trackingCompany,
+        "tracking_urls": [
+          `https://track24.net/?code=${req.body.tracking}`
+        ],
+        //tracking_company: req.body.trackingCompany,
         line_items: [
           {
             id: req.body.lineItemId

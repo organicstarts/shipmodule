@@ -176,8 +176,8 @@ const getOswOrder = async action => {
                   orderId: data[0].id,
                   locationId: 30977539,
                   tracking: data[0].relabel,
-                  trackingCompany:
-                    data[0].countryCode === "CA" ? "Canada Post" : "USPS",
+                  //trackingCompany:
+                   // data[0].countryCode === "CA" ? "Canada Post" : "USPS",
                   lineItemId: item.id,
                   notifyCustomer: true
                 })

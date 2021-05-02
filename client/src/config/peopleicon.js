@@ -12,6 +12,7 @@ import {
   peter,
   isaiah,
   yvan,
+  john,
   chandler
 } from "../images/employeeIcons";
 
@@ -64,8 +65,8 @@ export const iconQuotes = {
   },
   john: {
     name: "John",
-    quote: "With great power, comes great responsibilities.",
-    icon: daniel
+    quote: "Feeling gratitude and not expressing it is like wrapping a present and not giving it.",
+    icon: john
   },
   chandler: {
     name: "Chandler",

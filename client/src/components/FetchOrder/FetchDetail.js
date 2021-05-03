@@ -941,8 +941,7 @@ const getCarrier = (carrier, boxPackage) => {
 
 const calculateTime = (startDate, endDate) => {
   let date1 = moment(startDate);
-  let date2 = moment(endDate);
-  let hours = date2.diff(date1, "Hours");
+  let date2 = endDate? moment(endDate): moment(startDate).add(1, "hours").add(30, "minutes");  let hours = date2.diff(date1, "Hours");
   let mins = moment
     .utc(moment(endDate, "HH:mm:ss").diff(moment(startDate, "HH:mm:ss")))
     .format("mm");
